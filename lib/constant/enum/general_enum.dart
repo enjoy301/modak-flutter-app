@@ -1,0 +1,1 @@
+enum DirectionType {right, left}

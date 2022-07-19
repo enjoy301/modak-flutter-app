@@ -1,0 +1,1 @@
+enum ChatType {general, love, sad, }

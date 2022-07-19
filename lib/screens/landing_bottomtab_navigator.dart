@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/screens/album/album_landing_screen.dart';
-import 'package:modak_flutter_app/screens/chat/chat_landing_screen.dart';
+import 'package:modak_flutter_app/screens/chat/landing/chat_landing_screen.dart';
 import 'package:modak_flutter_app/screens/home/home_landing_screen.dart';
 import 'package:modak_flutter_app/screens/todo/todo_landing_screen.dart';
 import 'package:modak_flutter_app/screens/user/user_landing_screen.dart';
@@ -31,7 +31,11 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (index) {
+          if (index == 2) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatLandingScreen()));
+          } else {
           setState(() => currentIndex = index);
+          }
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "HOME"),
