@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/screens/album/album_landing_screen.dart';
 import 'package:modak_flutter_app/screens/chat/landing/chat_landing_screen.dart';
 import 'package:modak_flutter_app/screens/home/home_landing_screen.dart';
-import 'package:modak_flutter_app/screens/todo/todo_landing_screen.dart';
+import 'package:modak_flutter_app/screens/todo/landing/todo_landing_screen.dart';
 import 'package:modak_flutter_app/screens/user/user_landing_screen.dart';
 
 class LandingBottomNavigator extends StatefulWidget {

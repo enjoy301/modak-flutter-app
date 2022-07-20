@@ -45,6 +45,10 @@ dependencies:
   flutter_dotenv: ^5.0.2
   dio: ^4.0.6
   web_socket_channel: ^2.2.0
+  table_calendar: ^3.0.6
+  intl: ^0.17.0
+  percent_indicator: ^4.2.2
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_test:
