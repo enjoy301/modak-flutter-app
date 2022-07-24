@@ -39,3 +39,14 @@ void getChats(BuildContext context) async {
     context.read<ChatProvider>().add(ChatModel(userId: item['user_id'], content: item['content'], sendAt: item['send_at'], typeCode: item['type_code'], metaData: item['metadata']));
   }
 }
+
+
+void sendMedia(FormData formData) async {
+  var res = await Dio(BaseOptions(
+    contentType: 'multipart/form-data',
+  )).post("${dotenv.get("CHAT_HTTP")}/dev/media", data: formData);
+
+  print(res);
+}
+
+

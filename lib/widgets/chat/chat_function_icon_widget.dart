@@ -13,7 +13,7 @@ class ChatFunctionIconWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(12.0),
             child: Container(
                 decoration: BoxDecoration(
                     color: data['color'],
@@ -23,7 +23,7 @@ class ChatFunctionIconWidget extends StatelessWidget {
                   child: Image.asset(data['image']),
                 )),
           ),
-          // Text(data['name'], style: TextStyle(color: Colors.black)),
+          Text(data['name'], style: TextStyle(color: Colors.black)),
         ],
       ),
     );

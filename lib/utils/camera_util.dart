@@ -3,11 +3,24 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 
-getImageFromCamera() async {
-  XFile? f = await ImagePicker()
-      .pickImage(source: ImageSource.camera); //갤러리에서 사진을 가져옵니다.
-  File dummyFile = File(f!.path); //가져온 사진의 Type을 File 형식으로 바꿔줍니다.
-  return dummyFile;
+Future<XFile?> getImageFromCamera() async {
+  try {
+    XFile? f = await ImagePicker()
+        .pickImage(source: ImageSource.camera); //갤러리에서 사진을 가져옵니다.
+    return Future(() => f);
+  } catch(e) {
+    print("failed to get image");
+  }
+}
+
+Future<XFile?> getVideoFromCamera() async {
+  try {
+    XFile? f = await ImagePicker()
+        .pickVideo(source: ImageSource.camera); //갤러리에서 사진을 가져옵니다.
+    return Future(() => f);
+  } catch(e) {
+    print("failed to get video");
+  }
 }
 
 Future<List<AssetEntity>> getImageFromAlbum() async {

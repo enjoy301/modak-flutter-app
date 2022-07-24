@@ -18,7 +18,6 @@ class _ChatLandingFunctionState extends State<ChatLandingFunction> {
     FunctionState.landing: FunctionLandingWidget(),
     FunctionState.album: FunctionAlbumWidget(),
     FunctionState.onWay: FunctionOnWayWidget(),
-
   };
 
   @override
