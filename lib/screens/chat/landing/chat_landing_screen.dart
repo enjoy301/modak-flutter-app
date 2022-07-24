@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/screens/chat/landing/chat_landing_dialog.dart';
-import 'package:modak_flutter_app/screens/chat/landing/chat_landing_function.dart';
+import 'package:modak_flutter_app/screens/chat/landing/function/chat_landing_function.dart';
 import 'package:modak_flutter_app/screens/chat/landing/chat_landing_header.dart';
 import 'package:modak_flutter_app/screens/chat/landing/chat_landing_input.dart';
 import 'package:provider/provider.dart';

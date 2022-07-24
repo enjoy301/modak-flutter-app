@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -9,8 +11,8 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
   await dotenv.load();
-
   initializeDateFormatting().then((_) =>runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => ChatProvider()),
     ChangeNotifierProvider(create: (_) => UserProvider()),

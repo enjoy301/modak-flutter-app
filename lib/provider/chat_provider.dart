@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 
@@ -7,12 +9,13 @@ class ChatProvider extends ChangeNotifier {
   final List<ChatModel> _chats = [];
   String _currentMyChat = "";
   bool _isFunctionOpened = false;
+  final List<File> _files = [];
 
   /// getters
   List<ChatModel> get chats => _chats;
   String get currentMyChat => _currentMyChat;
   bool get isFunctionOpened => _isFunctionOpened;
-
+  List<File> get files => _files;
 
   /// setters
   void setCurrentMyChat(String chat) {
@@ -33,6 +36,10 @@ class ChatProvider extends ChangeNotifier {
   /// 채팅리스트에 뒤에 추가합니다.
   void add(ChatModel chat) {
     _chats.add(chat);
+    notifyListeners();
+  }
+  void addFile(File file) {
+    _files.add(file);
     notifyListeners();
   }
 
