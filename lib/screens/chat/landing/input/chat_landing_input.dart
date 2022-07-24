@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/services/chat_service.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/io.dart';
 
 class ChatLandingInput extends StatefulWidget {
   const ChatLandingInput({Key? key}) : super(key: key);

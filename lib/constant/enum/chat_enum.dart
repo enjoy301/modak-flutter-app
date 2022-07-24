@@ -1,2 +1,3 @@
 enum ChatType {general, love, sad, }
-enum ChatState {landing, album, onWay}
+enum FunctionState {landing, album, onWay, todo, }
+enum InputState {none, chat, function, }
