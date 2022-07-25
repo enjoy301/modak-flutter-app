@@ -49,6 +49,10 @@ dependencies:
   intl: ^0.17.0
   percent_indicator: ^4.2.2
   expandable: ^5.0.1
+  image_picker: ^0.8.5+3
+  photo_manager: ^2.1.4
+  http: ^0.13.4
+  http_parser: ^4.0.1
 
 dev_dependencies:
   flutter_test:

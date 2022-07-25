@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/services/chat_service.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/io.dart';
 
-class ChatLandingInput extends StatefulWidget {
-  const ChatLandingInput({Key? key}) : super(key: key);
+class InputChatWidget extends StatefulWidget {
+  const InputChatWidget({Key? key}) : super(key: key);
 
   @override
-  State<ChatLandingInput> createState() => _ChatLandingInputState();
+  State<InputChatWidget> createState() => _InputChatWidgetState();
 }
 
-class _ChatLandingInputState extends State<ChatLandingInput> {
+class _InputChatWidgetState extends State<InputChatWidget> {
   TextEditingController textEditingController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+
     return Row(
       children: [
         IconButton(
             onPressed: () {
               setState(() =>
-                  {context.read<ChatProvider>().isFunctionOpenedToggle()});
+              {context.read<ChatProvider>().isFunctionOpenedToggle()});
               FocusScope.of(context).unfocus();
               print(context.read<ChatProvider>().isFunctionOpened);
             },
             icon: Icon(Icons.add)),
         Expanded(
             child: TextField(
-          controller: textEditingController,
-          onTap: () {
-            setState(() =>
+              controller: textEditingController,
+              onTap: () {
+                setState(() =>
                 {context.read<ChatProvider>().setIsFunctionOpened(false)});
-          },
-          onChanged: (String chat) {
-            context.read<ChatProvider>().setCurrentMyChat(chat);
-          },
-          decoration: InputDecoration(
-            focusedBorder:
+              },
+              onChanged: (String chat) {
+                context.read<ChatProvider>().setCurrentMyChat(chat);
+              },
+              decoration: InputDecoration(
+                focusedBorder:
                 OutlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
-          ),
-        )),
+              ),
+            )),
         IconButton(
           onPressed: () {
             context.read<ChatProvider>().add(ChatModel(
@@ -62,7 +63,6 @@ class _ChatLandingInputState extends State<ChatLandingInput> {
 
   @override
   void initState() {
-    getChats(context);
     textEditingController.text = context.read<ChatProvider>().currentMyChat;
   }
 }
