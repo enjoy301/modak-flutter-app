@@ -44,7 +44,7 @@ void getChats(BuildContext context) async {
 void sendMedia(FormData formData) async {
   var res = await Dio(BaseOptions(
     contentType: 'multipart/form-data',
-  )).post("${dotenv.get("CHAT_HTTP")}/dev/media", data: formData);
+  )).post("${dotenv.get("CHAT_HTTP")}/dev/media?u=${UserProvider.user_id}&f=${UserProvider.family_id}", data: formData);
 
   print(res);
 }

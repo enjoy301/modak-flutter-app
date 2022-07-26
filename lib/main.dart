@@ -3,20 +3,31 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:modak_flutter_app/provider/auth_provider.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/screens/auth/splash_screen.dart';
+import 'package:modak_flutter_app/screens/auth/auth_splash_screen.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  // main 에서 await 사용시 실행
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
+
+  // sharedPreference singleton 객체 생성
+  Prefs.init();
+  // dotenv 파일 로드
   await dotenv.load();
+
+  // 한글 지원
+  // 상태관리 provider 정의
   initializeDateFormatting().then((_) =>runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => ChatProvider()),
     ChangeNotifierProvider(create: (_) => UserProvider()),
     ChangeNotifierProvider(create: (_) => TodoProvider()),
+    ChangeNotifierProvider(create: (_) => AuthProvider()),
   ], child: const MyApp())));
 
 }
@@ -29,10 +40,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SplashScreen(),
+      home: const AuthSplashScreen(),
     );
   }
 }

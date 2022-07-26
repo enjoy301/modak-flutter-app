@@ -53,6 +53,8 @@ dependencies:
   photo_manager: ^2.1.4
   http: ^0.13.4
   http_parser: ^4.0.1
+  shared_preferences: ^2.0.15
+  flutter_datetime_picker: ^1.5.1
 
 dev_dependencies:
   flutter_test:
