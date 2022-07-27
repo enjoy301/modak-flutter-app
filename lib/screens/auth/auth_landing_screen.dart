@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/auth_register_screen.dart';
+import 'package:modak_flutter_app/services/auth_service.dart';
+import 'package:modak_flutter_app/utils/auth_util.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 
 class AuthLandingScreen extends StatefulWidget {
   const AuthLandingScreen({Key? key}) : super(key: key);
@@ -16,15 +19,33 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
         body: Column(
           children: [
             TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AuthRegisterScreen()));
+              onPressed: () async {
+                await AuthUtil.kakaoLogin(context);
+                if (PrefsUtil.getInt("provider_id") != null && PrefsUtil.getString("provider") != null) {
+                  PrefsUtil.setBool("is_register_progress", true);
+                  Future(() => Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthRegisterScreen())));
+                }
               },
-              child: Text("회원가입으로 이동"),
+              child: Text("카카오로 로그인"),
+            ),
+            TextButton(
+              onPressed: () async {
+                tokenLogin();
+              },
+              child: Text("통신 테스트"),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
   }
 }
