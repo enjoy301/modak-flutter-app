@@ -55,6 +55,7 @@ dependencies:
   http_parser: ^4.0.1
   shared_preferences: ^2.0.15
   flutter_datetime_picker: ^1.5.1
+  kakao_flutter_sdk: ^1.2.1
 
 dev_dependencies:
   flutter_test:
