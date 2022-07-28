@@ -44,7 +44,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: const AuthSplashScreen(),
       theme: ThemeData(
-        fontFamily: 'Font_Poppins'
+        fontFamily: 'Font_Poppins',
+        backgroundColor: Colors.white,
       ),
     );
   }

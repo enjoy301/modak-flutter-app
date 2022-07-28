@@ -35,9 +35,10 @@ class _AuthRegisterScreenState extends State<AuthRegisterScreen> {
               "회원가입", () => {provider.goPreviousPage(context)}),
           body: pages[provider.page - 1],
           bottomSheet: Container(
+              color: Colors.white,
               width: double.infinity,
-              height: 60,
-              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+              height: 100,
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
               child: ElevatedButton(
                 onPressed: provider.getValidity()
                     ? () {
