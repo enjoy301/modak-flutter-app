@@ -43,6 +43,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: const AuthSplashScreen(),
+      theme: ThemeData(
+        fontFamily: 'Font_Poppins'
+      ),
     );
   }
 }
