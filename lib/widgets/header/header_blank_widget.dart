@@ -7,7 +7,7 @@ AppBar headerBlankWidget(String title, Function() onPressed) {
       style: TextStyle(color: Colors.black),
     ),
     elevation: 0,
-    backgroundColor: Colors.white10,
+    backgroundColor: Colors.white,
     leading: IconButton(
         icon: Icon(
           Icons.keyboard_backspace_outlined,

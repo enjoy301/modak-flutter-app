@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 
 extension StringToType on String? {
