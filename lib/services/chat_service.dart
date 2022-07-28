@@ -33,20 +33,24 @@ void getChats(BuildContext context) async {
     '${dotenv.get("CHAT_HTTP")}/dev/messages/0',
   );
 
-  List<dynamic> tempList =  (jsonDecode(response.data as String)['message']);
+  List<dynamic> tempList = (jsonDecode(response.data as String)['message']);
   for (var item in tempList) {
     // ignore: use_build_context_synchronously
-    context.read<ChatProvider>().add(ChatModel(userId: item['user_id'], content: item['content'], sendAt: item['send_at'], typeCode: item['type_code'], metaData: item['metadata']));
+    context.read<ChatProvider>().add(ChatModel(
+        userId: item['user_id'],
+        content: item['content'],
+        sendAt: item['send_at'],
+        typeCode: item['type_code'],
+        metaData: item['metadata']));
   }
 }
-
 
 void sendMedia(FormData formData) async {
   var res = await Dio(BaseOptions(
     contentType: 'multipart/form-data',
-  )).post("${dotenv.get("CHAT_HTTP")}/dev/media?u=${UserProvider.user_id}&f=${UserProvider.family_id}", data: formData);
+  )).post(
+      "${dotenv.get("CHAT_HTTP")}/dev/media?u=${UserProvider.user_id}&f=${UserProvider.family_id}",
+      data: formData);
 
   print(res);
 }
-
-
