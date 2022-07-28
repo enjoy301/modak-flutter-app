@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ChatFunctionIconWidget extends StatelessWidget {
-  const ChatFunctionIconWidget({Key? key, required this.data, required this.onTap})
+  const ChatFunctionIconWidget(
+      {Key? key, required this.data, required this.onTap})
       : super(key: key);
   final Map<String, dynamic> data;
   final Function() onTap;
@@ -18,10 +19,7 @@ class ChatFunctionIconWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: data['color'],
                     borderRadius: BorderRadius.circular(100)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Image.asset(data['image']),
-                )),
+                child: Text("뭐야 씨발")),
           ),
           Text(data['name'], style: TextStyle(color: Colors.black)),
         ],

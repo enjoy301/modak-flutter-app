@@ -56,10 +56,13 @@ dependencies:
   shared_preferences: ^2.0.15
   flutter_datetime_picker: ^1.5.1
   kakao_flutter_sdk: ^1.2.1
+  flutter_launcher_icons: ^0.9.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -72,6 +75,11 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/icons/light_icon.ttf"
+
 flutter:
   uses-material-design: true
   assets:
@@ -88,6 +96,12 @@ flutter:
           weight: 500
         - asset: lib/assets/fonts/Font_Poppins/Poppins-Regular.otf
           weight: 400
+    - family: LightIcons
+      fonts:
+        - asset: lib/assets/icons/light/LightIcons.ttf
+    - family: DarkIcons
+      fonts:
+        - asset: lib/assets/icons/dark/DarkIcons.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

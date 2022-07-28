@@ -46,22 +46,20 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
     return Consumer<ChatProvider>(
       builder: (context, provider, build) {
         return GridView(
+
           shrinkWrap: true,
           gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 100),
           children: [
             ChatFunctionIconWidget(
               data: functionIconWidgetValues[0],
               onTap: () async {
                 XFile? response = await getImageFromCamera();
                 if (response != null) {
-                  
                   var formData = MultipartFile.fromFileSync(response.path, contentType: MediaType("image", "jpg"));
                   var formData2 = FormData.fromMap({"image": formData});
 
                   sendMedia(formData2);
-
-
                 }
               },
             ),
