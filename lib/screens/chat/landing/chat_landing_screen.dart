@@ -39,10 +39,15 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
                   child: Text(""),
                   onWillPop: () {
                     /// Function State 가 landing 이 아닐 때
-                    if ([FunctionState.album, FunctionState.onWay, FunctionState.todo].contains(provider.functionState)) {
+                    if ([
+                      FunctionState.album,
+                      FunctionState.onWay,
+                      FunctionState.todo
+                    ].contains(provider.functionState)) {
                       provider.setFunctionState(FunctionState.landing);
                       return Future(() => false);
                     }
+
                     /// Function 메뉴가 열려있을 때
                     if (provider.isFunctionOpened) {
                       provider.isFunctionOpenedToggle();
