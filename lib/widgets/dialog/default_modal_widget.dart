@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void DefaultDialogWidget(BuildContext context) {
+void defaultModalWidget(BuildContext context, List<TextButton> buttons) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -11,10 +11,7 @@ void DefaultDialogWidget(BuildContext context) {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextButton(onPressed: () {Navigator.pop(context);}, child: Text("수정하기")),
-              TextButton(onPressed: () {Navigator.pop(context);}, child: Text("삭제하기")),
-            ],
+            children: buttons
           ),
         );
       });

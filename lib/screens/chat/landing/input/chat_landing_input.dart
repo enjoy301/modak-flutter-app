@@ -22,6 +22,7 @@ class _ChatLandingInputState extends State<ChatLandingInput> {
   };
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: inputStatePage[context.watch<ChatProvider>().getInputState()] as Widget,
     );
   }
