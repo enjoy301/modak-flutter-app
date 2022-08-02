@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 
 class IconGradientWidget extends StatelessWidget {
-  IconGradientWidget(
-      this.icon,
-      this.size,
-      this.gradient,
-      );
+  const IconGradientWidget(this.icon, this.size, this.gradient, {Key? key, this.scale = 1.2})
+      : super(key: key);
 
   final IconData icon;
   final double size;
   final Gradient gradient;
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
       child: SizedBox(
-        width: size * 1.2,
-        height: size * 1.2,
+        width: size * scale,
+        height: size * scale,
         child: Icon(
           icon,
           size: size,
