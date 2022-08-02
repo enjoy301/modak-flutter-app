@@ -28,7 +28,7 @@ Future<bool> sendChat(
 void getChats(BuildContext context) async {
   final response = await Dio(BaseOptions(queryParameters: {
     'f': UserProvider.family_id,
-    'c': UserProvider.user_id,
+    'c': 100,
   })).get(
     '${dotenv.get("CHAT_HTTP")}/dev/messages/0',
   );
@@ -36,7 +36,7 @@ void getChats(BuildContext context) async {
   List<dynamic> tempList = (jsonDecode(response.data as String)['message']);
   for (var item in tempList) {
     // ignore: use_build_context_synchronously
-    context.read<ChatProvider>().addChat(ChatModel(
+    context.read<ChatProvider>().add(ChatModel(
         userId: item['user_id'],
         content: item['content'],
         sendAt: item['send_at'],
@@ -45,83 +45,12 @@ void getChats(BuildContext context) async {
   }
 }
 
-Future<Map<String, dynamic>> sendMedia(MultipartFile? file, String type) async {
-  if (file == null) {
-    return {"result": "FAIL", "message": "FILE_NULL"};
-  }
-  Map<String, dynamic> getMediaUrlResponse = await getMediaUrl();
-  if (getMediaUrlResponse['result'] == "FAIL") {
-    return {"result": "FAIL", "message": "URL"};
-  }
-  Map<String, dynamic> mediaUrlData =
-      jsonDecode(getMediaUrlResponse['response'].data);
+void sendMedia(FormData formData) async {
+  var res = await Dio(BaseOptions(
+    contentType: 'multipart/form-data',
+  )).post(
+      "${dotenv.get("CHAT_HTTP")}/dev/media?u=${UserProvider.user_id}&f=${UserProvider.family_id}",
+      data: formData);
 
-  Map<String, dynamic> uploadMediaResponse =
-      await uploadMedia(mediaUrlData, file, type);
-  if (uploadMediaResponse['result'] == "FAIL") {
-    return {"result": "FAIL", "message": "UPLOAD"};
-  }
-  return {"result": "SUCCESS", "response": uploadMediaResponse};
-}
-
-Future<Map<String, dynamic>> getMediaUrl() async {
-  try {
-    var res = await Dio(BaseOptions(
-      contentType: 'multipart/form-data',
-    )).get(
-        "${dotenv.get("CHAT_HTTP")}/dev/media/url?u=${UserProvider.user_id}&f=${UserProvider.family_id}");
-    return {"response": res, "result": "SUCCESS"};
-  } catch (e) {
-    return {"result": "FAIL"};
-  }
-}
-
-Future<Map<String, dynamic>> uploadMedia(
-    Map<String, dynamic> mediaUrlData, MultipartFile file, String type) async {
-  try {
-    String xAmzAlgorithm = mediaUrlData['fields']['x-amz-algorithm'];
-    String xAmzCredential = mediaUrlData['fields']['x-amz-credential'];
-    String xAmzDate = mediaUrlData['fields']['x-amz-date'];
-    String xAmzSecurityToken = mediaUrlData['fields']['x-amz-security-token'];
-    String policy = mediaUrlData['fields']['policy'];
-    String xAmzSignature = mediaUrlData['fields']['x-amz-signature'];
-
-    debugPrint("""
-    ----------------------------------------------------
-    Media information to S3
-    algo: $xAmzAlgorithm
-    cred: $xAmzCredential
-    date: $xAmzDate
-    token: $xAmzSecurityToken
-    policy: $policy
-    sign: $xAmzSignature
-    ----------------------------------------------------
-    """);
-
-    var formData = FormData.fromMap({
-      "key": "${UserProvider.family_id}/${UserProvider.user_id}/${DateTime.now().millisecondsSinceEpoch}.$type",
-      "x-amz-algorithm": xAmzAlgorithm.trim(),
-      "x-amz-credential": xAmzCredential.trim(),
-      "x-amz-date": xAmzDate.trim(),
-      "x-amz-security-token": xAmzSecurityToken.trim(),
-      "policy": policy.trim(),
-      "x-amz-signature": xAmzSignature.trim(),
-      "x-amz-meta-is_first": 1,
-      "x-amz-meta-count": 1,
-      "file": file,
-    });
-
-
-    var response = await Dio(BaseOptions(headers: {
-      "Content-Type": "multipart/form-data",
-      'Connection': 'keep-alive',
-      "Accept": "*/*"
-    })).post("https://chatapp-private.s3.amazonaws.com/", data: formData);
-    print(response);
-
-    return {"result": "SUCCESS"};
-  } catch (e) {
-    print(e);
-    return {"result": "FAIL"};
-  }
+  print(res);
 }

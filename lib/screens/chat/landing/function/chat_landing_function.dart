@@ -23,14 +23,11 @@ class _ChatLandingFunctionState extends State<ChatLandingFunction> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChatProvider>(builder: (context, provider, child) {
-      return Container(
-        color: Colors.white,
-        child: Visibility(
-            visible: provider.isFunctionOpened,
-            child: SizedBox(
-                height: 300,
-                child: functionStatePage[provider.functionState] as Widget)),
-      );
+      return Visibility(
+          visible: provider.isFunctionOpened,
+          child: SizedBox(
+              height: 300,
+              child: functionStatePage[provider.functionState] as Widget));
     });
   }
 }

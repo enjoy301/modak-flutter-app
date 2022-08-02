@@ -1,19 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
-import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/services/chat_service.dart';
-import 'package:modak_flutter_app/utils/media_util.dart';
+import 'package:modak_flutter_app/utils/camera_util.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_function_icon_widget.dart';
-import 'package:modak_flutter_app/widgets/dialog/default_modal_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -28,117 +22,86 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
   final List<Map<String, dynamic>> functionIconWidgetValues = [
     {
       'name': "앨범",
-      'icon': LightIcons.Image,
-      'color': Coloring.bg_pink,
+      'image': "lib/assets/img.png",
+      'color': Colors.red,
     },
     {
       'name': "카메라",
-      'icon': LightIcons.Camera,
-      'color': Coloring.bg_red,
+      'image': "lib/assets/img.png",
+      'color': Colors.red,
     },
     {
       'name': "오는 길에",
-      'icon': LightIcons.Work,
-      'color': Coloring.bg_orange,
+      'image': "lib/assets/img.png",
+      'color': Colors.red,
     },
-    {'name': "룰렛", 'icon': LightIcons.TicketStar, 'color': Coloring.bg_yellow},
-    {'name': "위치 공유", 'icon': LightIcons.Location, 'color': Coloring.bg_purple},
-    {
-      'name': "일정 추가",
-      'icon': LightIcons.Calendar,
-      'color': Coloring.point_pureorange
-    },
-    {'name': "할 일 공유", 'icon': LightIcons.Plus, 'color': Coloring.gray_30},
+    {'name': "룰렛", 'image': "lib/assets/img.png", 'color': Colors.red},
+    {'name': "위치 공유", 'image': "lib/assets/img.png", 'color': Colors.blue},
+    {'name': "일정 추가", 'image': "lib/assets/img.png", 'color': Colors.red},
+    {'name': "할 일 공유", 'image': "lib/assets/img.png", 'color': Colors.red},
   ];
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatProvider>(builder: (context, provider, build) {
-      return GridView(
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
 
-            /// TODO 화면 비율에 따라 짤리지 않도록 변경
-            childAspectRatio: 0.8,
-            crossAxisCount: 4),
-        children: [
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[0],
-            onTap: () async {
-              provider.setFunctionState(FunctionState.album);
-              if (provider.medias.isEmpty) {
-                List<File> files = await getImageFromAlbum();
-                for (File file in files) {
-                  await provider.addMedia(file);
+    return Consumer<ChatProvider>(
+      builder: (context, provider, build) {
+        return GridView(
+
+          shrinkWrap: true,
+          gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 100),
+          children: [
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[0],
+              onTap: () async {
+                XFile? response = await getImageFromCamera();
+                if (response != null) {
+                  var formData = MultipartFile.fromFileSync(response.path, contentType: MediaType("image", "jpg"));
+                  var formData2 = FormData.fromMap({"image": formData});
+
+                  sendMedia(formData2);
                 }
-              }
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[1],
-            onTap: () async {
-              defaultModalWidget(context, [
-                TextButton(
-                    onPressed: () async {
-                      Future(() => Navigator.pop(context));
-
-                      MultipartFile? image = await getImageFromCamera();
-
-                      Map<String, dynamic> response = await sendMedia(image, "png");
-
-                      if (response['result'] != "FAIL") {
-                        print(response['response']);
-                      } else {
-                        print(response['message']);
-                      }
-                    },
-                    child: Text("사진 찍기")),
-                TextButton(
-                    onPressed: () async {
-                      Future(() => Navigator.pop(context));
-                      MultipartFile? video = await getVideoFromCamera();
-                      Map<String, dynamic> response = await sendMedia(video, "mp4");
-                      if (response['result'] != "FAIL") {
-                        print(response['response']);
-                      } else {
-                        print(response['message']);
-                      }
-                    },
-                    child: Text("동영상 촬영"))
-              ]);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[2],
-            onTap: () {
-              provider.setFunctionState(FunctionState.onWay);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[3],
-            onTap: () {
-              print(4);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[4],
-            onTap: () {
-              print(5);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[5],
-            onTap: () {
-              print(6);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[6],
-            onTap: () {
-              print(7);
-            },
-          ),
-        ],
-      );
-    });
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[1],
+              onTap: () async {
+                provider.setFunctionState(FunctionState.album);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[2],
+              onTap: () {
+                provider.setFunctionState(FunctionState.onWay);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[3],
+              onTap: () {
+                print(4);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[4],
+              onTap: () {
+                print(5);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[5],
+              onTap: () {
+                print(6);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[6],
+              onTap: () {
+                print(7);
+              },
+            ),
+          ],
+        );
+      }
+    );
   }
 }

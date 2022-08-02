@@ -21,14 +21,9 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
             TextButton(
               onPressed: () async {
                 await AuthUtil.kakaoLogin(context);
-                if (PrefsUtil.getInt("provider_id") != null &&
-                    PrefsUtil.getString("provider") != null) {
+                if (PrefsUtil.getInt("provider_id") != null && PrefsUtil.getString("provider") != null) {
                   PrefsUtil.setBool("is_register_progress", true);
-
-                  Future(() => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AuthRegisterScreen())));
+                  Future(() => Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthRegisterScreen())));
                 }
               },
               child: Text("카카오로 로그인"),
@@ -51,5 +46,6 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
   }
 
   @override
-  void didChangeDependencies() {}
+  void didChangeDependencies() {
+  }
 }
