@@ -1,7 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/models/todo_model.dart';
-import 'package:modak_flutter_app/widgets/dialog/default_dialog_widget.dart';
+import 'package:modak_flutter_app/widgets/dialog/default_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/todo/todo_listitem_tag_widget.dart';
 
 class TodoListItemWidget extends StatelessWidget {
@@ -63,10 +63,16 @@ class TodoListItemWidget extends StatelessWidget {
               ),
             ),
           ),
-          IconButton(onPressed: () {DefaultDialogWidget(context);}, icon: Icon(Icons.more_vert)),
+          IconButton(
+              onPressed: () {
+                defaultModalWidget(context, [
+                  TextButton(onPressed: () {}, child: Text("수정하기")),
+                  TextButton(onPressed: () {}, child: Text("삭제하기"))
+                ]);
+              },
+              icon: Icon(Icons.more_vert)),
         ],
       ),
     );
   }
 }
-
