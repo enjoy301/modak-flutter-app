@@ -9,22 +9,21 @@ class ChatFunctionIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Padding(
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Padding(
             padding: const EdgeInsets.all(12.0),
             child: Container(
-              padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                     color: data['color'],
                     borderRadius: BorderRadius.circular(100)),
-                child: Icon(data['icon'])),
+                child: Text("뭐야 씨발")),
           ),
-        ),
-        Text(data['name'], style: TextStyle(color: Colors.black)),
-      ],
+          Text(data['name'], style: TextStyle(color: Colors.black)),
+        ],
+      ),
     );
   }
 }

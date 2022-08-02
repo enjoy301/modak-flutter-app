@@ -27,6 +27,10 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
   }
 
   navigateToNextPage() async {
+    Future(() => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const LandingBottomNavigator())));
     /// 유저가 생성되어 있을 때 처리
     if (PrefsUtil.getString("refresh_token") != null &&
         PrefsUtil.getString("access_token") != null) {
