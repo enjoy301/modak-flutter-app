@@ -28,8 +28,10 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
   ];
   @override
   Widget build(BuildContext context) {
-    EdgeInsets iconPadding = EdgeInsets.only(top: 8, bottom: 3, left: 12, right: 12);
+    EdgeInsets iconPadding =
+        EdgeInsets.only(top: 8, bottom: 3, left: 12, right: 12);
     return Scaffold(
+        backgroundColor: Colors.white,
         body: pages[currentIndex],
         bottomNavigationBar: Wrap(
           children: [
@@ -51,6 +53,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 DarkIcons.Home, 25, Coloring.sub_purple)
                             : Icon(
                                 LightIcons.Home,
+                                size: 25,
                                 color: Coloring.gray_20,
                               ),
                         constraints: BoxConstraints(),
@@ -72,6 +75,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 DarkIcons.TickSquare, 25, Coloring.sub_purple)
                             : Icon(
                                 LightIcons.TickSquare,
+                                size: 25,
                                 color: Coloring.gray_20,
                               ),
                         constraints: BoxConstraints(),
@@ -96,6 +100,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 DarkIcons.Chat, 25, Coloring.sub_purple)
                             : Icon(
                                 LightIcons.Chat,
+                                size: 25,
                                 color: Coloring.gray_20,
                               ),
                         constraints: BoxConstraints(),
@@ -117,6 +122,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 DarkIcons.Image, 25, Coloring.sub_purple)
                             : Icon(
                                 LightIcons.Image,
+                                size: 25,
                                 color: Coloring.gray_20,
                               ),
                         constraints: BoxConstraints(),
@@ -138,6 +144,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 DarkIcons.Profile, 25, Coloring.sub_purple)
                             : Icon(
                                 LightIcons.Profile,
+                                size: 25,
                                 color: Coloring.gray_20,
                               ),
                         constraints: BoxConstraints(),
