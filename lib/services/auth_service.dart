@@ -11,7 +11,6 @@ Future<Map<String, dynamic>> signUp() async {
       // PrefsUtil.getString("fcmToken") == null ||
       PrefsUtil.getString("provider") == null ||
       PrefsUtil.getInt("provider_id") == null) {
-    print("회원가입 값이 제대로 입력되지 않은 것이 있습니다.");
     return {"result": "NULL"};
   }
   try {
@@ -40,6 +39,9 @@ Future<Map<String, dynamic>> signUp() async {
 
 /// 로그인 시도 함수
 Future<Map<String, dynamic>> tokenLogin() async {
+  print(PrefsUtil.getString("access_token"));
+  print(PrefsUtil.getString("refresh_token"));
+
   try {
     Response response = await Dio()
         .post("${dotenv.get("API_ENDPOINT")}/api/member/token-login", data: {
@@ -54,6 +56,7 @@ Future<Map<String, dynamic>> tokenLogin() async {
 
     return {"response": response, "result": "SUCCESS"};
   } catch (e) {
+    print(e);
     print("로그인 실패");
     return {"result": "FAIL"};
   }

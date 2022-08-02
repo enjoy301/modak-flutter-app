@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/screens/chat/landing/chat_landing_dialog.dart';
+import 'package:modak_flutter_app/screens/chat/landing/chat_landing_emotion.dart';
 import 'package:modak_flutter_app/screens/chat/landing/function/chat_landing_function.dart';
 import 'package:modak_flutter_app/screens/chat/landing/chat_landing_header.dart';
 import 'package:modak_flutter_app/screens/chat/landing/input/chat_landing_input.dart';
@@ -32,30 +33,34 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
         body: Column(
           children: [
             Flexible(child: ChatLandingDialog()),
+            ChatLandingEmotion(),
             ChatLandingInput(),
             ChatLandingFunction(),
             Consumer<ChatProvider>(builder: (context, provider, child) {
-              return WillPopScope(
-                  child: Text(""),
-                  onWillPop: () {
-                    /// Function State 가 landing 이 아닐 때
-                    if ([
-                      FunctionState.album,
-                      FunctionState.onWay,
-                      FunctionState.todo
-                    ].contains(provider.functionState)) {
-                      provider.setFunctionState(FunctionState.landing);
-                      return Future(() => false);
-                    }
-
-                    /// Function 메뉴가 열려있을 때
-                    if (provider.isFunctionOpened) {
-                      provider.isFunctionOpenedToggle();
-                      return Future(() => false);
-                    }
-                    provider.refresh();
-                    return Future(() => true);
-                  });
+              return Visibility(
+                visible: false,
+                maintainState: true,
+                child: WillPopScope(
+                    child: Text(""),
+                    onWillPop: () {
+                      /// Function State 가 landing 이 아닐 때
+                      if ([
+                        FunctionState.album,
+                        FunctionState.onWay,
+                        FunctionState.todo
+                      ].contains(provider.functionState)) {
+                        provider.setFunctionState(FunctionState.landing);
+                        return Future(() => false);
+                      }
+                      /// Function 메뉴가 열려있을 때
+                      if (provider.isFunctionOpened) {
+                        provider.isFunctionOpenedToggle();
+                        return Future(() => false);
+                      }
+                      provider.refresh();
+                      return Future(() => true);
+                    }),
+              );
             }),
           ],
         ),
