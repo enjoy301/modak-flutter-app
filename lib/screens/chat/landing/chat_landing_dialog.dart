@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/chat_dialog_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
 import 'package:provider/provider.dart';
 
 class ChatLandingDialog extends StatefulWidget {
@@ -16,22 +17,19 @@ class _ChatLandingDialogState extends State<ChatLandingDialog> {
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
 
-    return
-      GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: ListView.builder(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Consumer<ChatProvider>(builder: (context, provider, child) {
+        return ListView.builder(
             controller: scrollController,
             itemCount: context.watch<ChatProvider>().chats.length,
             itemBuilder: (BuildContext context, int index) {
-              return ChatDialogWidget(
-                  chat: context
-                      .watch<ChatProvider>()
-                      .getChatAt(index));
-            }),
-      );
-
+              return ChatDialogWidget(chat: provider.getChatAt(index));
+              // return ChatImageWidget();
+            });
+      }),
+    );
   }
 }
-

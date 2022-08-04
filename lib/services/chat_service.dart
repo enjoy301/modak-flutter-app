@@ -103,7 +103,8 @@ Future<Map<String, dynamic>> uploadMedia(
     """);
 
     var formData = FormData.fromMap({
-      "key": "${UserProvider.family_id}/${UserProvider.user_id}/${DateTime.now().millisecondsSinceEpoch}.$type",
+      "key": "${UserProvider.family_id}/${DateTime.now().millisecondsSinceEpoch}/Modak_${uuid}.zip",
+      Modak_uuid_1.png/jpg/mp4
       "x-amz-algorithm": xAmzAlgorithm.trim(),
       "x-amz-credential": xAmzCredential.trim(),
       "x-amz-date": xAmzDate.trim(),

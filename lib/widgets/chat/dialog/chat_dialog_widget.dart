@@ -1,9 +1,13 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
 
 class ChatDialogWidget extends StatefulWidget {
   const ChatDialogWidget({Key? key, required this.chat}) : super(key: key);
@@ -19,15 +23,16 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
     return Container(
       margin: EdgeInsets.only(top: 9, right: 10, bottom: 8, left: 10),
       child: Row(
-        mainAxisAlignment:
-            isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
+        textDirection: isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
         children: [
+          DialogImageWidget(chat: widget.chat),
+          // DialogBubbleWidget(chat: widget.chat),
           Padding(
-            padding: EdgeInsets.only(right: 4),
+            padding: EdgeInsets.symmetric(horizontal: 4),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Text(
                   "1",
@@ -50,27 +55,8 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
               ],
             ),
           ),
-          Container(
-            constraints: BoxConstraints(minWidth: 30, maxWidth: 250),
-            decoration: BoxDecoration(
-              color: isMine ? Coloring.point_pureorange : Coloring.bg_orange,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(top: 9, right: 10, bottom: 8, left: 10),
-              child: Text(
-                widget.chat.content,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: Font.size_mediumText,
-                  fontWeight: Font.weight_regular,
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );
   }
 }
-
