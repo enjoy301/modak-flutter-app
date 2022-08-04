@@ -83,7 +83,7 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
 
                       MultipartFile? image = await getImageFromCamera();
 
-                      Map<String, dynamic> response = await sendMedia(image, "png");
+                      Map<String, dynamic> response = await sendMedia(image, "png", 1);
 
                       if (response['result'] != "FAIL") {
                         print(response['response']);
@@ -96,7 +96,7 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
                     onPressed: () async {
                       Future(() => Navigator.pop(context));
                       MultipartFile? video = await getVideoFromCamera();
-                      Map<String, dynamic> response = await sendMedia(video, "mp4");
+                      Map<String, dynamic> response = await sendMedia(video, "mp4", 0);
                       if (response['result'] != "FAIL") {
                         print(response['response']);
                       } else {

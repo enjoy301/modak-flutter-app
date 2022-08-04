@@ -45,7 +45,7 @@ void getChats(BuildContext context) async {
   }
 }
 
-Future<Map<String, dynamic>> sendMedia(MultipartFile? file, String type) async {
+Future<Map<String, dynamic>> sendMedia(MultipartFile? file, String type, int imageCount) async {
   if (file == null) {
     return {"result": "FAIL", "message": "FILE_NULL"};
   }
@@ -57,7 +57,7 @@ Future<Map<String, dynamic>> sendMedia(MultipartFile? file, String type) async {
       jsonDecode(getMediaUrlResponse['response'].data);
 
   Map<String, dynamic> uploadMediaResponse =
-      await uploadMedia(mediaUrlData, file, type);
+      await uploadMedia(mediaUrlData, file, type, imageCount);
   if (uploadMediaResponse['result'] == "FAIL") {
     return {"result": "FAIL", "message": "UPLOAD"};
   }
@@ -77,7 +77,7 @@ Future<Map<String, dynamic>> getMediaUrl() async {
 }
 
 Future<Map<String, dynamic>> uploadMedia(
-    Map<String, dynamic> mediaUrlData, MultipartFile file, String type) async {
+    Map<String, dynamic> mediaUrlData, MultipartFile file, String type, int imageCount) async {
   try {
     String xAmzAlgorithm = mediaUrlData['fields']['x-amz-algorithm'];
     String xAmzCredential = mediaUrlData['fields']['x-amz-credential'];
@@ -85,6 +85,7 @@ Future<Map<String, dynamic>> uploadMedia(
     String xAmzSecurityToken = mediaUrlData['fields']['x-amz-security-token'];
     String policy = mediaUrlData['fields']['policy'];
     String xAmzSignature = mediaUrlData['fields']['x-amz-signature'];
+    int xAmzMetaImageCount = imageCount;
 
     debugPrint("""
     ----------------------------------------------------
@@ -95,6 +96,9 @@ Future<Map<String, dynamic>> uploadMedia(
     token: $xAmzSecurityToken
     policy: $policy
     sign: $xAmzSignature
+    userId: ${UserProvider.user_id}
+    familyId: ${UserProvider.family_id}
+    imageCount: $xAmzMetaImageCount
     ----------------------------------------------------
     """);
 
@@ -106,8 +110,9 @@ Future<Map<String, dynamic>> uploadMedia(
       "x-amz-security-token": xAmzSecurityToken.trim(),
       "policy": policy.trim(),
       "x-amz-signature": xAmzSignature.trim(),
-      "x-amz-meta-is_first": 1,
-      "x-amz-meta-count": 1,
+      "x-amz-meta-user_id": UserProvider.user_id,
+      "x-amz-meta-family_id": UserProvider.family_id,
+      "x-amz-meta-image_count": xAmzMetaImageCount,
       "file": file,
     });
 

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 
 extension StringToType on String? {
@@ -20,13 +18,15 @@ extension StringToType on String? {
 
   String? mediaType() {
     if (this == null) return null;
-    RegExp regExp = RegExp(r'png|mp4');
+    RegExp regExp = RegExp(r'png|mp4|jpg');
     String res = this!.toLowerCase().split(".").last;
     List<String> extensions = regExp.allMatches(res).map((m) => m.group(0).toString()).toList();
     if (extensions.contains("png")) {
       return "png";
     } else if (extensions.contains("mp4")) {
       return "mp4";
+    } else if (extensions.contains("jpg")) {
+      return "jpg";
     }
     return null;
   }
