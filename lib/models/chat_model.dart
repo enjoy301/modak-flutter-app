@@ -9,7 +9,6 @@ class ChatModel with _$ChatModel {
     required int userId,
     required String content,
     required double sendAt,
-    required String typeCode,
     required Map? metaData,
   }) = _ChatModel;
 
