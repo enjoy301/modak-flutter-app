@@ -13,8 +13,8 @@ class AuthUtil {
         token = await UserApi.instance.loginWithKakaoAccount();
       }
       User user = await UserApi.instance.me();
-      Future(() => context.read<AuthProvider>().setProvider("KAKAO"));
-      Future(() => context.read<AuthProvider>().setProviderId(user.id));
+      context.read<AuthProvider>().setProvider("KAKAO");
+      context.read<AuthProvider>().setProviderId(user.id-1);
     } catch(e) {
       return false;
     }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/provider/auth_provider.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/register_name_agreement_screen.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/register_role_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
-import 'package:modak_flutter_app/widgets/header/header_blank_widget.dart';
+import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
+import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
 class AuthRegisterScreen extends StatefulWidget {
@@ -31,28 +33,27 @@ class _AuthRegisterScreenState extends State<AuthRegisterScreen> {
           return Future(() => false);
         },
         child: Scaffold(
-          appBar: headerBlankWidget(
-              "회원가입", () => {provider.goPreviousPage(context)}),
-          body: pages[provider.page - 1],
+          resizeToAvoidBottomInset: false,
+          appBar: headerDefaultWidget(
+              title: "가족 생성",
+              leading: FunctionalIcon.back,
+              onClickLeading: () => {provider.goPreviousPage(context)}),
+          body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: pages[provider.page - 1]),
           bottomSheet: Container(
               color: Colors.white,
               width: double.infinity,
               height: 100,
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-              child: ElevatedButton(
-                onPressed: provider.getValidity()
-                    ? () {
-                        provider.goNextPage(context);
-                      }
-                    : null,
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                ),
-                child: Text(buttonText[provider.page - 1]),
+              child: ButtonMainWidget(
+                title: buttonText[provider.page - 1],
+                onPressed: () {
+                  provider.goNextPage(context);
+                },
+                isValid: provider.getValidity(),
               )),
         ),
       );

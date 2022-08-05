@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:modak_flutter_app/screens/auth/auth_invitation_screen.dart';
 import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
-import 'package:modak_flutter_app/screens/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
@@ -68,7 +68,7 @@ class AuthProvider extends ChangeNotifier {
         return;
       } else if (response["result"] == "SUCCESS") {
         Future(() => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => LandingBottomNavigator())));
+            MaterialPageRoute(builder: (context) => AuthInvitationScreen())));
       }
     } else {
       _page += 1;
@@ -138,6 +138,11 @@ class AuthProvider extends ChangeNotifier {
   void setIsLunar(bool isLunar) {
     _isLunar = isLunar;
     PrefsUtil.setBool("user_is_lunar", isLunar);
+    notifyListeners();
+  }
+
+  void toggleIsLunar() {
+    _isLunar = !_isLunar;
     notifyListeners();
   }
 

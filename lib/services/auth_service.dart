@@ -37,10 +37,40 @@ Future<Map<String, dynamic>> signUp() async {
   }
 }
 
+/// 소셜 로그인 확인 함수
+Future<Map<String, dynamic>> socialLogin() async {
+  print(PrefsUtil.getString("provider"));
+  print(PrefsUtil.getInt("provider_id"));
+
+  try {
+    Response response = await Dio()
+        .post("${dotenv.get("API_ENDPOINT")}/api/member/social-login", data: {
+      "provider": "${PrefsUtil.getString("provider")}",
+      "providerId": "${PrefsUtil.getInt("provider_id").toString()}",
+    });
+    PrefsUtil.setString("access_token", response.headers['access_token']![0]);
+    PrefsUtil.setString("refresh_token", response.headers['refresh_token']![0]);
+    return {
+      "result": "SUCCESS",
+      "response": response,
+    };
+  } catch (e) {
+    if (e is DioError) {
+
+      return {
+        "result": "FAIL",
+        "code": e.response!.data['code']
+      };
+    }
+  }
+  return {
+    "result": "FAIL",
+    "code": "unknownError"
+  };
+}
+
 /// 로그인 시도 함수
 Future<Map<String, dynamic>> tokenLogin() async {
-  print(PrefsUtil.getString("access_token"));
-  print(PrefsUtil.getString("refresh_token"));
 
   try {
     Response response = await Dio()
@@ -56,6 +86,12 @@ Future<Map<String, dynamic>> tokenLogin() async {
 
     return {"response": response, "result": "SUCCESS"};
   } catch (e) {
+    if (e is DioError) {
+      return {
+        "result": "FAIL",
+        "code": e.response!.data['code']
+      };
+    }
     print(e);
     print("로그인 실패");
     return {"result": "FAIL"};

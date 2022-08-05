@@ -91,6 +91,10 @@ flutter:
   assets:
     - .env
     -  lib/assets/
+    -  lib/assets/functional_image/
+    -  lib/assets/images/auth/
+    -  lib/assets/images/family/
+    -  lib/assets/images/others/
   fonts:
     - family: Font_Poppins
       fonts:

@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/screens/auth/auth_invited_screen.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/auth_register_screen.dart';
+import 'package:modak_flutter_app/screens/landing_bottomtab_navigator.dart';
+import 'package:modak_flutter_app/services/auth_service.dart';
 import 'package:modak_flutter_app/utils/auth_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/auth/auth_introduction_widget.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
+import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 
 class AuthLandingScreen extends StatefulWidget {
   const AuthLandingScreen({Key? key}) : super(key: key);
@@ -21,35 +25,7 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: Ink(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color(0XFFF7F8F8),
-            ),
-            child: IconButton(
-              onPressed: () {
-                print("안녕");
-              },
-              icon: Icon(
-                LightIcons.ArrowLeft2,
-                size: 16,
-                color: Coloring.gray_0,
-              ),
-            ),
-          ),
-          centerTitle: true,
-          title: Text("Modak",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: Font.size_largeText,
-                fontWeight: Font.weight_bold,
-              )),
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
+        appBar: headerDefaultWidget(title: "Modak"),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -77,7 +53,12 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: ButtonMainWidget(
                 title: "가족 방에 초대 받았습니다",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AuthInvitedScreen()));
+                },
               ),
             ),
             Container(
@@ -95,16 +76,29 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                         await AuthUtil.kakaoLogin(context);
                         if (PrefsUtil.getInt("provider_id") != null &&
                             PrefsUtil.getString("provider") != null) {
-                          PrefsUtil.setBool("is_register_progress", true);
-                          Future(() => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AuthRegisterScreen())));
+                          Map<String, dynamic> response = await socialLogin();
+                          print(response['result']);
+                          if (response['result'] == "FAIL") {
+                            if (response['code'] ==
+                                "EmptyResultDataAccessException") {
+                              PrefsUtil.setBool("is_register_progress", true);
+                              Future(() => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AuthRegisterScreen())));
+                            }
+                          } else {
+                            Future(() => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        LandingBottomNavigator())));
+                          }
                         }
                       },
                       child: Image.asset(
-                        "lib/assets/kakao_login.png",
+                        "lib/assets/images/auth/kakao_login.png",
                         width: 60,
                         height: 60,
                       ),
@@ -126,7 +120,7 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                         }
                       },
                       child: Image.asset(
-                        "lib/assets/apple_login.png",
+                        "lib/assets/images/auth/apple_login.png",
                         width: 60,
                         height: 60,
                       ),
