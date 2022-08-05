@@ -10,7 +10,6 @@ _$_ChatModel _$$_ChatModelFromJson(Map<String, dynamic> json) => _$_ChatModel(
       userId: json['userId'] as int,
       content: json['content'] as String,
       sendAt: (json['sendAt'] as num).toDouble(),
-      typeCode: json['typeCode'] as String,
       metaData: json['metaData'] as Map<String, dynamic>?,
     );
 
@@ -19,6 +18,5 @@ Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
       'userId': instance.userId,
       'content': instance.content,
       'sendAt': instance.sendAt,
-      'typeCode': instance.typeCode,
       'metaData': instance.metaData,
     };

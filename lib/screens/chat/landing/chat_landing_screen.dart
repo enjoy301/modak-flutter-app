@@ -20,10 +20,13 @@ class ChatLandingScreen extends StatefulWidget {
 }
 
 class _ChatLandingScreenState extends State<ChatLandingScreen> {
-  var channel = IOWebSocketChannel.connect("${dotenv.get("CHAT_WSS")}/dev?u=2")
-      .stream
-      .listen((event) {
-    print(event);
+  var channel =
+      IOWebSocketChannel.connect("${dotenv.get("CHAT_WSS")}/dev?u=2&f=1")
+          .stream
+          .listen((event) {
+    debugPrint("""
+    $event
+    """);
   });
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,7 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
                         provider.setFunctionState(FunctionState.landing);
                         return Future(() => false);
                       }
+
                       /// Function 메뉴가 열려있을 때
                       if (provider.isFunctionOpened) {
                         provider.isFunctionOpenedToggle();

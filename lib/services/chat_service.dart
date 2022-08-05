@@ -8,14 +8,13 @@ import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
-Future<bool> sendChat(
-    BuildContext context, String content, String typeCode) async {
+Future<bool> sendChat(ChatModel chat) async {
   final response =
       await Dio().post('${dotenv.get("CHAT_HTTP")}/dev/messages', data: {
     'family_id': UserProvider.family_id,
     'user_id': UserProvider.user_id,
-    'content': content,
-    'type_code': typeCode,
+    'content': chat.content,
+    'metadata': chat.metaData,
   });
 
   print(response.statusCode);
@@ -35,17 +34,18 @@ void getChats(BuildContext context) async {
 
   List<dynamic> tempList = (jsonDecode(response.data as String)['message']);
   for (var item in tempList) {
+
     // ignore: use_build_context_synchronously
     context.read<ChatProvider>().addChat(ChatModel(
         userId: item['user_id'],
         content: item['content'],
         sendAt: item['send_at'],
-        typeCode: item['type_code'],
-        metaData: item['metadata']));
+        metaData: jsonDecode(item['metadata'])));
   }
 }
 
-Future<Map<String, dynamic>> sendMedia(MultipartFile? file, String type, int imageCount) async {
+Future<Map<String, dynamic>> sendMedia(
+    MultipartFile? file, String type, int imageCount) async {
   if (file == null) {
     return {"result": "FAIL", "message": "FILE_NULL"};
   }
@@ -76,8 +76,8 @@ Future<Map<String, dynamic>> getMediaUrl() async {
   }
 }
 
-Future<Map<String, dynamic>> uploadMedia(
-    Map<String, dynamic> mediaUrlData, MultipartFile file, String type, int imageCount) async {
+Future<Map<String, dynamic>> uploadMedia(Map<String, dynamic> mediaUrlData,
+    MultipartFile file, String type, int imageCount) async {
   try {
     String xAmzAlgorithm = mediaUrlData['fields']['x-amz-algorithm'];
     String xAmzCredential = mediaUrlData['fields']['x-amz-credential'];
@@ -103,7 +103,8 @@ Future<Map<String, dynamic>> uploadMedia(
     """);
 
     var formData = FormData.fromMap({
-      "key": "${UserProvider.family_id}/${DateTime.now().millisecondsSinceEpoch}/Modak.zip",
+      "key":
+          "${UserProvider.family_id}/${DateTime.now().millisecondsSinceEpoch}/Modak.zip",
       "x-amz-algorithm": xAmzAlgorithm.trim(),
       "x-amz-credential": xAmzCredential.trim(),
       "x-amz-date": xAmzDate.trim(),
@@ -115,7 +116,6 @@ Future<Map<String, dynamic>> uploadMedia(
       "x-amz-meta-image_count": xAmzMetaImageCount,
       "file": file,
     });
-
 
     var response = await Dio(BaseOptions(headers: {
       "Content-Type": "multipart/form-data",

@@ -23,7 +23,6 @@ mixin _$ChatModel {
   int get userId => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   double get sendAt => throw _privateConstructorUsedError;
-  String get typeCode => throw _privateConstructorUsedError;
   Map<dynamic, dynamic>? get metaData => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,7 +39,6 @@ abstract class $ChatModelCopyWith<$Res> {
       {int userId,
       String content,
       double sendAt,
-      String typeCode,
       Map<dynamic, dynamic>? metaData});
 }
 
@@ -57,7 +55,6 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
     Object? userId = freezed,
     Object? content = freezed,
     Object? sendAt = freezed,
-    Object? typeCode = freezed,
     Object? metaData = freezed,
   }) {
     return _then(_value.copyWith(
@@ -73,10 +70,6 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
           ? _value.sendAt
           : sendAt // ignore: cast_nullable_to_non_nullable
               as double,
-      typeCode: typeCode == freezed
-          ? _value.typeCode
-          : typeCode // ignore: cast_nullable_to_non_nullable
-              as String,
       metaData: metaData == freezed
           ? _value.metaData
           : metaData // ignore: cast_nullable_to_non_nullable
@@ -95,7 +88,6 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
       {int userId,
       String content,
       double sendAt,
-      String typeCode,
       Map<dynamic, dynamic>? metaData});
 }
 
@@ -114,7 +106,6 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
     Object? userId = freezed,
     Object? content = freezed,
     Object? sendAt = freezed,
-    Object? typeCode = freezed,
     Object? metaData = freezed,
   }) {
     return _then(_$_ChatModel(
@@ -130,10 +121,6 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
           ? _value.sendAt
           : sendAt // ignore: cast_nullable_to_non_nullable
               as double,
-      typeCode: typeCode == freezed
-          ? _value.typeCode
-          : typeCode // ignore: cast_nullable_to_non_nullable
-              as String,
       metaData: metaData == freezed
           ? _value._metaData
           : metaData // ignore: cast_nullable_to_non_nullable
@@ -149,7 +136,6 @@ class _$_ChatModel implements _ChatModel {
       {required this.userId,
       required this.content,
       required this.sendAt,
-      required this.typeCode,
       required final Map<dynamic, dynamic>? metaData})
       : _metaData = metaData;
 
@@ -162,8 +148,6 @@ class _$_ChatModel implements _ChatModel {
   final String content;
   @override
   final double sendAt;
-  @override
-  final String typeCode;
   final Map<dynamic, dynamic>? _metaData;
   @override
   Map<dynamic, dynamic>? get metaData {
@@ -175,7 +159,7 @@ class _$_ChatModel implements _ChatModel {
 
   @override
   String toString() {
-    return 'ChatModel(userId: $userId, content: $content, sendAt: $sendAt, typeCode: $typeCode, metaData: $metaData)';
+    return 'ChatModel(userId: $userId, content: $content, sendAt: $sendAt, metaData: $metaData)';
   }
 
   @override
@@ -186,7 +170,6 @@ class _$_ChatModel implements _ChatModel {
             const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.content, content) &&
             const DeepCollectionEquality().equals(other.sendAt, sendAt) &&
-            const DeepCollectionEquality().equals(other.typeCode, typeCode) &&
             const DeepCollectionEquality().equals(other._metaData, _metaData));
   }
 
@@ -197,7 +180,6 @@ class _$_ChatModel implements _ChatModel {
       const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(content),
       const DeepCollectionEquality().hash(sendAt),
-      const DeepCollectionEquality().hash(typeCode),
       const DeepCollectionEquality().hash(_metaData));
 
   @JsonKey(ignore: true)
@@ -218,7 +200,6 @@ abstract class _ChatModel implements ChatModel {
       {required final int userId,
       required final String content,
       required final double sendAt,
-      required final String typeCode,
       required final Map<dynamic, dynamic>? metaData}) = _$_ChatModel;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
@@ -230,8 +211,6 @@ abstract class _ChatModel implements ChatModel {
   String get content;
   @override
   double get sendAt;
-  @override
-  String get typeCode;
   @override
   Map<dynamic, dynamic>? get metaData;
   @override

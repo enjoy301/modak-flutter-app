@@ -67,16 +67,12 @@ class _InputChatWidgetState extends State<InputChatWidget> {
           provider.currentMyChat != ""
               ? IconButton(
                   onPressed: () {
-                    context.read<ChatProvider>().addChat(ChatModel(
+                    sendChat(ChatModel(
                         userId: UserProvider.user_id,
                         content: textEditingController.value.text,
-                        sendAt:
-                            DateTime.now().millisecondsSinceEpoch.toDouble(),
-                        typeCode: "plain",
-                        metaData: null));
-                    sendChat(
-                        context, textEditingController.value.text, "plain");
-                    context.read<ChatProvider>().setCurrentMyChat("");
+                        sendAt: 0.0,
+                        metaData: {"type_code": "plain"}));
+                    provider.setCurrentMyChat("");
                     textEditingController.clear();
                   },
                   icon: IconGradientWidget(
