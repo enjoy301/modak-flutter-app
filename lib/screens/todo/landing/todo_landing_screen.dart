@@ -26,16 +26,17 @@ class TodoLandingScreen extends StatelessWidget {
         ),
         floatingActionButton: GestureDetector(
           child: Container(
-            width: 50,
-            height: 50,
+            width: 60,
+            height: 60,
             decoration: BoxDecoration(
-              gradient: Coloring.notice,
+              gradient: Coloring.sub_purple,
               boxShadow: [
                 Shadowing.purple,
               ],
+              borderRadius: BorderRadius.circular(30),
             ),
+            child: Icon(Icons.add, color: Colors.white,),
           ),
-
           onTap: () {
             context.read<TodoProvider>().add(TodoModel(
                 title: "제목",

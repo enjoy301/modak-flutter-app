@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/models/todo_model.dart';
 import 'package:modak_flutter_app/widgets/dialog/default_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/todo/todo_listitem_tag_widget.dart';
@@ -19,7 +20,8 @@ class TodoListItemWidget extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(top: 5, bottom: 5, left: 20, right: 2),
               decoration: BoxDecoration(
-                  color: Colors.pinkAccent,
+                  color: Coloring.bg_purple,
+                  gradient: Coloring.sub_purple,
                   borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(12),
@@ -42,7 +44,15 @@ class TodoListItemWidget extends StatelessWidget {
                         Text(todo.title),
                         Expanded(child: Text("")),
                         ExpandableButton(
-                          child: Icon(Icons.keyboard_arrow_down_rounded),
+                          child: Expandable(
+                              expanded: Icon(
+                                Icons.keyboard_arrow_up_rounded,
+                                color: Coloring.gray_10,
+                              ),
+                              collapsed: Icon(
+                                Icons.keyboard_arrow_down_rounded,
+                                color: Coloring.gray_10,
+                              )),
                         )
                       ],
                     ),
