@@ -14,7 +14,7 @@ class AuthUtil {
       }
       User user = await UserApi.instance.me();
       context.read<AuthProvider>().setProvider("KAKAO");
-      context.read<AuthProvider>().setProviderId(user.id-1);
+      context.read<AuthProvider>().setProviderId(user.id);
     } catch(e) {
       return false;
     }

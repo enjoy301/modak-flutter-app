@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
@@ -53,6 +52,7 @@ class ChatProvider extends ChangeNotifier {
     if (media != null) {
       _medias.add(media);
       _thumbnailMedias.add(await getVideoThumbnail(media));
+      print(media.path);
     }
     print(_medias.length);
     print(_thumbnailMedias.length);
