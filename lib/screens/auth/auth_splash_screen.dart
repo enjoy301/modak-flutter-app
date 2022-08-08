@@ -1,9 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
+import 'package:modak_flutter_app/provider/album_provider.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/auth_register_screen.dart';
 import 'package:modak_flutter_app/screens/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
+import 'package:modak_flutter_app/utils/file_system_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class AuthSplashScreen extends StatefulWidget {
   const AuthSplashScreen({Key? key}) : super(key: key);
@@ -32,6 +40,36 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
         PrefsUtil.getString("access_token") != null) {
       Map<String, dynamic> response = await tokenLogin();
       if (response['result'] == 'SUCCESS') {
+
+        Directory? directory = await FileSystemUtil.getMediaDirectory();
+        if (directory != null) {
+
+          Directory messengerDirectory = Directory("${directory.path}/${UserProvider.family_id}");
+          Directory todoDirectory = Directory("${directory.path}/${UserProvider.family_id}");
+
+          if (!await messengerDirectory.exists()) {
+            await messengerDirectory.create(recursive: true);
+          }
+
+          if (!await todoDirectory.exists()) {
+            await todoDirectory.create(recursive: true);
+          }
+
+          List<FileSystemEntity> messengerFiles = messengerDirectory.listSync(recursive: true);
+          List<FileSystemEntity> todoFiles = todoDirectory.listSync(recursive: true);
+
+          for (FileSystemEntity fileSystemEntity in messengerFiles) {
+            // ignore: use_build_context_synchronously
+            context.read<AlbumProvider>().addFileToMessengerAlbum(File(fileSystemEntity.path));
+          }
+          // for (FileSystemEntity fileSystemEntity in todoFiles) {
+          //   // ignore: use_build_context_synchronously
+          //   context.read<AlbumProvider>().addFileToTodoAlbum(File(fileSystemEntity.path));
+          // }
+
+
+        }
+
         Future(() => Navigator.pushReplacement(
             context,
             MaterialPageRoute(

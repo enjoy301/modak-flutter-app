@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class AlbumProvider extends ChangeNotifier {
 
-  final List<File> _messengerAlbumFiles = [File("storage/emulated/0/Android/data/com.example.modak_flutter_app/files/Download/cached_media/test.png")];
+  static int messengerLastId = 0;
+
+  final List<File> _messengerAlbumFiles = [];
   get messengerAlbumFiles => _messengerAlbumFiles;
 
   void addFileToMessengerAlbum(File file) {

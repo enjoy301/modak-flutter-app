@@ -26,14 +26,13 @@ void main() async {
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_KEY"));
   // 한글 지원
   // 상태관리 provider 정의
-  initializeDateFormatting().then((_) =>runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => ChatProvider()),
-    ChangeNotifierProvider(create: (_) => UserProvider()),
-    ChangeNotifierProvider(create: (_) => TodoProvider()),
-    ChangeNotifierProvider(create: (_) => AuthProvider()),
-    ChangeNotifierProvider(create: (_) => AlbumProvider()),
-  ], child: const MyApp())));
-
+  initializeDateFormatting().then((_) => runApp(MultiProvider(providers: [
+        ChangeNotifierProvider(create: (_) => ChatProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => TodoProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => AlbumProvider()),
+      ], child: const MyApp())));
 }
 
 class MyApp extends StatelessWidget {

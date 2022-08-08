@@ -121,7 +121,7 @@ Future<Map<String, dynamic>> uploadMedia(Map<String, dynamic> mediaUrlData,
       "Content-Type": "multipart/form-data",
       'Connection': 'keep-alive',
       "Accept": "*/*"
-    })).post("https://chatapp-private.s3.amazonaws.com/", data: formData);
+    })).post(dotenv.get("S3_ENDPOINT"), data: formData);
     print(response);
 
     return {"result": "SUCCESS"};
