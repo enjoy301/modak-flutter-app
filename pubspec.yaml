@@ -64,6 +64,7 @@ dependencies:
   image: ^3.2.0
   uuid: ^3.0.6
   image_downloader: ^0.31.0
+  sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:
