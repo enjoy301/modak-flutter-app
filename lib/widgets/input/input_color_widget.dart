@@ -3,6 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/constant/user_colors.dart';
 
 class InputColorWidget extends StatefulWidget {
   const InputColorWidget({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _InputColorWidgetState extends State<InputColorWidget> {
                   content: SingleChildScrollView(
                     child: BlockPicker(
                       pickerColor: Colors.red,
-                      availableColors: [Colors.red, Colors.black, Colors.white],
+                      availableColors: UserColors.points,
                       onColorChanged: (Color color) {},
                     ),
                   ),

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 
 /// 회원가입 완료 실행 함수
@@ -56,22 +58,14 @@ Future<Map<String, dynamic>> socialLogin() async {
     };
   } catch (e) {
     if (e is DioError) {
-
-      return {
-        "result": "FAIL",
-        "code": e.response!.data['code']
-      };
+      return {"result": "FAIL", "code": e.response!.data['code']};
     }
   }
-  return {
-    "result": "FAIL",
-    "code": "unknownError"
-  };
+  return {"result": "FAIL", "code": "unknownError"};
 }
 
 /// 로그인 시도 함수
 Future<Map<String, dynamic>> tokenLogin() async {
-
   try {
     Response response = await Dio()
         .post("${dotenv.get("API_ENDPOINT")}/api/member/token-login", data: {
@@ -87,13 +81,35 @@ Future<Map<String, dynamic>> tokenLogin() async {
     return {"response": response, "result": "SUCCESS"};
   } catch (e) {
     if (e is DioError) {
-      return {
-        "result": "FAIL",
-        "code": e.response!.data['code']
-      };
+      return {"result": "FAIL", "code": e.response!.data['code']};
     }
     print(e);
     print("로그인 실패");
     return {"result": "FAIL"};
+  }
+}
+
+/// access Token 재발급 함수
+Future<Map<String, dynamic>> requestAccessToken(BuildContext context) async {
+  try {
+    Response response = await Dio()
+        .post("${dotenv.get("API_ENDPOINT")}/api/token/reissue", data: {
+      "accessToken": PrefsUtil.getString("access_token"),
+      "refreshToken": PrefsUtil.getString("refresh_token"),
+    });
+    PrefsUtil.setString("access_token", response.headers['access_token']![0]);
+    return {"result": "SUCCESS"};
+  } catch (e) {
+    if (e is DioError) {
+      if (e.message == "ExpiredRefreshTokenException") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => AuthLandingScreen()),
+            ModalRoute.withName('/') // Replace this with your root screen's route name (usually '/')
+        );
+      }
+      return {"result": "FAIL", "message": e.message};
+    }
+    return {"result": "FAIL", "message": "UNEXPECTED"};
   }
 }

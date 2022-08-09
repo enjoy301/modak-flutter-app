@@ -5,6 +5,8 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/screens/todo/write/write_when_screen.dart';
+import 'package:modak_flutter_app/services/auth_service.dart';
+import 'package:modak_flutter_app/services/todo_service.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_date_widget.dart';
@@ -146,7 +148,9 @@ class TodoWriteScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30, bottom: 20,),
         child: ButtonMainWidget(
-          title: "등록", onPressed: () {},
+          title: "등록", onPressed: () {
+            getWeekTodos();
+        },
         ),
       ),
     );
