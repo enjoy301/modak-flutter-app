@@ -19,6 +19,7 @@ class _TodoLandingCalendarState extends State<TodoLandingCalendar> {
   Widget build(BuildContext context) {
     return Consumer<TodoProvider>(builder: (context, provider, child) {
       return Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         decoration: BoxDecoration(gradient: Coloring.main),
         child: TableCalendar(
             locale: 'ko-KR',

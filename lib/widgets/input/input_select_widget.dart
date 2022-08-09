@@ -6,27 +6,32 @@ import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
 
 class InputSelectWidget extends StatefulWidget {
   const InputSelectWidget(
-      {Key? key, required this.title, required this.contents, required this.buttons, this.leftIconData})
+      {Key? key,
+      required this.title,
+      required this.contents,
+      this.buttons = const [],
+      this.leftIconData,
+      this.onTap})
       : super(key: key);
 
   final String title;
   final String contents;
   final List<TextButton> buttons;
   final IconData? leftIconData;
-
+  final Function()? onTap;
 
   @override
   State<InputSelectWidget> createState() => _InputSelectWidgetState();
 }
 
 class _InputSelectWidgetState extends State<InputSelectWidget> {
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        defaultModalWidget(context, widget.buttons);
-      },
+      onTap: widget.onTap ??
+          () {
+            defaultModalWidget(context, widget.buttons);
+          },
       child: Container(
         padding: EdgeInsets.only(top: 15, right: 15, bottom: 11, left: 15),
         decoration: BoxDecoration(

@@ -6,16 +6,20 @@ class InputTextWidget extends StatefulWidget {
   const InputTextWidget(
       {Key? key,
       this.initialValue = "",
-        this.hint = "",
+      this.hint = "",
       this.onChanged,
       this.isSuffix = false,
-      this.onClickSuffix})
+      this.onClickSuffix,
+      this.minLines = 1,
+      this.maxLines = 1})
       : super(key: key);
   final String initialValue;
   final String hint;
   final Function(String text)? onChanged;
   final bool isSuffix;
   final Function()? onClickSuffix;
+  final int minLines;
+  final int maxLines;
 
   @override
   // ignore: no_logic_in_create_state
@@ -35,10 +39,12 @@ class _InputTextWidgetState extends State<InputTextWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextFormField(
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
         controller: _controller,
         onChanged: widget.onChanged,
         decoration: InputDecoration(
-          hintText: widget.hint,
+            hintText: widget.hint,
             hintStyle: TextStyle(
               color: Coloring.gray_20,
               fontSize: Font.size_mediumText,
