@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/screens/auth/auth_invited_screen.dart';
+import 'package:modak_flutter_app/screens/auth/auth_instruction_screen.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/auth_register_screen.dart';
 import 'package:modak_flutter_app/screens/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
@@ -57,7 +57,7 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AuthInvitedScreen()));
+                          builder: (context) => AuthInstructionScreen()));
                 },
               ),
             ),

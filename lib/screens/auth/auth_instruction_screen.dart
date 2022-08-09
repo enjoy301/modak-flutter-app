@@ -4,8 +4,8 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 
-class AuthInvitedScreen extends StatelessWidget {
-  const AuthInvitedScreen({Key? key}) : super(key: key);
+class AuthInstructionScreen extends StatelessWidget {
+  const AuthInstructionScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
