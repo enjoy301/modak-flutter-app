@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:modak_flutter_app/screens/auth/auth_invitation_screen.dart';
+import 'package:modak_flutter_app/screens/common/common_invitation_screen.dart';
 import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
@@ -68,7 +68,7 @@ class AuthProvider extends ChangeNotifier {
         return;
       } else if (response["result"] == "SUCCESS") {
         Future(() => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => AuthInvitationScreen())));
+            MaterialPageRoute(builder: (context) => CommonInvitationScreen(withSkipButton: true,))));
       }
     } else {
       _page += 1;

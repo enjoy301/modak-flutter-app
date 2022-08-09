@@ -8,17 +8,19 @@ class ButtonMainWidget extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.onPressed,
-      this.isValid = true})
+      this.isValid = true, this.width = double.infinity, this.height = 60})
       : super(key: key);
   final String title;
   final Function()? onPressed;
   final bool isValid;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
-        height: 60,
+        width: width,
+        height: height,
         decoration: BoxDecoration(
           gradient: isValid ? Coloring.main : null,
           color: isValid ? null : Coloring.gray_50,

@@ -13,7 +13,7 @@ import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/services/chat_service.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_function_icon_widget.dart';
-import 'package:modak_flutter_app/widgets/dialog/default_modal_widget.dart';
+import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 

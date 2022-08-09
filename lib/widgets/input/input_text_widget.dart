@@ -61,7 +61,8 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                     },
                     icon: Icon(
                       Icons.close,
-                      color: Colors.black,
+                      color: Coloring.gray_10,
+                      size: 20,
                     ))
                 : null),
         cursorColor: Coloring.gray_0,

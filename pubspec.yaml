@@ -65,6 +65,7 @@ dependencies:
   uuid: ^3.0.6
   image_downloader: ^0.31.0
   sliding_up_panel: ^2.0.0+1
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -96,6 +97,7 @@ flutter:
     -  lib/assets/functional_image/
     -  lib/assets/images/auth/
     -  lib/assets/images/family/
+    -  lib/assets/images/family/profile/
     -  lib/assets/images/others/
   fonts:
     - family: Font_Poppins
