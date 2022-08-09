@@ -82,7 +82,6 @@ class _UserFamilyScreenState extends State<UserFamilyScreen> {
                 fontWeight: Font.weight_semiBold,
               ),),
             ),
-
           ],
         ),
       ),
