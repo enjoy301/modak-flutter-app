@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "937910743612",
+    "project_id": "modak-service",
+    "storage_bucket": "modak-service.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:937910743612:android:de211b416b3f186d0fc939",
+        "android_client_info": {
+          "package_name": "com.example.modak_flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "937910743612-249au7tcpls9eln2af1lsc1quikk8mle.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRQLtagAAYunt2dQj4DlbcD2Xe_KocIbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "937910743612-249au7tcpls9eln2af1lsc1quikk8mle.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "937910743612-8gi8nndbmc6158mn8mr9lhmjpsfgfpmd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.modakFlutterApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
