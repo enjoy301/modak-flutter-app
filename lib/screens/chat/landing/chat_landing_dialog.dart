@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/chat_dialog_widget.dart';
-import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
 import 'package:provider/provider.dart';
 
 class ChatLandingDialog extends StatefulWidget {
