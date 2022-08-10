@@ -13,8 +13,6 @@ import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/screens/auth/auth_splash_screen.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/auth_invitation_screen.dart';
-import 'package:modak_flutter_app/screens/todo/write/write_when_screen.dart';
-import 'package:modak_flutter_app/screens/user/user_modify_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
