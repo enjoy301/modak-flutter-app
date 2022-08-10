@@ -75,76 +75,75 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
   }
 
   navigateToNextPage() async {
-    Future(() => Navigator.push(context, MaterialPageRoute(builder: (context) => AuthInvitationScreen())));
     /// 유저가 생성되어 있을 때 처리
-  //   if (PrefsUtil.getString("refresh_token") != null &&
-  //       PrefsUtil.getString("access_token") != null) {
-  //     Map<String, dynamic> response = await tokenLogin();
-  //     if (response['result'] == 'SUCCESS') {
-  //       Directory? directory = await FileSystemUtil.getMediaDirectory();
-  //       if (directory != null) {
-  //         Directory messengerDirectory =
-  //             Directory("${directory.path}/${UserProvider.family_id}");
-  //         Directory todoDirectory =
-  //             Directory("${directory.path}/${UserProvider.family_id}");
-  //
-  //         if (!await messengerDirectory.exists()) {
-  //           await messengerDirectory.create(recursive: true);
-  //         }
-  //
-  //         if (!await todoDirectory.exists()) {
-  //           await todoDirectory.create(recursive: true);
-  //         }
-  //
-  //         List<FileSystemEntity> messengerFiles =
-  //             messengerDirectory.listSync(recursive: true);
-  //         List<FileSystemEntity> todoFiles =
-  //             todoDirectory.listSync(recursive: true);
-  //
-  //         for (FileSystemEntity fileSystemEntity in messengerFiles) {
-  //           // ignore: use_build_context_synchronously
-  //           context
-  //               .read<AlbumProvider>()
-  //               .addFileToMessengerAlbum(File(fileSystemEntity.path));
-  //         }
-  //         // for (FileSystemEntity fileSystemEntity in todoFiles) {
-  //         //   // ignore: use_build_context_synchronously
-  //         //   context.read<AlbumProvider>().addFileToTodoAlbum(File(fileSystemEntity.path));
-  //         // }
-  //
-  //       }
-  //
-  //       Future(() => Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) => const LandingBottomNavigator())));
-  //     } else if (response['result'] == 'FAIL') {
-  //       if (response['code'] == "MalformedJwtException" ||
-  //           response['code'] == "SignatureException" ||
-  //           response['code'] == "ExpiredJwtException") {
-  //         Future(() => Navigator.pushReplacement(
-  //             context,
-  //             MaterialPageRoute(
-  //                 builder: (context) => const AuthLandingScreen())));
-  //       } else {
-  //         Future(() => Navigator.pushReplacement(
-  //             context,
-  //             MaterialPageRoute(
-  //                 builder: (context) => const AuthLandingScreen())));
-  //       }
-  //     }
-  //   }
-  //
-  //   /// 회원가입 진행 중일 때 처리
-  //   else if (PrefsUtil.getBool("is_register_progress") == true) {
-  //     Future(() => Navigator.pushReplacement(context,
-  //         MaterialPageRoute(builder: (context) => const AuthRegisterScreen())));
-  //   }
-  //
-  //   /// 정보가 없을 때 처리
-  //   else {
-  //     Future(() => Navigator.pushReplacement(context,
-  //         MaterialPageRoute(builder: (context) => const AuthLandingScreen())));
-  //   }
+    if (PrefsUtil.getString("refresh_token") != null &&
+        PrefsUtil.getString("access_token") != null) {
+      Map<String, dynamic> response = await tokenLogin();
+      if (response['result'] == 'SUCCESS') {
+        Directory? directory = await FileSystemUtil.getMediaDirectory();
+        if (directory != null) {
+          Directory messengerDirectory =
+              Directory("${directory.path}/${UserProvider.family_id}");
+          Directory todoDirectory =
+              Directory("${directory.path}/${UserProvider.family_id}");
+
+          if (!await messengerDirectory.exists()) {
+            await messengerDirectory.create(recursive: true);
+          }
+
+          if (!await todoDirectory.exists()) {
+            await todoDirectory.create(recursive: true);
+          }
+
+          List<FileSystemEntity> messengerFiles =
+              messengerDirectory.listSync(recursive: true);
+          List<FileSystemEntity> todoFiles =
+              todoDirectory.listSync(recursive: true);
+
+          for (FileSystemEntity fileSystemEntity in messengerFiles) {
+            // ignore: use_build_context_synchronously
+            context
+                .read<AlbumProvider>()
+                .addFileToMessengerAlbum(File(fileSystemEntity.path));
+          }
+          // for (FileSystemEntity fileSystemEntity in todoFiles) {
+          //   // ignore: use_build_context_synchronously
+          //   context.read<AlbumProvider>().addFileToTodoAlbum(File(fileSystemEntity.path));
+          // }
+
+        }
+
+        Future(() => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const LandingBottomNavigator())));
+      } else if (response['result'] == 'FAIL') {
+        if (response['code'] == "MalformedJwtException" ||
+            response['code'] == "SignatureException" ||
+            response['code'] == "ExpiredJwtException") {
+          Future(() => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AuthLandingScreen())));
+        } else {
+          Future(() => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AuthLandingScreen())));
+        }
+      }
+    }
+
+    /// 회원가입 진행 중일 때 처리
+    else if (PrefsUtil.getBool("is_register_progress") == true) {
+      Future(() => Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const AuthRegisterScreen())));
+    }
+
+    /// 정보가 없을 때 처리
+    else {
+      Future(() => Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const AuthLandingScreen())));
+    }
   }
 }

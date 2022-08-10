@@ -24,7 +24,8 @@ Future<Map<String, dynamic>> signUp() async {
       "role": PrefsUtil.getString("user_role")!.split(".").last.toUpperCase(),
       "fcmToken": "qgti2uitu03gqrue9jqgn2342vwlngwkfw",
       "provider": PrefsUtil.getString("provider"),
-      "providerId": PrefsUtil.getInt("provider_id").toString()
+      "providerId": PrefsUtil.getInt("provider_id").toString(),
+      "familyId": -1,
     });
     print("회원가입 성공");
 
@@ -34,6 +35,9 @@ Future<Map<String, dynamic>> signUp() async {
 
     return {"response": response, "result": "SUCCESS"};
   } catch (e) {
+    if (e is DioError) {
+      print(await e.response!.data);
+    }
     print("회원가입 실패");
     return {"result": "FAIL"};
   }
@@ -48,7 +52,7 @@ Future<Map<String, dynamic>> socialLogin() async {
     Response response = await Dio()
         .post("${dotenv.get("API_ENDPOINT")}/api/member/social-login", data: {
       "provider": "${PrefsUtil.getString("provider")}",
-      "providerId": "${PrefsUtil.getInt("provider_id").toString()}",
+      "providerId": PrefsUtil.getInt("provider_id").toString(),
     });
     PrefsUtil.setString("access_token", response.headers['access_token']![0]);
     PrefsUtil.setString("refresh_token", response.headers['refresh_token']![0]);
@@ -58,6 +62,7 @@ Future<Map<String, dynamic>> socialLogin() async {
     };
   } catch (e) {
     if (e is DioError) {
+      print(await e.response!.data);
       return {"result": "FAIL", "code": e.response!.data['code']};
     }
   }
@@ -83,7 +88,6 @@ Future<Map<String, dynamic>> tokenLogin() async {
     if (e is DioError) {
       return {"result": "FAIL", "code": e.response!.data['code']};
     }
-    print(e);
     print("로그인 실패");
     return {"result": "FAIL"};
   }
@@ -104,9 +108,11 @@ Future<Map<String, dynamic>> requestAccessToken(BuildContext context) async {
       if (e.message == "ExpiredRefreshTokenException") {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (BuildContext context) => AuthLandingScreen()),
-            ModalRoute.withName('/') // Replace this with your root screen's route name (usually '/')
-        );
+            MaterialPageRoute(
+                builder: (BuildContext context) => AuthLandingScreen()),
+            ModalRoute.withName(
+                '/') // Replace this with your root screen's route name (usually '/')
+            );
       }
       return {"result": "FAIL", "message": e.message};
     }

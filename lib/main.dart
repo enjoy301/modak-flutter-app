@@ -12,6 +12,7 @@ import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/screens/auth/auth_splash_screen.dart';
+import 'package:modak_flutter_app/screens/auth/reigster/auth_invitation_screen.dart';
 import 'package:modak_flutter_app/screens/todo/write/write_when_screen.dart';
 import 'package:modak_flutter_app/screens/user/user_modify_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
@@ -27,8 +28,6 @@ void main() async {
   // dotenv 파일 로드
   await dotenv.load();
   await Firebase.initializeApp();
-
-
 
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_KEY"));
 
@@ -51,11 +50,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -74,11 +70,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initDynamicLink() async {
-    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink();
-    if (data != null) {
-      final Uri deepLink = data.link;
-      PrefsUtil.setString("invite_family_id", deepLink.toString());
-      Future(() => Navigator.push(context, MaterialPageRoute(builder: (context) => WriteWhenScreen())));
-    }
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AuthInvitationScreen()));
+    }).onError((error) {
+      debugPrint("act normally");
+    });
   }
 }
