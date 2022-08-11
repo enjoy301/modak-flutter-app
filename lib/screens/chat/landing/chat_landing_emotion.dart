@@ -12,8 +12,10 @@ class ChatLandingEmotion extends StatefulWidget {
 class _ChatLandingEmotionState extends State<ChatLandingEmotion> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatProvider>(builder: (context, provider, child) {
-      return Visibility(visible: provider.isEmotionOpened, child: Text("임시"));
-    });
+    return Consumer<ChatProvider>(
+      builder: (context, provider, child) {
+        return Visibility(visible: provider.isEmotionOpened, child: Text("임시"));
+      },
+    );
   }
 }

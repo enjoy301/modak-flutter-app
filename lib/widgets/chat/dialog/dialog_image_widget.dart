@@ -24,7 +24,7 @@ class _DialogImageWidgetState extends State<DialogImageWidget> {
       child: Stack(
         children: [
           Image.asset(
-            "lib/assets/img_graphic_album.png",
+            "lib/assets/images/family/dad.png",
             width: MediaQuery.of(context).size.width * 2 / 3,
             height: MediaQuery.of(context).size.width * 2 / 3 * 25 / 16,
           ),

@@ -6,7 +6,6 @@ import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 
 class ChatProvider extends ChangeNotifier {
-
   /// PREFIX: 채팅
 
   /// 모든 채팅
@@ -15,6 +14,7 @@ class ChatProvider extends ChangeNotifier {
 
   /// 채팅리스트에 뒤에 추가합니다.
   void addChat(ChatModel chat) {
+    chat.readCount = _connectionCount;
     _chats.add(chat);
     notifyListeners();
   }
@@ -39,6 +39,30 @@ class ChatProvider extends ChangeNotifier {
 
   void setCurrentMyChatType(ChatType currentMyChatType) {
     _currentMyChatType = currentMyChatType;
+  }
+
+  /// PREFIX: 커넥션 관리
+  final List<Map> _connections = [];
+  List<ChatModel> get connections => _chats;
+  int _connectionCount = 5;
+  int get connectionCount => _connectionCount;
+
+  void setConnection(List<dynamic> tempList) {
+    _connections.clear();
+    int count = 0;
+    print(tempList);
+    for (var item in tempList) {
+      _connections.add(item);
+      if (!item['is_joining']) {
+        count++;
+      }
+    }
+    _connectionCount = count;
+    notifyListeners();
+  }
+
+  int getNowJoin() {
+    return _connectionCount;
   }
 
   /// PREFIX: 앨범 사진 보관
@@ -97,14 +121,13 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   /// PREFIX: 입력 칸, 기능 칸 상태
 
   /// 기능 창 열림 여부
   bool _isFunctionOpened = false;
   bool get isFunctionOpened => _isFunctionOpened;
 
-  void setIsFunctionOpened (bool isFunctionOpened) {
+  void setIsFunctionOpened(bool isFunctionOpened) {
     _isFunctionOpened = isFunctionOpened;
     notifyListeners();
   }
@@ -129,10 +152,12 @@ class ChatProvider extends ChangeNotifier {
     if ([FunctionState.todo, FunctionState.onWay].contains(_functionState)) {
       return InputState.none;
     }
+
     /// album기능에서 inputState를 function으로 설정
     if ([FunctionState.album].contains(_functionState)) {
       return InputState.function;
     }
+
     /// 그 외 상태에서 inputState를 chat으로 설정
     return InputState.chat;
   }
@@ -147,7 +172,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   void toggleIsEmotionOpened() {
-    _isEmotionOpened  = !_isEmotionOpened;
+    _isEmotionOpened = !_isEmotionOpened;
     notifyListeners();
   }
 
@@ -158,5 +183,4 @@ class ChatProvider extends ChangeNotifier {
     _functionState = FunctionState.landing;
     _chats.clear();
   }
-
 }

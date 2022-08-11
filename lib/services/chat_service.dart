@@ -27,20 +27,21 @@ Future<bool> sendChat(ChatModel chat) async {
 void getChats(BuildContext context) async {
   final response = await Dio(BaseOptions(queryParameters: {
     'f': UserProvider.family_id,
-    'c': UserProvider.user_id,
+    'c': 100,
   })).get(
     '${dotenv.get("CHAT_HTTP")}/dev/messages/0',
   );
 
   List<dynamic> tempList = (jsonDecode(response.data as String)['message']);
   for (var item in tempList) {
-
     // ignore: use_build_context_synchronously
     context.read<ChatProvider>().addChat(ChatModel(
-        userId: item['user_id'],
-        content: item['content'],
-        sendAt: item['send_at'],
-        metaData: jsonDecode(item['metadata'])));
+          userId: item['user_id'],
+          content: item['content'],
+          sendAt: item['send_at'],
+          metaData: jsonDecode(item['metadata']),
+          readCount: 4,
+        ));
   }
 }
 
@@ -129,4 +130,16 @@ Future<Map<String, dynamic>> uploadMedia(Map<String, dynamic> mediaUrlData,
     print(e);
     return {"result": "FAIL"};
   }
+}
+
+void setConnections(BuildContext context) async {
+  final response = await Dio(BaseOptions(queryParameters: {
+    'f': UserProvider.family_id,
+  })).get(
+    '${dotenv.get("CHAT_HTTP")}/dev/connections',
+  );
+
+  List<dynamic> tempList =
+      (jsonDecode(response.data as String)['connection_data']);
+  context.read<ChatProvider>().setConnection(tempList);
 }

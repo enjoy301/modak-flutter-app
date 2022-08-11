@@ -21,8 +21,9 @@ class _FunctionAlbumWidgetState extends State<FunctionAlbumWidget>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatProvider>(builder: (context, provider, child) {
-      return ListView.builder(
+    return Consumer<ChatProvider>(
+      builder: (context, provider, child) {
+        return ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemCount: provider.thumbnailMedias.length,
@@ -107,8 +108,10 @@ class _FunctionAlbumWidgetState extends State<FunctionAlbumWidget>
                 )
               ],
             );
-          });
-    });
+          },
+        );
+      },
+    );
   }
 
   @override

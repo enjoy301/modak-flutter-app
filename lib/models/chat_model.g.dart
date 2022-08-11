@@ -11,6 +11,7 @@ _$_ChatModel _$$_ChatModelFromJson(Map<String, dynamic> json) => _$_ChatModel(
       content: json['content'] as String,
       sendAt: (json['sendAt'] as num).toDouble(),
       metaData: json['metaData'] as Map<String, dynamic>?,
+      readCount: json['readCount'] as int,
     );
 
 Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
       'content': instance.content,
       'sendAt': instance.sendAt,
       'metaData': instance.metaData,
+      'readCount': instance.readCount,
     };
