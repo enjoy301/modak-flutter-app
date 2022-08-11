@@ -72,6 +72,7 @@ dependencies:
   kakao_flutter_sdk: ^1.2.1
   kakao_flutter_sdk_user: ^1.2.1
   kakao_flutter_sdk_talk: ^1.2.1
+  sign_in_with_apple: ^4.1.0
 
 dev_dependencies:
   flutter_test:

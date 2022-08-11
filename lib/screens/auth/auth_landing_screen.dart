@@ -11,6 +11,7 @@ import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/auth/auth_introduction_widget.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthLandingScreen extends StatefulWidget {
   const AuthLandingScreen({Key? key}) : super(key: key);
@@ -108,16 +109,12 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () async {
-                        await AuthUtil.kakaoLogin(context);
-                        if (PrefsUtil.getInt("provider_id") != null &&
-                            PrefsUtil.getString("provider") != null) {
-                          PrefsUtil.setBool("is_register_progress", true);
-                          Future(() => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AuthRegisterScreen())));
-                        }
+                        final appIdCredential =
+                            await SignInWithApple.getAppleIDCredential(scopes: [
+                          AppleIDAuthorizationScopes.fullName,
+                          AppleIDAuthorizationScopes.email
+                        ]);
+                        debugPrint(appIdCredential.userIdentifier);
                       },
                       child: Image.asset(
                         "lib/assets/images/auth/apple_login.png",
