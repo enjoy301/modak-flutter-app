@@ -52,93 +52,97 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatProvider>(builder: (context, provider, build) {
-      return GridView(
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    return Consumer<ChatProvider>(
+      builder: (context, provider, build) {
+        return GridView(
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
 
-            /// TODO 화면 비율에 따라 짤리지 않도록 변경
-            childAspectRatio: 0.8,
-            crossAxisCount: 4),
-        children: [
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[0],
-            onTap: () async {
-              provider.setFunctionState(FunctionState.album);
-              if (provider.medias.isEmpty) {
-                List<File> files = await getImageFromAlbum();
-                for (File file in files) {
-                  await provider.addMedia(file);
+              /// TODO 화면 비율에 따라 짤리지 않도록 변경
+              childAspectRatio: 0.8,
+              crossAxisCount: 4),
+          children: [
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[0],
+              onTap: () async {
+                provider.setFunctionState(FunctionState.album);
+                if (provider.medias.isEmpty) {
+                  List<File> files = await getImageFromAlbum();
+                  for (File file in files) {
+                    await provider.addMedia(file);
+                  }
                 }
-              }
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[1],
-            onTap: () async {
-              defaultModalWidget(context, [
-                TextButton(
-                    onPressed: () async {
-                      Future(() => Navigator.pop(context));
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[1],
+              onTap: () async {
+                defaultModalWidget(context, [
+                  TextButton(
+                      onPressed: () async {
+                        Future(() => Navigator.pop(context));
 
-                      MultipartFile? image = await getImageFromCamera();
+                        MultipartFile? image = await getImageFromCamera();
 
-                      Map<String, dynamic> response = await sendMedia(image, "png", 1);
+                        Map<String, dynamic> response =
+                            await sendMedia(image, "png", 1);
 
-                      if (response['result'] != "FAIL") {
-                        print(response['response']);
-                      } else {
-                        print(response['message']);
-                      }
-                    },
-                    child: Text("사진 찍기")),
-                TextButton(
-                    onPressed: () async {
-                      Future(() => Navigator.pop(context));
-                      MultipartFile? video = await getVideoFromCamera();
-                      Map<String, dynamic> response = await sendMedia(video, "mp4", 0);
-                      if (response['result'] != "FAIL") {
-                        print(response['response']);
-                      } else {
-                        print(response['message']);
-                      }
-                    },
-                    child: Text("동영상 촬영"))
-              ]);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[2],
-            onTap: () {
-              provider.setFunctionState(FunctionState.onWay);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[3],
-            onTap: () {
-              print(4);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[4],
-            onTap: () {
-              print(5);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[5],
-            onTap: () {
-              print(6);
-            },
-          ),
-          ChatFunctionIconWidget(
-            data: functionIconWidgetValues[6],
-            onTap: () {
-              print(7);
-            },
-          ),
-        ],
-      );
-    });
+                        if (response['result'] != "FAIL") {
+                          print(response['response']);
+                        } else {
+                          print(response['message']);
+                        }
+                      },
+                      child: Text("사진 찍기")),
+                  TextButton(
+                      onPressed: () async {
+                        Future(() => Navigator.pop(context));
+                        MultipartFile? video = await getVideoFromCamera();
+                        Map<String, dynamic> response =
+                            await sendMedia(video, "mp4", 0);
+                        if (response['result'] != "FAIL") {
+                          print(response['response']);
+                        } else {
+                          print(response['message']);
+                        }
+                      },
+                      child: Text("동영상 촬영"))
+                ]);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[2],
+              onTap: () {
+                provider.setFunctionState(FunctionState.onWay);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[3],
+              onTap: () {
+                print(4);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[4],
+              onTap: () {
+                print(5);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[5],
+              onTap: () {
+                print(6);
+              },
+            ),
+            ChatFunctionIconWidget(
+              data: functionIconWidgetValues[6],
+              onTap: () {
+                print(7);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

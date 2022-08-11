@@ -26,29 +26,33 @@ class InputFunctionWidget extends StatefulWidget {
 class _InputFunctionWidgetState extends State<InputFunctionWidget> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatProvider>(builder: (context, provider, child) {
-      return Row(
-        children: [
-          IconButton(
-              onPressed: () {
-                context
-                    .read<ChatProvider>()
-                    .setFunctionState(FunctionState.landing);
-              },
-              icon: Icon(Icons.cancel_sharp)),
-          Expanded(child: Center(child: Text("보내고 싶은 사진 혹은 영상을 선택하세요"))),
-          IconButton(
+    return Consumer<ChatProvider>(
+      builder: (context, provider, child) {
+        return Row(
+          children: [
+            IconButton(
+                onPressed: () {
+                  context
+                      .read<ChatProvider>()
+                      .setFunctionState(FunctionState.landing);
+                },
+                icon: Icon(Icons.cancel_sharp)),
+            Expanded(child: Center(child: Text("보내고 싶은 사진 혹은 영상을 선택하세요"))),
+            IconButton(
               onPressed: () async {
                 if (provider.selectedMedias.isNotEmpty) {
-                  MultipartFile zipFile = await compressFilesToZip(provider.selectedMedias);
+                  MultipartFile zipFile =
+                      await compressFilesToZip(provider.selectedMedias);
                   int counter = 0;
                   for (File file in provider.selectedMedias) {
                     print(file.path.mediaType());
-                    if (file.path.mediaType() == "png" || file.path.mediaType() == "jpg") {
+                    if (file.path.mediaType() == "png" ||
+                        file.path.mediaType() == "jpg") {
                       counter += 1;
                     }
                   }
-                  Map<String, dynamic> response = await sendMedia(zipFile, "zip", counter);
+                  Map<String, dynamic> response =
+                      await sendMedia(zipFile, "zip", counter);
                   print(response['result']);
 
                   provider.clearSelectedMedia();
@@ -62,9 +66,11 @@ class _InputFunctionWidgetState extends State<InputFunctionWidget> {
                     : DarkIcons.Send,
                 25,
                 Coloring.sub_purple,
-              ))
-        ],
-      );
-    });
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }

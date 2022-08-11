@@ -21,9 +21,16 @@ ChatModel _$ChatModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ChatModel {
   int get userId => throw _privateConstructorUsedError;
+  set userId(int value) => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
+  set content(String value) => throw _privateConstructorUsedError;
   double get sendAt => throw _privateConstructorUsedError;
+  set sendAt(double value) => throw _privateConstructorUsedError;
   Map<dynamic, dynamic>? get metaData => throw _privateConstructorUsedError;
+  set metaData(Map<dynamic, dynamic>? value) =>
+      throw _privateConstructorUsedError;
+  int get readCount => throw _privateConstructorUsedError;
+  set readCount(int value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +46,8 @@ abstract class $ChatModelCopyWith<$Res> {
       {int userId,
       String content,
       double sendAt,
-      Map<dynamic, dynamic>? metaData});
+      Map<dynamic, dynamic>? metaData,
+      int readCount});
 }
 
 /// @nodoc
@@ -56,6 +64,7 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
     Object? content = freezed,
     Object? sendAt = freezed,
     Object? metaData = freezed,
+    Object? readCount = freezed,
   }) {
     return _then(_value.copyWith(
       userId: userId == freezed
@@ -74,6 +83,10 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
           ? _value.metaData
           : metaData // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
+      readCount: readCount == freezed
+          ? _value.readCount
+          : readCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -88,7 +101,8 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
       {int userId,
       String content,
       double sendAt,
-      Map<dynamic, dynamic>? metaData});
+      Map<dynamic, dynamic>? metaData,
+      int readCount});
 }
 
 /// @nodoc
@@ -107,6 +121,7 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
     Object? content = freezed,
     Object? sendAt = freezed,
     Object? metaData = freezed,
+    Object? readCount = freezed,
   }) {
     return _then(_$_ChatModel(
       userId: userId == freezed
@@ -122,9 +137,13 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
           : sendAt // ignore: cast_nullable_to_non_nullable
               as double,
       metaData: metaData == freezed
-          ? _value._metaData
+          ? _value.metaData
           : metaData // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
+      readCount: readCount == freezed
+          ? _value.readCount
+          : readCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -136,51 +155,27 @@ class _$_ChatModel implements _ChatModel {
       {required this.userId,
       required this.content,
       required this.sendAt,
-      required final Map<dynamic, dynamic>? metaData})
-      : _metaData = metaData;
+      required this.metaData,
+      required this.readCount});
 
   factory _$_ChatModel.fromJson(Map<String, dynamic> json) =>
       _$$_ChatModelFromJson(json);
 
   @override
-  final int userId;
+  int userId;
   @override
-  final String content;
+  String content;
   @override
-  final double sendAt;
-  final Map<dynamic, dynamic>? _metaData;
+  double sendAt;
   @override
-  Map<dynamic, dynamic>? get metaData {
-    final value = _metaData;
-    if (value == null) return null;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
+  Map<dynamic, dynamic>? metaData;
+  @override
+  int readCount;
 
   @override
   String toString() {
-    return 'ChatModel(userId: $userId, content: $content, sendAt: $sendAt, metaData: $metaData)';
+    return 'ChatModel(userId: $userId, content: $content, sendAt: $sendAt, metaData: $metaData, readCount: $readCount)';
   }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_ChatModel &&
-            const DeepCollectionEquality().equals(other.userId, userId) &&
-            const DeepCollectionEquality().equals(other.content, content) &&
-            const DeepCollectionEquality().equals(other.sendAt, sendAt) &&
-            const DeepCollectionEquality().equals(other._metaData, _metaData));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(userId),
-      const DeepCollectionEquality().hash(content),
-      const DeepCollectionEquality().hash(sendAt),
-      const DeepCollectionEquality().hash(_metaData));
 
   @JsonKey(ignore: true)
   @override
@@ -197,22 +192,30 @@ class _$_ChatModel implements _ChatModel {
 
 abstract class _ChatModel implements ChatModel {
   factory _ChatModel(
-      {required final int userId,
-      required final String content,
-      required final double sendAt,
-      required final Map<dynamic, dynamic>? metaData}) = _$_ChatModel;
+      {required int userId,
+      required String content,
+      required double sendAt,
+      required Map<dynamic, dynamic>? metaData,
+      required int readCount}) = _$_ChatModel;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
       _$_ChatModel.fromJson;
 
   @override
   int get userId;
+  set userId(int value);
   @override
   String get content;
+  set content(String value);
   @override
   double get sendAt;
+  set sendAt(double value);
   @override
   Map<dynamic, dynamic>? get metaData;
+  set metaData(Map<dynamic, dynamic>? value);
+  @override
+  int get readCount;
+  set readCount(int value);
   @override
   @JsonKey(ignore: true)
   _$$_ChatModelCopyWith<_$_ChatModel> get copyWith =>
