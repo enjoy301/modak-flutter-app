@@ -14,21 +14,18 @@ class ChatLandingInput extends StatefulWidget {
 }
 
 class _ChatLandingInputState extends State<ChatLandingInput> {
-
   final Map<InputState, Widget> inputStatePage = {
     InputState.none: Text(""),
     InputState.chat: InputChatWidget(),
     InputState.function: InputFunctionWidget(),
   };
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: inputStatePage[context.watch<ChatProvider>().getInputState()] as Widget,
+      child: inputStatePage[context.watch<ChatProvider>().getInputState()]
+          as Widget,
     );
-  }
-
-  @override
-  void initState() {
-    getChats(context);
   }
 }

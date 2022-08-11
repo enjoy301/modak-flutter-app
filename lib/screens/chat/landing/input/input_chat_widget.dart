@@ -68,10 +68,12 @@ class _InputChatWidgetState extends State<InputChatWidget> {
               ? IconButton(
                   onPressed: () {
                     sendChat(ChatModel(
-                        userId: UserProvider.user_id,
-                        content: textEditingController.value.text,
-                        sendAt: 0.0,
-                        metaData: {"type_code": "plain"}));
+                      userId: UserProvider.user_id,
+                      content: textEditingController.value.text,
+                      sendAt: 0.0,
+                      metaData: {"type_code": "plain"},
+                      readCount: 0,
+                    ));
                     provider.setCurrentMyChat("");
                     textEditingController.clear();
                   },

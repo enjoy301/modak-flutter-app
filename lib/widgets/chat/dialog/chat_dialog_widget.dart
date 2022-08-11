@@ -26,16 +26,18 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
         crossAxisAlignment: CrossAxisAlignment.end,
         textDirection: isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
         children: [
-          DialogImageWidget(chat: widget.chat),
-          // DialogBubbleWidget(chat: widget.chat),
+          widget.chat.metaData!['type_code'] == 'plain'
+              ? DialogBubbleWidget(chat: widget.chat)
+              : DialogImageWidget(chat: widget.chat),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 4),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Text(
-                  "1",
+                  '${widget.chat.readCount}',
                   style: TextStyle(
                     color: Coloring.info_yellow,
                     fontSize: Font.size_caption,
