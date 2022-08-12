@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
@@ -9,8 +11,23 @@ class ChatProvider extends ChangeNotifier {
   /// PREFIX: 채팅
 
   /// 모든 채팅
-  final List<ChatModel> _chats = [];
+  List<ChatModel> _chats = [];
   List<ChatModel> get chats => _chats;
+
+  /// 채팅리스트를 세팅합니다.
+  void setChat(List<dynamic> chatList) {
+    _chats = [];
+    for (var chat in chatList) {
+      _chats.add(ChatModel(
+        userId: chat['user_id'],
+        content: chat['content'],
+        sendAt: chat['send_at'],
+        metaData: jsonDecode(chat['metadata']),
+        readCount: 0,
+      ));
+    }
+    notifyListeners();
+  }
 
   /// 채팅리스트에 뒤에 추가합니다.
   void addChat(ChatModel chat) {
@@ -43,26 +60,36 @@ class ChatProvider extends ChangeNotifier {
 
   /// PREFIX: 커넥션 관리
   final List<Map> _connections = [];
-  List<ChatModel> get connections => _chats;
+  List<Map> get connections => _connections;
   int _connectionCount = 5;
   int get connectionCount => _connectionCount;
 
-  void setConnection(List<dynamic> tempList) {
+  // connections 초기화 및 chats.read_count 변경
+  void setConnection(List<dynamic> connectionList) {
     _connections.clear();
+
     int count = 0;
-    print(tempList);
-    for (var item in tempList) {
-      _connections.add(item);
-      if (!item['is_joining']) {
+    for (var connection in connectionList) {
+      _connections.add(connection);
+      if (!connection['is_joining']) {
         count++;
       }
     }
     _connectionCount = count;
-    notifyListeners();
-  }
 
-  int getNowJoin() {
-    return _connectionCount;
+    /// readCount 로직 개선 필요
+    for (var chat in _chats) {
+      int readCount = 0;
+      for (var connection in connectionList) {
+        if (!connection['is_joining'] &&
+            (chat.sendAt > connection['last_joined'])) {
+          readCount++;
+        }
+      }
+      chat.readCount = readCount;
+    }
+
+    notifyListeners();
   }
 
   /// PREFIX: 앨범 사진 보관

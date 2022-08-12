@@ -46,7 +46,8 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                 ),
                 Text(
                   DateFormat("h:mm a")
-                      .format(DateTime(widget.chat.sendAt.round()))
+                      .format(DateTime.fromMicrosecondsSinceEpoch(
+                          (widget.chat.sendAt * 1000000).round()))
                       .toString(),
                   style: TextStyle(
                     color: Coloring.gray_20,
