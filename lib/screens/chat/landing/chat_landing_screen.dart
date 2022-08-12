@@ -27,27 +27,6 @@ class ChatLandingScreen extends StatefulWidget {
 class _ChatLandingScreenState extends State<ChatLandingScreen> {
   @override
   Widget build(BuildContext context) {
-    IOWebSocketChannel.connect(
-            "${dotenv.get("CHAT_WSS")}/dev?u=${UserProvider.user_id}&f=${UserProvider.family_id}")
-        .stream
-        .listen((event) {
-      var item = jsonDecode(event) as Map;
-
-      if (item.containsKey("message_data")) {
-        var message = item['message_data'];
-        int readCount = context.read<ChatProvider>().getNowJoin();
-        context.read<ChatProvider>().addChat(ChatModel(
-              userId: message['user_id'],
-              content: message['content'],
-              sendAt: message['send_at'],
-              metaData: message['metadata'],
-              readCount: readCount,
-            ));
-      } else if (item.containsKey("connection_data")) {
-        var connection = item['connection_data'];
-        context.read<ChatProvider>().setConnection(connection);
-      }
-    });
     return Scaffold(
       appBar: headerBackWidget(context),
       body: SafeArea(
@@ -96,7 +75,29 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
   @override
   void initState() {
     super.initState();
-    setConnections(context);
+
+    IOWebSocketChannel.connect(
+            "${dotenv.get("CHAT_WSS")}/dev?u=${UserProvider.user_id}&f=${UserProvider.family_id}")
+        .stream
+        .listen((event) {
+      var item = jsonDecode(event) as Map;
+
+      if (item.containsKey("message_data")) {
+        var message = item['message_data'];
+        int readCount = context.read<ChatProvider>().connectionCount;
+        context.read<ChatProvider>().addChat(ChatModel(
+              userId: message['user_id'],
+              content: message['content'],
+              sendAt: message['send_at'],
+              metaData: message['metadata'],
+              readCount: readCount,
+            ));
+      } else if (item.containsKey("connection_data")) {
+        var connection = item['connection_data'];
+        context.read<ChatProvider>().setConnection(connection);
+      }
+    });
+
     getChats(context);
   }
 }
