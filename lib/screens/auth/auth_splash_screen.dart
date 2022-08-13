@@ -35,7 +35,11 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("lib/assets/images/others/splash_modak_fire.png", width: 160, height: 224,),
+              Image.asset(
+                "lib/assets/images/others/splash_modak_fire.png",
+                width: 160,
+                height: 224,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -100,17 +104,16 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
           List<FileSystemEntity> todoFiles =
               todoDirectory.listSync(recursive: true);
 
+          List<File> fileList = [];
           for (FileSystemEntity fileSystemEntity in messengerFiles) {
-            // ignore: use_build_context_synchronously
-            context
-                .read<AlbumProvider>()
-                .addFileToMessengerAlbum(File(fileSystemEntity.path));
+            fileList.add(File(fileSystemEntity.path));
           }
+          context.read<AlbumProvider>().setFileToMessengerAlbum(fileList);
+
           // for (FileSystemEntity fileSystemEntity in todoFiles) {
           //   // ignore: use_build_context_synchronously
           //   context.read<AlbumProvider>().addFileToTodoAlbum(File(fileSystemEntity.path));
           // }
-
         }
 
         Future(() => Navigator.pushReplacement(

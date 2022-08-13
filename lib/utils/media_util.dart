@@ -77,26 +77,28 @@ Future<File> getVideoThumbnail(File file) async {
 }
 
 Future<MultipartFile> compressFilesToZip(List<File> files) async {
+  Directory directory = await getTemporaryDirectory();
 
-  Directory directory =
-  await getTemporaryDirectory();
   if (await Directory("${directory.path}/sendImage").exists()) {
     Directory("${directory.path}/sendImage").deleteSync(recursive: true);
   }
 
   ZipFileEncoder encoder = ZipFileEncoder();
   encoder.create("${directory.path}/sendImage/medias.zip");
+
   int counter = 1;
   for (File file in files) {
-    File copy = await file.copy("${directory.path}/sendImage/Modak_$counter.${file.toString().mediaType()}");
+    File copy = await file.copy(
+        "${directory.path}/sendImage/$counter.${file.toString().mediaType()}");
     encoder.addFile(copy);
     counter += 1;
   }
+
   encoder.close();
+
   File file = File("${directory.path}/sendImage/medias.zip");
   MultipartFile zipFile = MultipartFile.fromFileSync(file.path,
       contentType: MediaType("zip", "zip"));
-
 
   return zipFile;
 }
