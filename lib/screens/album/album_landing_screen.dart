@@ -18,45 +18,44 @@ class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: headerDefaultWidget(title: "앨범"),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 30),
-          color: Colors.white,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 40.0),
-                  child: AlbumContainerWidget(
-                    type: "messenger",
-                  ),
+      appBar: headerDefaultWidget(title: "앨범"),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: AlbumContainerWidget(
+                  type: "messenger",
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 40.0),
-                  child: AlbumContainerWidget(
-                    type: "todo",
-                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: AlbumContainerWidget(
+                  type: "todo",
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
+
   @override
   void initState() {
-    getMedia();
     super.initState();
+    getMedia();
   }
+
   getMedia() async {
-
     Map<String, dynamic> result = await mediaLoading();
-    print(result['response']);
+    List<File> files = result['response'];
 
-    for (File file in result['response']) {
-      print(file.existsSync());
-      context.read<AlbumProvider>().addFileToMessengerAlbum(file);
-    }
+    Future(() => context.read<AlbumProvider>().setFileToMessengerAlbum(files));
   }
 }
