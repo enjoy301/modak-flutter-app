@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 
 extension StringToType on String? {
@@ -27,6 +28,18 @@ extension StringToType on String? {
       return "mp4";
     } else if (extensions.contains("jpg")) {
       return "jpg";
+    }
+    return null;
+  }
+
+  Color? toColor() {
+    if (this == null) return null;
+    var hexColor = this!.replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF$hexColor";
+    }
+    if (hexColor.length == 8) {
+      return Color(int.parse("0x$hexColor"));
     }
     return null;
   }
