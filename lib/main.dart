@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/route_manager.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
@@ -50,7 +52,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: const AuthSplashScreen(),
@@ -68,10 +70,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initDynamicLink() async {
-    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AuthInvitationScreen()));
-    }).onError((error) {
-      debugPrint("act normally");
-    });
+      FirebaseDynamicLinks.instance.onLink
+          .listen((PendingDynamicLinkData dynamicLink) async {
+        final Uri deepLink = dynamicLink.link;
+        // String familyId  = deepLink.queryParameters["id"]!;
+        print("deepLink: $dynamicLink");
+        print(dynamicLink.link.queryParameters['id']);
+        Get.offAll(
+            () => AuthInvitationScreen()
+        );
+      }).onError((error) {
+        log(error);
+      });
   }
 }

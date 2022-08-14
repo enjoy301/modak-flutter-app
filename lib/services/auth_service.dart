@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,9 +9,9 @@ import 'package:modak_flutter_app/utils/prefs_util.dart';
 /// 회원가입 완료 실행 함수
 Future<Map<String, dynamic>> signUp() async {
   /// 회원가입을 위한 정보들이 준비되었는지 확인
-  if (PrefsUtil.getString("user_name") == null ||
-      PrefsUtil.getString("user_birth_day") == null ||
-      PrefsUtil.getString("user_role") == null ||
+  if (PrefsUtil.getString("auth_name") == null ||
+      PrefsUtil.getString("auth_birth_day") == null ||
+      PrefsUtil.getString("auth_role") == null ||
       // PrefsUtil.getString("fcmToken") == null ||
       PrefsUtil.getString("provider") == null ||
       PrefsUtil.getInt("provider_id") == null) {
@@ -18,13 +20,13 @@ Future<Map<String, dynamic>> signUp() async {
   try {
     Response response =
         await Dio().post("${dotenv.get("API_ENDPOINT")}/api/member/new", data: {
-      "name": PrefsUtil.getString("user_name")!,
-      "birthday": PrefsUtil.getString("user_birth_day"),
-      "isLunar": PrefsUtil.getBool("user_is_Lunar") ?? false ? 1 : 0,
-      "role": PrefsUtil.getString("user_role")!.split(".").last.toUpperCase(),
+      "name": PrefsUtil.getString("auth_name")!,
+      "birthday": PrefsUtil.getString("auth_birth_day"),
+      "isLunar": PrefsUtil.getBool("auth_is_Lunar") ?? false ? 1 : 0,
+      "role": PrefsUtil.getString("auth_role")!.split(".").last.toUpperCase(),
       "fcmToken": "qgti2uitu03gqrue9jqgn2342vwlngwkfw",
       "provider": PrefsUtil.getString("provider"),
-      "providerId": PrefsUtil.getInt("provider_id").toString(),
+      "providerId": (PrefsUtil.getInt("provider_id")! + 10).toString(),
       "familyId": -1,
     });
     print("회원가입 성공");
@@ -32,6 +34,11 @@ Future<Map<String, dynamic>> signUp() async {
     /// 회원가입 성공시 accessToken 과 refreshToken 을 local storage 에 저장
     PrefsUtil.setString("access_token", response.headers['access_token']![0]);
     PrefsUtil.setString("refresh_token", response.headers['refresh_token']![0]);
+
+    /// 아이디 정보들 저장
+    PrefsUtil.setInt("member_id", response.data['data']['memberId']);
+    PrefsUtil.setInt("family_id", response.data['data']['familyId']);
+    PrefsUtil.setInt("anniversary_id", response.data['data']['anniversaryId']);
 
     return {"response": response, "result": "SUCCESS"};
   } catch (e) {
@@ -52,7 +59,7 @@ Future<Map<String, dynamic>> socialLogin() async {
     Response response = await Dio()
         .post("${dotenv.get("API_ENDPOINT")}/api/member/social-login", data: {
       "provider": "${PrefsUtil.getString("provider")}",
-      "providerId": PrefsUtil.getInt("provider_id").toString(),
+      "providerId": (PrefsUtil.getInt("provider_id")! + 10).toString(),
     });
     PrefsUtil.setString("access_token", response.headers['access_token']![0]);
     PrefsUtil.setString("refresh_token", response.headers['refresh_token']![0]);

@@ -37,7 +37,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                   isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.chat.readCount}',
+                  widget.chat.readCount <= 0 ? "" : widget.chat.readCount.toString(),
                   style: TextStyle(
                     color: Coloring.info_yellow,
                     fontSize: Font.size_caption,

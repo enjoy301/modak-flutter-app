@@ -1,19 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/provider/album_provider.dart';
-import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
-import 'package:modak_flutter_app/screens/auth/reigster/auth_invitation_screen.dart';
-import 'package:modak_flutter_app/screens/auth/reigster/auth_register_screen.dart';
-import 'package:modak_flutter_app/screens/landing_bottomtab_navigator.dart';
-import 'package:modak_flutter_app/services/auth_service.dart';
-import 'package:modak_flutter_app/utils/file_system_util.dart';
-import 'package:modak_flutter_app/utils/prefs_util.dart';
-import 'package:provider/provider.dart';
+import 'package:modak_flutter_app/utils/auth_util.dart';
 
 class AuthSplashScreen extends StatefulWidget {
   const AuthSplashScreen({Key? key}) : super(key: key);
@@ -73,80 +62,14 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
   }
 
   @override
-  // ignore: must_call_super
   void initState() {
-    navigateToNextPage();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      AuthUtil.authRedirection(context, isLoad: true);
+    });
+
+    super.initState();
+
   }
 
-  navigateToNextPage() async {
-    /// 유저가 생성되어 있을 때 처리
-    if (PrefsUtil.getString("refresh_token") != null &&
-        PrefsUtil.getString("access_token") != null) {
-      Map<String, dynamic> response = await tokenLogin();
-      if (response['result'] == 'SUCCESS') {
-        Directory? directory = await FileSystemUtil.getMediaDirectory();
-        if (directory != null) {
-          Directory messengerDirectory =
-              Directory("${directory.path}/${UserProvider.family_id}");
-          Directory todoDirectory =
-              Directory("${directory.path}/${UserProvider.family_id}");
 
-          if (!await messengerDirectory.exists()) {
-            await messengerDirectory.create(recursive: true);
-          }
-
-          if (!await todoDirectory.exists()) {
-            await todoDirectory.create(recursive: true);
-          }
-
-          List<FileSystemEntity> messengerFiles =
-              messengerDirectory.listSync(recursive: true);
-          List<FileSystemEntity> todoFiles =
-              todoDirectory.listSync(recursive: true);
-
-          List<File> fileList = [];
-          for (FileSystemEntity fileSystemEntity in messengerFiles) {
-            fileList.add(File(fileSystemEntity.path));
-          }
-          context.read<AlbumProvider>().setFileToMessengerAlbum(fileList);
-
-          // for (FileSystemEntity fileSystemEntity in todoFiles) {
-          //   // ignore: use_build_context_synchronously
-          //   context.read<AlbumProvider>().addFileToTodoAlbum(File(fileSystemEntity.path));
-          // }
-        }
-
-        Future(() => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const LandingBottomNavigator())));
-      } else if (response['result'] == 'FAIL') {
-        if (response['code'] == "MalformedJwtException" ||
-            response['code'] == "SignatureException" ||
-            response['code'] == "ExpiredJwtException") {
-          Future(() => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const AuthLandingScreen())));
-        } else {
-          Future(() => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const AuthLandingScreen())));
-        }
-      }
-    }
-
-    /// 회원가입 진행 중일 때 처리
-    else if (PrefsUtil.getBool("is_register_progress") == true) {
-      Future(() => Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const AuthRegisterScreen())));
-    }
-
-    /// 정보가 없을 때 처리
-    else {
-      Future(() => Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const AuthLandingScreen())));
-    }
-  }
 }

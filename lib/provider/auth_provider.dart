@@ -108,11 +108,11 @@ class AuthProvider extends ChangeNotifier {
 
   /// register_name_agreement_screen 첫 번째 페이지
 
-  String _name = PrefsUtil.getString("user_name") ?? "";
-  DateTime? _birthDay = PrefsUtil.getString("user_birth_day") == null
+  String _name = PrefsUtil.getString("auth_name") ?? "";
+  DateTime? _birthDay = PrefsUtil.getString("auth_birth_day") == null
       ? null
-      : DateTime.tryParse(PrefsUtil.getString("user_birth_day")!);
-  bool _isLunar = PrefsUtil.getBool("user_is_lunar") ?? false;
+      : DateTime.tryParse(PrefsUtil.getString("auth_birth_day")!);
+  bool _isLunar = PrefsUtil.getBool("auth_is_lunar") ?? false;
   bool _isPrivateInformationAgreed = false;
   bool _isOperatingPolicyAgreed = false;
 
@@ -124,20 +124,20 @@ class AuthProvider extends ChangeNotifier {
 
   void setName(String name) {
     _name = name;
-    PrefsUtil.setString("user_name", name);
+    PrefsUtil.setString("auth_name", name);
     notifyListeners();
   }
 
   void setBirthDay(DateTime birthDay) {
     _birthDay = birthDay;
     PrefsUtil.setString(
-        "user_birth_day", DateFormat("yyyy-MM-dd").format(birthDay));
+        "auth_birth_day", DateFormat("yyyy-MM-dd").format(birthDay));
     notifyListeners();
   }
 
   void setIsLunar(bool isLunar) {
     _isLunar = isLunar;
-    PrefsUtil.setBool("user_is_lunar", isLunar);
+    PrefsUtil.setBool("auth_is_lunar", isLunar);
     notifyListeners();
   }
 
@@ -166,13 +166,13 @@ class AuthProvider extends ChangeNotifier {
 
   /// register_role_screen 두 번째 페이지
 
-  FamilyType? _role = PrefsUtil.getString("user_role").toFamilyType();
+  FamilyType? _role = PrefsUtil.getString("auth_role").toFamilyType();
 
   FamilyType? get role => _role;
 
   void setRole(FamilyType role) {
     _role = role;
-    PrefsUtil.setString("user_role", role.toString());
+    PrefsUtil.setString("auth_role", role.toString());
     notifyListeners();
   }
 
@@ -184,7 +184,5 @@ class AuthProvider extends ChangeNotifier {
   void clearCache() {
     _provider = null;
     _providerId = null;
-    PrefsUtil.remove('user_provider');
-    PrefsUtil.remove('user_provider_id');
   }
 }

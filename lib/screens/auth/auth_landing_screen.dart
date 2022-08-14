@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
-import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/screens/auth/auth_instruction_screen.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/auth_register_screen.dart';
 import 'package:modak_flutter_app/screens/landing_bottomtab_navigator.dart';
@@ -12,6 +9,7 @@ import 'package:modak_flutter_app/widgets/auth/auth_introduction_widget.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 
 class AuthLandingScreen extends StatefulWidget {
   const AuthLandingScreen({Key? key}) : super(key: key);
@@ -132,11 +130,5 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
-  @override
-  void didChangeDependencies() {}
 }

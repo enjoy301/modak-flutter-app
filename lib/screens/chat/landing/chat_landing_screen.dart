@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -82,8 +84,13 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
         .listen((event) {
       var item = jsonDecode(event) as Map;
 
+
+      log(item.toString());
+      log("오긴 왔어 친구야");
       if (item.containsKey("message_data")) {
         var message = item['message_data'];
+
+
         int readCount = context.read<ChatProvider>().connectionCount;
         context.read<ChatProvider>().addChat(ChatModel(
               userId: message['user_id'],

@@ -15,7 +15,6 @@ class ButtonInvitationWidget extends StatelessWidget {
       : super(key: key);
 
   final String type;
-
   @override
   Widget build(BuildContext context) {
     Map<String, Map<String, dynamic>> data = {
@@ -36,7 +35,7 @@ class ButtonInvitationWidget extends StatelessWidget {
 ${UserProvider.family_id}님께서 당신을 모닥에 초대하셨습니다.
  링크를 클릭하여 가족 채팅방에 참여하세요.
   앱이 없다면 다운로드 링크로 이동합니다.
-  ${await getLink("purpose", "id")}
+  ${await DynamicLinkUtil.getInvitationLink()}
   """,
               },
             );
@@ -49,12 +48,12 @@ ${UserProvider.family_id}님께서 당신을 모닥에 초대하셨습니다.
         "image": "lib/assets/images/others/kakao_invitation.png",
         "onPressed": () async {
           final TextTemplate defaultFeed = TextTemplate(
-            buttonTitle: "가족 방으로 이동하기",
+              buttonTitle: "가족 방으로 이동하기",
               text:
                   "모닥에서 ${UserProvider.family_id} 님이 당신을 가족방에 초대하셨습니다. 클릭하여 방으로 이동하세요. 아직 앱이 설치되있지 않을시 스토어로 이동합니다.",
               link: Link(
-                webUrl: Uri.parse('https://modakflutterapp.page.link/invitation'),
-                mobileWebUrl: Uri.parse('https://modakflutterapp.page.link/invitation'),
+                webUrl: await DynamicLinkUtil.getInvitationLink(),
+                mobileWebUrl: await DynamicLinkUtil.getInvitationLink(),
               ));
           try {
             Uri uri =

@@ -5,8 +5,8 @@ import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 
 class UserProvider extends ChangeNotifier {
-  static int family_id = 1;
-  static int user_id = 4;
+  static int family_id = PrefsUtil.getInt("family_id") ?? -1;
+  static int user_id = PrefsUtil.getInt("user_id") ?? -1;
 
   String? _name = PrefsUtil.getString("user_name");
   String? get name => _name;
