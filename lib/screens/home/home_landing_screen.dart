@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/services/user_service.dart';
 import 'package:modak_flutter_app/widgets/home/HomeScheduleWidget.dart';
 import 'package:modak_flutter_app/widgets/home/HomeTodoWidget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -48,8 +49,15 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                       Column(
                         children: [
                           HomeScheduleWidget(title: "엄마 생일", day: 120),
-                          HomeScheduleWidget(title: "수능", day: 63,),
-                          HomeScheduleWidget(title: "", day: 0, isNone: true,),
+                          HomeScheduleWidget(
+                            title: "수능",
+                            day: 63,
+                          ),
+                          HomeScheduleWidget(
+                            title: "",
+                            day: 0,
+                            isNone: true,
+                          ),
                         ],
                       ),
                       Padding(
@@ -64,12 +72,24 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                       ),
                       Column(
                         children: [
-                          HomeTodoWidget(title: "은종이 데리러 가기",),
-                          HomeTodoWidget(title: "설거지하기",),
-                          HomeTodoWidget(title: "빨래하기",),
-                          HomeTodoWidget(title: "엄마 생일 선물 준비하기",),
-                          HomeTodoWidget(title: "저녁 식사 준비하기",),
-                          HomeTodoWidget(title: "코딩 존나 하기",),
+                          HomeTodoWidget(
+                            title: "은종이 데리러 가기",
+                          ),
+                          HomeTodoWidget(
+                            title: "설거지하기",
+                          ),
+                          HomeTodoWidget(
+                            title: "빨래하기",
+                          ),
+                          HomeTodoWidget(
+                            title: "엄마 생일 선물 준비하기",
+                          ),
+                          HomeTodoWidget(
+                            title: "저녁 식사 준비하기",
+                          ),
+                          HomeTodoWidget(
+                            title: "코딩 존나 하기",
+                          ),
                           HomeTodoWidget(title: "", isNone: true),
                         ],
                       ),

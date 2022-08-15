@@ -3,6 +3,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
   const DialogBubbleWidget({Key? key, required this.chat}) : super(key: key);
@@ -16,7 +17,7 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isMine = widget.chat.userId == UserProvider.user_id;
+    final bool isMine = widget.chat.userId == PrefsUtil.getInt("user_id");
 
     return Container(
       constraints: BoxConstraints(minWidth: 30, maxWidth: 250),

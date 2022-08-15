@@ -7,6 +7,7 @@ import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/services/chat_service.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -68,7 +69,7 @@ class _InputChatWidgetState extends State<InputChatWidget> {
               ? IconButton(
                   onPressed: () {
                     sendChat(ChatModel(
-                      userId: UserProvider.user_id,
+                      userId: PrefsUtil.getInt("user_id") ?? -1,
                       content: textEditingController.value.text,
                       sendAt: 0.0,
                       metaData: {"type_code": "plain"},

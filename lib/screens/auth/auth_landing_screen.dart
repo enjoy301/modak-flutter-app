@@ -3,13 +3,13 @@ import 'package:modak_flutter_app/screens/auth/auth_instruction_screen.dart';
 import 'package:modak_flutter_app/screens/auth/reigster/auth_register_screen.dart';
 import 'package:modak_flutter_app/screens/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
+import 'package:modak_flutter_app/services/user_service.dart';
 import 'package:modak_flutter_app/utils/auth_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/auth/auth_introduction_widget.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
 
 class AuthLandingScreen extends StatefulWidget {
   const AuthLandingScreen({Key? key}) : super(key: key);
@@ -75,7 +75,8 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                         await AuthUtil.kakaoLogin(context);
                         if (PrefsUtil.getInt("provider_id") != null &&
                             PrefsUtil.getString("provider") != null) {
-                          Map<String, dynamic> response = await socialLogin();
+                          // ignore: use_build_context_synchronously
+                          Map<String, dynamic> response = await socialLogin(context);
                           print(response['result']);
                           if (response['result'] == "FAIL") {
                             if (response['code'] ==
@@ -129,6 +130,4 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
       ),
     );
   }
-
-
 }

@@ -9,11 +9,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/file_system_util.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 
 Future<Map<String, dynamic>> getMediaNames() async {
   try {
     Response response = await Dio(BaseOptions(queryParameters: {
-      'f': UserProvider.family_id,
+      'f': PrefsUtil.getInt("family_id"),
       'c': 100,
     })).get(
       "${dotenv.get("CHAT_HTTP")}/dev/media/${AlbumProvider.messengerLastId}",

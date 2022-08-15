@@ -6,7 +6,7 @@ class DynamicLinkUtil {
     String dynamicLinkPrefix = 'https://modakflutterapp.page.link/invitation';
     final dynamicLinkParams = DynamicLinkParameters(
       uriPrefix: dynamicLinkPrefix,
-      link: Uri.parse('https://modakflutterapp.page.link/invitation?link=https://app.mdak&d=${UserProvider.family_id}'),
+      link: Uri.parse('https://modakflutterapp.page.link/invitation?'),
       androidParameters: const AndroidParameters(
         packageName: "com.example.modakFlutterApp",
         minimumVersion: 0,
