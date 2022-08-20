@@ -6,13 +6,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
 Future<bool> sendChat(ChatModel chat) async {
   final response =
       await Dio().post('${dotenv.get("CHAT_HTTP")}/dev/messages', data: {
-    'family_id': UserProvider.family_id,
-    'user_id': UserProvider.user_id,
+    'family_id': PrefsUtil.getInt("family_id"),
+    'user_id': PrefsUtil.getInt("user_id"),
     'content': chat.content,
     'metadata': chat.metaData,
   });
@@ -26,14 +27,14 @@ Future<bool> sendChat(ChatModel chat) async {
 
 void getChats(BuildContext context) async {
   final chatResponse = await Dio(BaseOptions(queryParameters: {
-    'f': UserProvider.family_id,
+    'f': PrefsUtil.getInt("family_id"),
     'c': 100,
   })).get(
     '${dotenv.get("CHAT_HTTP")}/dev/messages/0',
   );
 
   final connectionResponse = await Dio(BaseOptions(queryParameters: {
-    'f': UserProvider.family_id,
+    'f': PrefsUtil.getInt("family_id"),
   })).get(
     '${dotenv.get("CHAT_HTTP")}/dev/connections',
   );
@@ -71,7 +72,7 @@ Future<Map<String, dynamic>> getMediaUrl() async {
     var res = await Dio(BaseOptions(
       contentType: 'multipart/form-data',
     )).get(
-        "${dotenv.get("CHAT_HTTP")}/dev/media/url?u=${UserProvider.user_id}&f=${UserProvider.family_id}");
+        "${dotenv.get("CHAT_HTTP")}/dev/media/url?u=${PrefsUtil.getInt("user_id")}&f=${PrefsUtil.getInt("family_id")}");
     return {"response": res, "result": "SUCCESS"};
   } catch (e) {
     return {"result": "FAIL"};
@@ -98,23 +99,23 @@ Future<Map<String, dynamic>> uploadMedia(Map<String, dynamic> mediaUrlData,
     token: $xAmzSecurityToken
     policy: $policy
     sign: $xAmzSignature
-    userId: ${UserProvider.user_id}
-    familyId: ${UserProvider.family_id}
+    userId: ${PrefsUtil.getInt("user_id")}
+    familyId: ${PrefsUtil.getInt("family_id")}
     imageCount: $xAmzMetaImageCount
     ----------------------------------------------------
     """);
 
     var formData = FormData.fromMap({
       "key":
-          "${UserProvider.family_id}/${DateTime.now().millisecondsSinceEpoch}/Modak.zip",
+          "${PrefsUtil.getInt("family_id")}/${DateTime.now().millisecondsSinceEpoch}/Modak.zip",
       "x-amz-algorithm": xAmzAlgorithm.trim(),
       "x-amz-credential": xAmzCredential.trim(),
       "x-amz-date": xAmzDate.trim(),
       "x-amz-security-token": xAmzSecurityToken.trim(),
       "policy": policy.trim(),
       "x-amz-signature": xAmzSignature.trim(),
-      "x-amz-meta-user_id": UserProvider.user_id,
-      "x-amz-meta-family_id": UserProvider.family_id,
+      "x-amz-meta-user_id": PrefsUtil.getInt("user_id"),
+      "x-amz-meta-family_id": PrefsUtil.getInt("family_id"),
       "x-amz-meta-image_count": xAmzMetaImageCount,
       "file": file,
     });

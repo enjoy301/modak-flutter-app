@@ -124,7 +124,7 @@ class _AuthInvitationScreenState extends State<AuthInvitationScreen> {
                   if (await AuthUtil.kakaoLogin(context)) {
                     if (PrefsUtil.getInt("provider_id") != null &&
                         PrefsUtil.getString("provider") != null) {
-                      Map<String, dynamic> response = await socialLogin();
+                      Map<String, dynamic> response = await socialLogin(context);
                       print(response['result']);
                       if (response['result'] == "FAIL") {
                         if (response['code'] ==

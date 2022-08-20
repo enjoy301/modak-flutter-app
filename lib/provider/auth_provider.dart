@@ -4,6 +4,7 @@ import 'package:modak_flutter_app/screens/common/common_invitation_screen.dart';
 import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
+import 'package:modak_flutter_app/services/user_service.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 
@@ -67,8 +68,11 @@ class AuthProvider extends ChangeNotifier {
       if (response["result"] == "FAIL") {
         return;
       } else if (response["result"] == "SUCCESS") {
-        Future(() => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => CommonInvitationScreen(withSkipButton: true,))));
+        Map<String, dynamic> response = await reloadUserInfo(context);
+        if (response['result'] == "SUCCESS") {
+          Future(() => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => CommonInvitationScreen(withSkipButton: true,))));
+        }
       }
     } else {
       _page += 1;

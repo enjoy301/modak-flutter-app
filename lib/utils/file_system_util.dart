@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +22,9 @@ class FileSystemUtil {
     Directory? directory = await FileSystemUtil.getMediaDirectory();
     if (directory != null) {
       Directory messengerDirectory =
-      Directory("${directory.path}/${UserProvider.family_id}");
+      Directory("${directory.path}/${PrefsUtil.getInt("family_id")}");
       Directory todoDirectory =
-      Directory("${directory.path}/${UserProvider.family_id}");
+      Directory("${directory.path}/${PrefsUtil.getInt("family_id")}");
 
       if (!await messengerDirectory.exists()) {
     await messengerDirectory.create(recursive: true);

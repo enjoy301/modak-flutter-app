@@ -6,6 +6,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/models/chat_model.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
 
@@ -19,7 +20,7 @@ class ChatDialogWidget extends StatefulWidget {
 class _ChatDialogWidgetState extends State<ChatDialogWidget> {
   @override
   Widget build(BuildContext context) {
-    final bool isMine = widget.chat.userId == UserProvider.user_id;
+    final bool isMine = widget.chat.userId == PrefsUtil.getInt("user_id");
     return Container(
       margin: EdgeInsets.only(top: 9, right: 10, bottom: 8, left: 10),
       child: Row(

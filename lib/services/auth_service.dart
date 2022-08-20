@@ -3,8 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:modak_flutter_app/constant/enum/general_enum.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
+import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
+import 'package:provider/provider.dart';
 
 /// 회원가입 완료 실행 함수
 Future<Map<String, dynamic>> signUp() async {
@@ -26,7 +30,7 @@ Future<Map<String, dynamic>> signUp() async {
       "role": PrefsUtil.getString("auth_role")!.split(".").last.toUpperCase(),
       "fcmToken": "qgti2uitu03gqrue9jqgn2342vwlngwkfw",
       "provider": PrefsUtil.getString("provider"),
-      "providerId": (PrefsUtil.getInt("provider_id")! + 10).toString(),
+      "providerId": (PrefsUtil.getInt("provider_id")!).toString(),
       "familyId": -1,
     });
     print("회원가입 성공");
@@ -36,7 +40,7 @@ Future<Map<String, dynamic>> signUp() async {
     PrefsUtil.setString("refresh_token", response.headers['refresh_token']![0]);
 
     /// 아이디 정보들 저장
-    PrefsUtil.setInt("member_id", response.data['data']['memberId']);
+    PrefsUtil.setInt("user_id", response.data['data']['memberId']);
     PrefsUtil.setInt("family_id", response.data['data']['familyId']);
     PrefsUtil.setInt("anniversary_id", response.data['data']['anniversaryId']);
 
@@ -51,7 +55,7 @@ Future<Map<String, dynamic>> signUp() async {
 }
 
 /// 소셜 로그인 확인 함수
-Future<Map<String, dynamic>> socialLogin() async {
+Future<Map<String, dynamic>> socialLogin(BuildContext context) async {
   print(PrefsUtil.getString("provider"));
   print(PrefsUtil.getInt("provider_id"));
 
@@ -59,10 +63,32 @@ Future<Map<String, dynamic>> socialLogin() async {
     Response response = await Dio()
         .post("${dotenv.get("API_ENDPOINT")}/api/member/social-login", data: {
       "provider": "${PrefsUtil.getString("provider")}",
-      "providerId": (PrefsUtil.getInt("provider_id")! + 10).toString(),
+      "providerId": (PrefsUtil.getInt("provider_id")!).toString(),
     });
     PrefsUtil.setString("access_token", response.headers['access_token']![0]);
     PrefsUtil.setString("refresh_token", response.headers['refresh_token']![0]);
+
+    Map<String, dynamic> userInfo = response.data['data']['result'];
+    print(userInfo);
+
+    String name = userInfo['name'];
+    int isLunar = userInfo['isLunar'];
+    DateTime birthDay = DateTime.parse(userInfo['birthDay'] as String);
+    String? profileImageUrl = userInfo['profileImageUrl'];
+    FamilyType? familyType = userInfo['role'].toString().toFamilyType();
+    Color color = userInfo['color'].toString().toColor() ?? Colors.black;
+
+    print("name: ${name.toString()}");
+    print("isLunar: ${isLunar.toString()}");
+    print("birthDay: ${birthDay.toString()}");
+    print("profileImageUrl: ${profileImageUrl.toString()}");
+    print("familyType: ${familyType.toString()}");
+    print("color: ${color.toString()}");
+    print(response.data);
+    context.read<UserProvider>().setUserInfo(
+        name, isLunar, birthDay, profileImageUrl, familyType, color);
+
+    PrefsUtil.setInt("user_id", userInfo['id']);
     return {
       "result": "SUCCESS",
       "response": response,

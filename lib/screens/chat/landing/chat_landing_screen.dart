@@ -14,6 +14,7 @@ import 'package:modak_flutter_app/screens/chat/landing/function/chat_landing_fun
 import 'package:modak_flutter_app/screens/chat/landing/chat_landing_header.dart';
 import 'package:modak_flutter_app/screens/chat/landing/input/chat_landing_input.dart';
 import 'package:modak_flutter_app/services/chat_service.dart';
+import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -76,10 +77,12 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
 
   @override
   void initState() {
+    print(PrefsUtil.getInt("user_id"));
+    print(PrefsUtil.getInt("family_id"));
     super.initState();
 
     IOWebSocketChannel.connect(
-            "${dotenv.get("CHAT_WSS")}/dev?u=${UserProvider.user_id}&f=${UserProvider.family_id}")
+            "${dotenv.get("CHAT_WSS")}/dev?u=${PrefsUtil.getInt("user_id")}&f=${PrefsUtil.getInt("family_id")}")
         .stream
         .listen((event) {
       var item = jsonDecode(event) as Map;
