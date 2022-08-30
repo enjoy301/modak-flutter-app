@@ -422,6 +422,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  hive:
+    dependency: "direct main"
+    description:
+      name: hive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
   html:
     dependency: transitive
     description:
@@ -521,7 +528,7 @@ packages:
     source: hosted
     version: "0.6.4"
   json_annotation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:modak_flutter_app/models/todo_model.dart';
+import 'package:modak_flutter_app/data/model/todo_model.dart';
 
 class TodoProvider extends ChangeNotifier {
 

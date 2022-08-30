@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
+import 'package:modak_flutter_app/ui/auth/auth_landing_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';

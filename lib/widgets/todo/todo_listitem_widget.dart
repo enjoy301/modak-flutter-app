@@ -1,7 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/models/todo_model.dart';
+import 'package:modak_flutter_app/data/model/todo_model.dart';
 import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/todo/todo_listitem_tag_widget.dart';
 

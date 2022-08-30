@@ -74,6 +74,8 @@ dependencies:
   kakao_flutter_sdk_talk: ^1.2.1
   sign_in_with_apple: ^4.1.0
   get: ^4.6.5
+  json_annotation: ^4.6.0
+  hive: ^2.2.3
 
 dev_dependencies:
   flutter_test:

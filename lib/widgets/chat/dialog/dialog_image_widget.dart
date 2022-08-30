@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/models/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat_model.dart';
 
 class DialogImageWidget extends StatefulWidget {
   const DialogImageWidget({Key? key, required this.chat}) : super(key: key);

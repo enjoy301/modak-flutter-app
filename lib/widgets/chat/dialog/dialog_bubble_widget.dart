@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/models/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat_model.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 

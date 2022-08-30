@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:modak_flutter_app/screens/common/common_invitation_screen.dart';
-import 'package:modak_flutter_app/screens/auth/auth_landing_screen.dart';
+import 'package:modak_flutter_app/ui/common/common_invitation_screen.dart';
+import 'package:modak_flutter_app/ui/auth/auth_landing_screen.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
 import 'package:modak_flutter_app/services/user_service.dart';

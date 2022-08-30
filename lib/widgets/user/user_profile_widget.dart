@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/screens/user/user_modify_screen.dart';
+import 'package:modak_flutter_app/ui/user/user_modify_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_small_widget.dart';
-import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileWidget extends StatefulWidget {

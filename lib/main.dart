@@ -13,8 +13,8 @@ import 'package:modak_flutter_app/provider/auth_provider.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/screens/auth/auth_splash_screen.dart';
-import 'package:modak_flutter_app/screens/auth/reigster/auth_invitation_screen.dart';
+import 'package:modak_flutter_app/ui/auth/auth_splash_screen.dart';
+import 'package:modak_flutter_app/ui/auth/reigster/auth_invitation_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 

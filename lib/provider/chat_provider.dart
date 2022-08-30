@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
-import 'package:modak_flutter_app/models/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat_model.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 
 class ChatProvider extends ChangeNotifier {
