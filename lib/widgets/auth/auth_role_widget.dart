@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
+import 'package:modak_flutter_app/constant/strings.dart';
 
 class AuthRoleWidget extends StatefulWidget {
   const AuthRoleWidget({Key? key, required this.family, required this.isChecked}) : super(key: key);
 
-  final FamilyType family;
+  final String family;
   final bool isChecked;
 
   @override
@@ -13,11 +14,11 @@ class AuthRoleWidget extends StatefulWidget {
 }
 
 class _AuthRoleWidgetState extends State<AuthRoleWidget> {
-  Map<FamilyType, String> data = {
-    FamilyType.dad: "lib/assets/images/family/dad.png",
-    FamilyType.mom: "lib/assets/images/family/mom.png",
-    FamilyType.dau: "lib/assets/images/family/dau.png",
-    FamilyType.son: "lib/assets/images/family/son.png",
+  Map<String, String> data = {
+    Strings.dad: "lib/assets/images/family/dad.png",
+    Strings.mom: "lib/assets/images/family/mom.png",
+    Strings.dau: "lib/assets/images/family/dau.png",
+    Strings.son: "lib/assets/images/family/son.png",
   };
 
   @override

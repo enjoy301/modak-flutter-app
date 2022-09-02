@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 
-class CommonCheckboxWidget extends StatefulWidget {
-  const CommonCheckboxWidget(
+class CheckboxWidget extends StatefulWidget {
+  const CheckboxWidget(
       {Key? key, required this.value, required this.onChanged})
       : super(key: key);
 
@@ -10,10 +10,10 @@ class CommonCheckboxWidget extends StatefulWidget {
   final Function(bool?) onChanged;
 
   @override
-  State<CommonCheckboxWidget> createState() => _CommonCheckboxWidgetState();
+  State<CheckboxWidget> createState() => _CheckboxWidgetState();
 }
 
-class _CommonCheckboxWidgetState extends State<CommonCheckboxWidget> {
+class _CheckboxWidgetState extends State<CheckboxWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(

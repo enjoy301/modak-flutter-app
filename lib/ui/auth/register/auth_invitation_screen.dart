@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/ui/auth/reigster/auth_register_screen.dart';
+import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
 import 'package:modak_flutter_app/utils/auth_util.dart';

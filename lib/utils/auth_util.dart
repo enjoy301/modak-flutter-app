@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
 import 'package:modak_flutter_app/provider/auth_provider.dart';
 import 'package:modak_flutter_app/ui/auth/auth_landing_screen.dart';
-import 'package:modak_flutter_app/ui/auth/reigster/auth_register_screen.dart';
+import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/services/auth_service.dart';
 import 'package:modak_flutter_app/services/user_service.dart';

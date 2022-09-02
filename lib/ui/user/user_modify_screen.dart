@@ -4,7 +4,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
-import 'package:modak_flutter_app/widgets/common/common_checkbox_widget.dart';
+import 'package:modak_flutter_app/widgets/common/checkbox_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_color_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_date_widget.dart';
@@ -66,7 +66,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 13),
-                  child: InputTextWidget(isSuffix: true, onClickSuffix: () {}),
+                  child: InputTextWidget(textEditingController: TextEditingController(), isSuffix: true, onClickSuffix: () {}),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 13),
@@ -97,7 +97,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                       Expanded(child: Text("")),
                       Padding(
                         padding: EdgeInsets.only(right: 10),
-                        child: CommonCheckboxWidget(value: true, onChanged: (bool? value) {}),
+                        child: CheckboxWidget(value: true, onChanged: (bool? value) {}),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 16),

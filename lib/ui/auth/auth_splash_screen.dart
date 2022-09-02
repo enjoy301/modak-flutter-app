@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/utils/auth_util.dart';
+import 'package:modak_flutter_app/ui/auth/auth_splash_VM.dart';
+import 'package:provider/provider.dart';
 
 class AuthSplashScreen extends StatefulWidget {
   const AuthSplashScreen({Key? key}) : super(key: key);
@@ -14,62 +15,54 @@ class AuthSplashScreen extends StatefulWidget {
 class _AuthSplashScreenState extends State<AuthSplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: Coloring.main,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "lib/assets/images/others/splash_modak_fire.png",
-                width: 160,
-                height: 224,
+    return Consumer<AuthSplashVM>(
+      builder: (context, provider, child) {
+        return Scaffold(
+          body: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                gradient: Coloring.main,
               ),
-              Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("MO",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Font.size_h1 * 1.4,
-                        fontWeight: Font.weight_bold,
-                      )),
+                  Image.asset(
+                    "lib/assets/images/others/splash_modak_fire.png",
+                    width: 160,
+                    height: 224,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("MO",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Font.size_h1 * 1.4,
+                            fontWeight: Font.weight_bold,
+                          )),
+                      Text(
+                        "DAK",
+                        style: TextStyle(
+                          color: Color(0XFF583668),
+                          fontSize: Font.size_h1 * 1.4,
+                          fontWeight: Font.weight_bold,
+                        ),
+                      )
+                    ],
+                  ),
                   Text(
-                    "DAK",
+                    "family messenger app",
                     style: TextStyle(
-                      color: Color(0XFF583668),
-                      fontSize: Font.size_h1 * 1.4,
-                      fontWeight: Font.weight_bold,
+                      color: Colors.white,
+                      fontSize: Font.size_largeText,
+                      fontWeight: Font.weight_regular,
                     ),
-                  )
+                  ),
                 ],
-              ),
-              Text(
-                "family messenger app",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Font.size_largeText,
-                  fontWeight: Font.weight_regular,
-                ),
-              ),
-            ],
-          )),
+              )),
+        );
+      }
     );
   }
-
-  @override
-  void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      AuthUtil.authRedirection(context, isLoad: true);
-    });
-
-    super.initState();
-
-  }
-
-
 }

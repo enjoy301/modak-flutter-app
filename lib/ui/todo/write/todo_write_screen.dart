@@ -9,7 +9,6 @@ import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_date_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_select_widget.dart';
-import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 import 'package:modak_flutter_app/widgets/todo/todo_day_week_widget.dart';
 
 class TodoWriteScreen extends StatelessWidget {
@@ -45,7 +44,7 @@ class TodoWriteScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                InputTextWidget(),
+                // InputTextWidget(),
                 InputSelectWidget(
                     title: "담당",
                     contents: "contents",
@@ -132,11 +131,11 @@ class TodoWriteScreen extends StatelessWidget {
                           ),
                         ),
                         Text("메모 (옵션)"),
-                        InputTextWidget(
-                          hint: "할 일 내용",
-                          minLines: 2,
-                          maxLines: 5,
-                        ),
+                        // InputTextWidget(
+                        //   hint: "할 일 내용",
+                        //   minLines: 2,
+                        //   maxLines: 5,
+                        // ),
                       ],
                     ))
               ],

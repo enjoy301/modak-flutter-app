@@ -5,7 +5,7 @@ import 'package:modak_flutter_app/constant/font.dart';
 class InputTextWidget extends StatefulWidget {
   const InputTextWidget(
       {Key? key,
-      this.initialValue = "",
+      required this.textEditingController,
       this.hint = "",
       this.onChanged,
       this.isSuffix = false,
@@ -13,7 +13,7 @@ class InputTextWidget extends StatefulWidget {
       this.minLines = 1,
       this.maxLines = 1})
       : super(key: key);
-  final String initialValue;
+  final TextEditingController textEditingController;
   final String hint;
   final Function(String text)? onChanged;
   final bool isSuffix;
@@ -27,11 +27,9 @@ class InputTextWidget extends StatefulWidget {
 }
 
 class _InputTextWidgetState extends State<InputTextWidget> {
-  late TextEditingController _controller;
 
   @override
   void initState() {
-    _controller = TextEditingController(text: widget.initialValue);
     super.initState();
   }
 
@@ -41,7 +39,7 @@ class _InputTextWidgetState extends State<InputTextWidget> {
       child: TextFormField(
         minLines: widget.minLines,
         maxLines: widget.maxLines,
-        controller: _controller,
+        controller: widget.textEditingController,
         onChanged: widget.onChanged,
         decoration: InputDecoration(
             hintText: widget.hint,
@@ -63,7 +61,7 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                 ? IconButton(
                     onPressed: () {
                       widget.onClickSuffix!.call();
-                      _controller.clear();
+                      widget.textEditingController.clear();
                     },
                     icon: Icon(
                       Icons.close,

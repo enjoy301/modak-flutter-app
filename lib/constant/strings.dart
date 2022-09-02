@@ -1,5 +1,69 @@
 class Strings {
-  static String privateInformation = """개인정보카카오아이엑스 주식회사(이하 “회사”)는 이용자의 개인정보를 매우 중요하게 여기며, 개인정보의 수집, 이용, 제공이 필요한 경우에는 이용자의 동의를 기반으로 하여 이용자의 개인정보 자기결정 권리를 보장합니다.
+  /// env
+  static String apiEndPoint = "API_ENDPOINT";
+
+  /// request
+  static String headerHost = "Host";
+  static String headerProviderName = "Provider";
+  static String headerProviderId = "Provider-Id";
+  static String headerAccessToken = "Access-Token";
+  static String headerRefreshToken = "Refresh-Token";
+
+  /// final result
+  static const String noUser = "NO USER";
+  static const String noValue = "NO VALUE";
+  static const String valueAlreadyExist = "Value Already Exists";
+  static const String success = "SUCCESS";
+  static const String fail = "FAIL";
+
+  /// response
+  static String result = "result";
+  static String response = "response";
+  static String message = "message";
+
+  /// Auth
+  static String providerName = "provider";
+  static String providerId = "providerId";
+  static String accessToken = "accessToken";
+  static String refreshToken = "refreshToken";
+  static String memberId = "id";
+  static String familyId = "familyId";
+  static String isRegisterProgress = "isRegisterProgress";
+
+  /// User
+  static String name = "name";
+  static String birthDay = "birthday";
+  static String isLunar = "isLunar";
+  static String role = "role";
+  static String fcmToken = "fcmToken";
+
+  /// role
+  static String dad = "DAD";
+  static String mom = "MOM";
+  static String son = "SON";
+  static String dau = "DAU";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  static String privateInformation =
+      """개인정보카카오아이엑스 주식회사(이하 “회사”)는 이용자의 개인정보를 매우 중요하게 여기며, 개인정보의 수집, 이용, 제공이 필요한 경우에는 이용자의 동의를 기반으로 하여 이용자의 개인정보 자기결정 권리를 보장합니다.
 
   회사는 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법 등 정보통신서비스 제공자가 준수하여야 하는 관련 법령과 개인정보 보호 규정 및 가이드라인을 준수하여 이용자의 개인정보 보호를 위해 최선을 다 하고 있습니다.
 
