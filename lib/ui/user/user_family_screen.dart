@@ -72,7 +72,6 @@ class _UserFamilyScreenState extends State<UserFamilyScreen> {
                 color: Coloring.gray_40,
               ),
             ),
-            UserProfileWidget(),
             Padding(
               padding: const EdgeInsets.only(top: 48, bottom: 32),
               child: Text("최근 인증 사진", style: TextStyle(

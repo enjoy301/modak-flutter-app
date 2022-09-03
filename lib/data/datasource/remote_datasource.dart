@@ -80,6 +80,7 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> tokenLogin() async {
     return _tryRequest(() async {
       return await Dio(BaseOptions(headers: {
+        Strings.headerHost: "www.never.com",
         Strings.headerRefreshToken:
             await storage.read(key: Strings.refreshToken),
       })).get(
@@ -142,7 +143,7 @@ class RemoteDataSource {
         await storage.write(
             key: Strings.memberId,
             value:
-                response.data['data']['result'][Strings.memberId].toString());
+                response.data['data']['memberResult'][Strings.memberId].toString());
       }
       if (isUpdatingFamilyId) {
         await storage.write(

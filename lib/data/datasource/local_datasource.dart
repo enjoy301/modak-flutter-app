@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/data/model/user.dart';
 
 class LocalDataSource {
   LocalDataSource._create();
@@ -17,6 +19,7 @@ class LocalDataSource {
   static Box albumBox = Hive.box("album");
 
   /// auth
+  /// get
   String? getName() {
     String? name = authBox.get(Strings.name);
     return name;
@@ -42,6 +45,8 @@ class LocalDataSource {
     return isRegisterProgress;
   }
 
+  /// auth
+  /// set
   Future<bool> updateName(String name) async {
     return tryFunction(() async => await authBox.put(Strings.name, name));
   }
@@ -75,7 +80,16 @@ class LocalDataSource {
   }
 
   /// user
-
+  /// get
+  User? getMe() {
+    User? user = userBox.get(Strings.me);
+    return user;
+  }
+  /// user
+  /// set
+  Future<bool> updateMe(User user) async {
+    return tryFunction(() async => await userBox.put(Strings.me, user));
+  }
 
   bool tryFunction(Function() function) {
     try {

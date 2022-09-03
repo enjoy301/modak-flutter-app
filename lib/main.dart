@@ -7,6 +7,7 @@ import 'package:get/route_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
+import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/provider/auth_provider.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
@@ -19,6 +20,8 @@ import 'package:modak_flutter_app/ui/auth/auth_splash_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_VM.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
+import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
+import 'package:modak_flutter_app/ui/user/user_landing_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +32,9 @@ void main() async {
 
   // Hive 시작
   await Hive.initFlutter();
+
+  // Hive 객체 등록
+  Hive.registerAdapter<User>(UserAdapter());
 
   await Hive.openBox('auth');
   await Hive.openBox('user');
@@ -45,6 +51,7 @@ void main() async {
 
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_KEY"));
 
+
   // 한글 지원
   // 상태관리 provider 정의
   initializeDateFormatting().then((_) => runApp(MultiProvider(providers: [
@@ -53,7 +60,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => TodoProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => AlbumProvider()),
-        ChangeNotifierProvider(create: (_) => AuthRegisterVM()),
+        ChangeNotifierProvider(create: (_) => UserLandingVM()),
       ], child: const MyApp())));
 }
 
@@ -89,6 +96,10 @@ class _MyAppState extends State<MyApp> {
               create: (_) => AuthRegisterVM(),
               child: AuthRegisterScreen(),
             ),
+        "/user/landing": (context) => ChangeNotifierProvider(
+          create: (_) => UserLandingVM(),
+          child: UserLandingScreen(),
+        ),
       },
     );
   }

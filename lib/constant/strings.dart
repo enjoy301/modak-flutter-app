@@ -26,16 +26,20 @@ class Strings {
   static String providerId = "providerId";
   static String accessToken = "accessToken";
   static String refreshToken = "refreshToken";
-  static String memberId = "id";
+  static String memberId = "memberId";
   static String familyId = "familyId";
   static String isRegisterProgress = "isRegisterProgress";
 
-  /// User
   static String name = "name";
-  static String birthDay = "birthday";
+  static String birthDay = "birthDay";
   static String isLunar = "isLunar";
   static String role = "role";
   static String fcmToken = "fcmToken";
+  static String color = "color";
+
+  /// User
+  static String me = "me";
+
 
   /// role
   static String dad = "DAD";

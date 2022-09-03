@@ -1,7 +1,9 @@
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
+import 'package:modak_flutter_app/data/model/user.dart';
 
 class UserRepository {
   UserRepository._create();
@@ -19,7 +21,7 @@ class UserRepository {
   Future<String> tokenLogin() async {
     Map<String, dynamic> response = await remoteDataSource!.tokenLogin();
     print(response['message']);
-    if (response['result']) {
+    if (response[Strings.result]) {
       return Strings.success;
     }
     return Strings.fail;
@@ -29,9 +31,18 @@ class UserRepository {
     bool isKakaoLoginSuccess = await remoteDataSource!.kakaoLogin();
     if (isKakaoLoginSuccess) {
       Map<String, dynamic> response = await remoteDataSource!.socialLogin();
-      if (response['result']) {
+      if (response[Strings.result]) {
+        final userInfo =
+            response[Strings.response].data['data']['memberResult'];
+        localDataSource!.updateMe(User(
+            name: userInfo[Strings.name],
+            birthDay: userInfo[Strings.birthDay],
+            isLunar: userInfo[Strings.isLunar] == 1 ? true : false,
+            role: userInfo[Strings.role],
+            fcmToken: "fcmToken",
+            color: userInfo[Strings.color]));
         return Strings.success;
-      } else if (response['message'] == "NoSuchMemberException") {
+      } else if (response[Strings.message] == "NoSuchMemberException") {
         return Strings.noUser;
       }
     }
@@ -49,20 +60,20 @@ class UserRepository {
     }
     Map<String, dynamic> response = await remoteDataSource!
         .signUp(name!, birthDay!, isLunar! ? 1 : 0, role!, "fcmToken", -1);
-    if (response['result']) {
+    if (response[Strings.result]) {
       await localDataSource!.updateIsRegisterProgress(false);
       return Strings.success;
     }
-    if (response['message'] == "MemberAlreadyExistsException") {
+    if (response[Strings.message] == "MemberAlreadyExistsException") {
       return Strings.valueAlreadyExist;
     }
-    print(response['message']);
     return Strings.fail;
   }
 
   String? getName() {
     return localDataSource!.getName();
   }
+
   DateTime? getBirthDay() {
     String? birthDay = localDataSource!.getBirthDay();
     if (birthDay == null) {
@@ -71,17 +82,20 @@ class UserRepository {
     DateTime birthDayDate = DateTime.parse(birthDay);
     return birthDayDate;
   }
-  bool? getIsLunar()  {
+
+  bool? getIsLunar() {
     return localDataSource!.getIsLunar();
   }
-  String? getRole()  {
+
+  String? getRole() {
     return localDataSource!.getRole();
   }
+
   bool? getIsRegisterProgress() {
     return localDataSource!.getIsRegisterProgress();
   }
 
-  void setName(String name)  {
+  void setName(String name) {
     localDataSource!.updateName(name);
   }
 
@@ -100,5 +114,4 @@ class UserRepository {
   void setIsRegisterProgress(bool isRegisterProgress) {
     localDataSource!.updateIsRegisterProgress(isRegisterProgress);
   }
-
 }

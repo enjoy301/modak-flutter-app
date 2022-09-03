@@ -1,28 +1,19 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 part 'user.g.dart';
+part 'user.freezed.dart';
 
-@HiveType(typeId: 0)
-class User {
-  @HiveField(0)
-  String name;
+@unfreezed
+class User with _$User {
+  @HiveType(typeId: 0)
+  factory User(
+      {@HiveField(0) required String name,
+      @HiveField(1) required String birthDay,
+      @HiveField(2) required bool isLunar,
+      @HiveField(3) required String role,
+      @HiveField(4) required String fcmToken,
+      @HiveField(5) required String color}) = _User;
 
-  @HiveField(1)
-  String birthDay;
-
-  @HiveField(2)
-  bool isLunar;
-
-  @HiveField(3)
-  String role;
-
-  @HiveField(4)
-  String fcmToken;
-
-  User(
-      {required this.name,
-      required this.birthDay,
-      required this.isLunar,
-      required this.role,
-      required this.fcmToken});
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
