@@ -2,11 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
-import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/auth/auth_landing_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
-import 'package:provider/provider.dart';
 
 /// 회원가입 완료 실행 함수
 Future<Map<String, dynamic>> signUp() async {
@@ -83,8 +81,6 @@ Future<Map<String, dynamic>> socialLogin(BuildContext context) async {
     print("familyType: ${familyType.toString()}");
     print("color: ${color.toString()}");
     print(response.data);
-    context.read<UserProvider>().setUserInfo(
-        name, isLunar, birthDay, profileImageUrl, familyType, color);
 
     PrefsUtil.setInt("user_id", userInfo['id']);
     return {

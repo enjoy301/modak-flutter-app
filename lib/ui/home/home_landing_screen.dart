@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/services/user_service.dart';
 import 'package:modak_flutter_app/widgets/home/HomeScheduleWidget.dart';
 import 'package:modak_flutter_app/widgets/home/HomeTodoWidget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';

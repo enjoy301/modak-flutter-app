@@ -6,7 +6,10 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/user_colors.dart';
 
 class InputColorWidget extends StatefulWidget {
-  const InputColorWidget({Key? key}) : super(key: key);
+  const InputColorWidget({Key? key, required this.color, required this.onColorChanged}) : super(key: key);
+
+  final Color color;
+  final Function(Color color) onColorChanged;
 
   @override
   State<InputColorWidget> createState() => _InputColorWidgetState();
@@ -22,9 +25,9 @@ class _InputColorWidgetState extends State<InputColorWidget> {
                   title: Text("색을 선택해주세요"),
                   content: SingleChildScrollView(
                     child: BlockPicker(
-                      pickerColor: Colors.red,
+                      pickerColor: Colors.black,
                       availableColors: UserColors.points,
-                      onColorChanged: (Color color) {},
+                      onColorChanged: widget.onColorChanged,
                     ),
                   ),
                 ),
@@ -62,7 +65,7 @@ class _InputColorWidgetState extends State<InputColorWidget> {
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(
-                  color: Colors.purple,
+                  color: widget.color,
                   borderRadius: BorderRadius.circular(7),
                 ),
               ),

@@ -26,6 +26,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
     AlbumLandingScreen(),
     UserLandingScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
     EdgeInsets iconPadding =

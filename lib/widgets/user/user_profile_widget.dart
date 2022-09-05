@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
-import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/ui/user/user_modify_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_small_widget.dart';
-import 'package:provider/provider.dart';
 
 class UserProfileWidget extends StatefulWidget {
-  const UserProfileWidget({Key? key, required this.user}) : super(key: key);
+  const UserProfileWidget({Key? key, required this.user, required this.onPressed}) : super(key: key);
 
   final User? user;
+  final Function() onPressed;
+
   @override
   State<UserProfileWidget> createState() => _UserProfileWidgetState();
 }
@@ -63,7 +62,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                           width: 10,
                           height: 10,
                           child: CircleAvatar(
-                            backgroundColor: Colors.orange,
+                            backgroundColor: widget.user != null ? widget.user!.color.toColor() : Colors.white,
                           ),
                         ),
                       )
@@ -86,12 +85,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
             Expanded(child: Text("")),
             ButtonMainSmallWidget(
               title: "수정하기",
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UserModifyScreen()));
-              },
+              onPressed: widget.onPressed,
             ),
           ],
         ),

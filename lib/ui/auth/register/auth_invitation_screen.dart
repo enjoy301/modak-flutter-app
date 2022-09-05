@@ -31,7 +31,6 @@ class _AuthInvitationScreenState extends State<AuthInvitationScreen> {
                 okText: "확인",
                 noText: "닫기",
                 onOkPressed: () {
-                  AuthUtil.authRedirection(context);
                 }, onNoPressed: () {
               Navigator.pop(context);
             });

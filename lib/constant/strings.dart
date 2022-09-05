@@ -42,10 +42,10 @@ class Strings {
 
 
   /// role
-  static String dad = "DAD";
-  static String mom = "MOM";
-  static String son = "SON";
-  static String dau = "DAU";
+  static const String dad = "DAD";
+  static const String mom = "MOM";
+  static const String son = "SON";
+  static const String dau = "DAU";
 
 
 

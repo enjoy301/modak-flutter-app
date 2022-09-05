@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
@@ -70,6 +69,16 @@ class UserRepository {
     return Strings.fail;
   }
 
+  Future<String> updateMeInfo(User user) async {
+    Map<String, dynamic> response = await remoteDataSource!.updateMeInfo(user);
+    print(response[Strings.message]);
+    print(response[Strings.response]);
+    if (response[Strings.result]) {
+      await localDataSource!.updateMe(user);
+      return Strings.success;
+    }
+    return Strings.fail;
+  }
   String? getName() {
     return localDataSource!.getName();
   }
@@ -95,6 +104,10 @@ class UserRepository {
     return localDataSource!.getIsRegisterProgress();
   }
 
+  User? getMe() {
+    return localDataSource!.getMe();
+  }
+
   void setName(String name) {
     localDataSource!.updateName(name);
   }
@@ -114,4 +127,9 @@ class UserRepository {
   void setIsRegisterProgress(bool isRegisterProgress) {
     localDataSource!.updateIsRegisterProgress(isRegisterProgress);
   }
+
+  void setMe(User user) {
+    localDataSource!.updateMe(user);
+  }
+
 }

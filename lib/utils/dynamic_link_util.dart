@@ -1,5 +1,4 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:modak_flutter_app/provider/user_provider.dart';
 
 class DynamicLinkUtil {
   static Future<Uri> getInvitationLink() async {

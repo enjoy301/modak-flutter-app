@@ -22,6 +22,8 @@ import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_screen.dart';
+import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
+import 'package:modak_flutter_app/ui/user/user_modify_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +52,6 @@ void main() async {
   await Firebase.initializeApp();
 
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_KEY"));
-
 
   // 한글 지원
   // 상태관리 provider 정의
@@ -97,9 +98,13 @@ class _MyAppState extends State<MyApp> {
               child: AuthRegisterScreen(),
             ),
         "/user/landing": (context) => ChangeNotifierProvider(
-          create: (_) => UserLandingVM(),
-          child: UserLandingScreen(),
-        ),
+              create: (_) => UserLandingVM(),
+              child: UserLandingScreen(),
+            ),
+        "/user/modify": (context) => ChangeNotifierProvider(
+              create: (_) => UserModifyVM(),
+              child: UserModifyScreen(),
+            )
       },
     );
   }

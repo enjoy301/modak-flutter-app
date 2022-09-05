@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/route_manager.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:modak_flutter_app/data/model/user.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/ui/auth/auth_landing_screen.dart';
 
@@ -55,8 +56,7 @@ class RemoteDataSource {
     });
   }
 
-  Future<Map<String, dynamic>> getUserInfo(
-      String accessToken, int userId) async {
+  Future<Map<String, dynamic>> getMeInfo(String accessToken, int userId) async {
     return _tryRequest(() async {
       return await Dio(BaseOptions(headers: {
         Strings.headerAccessToken: accessToken,
@@ -104,19 +104,36 @@ class RemoteDataSource {
 
   Future<bool> kakaoLogin() async {
     try {
-      late OAuthToken token;
-      if (await isKakaoTalkInstalled()) {
-        token = await UserApi.instance.loginWithKakaoTalk();
+      late kakao.OAuthToken token;
+      if (await kakao.isKakaoTalkInstalled()) {
+        token = await kakao.UserApi.instance.loginWithKakaoTalk();
       } else {
-        token = await UserApi.instance.loginWithKakaoAccount();
+        token = await kakao.UserApi.instance.loginWithKakaoAccount();
       }
-      User user = await UserApi.instance.me();
+      kakao.User user = await kakao.UserApi.instance.me();
       storage.write(key: Strings.providerName, value: "KAKAO");
       storage.write(key: Strings.providerId, value: user.id.toString());
     } catch (e) {
       return false;
     }
     return true;
+  }
+
+  /// me
+  Future<Map<String, dynamic>> updateMeInfo(User user) {
+    return _tryRequest(() async {
+      return Dio(BaseOptions(headers: {
+        Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
+      })).put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}",
+          data: {
+            Strings.name: user.name,
+            "birthday": user.birthDay,
+            Strings.isLunar: user.isLunar ? 1 : 0,
+            Strings.role: user.role,
+            Strings.color: user.color,
+          });
+    });
   }
 
   Future<Map<String, dynamic>> _tryRequest(
@@ -142,8 +159,8 @@ class RemoteDataSource {
       if (isUpdatingMemberId) {
         await storage.write(
             key: Strings.memberId,
-            value:
-                response.data['data']['memberResult'][Strings.memberId].toString());
+            value: response.data['data']['memberResult'][Strings.memberId]
+                .toString());
       }
       if (isUpdatingFamilyId) {
         await storage.write(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_invitation_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_family_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
@@ -13,10 +15,10 @@ class UserLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserLandingVM>(
-      builder: (context, provider, child) {
-        return FutureBuilder(
-          future: provider.init(),
+    return Consumer2<UserProvider, UserLandingVM>(
+        builder: (context, userProvider, provider, child) {
+      return FutureBuilder(
+          future: userProvider.init(),
           builder: (context, snapshot) {
             return Scaffold(
                 backgroundColor: Colors.white,
@@ -29,7 +31,12 @@ class UserLandingScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      UserProfileWidget(user: provider.user,),
+                      UserProfileWidget(
+                        user: userProvider.user,
+                        onPressed: () {
+                          Get.toNamed("/user/modify");
+                        },
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 32.0),
                         child: Container(
@@ -39,32 +46,27 @@ class UserLandingScreen extends StatelessWidget {
                         ),
                       ),
                       ButtonMainWidget(
-                          title: "가족 정보 보기",
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UserFamilyScreen()));
-                          }),
+                        title: "가족 정보 보기",
+                        onPressed: () {
+                          Get.to(() => UserFamilyScreen());
+                        },
+                        // onPressed: provider.navigateToFamilyInfo(),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 16),
                         child: ButtonMainWidget(
-                            title: "초대 하기",
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CommonInvitationScreen(
-                                            withSkipButton: false,
-                                          )));
-                            }),
-                      ),
+                          title: "초대 하기",
+                          onPressed: () {
+                            Get.to(() => CommonInvitationScreen(
+                                  withSkipButton: false,
+                                ));
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ));
-          }
-        );
-      }
-    );
+          });
+    });
   }
 }

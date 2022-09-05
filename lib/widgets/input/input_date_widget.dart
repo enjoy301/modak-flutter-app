@@ -22,13 +22,12 @@ class InputDateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(builder: (context, provider, child) {
       return GestureDetector(
         onTap: () {
           DatePicker.showDatePicker(context,
               minTime: DateTime.utc(1950),
               maxTime: DateTime.now(),
-              currentTime: provider.birthDay ?? DateTime.now(),
+              currentTime: currTime,
               onConfirm: onChanged);
         },
         child: Container(
@@ -67,6 +66,5 @@ class InputDateWidget extends StatelessWidget {
           ),
         ),
       );
-    });
   }
 }
