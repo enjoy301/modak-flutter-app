@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
-import 'package:modak_flutter_app/widgets/todo/todo_listitem_widget.dart';
 import 'package:provider/provider.dart';
 
 class TodoLandingList extends StatefulWidget {
@@ -20,7 +19,7 @@ class _TodoLandingListState extends State<TodoLandingList> {
             shrinkWrap: true,
             itemCount: provider.todos.length,
             itemBuilder: (context, index) {
-              return TodoListItemWidget(todo: provider.getTodoAt(index));
+              return Text("임시");
             },
           ),
         );

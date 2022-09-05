@@ -3,8 +3,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/provider/auth_provider.dart';
-import 'package:provider/provider.dart';
 
 class InputDateWidget extends StatelessWidget {
   const InputDateWidget(

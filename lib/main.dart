@@ -9,7 +9,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
-import 'package:modak_flutter_app/provider/auth_provider.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
@@ -19,7 +18,9 @@ import 'package:modak_flutter_app/ui/auth/auth_splash_VM.dart';
 import 'package:modak_flutter_app/ui/auth/auth_splash_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_VM.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
+import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
+import 'package:modak_flutter_app/ui/todo/landing/todo_landing_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
@@ -56,11 +57,13 @@ void main() async {
   // 한글 지원
   // 상태관리 provider 정의
   initializeDateFormatting().then((_) => runApp(MultiProvider(providers: [
+        /// share provider
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => TodoProvider()),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => AlbumProvider()),
+        /// main page provider
+        ChangeNotifierProvider(create: (_) => TodoLandingVM()),
         ChangeNotifierProvider(create: (_) => UserLandingVM()),
       ], child: const MyApp())));
 }
@@ -96,6 +99,10 @@ class _MyAppState extends State<MyApp> {
         "/auth/register": (context) => ChangeNotifierProvider(
               create: (_) => AuthRegisterVM(),
               child: AuthRegisterScreen(),
+            ),
+        "/todo/landing": (context) => ChangeNotifierProvider(
+              create: (_) => TodoLandingVM(),
+              child: TodoLandingScreen(),
             ),
         "/user/landing": (context) => ChangeNotifierProvider(
               create: (_) => UserLandingVM(),

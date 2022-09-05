@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:modak_flutter_app/data/model/todo_model.dart';
+import 'package:modak_flutter_app/data/model/todo.dart';
 
 class TodoProvider extends ChangeNotifier {
 
-  final List<TodoModel> _todos = [];
+  final List<Todo> _todos = [];
   DateTime _focusedDateTime = DateTime.now();
   int _todoCount = 40;
 
-  List<TodoModel> get todos => _todos;
+  List<Todo> get todos => _todos;
   DateTime get focusedDateTime => _focusedDateTime;
   int get todoCount => _todoCount;
 
 
-  void add(TodoModel todo) {
+  void add(Todo todo) {
     _todos.add(todo);
     notifyListeners();
   }
-  TodoModel getTodoAt(int index) {
+  Todo getTodoAt(int index) {
     return _todos[index];
   }
 

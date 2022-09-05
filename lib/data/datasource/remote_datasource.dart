@@ -5,7 +5,6 @@ import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:modak_flutter_app/constant/strings.dart';
-import 'package:modak_flutter_app/ui/auth/auth_landing_screen.dart';
 
 /// result: indicates whether communication was successful or not [ True | False ]
 /// response: returns response [ Response Object | Error Object ]
@@ -16,26 +15,42 @@ typedef RequestFunction = Future<Response<dynamic>> Function();
 class RemoteDataSource {
   static final storage = FlutterSecureStorage();
 
-  final _tokenDio = Dio().interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {},
-      onError: (error, handler) async {
-        if (error.response?.statusMessage == "ExpiredAccessTokenException") {
-          String? accessToken = await storage.read(key: Strings.accessToken);
-          String? refreshToken = await storage.read(key: Strings.refreshToken);
-          if (accessToken == null || refreshToken == null) {
-            storage.deleteAll();
-            Get.offAll(AuthLandingScreen());
-            return;
-          }
-          try {
-            Response response = await Dio(BaseOptions(headers: {
-              Strings.headerHost: "www.never.com",
-              Strings.headerAccessToken: accessToken,
-              Strings.headerRefreshToken: refreshToken,
-            })).get("${dotenv.get(Strings.apiEndPoint)}/api/token/reissue");
-          } catch (e) {}
+  /// accessToken, refresh Token 검증하는 과정이 포함된 Dio
+  Future<Dio> authDio() async {
+    final Dio dio = Dio();
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (options, handler) async {
+      String? accessToken = await storage.read(key: Strings.accessToken);
+      options.headers[Strings.headerAccessToken] = accessToken;
+      return handler.next(options);
+    }, onError: (error, handler) async {
+      if (error.response?.data['code'] == "ExpiredAccessTokenException") {
+        Map<String, dynamic> response = await _reIssueAccessToken();
+        if (response[Strings.result]) {
+          await storage.write(
+              key: Strings.accessToken,
+              value: response[Strings.response]
+                  .headers[Strings.headerAccessToken]![0]);
+          final clonedRequest = await Dio().request(error.requestOptions.path, options: Options(
+              method: error.requestOptions.method,
+              headers: {
+                Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
+              }),
+              data: error.requestOptions.data,
+              queryParameters: error.requestOptions.queryParameters
+          );
+          return handler.resolve(clonedRequest);
         }
-      }));
+        if (response[Strings.message] == "ExpiredRefreshTokenException") {
+          storage.deleteAll();
+          Get.offAllNamed("/auth/landing");
+        }
+      }
+      return handler.next(error);
+    }));
+
+    return dio;
+  }
 
   /// user request
   Future<Map<String, dynamic>> signUp(String name, String birthDay, int isLunar,
@@ -65,13 +80,13 @@ class RemoteDataSource {
     });
   }
 
-  Future<Map<String, dynamic>> _reIssueAccessToken(
-      String accessToken, String refreshToken) async {
+  Future<Map<String, dynamic>> _reIssueAccessToken() async {
     return _tryRequest(() async {
       return await Dio(BaseOptions(headers: {
         Strings.headerHost: "www.never.com",
-        Strings.headerAccessToken: accessToken,
-        Strings.headerRefreshToken: refreshToken,
+        Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
+        Strings.headerRefreshToken:
+            await storage.read(key: Strings.refreshToken),
       })).get("${dotenv.get(Strings.apiEndPoint)}/api/token/reissue");
     });
   }
@@ -122,19 +137,30 @@ class RemoteDataSource {
   /// me
   Future<Map<String, dynamic>> updateMeInfo(User user) {
     return _tryRequest(() async {
-      return Dio(BaseOptions(headers: {
-        Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
-      })).put(
+      final Dio auth = await authDio();
+      return auth.put(
           "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}",
           data: {
             Strings.name: user.name,
-            "birthday": user.birthDay,
+            Strings.birthDay: user.birthDay,
             Strings.isLunar: user.isLunar ? 1 : 0,
             Strings.role: user.role,
             Strings.color: user.color,
           });
     });
   }
+
+  /// todo
+  Future<Map<String, dynamic>> getTodos(String fromDate, String toDate) {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.post("${dotenv.get(Strings.apiEndPoint)}/api/todo/from-to-date", data: {
+        Strings.fromDate: fromDate,
+        Strings.toDate: toDate,
+      });
+    });
+  }
+
 
   Future<Map<String, dynamic>> _tryRequest(
     RequestFunction function, {

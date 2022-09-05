@@ -31,11 +31,15 @@ class Strings {
   static String isRegisterProgress = "isRegisterProgress";
 
   static String name = "name";
-  static String birthDay = "birthDay";
+  static String birthDay = "birthday";
   static String isLunar = "isLunar";
   static String role = "role";
   static String fcmToken = "fcmToken";
   static String color = "color";
+
+  /// todo
+  static String fromDate = "fromDate";
+  static String toDate = "toDate";
 
   /// User
   static String me = "me";

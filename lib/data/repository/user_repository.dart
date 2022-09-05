@@ -19,7 +19,6 @@ class UserRepository {
 
   Future<String> tokenLogin() async {
     Map<String, dynamic> response = await remoteDataSource!.tokenLogin();
-    print(response['message']);
     if (response[Strings.result]) {
       return Strings.success;
     }
@@ -71,8 +70,6 @@ class UserRepository {
 
   Future<String> updateMeInfo(User user) async {
     Map<String, dynamic> response = await remoteDataSource!.updateMeInfo(user);
-    print(response[Strings.message]);
-    print(response[Strings.response]);
     if (response[Strings.result]) {
       await localDataSource!.updateMe(user);
       return Strings.success;

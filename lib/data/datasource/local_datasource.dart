@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 

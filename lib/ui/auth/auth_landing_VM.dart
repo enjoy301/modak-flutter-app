@@ -20,14 +20,14 @@ class AuthLandingVM extends ChangeNotifier {
       switch (response) {
         case Strings.success:
           Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");
-          Get.offAll(LandingBottomNavigator());
+          Get.offAllNamed("/main");
           break;
         case Strings.fail:
           Fluttertoast.showToast(msg: "로그인에 실패하셨습니다");
           break;
         case Strings.noUser:
           Fluttertoast.showToast(msg: "회원가입 페이지로 이동합니다");
-          Get.offAll(AuthRegisterScreen());
+          Get.offAllNamed("/auth/register");
           break;
       }
     }

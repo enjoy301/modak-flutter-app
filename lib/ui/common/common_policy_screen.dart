@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
-import 'package:modak_flutter_app/provider/auth_provider.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
-import 'package:provider/provider.dart';
 
 class CommonPolicyScreen extends StatefulWidget {
-  const CommonPolicyScreen({Key? key, required this.policyType, required this.isChecked})
+  const CommonPolicyScreen(
+      {Key? key, required this.policyType, required this.isChecked})
       : super(key: key);
 
   final PolicyType policyType;
@@ -17,7 +16,6 @@ class CommonPolicyScreen extends StatefulWidget {
 }
 
 class _CommonPolicyScreenState extends State<CommonPolicyScreen> {
-
   late bool isChecked;
 
   @override
@@ -59,23 +57,20 @@ class _CommonPolicyScreenState extends State<CommonPolicyScreen> {
             child: Text(data[widget.policyType]['contents']),
           ),
         ),
-        bottomNavigationBar:
-            Consumer<AuthProvider>(builder: (context, provider, build) {
-          return SizedBox(
-            height: 70,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Checkbox(
-                    value: isChecked,
-                    onChanged: (bool? value) => setState(() {
-                      isChecked = value!;
-                    })),
-                Text(data[widget.policyType]['agreementText']),
-              ],
-            ),
-          );
-        }),
+        bottomNavigationBar: SizedBox(
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Checkbox(
+                  value: isChecked,
+                  onChanged: (bool? value) => setState(() {
+                        isChecked = value!;
+                      })),
+              Text(data[widget.policyType]['agreementText']),
+            ],
+          ),
+        ),
       ),
     );
   }
