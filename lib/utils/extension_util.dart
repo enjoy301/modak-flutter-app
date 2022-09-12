@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
+import 'package:modak_flutter_app/constant/strings.dart';
 
-extension FamilyTypeToView on FamilyType? {
-  String? toDisplayString() {
+extension StringConverter on String? {
+  String toDisplayString() {
     switch (this) {
-      case FamilyType.dad:
+      case Strings.dad:
         return "아빠";
-      case FamilyType.mom:
+      case Strings.mom:
         return "엄마";
-      case FamilyType.dau:
+      case Strings.dau:
         return "딸";
-      case FamilyType.son:
+      case Strings.son:
         return "아들";
-      default: return null;
+      default: return "Error";
     }
   }
 }
@@ -67,9 +68,16 @@ extension StringToType on String? {
     if (hexColor.length == 6) {
       hexColor = "FF$hexColor";
     }
+
     if (hexColor.length == 8) {
       return Color(int.parse("0x$hexColor"));
     }
     return null;
+  }
+}
+
+extension ColorToString on Color {
+  String colorToString() {
+    return toString().substring(8, 16);
   }
 }

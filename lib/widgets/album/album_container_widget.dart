@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
-import 'package:modak_flutter_app/screens/album/album_detail_screen.dart';
+import 'package:modak_flutter_app/ui/album/album_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class AlbumContainerWidget extends StatefulWidget {

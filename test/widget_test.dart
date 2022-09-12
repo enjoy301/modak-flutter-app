@@ -15,8 +15,6 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     DateTime now = DateTime.now();
     DateFormat format = DateFormat("yyyy-MM-dd");
-    print(format.format(now));
-    print(now.toString());
   });
 
 }

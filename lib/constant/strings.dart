@@ -1,5 +1,91 @@
 class Strings {
-  static String privateInformation = """개인정보카카오아이엑스 주식회사(이하 “회사”)는 이용자의 개인정보를 매우 중요하게 여기며, 개인정보의 수집, 이용, 제공이 필요한 경우에는 이용자의 동의를 기반으로 하여 이용자의 개인정보 자기결정 권리를 보장합니다.
+  /// env
+  static const String apiEndPoint = "API_ENDPOINT";
+
+  /// request
+  static const String headerHost = "Host";
+  static const String headerProviderName = "Provider";
+  static const String headerProviderId = "Provider-Id";
+  static const String headerAccessToken = "Access-Token";
+  static const String headerRefreshToken = "Refresh-Token";
+
+  /// final result
+  static const String noUser = "NO USER";
+  static const String noValue = "NO VALUE";
+  static const String valueAlreadyExist = "Value Already Exists";
+  static const String success = "SUCCESS";
+  static const String fail = "FAIL";
+
+  /// response
+  static const String result = "result";
+  static const String response = "response";
+  static const String message = "message";
+  static const String memberResult = "memberResult";
+  static const String familyMembersResult = "familyMembersResult";
+
+  /// Auth
+  static const String providerName = "provider";
+  static const String providerId = "providerId";
+  static const String accessToken = "accessToken";
+  static const String refreshToken = "refreshToken";
+  static const String memberId = "memberId";
+  static const String familyId = "familyId";
+  static const String isRegisterProgress = "isRegisterProgress";
+
+  static const String name = "name";
+  static const String familyMembers = "familyMembers";
+  static const String birthDay = "birthday";
+  static const String isLunar = "isLunar";
+  static const String role = "role";
+  static const String fcmToken = "fcmToken";
+  static const String color = "color";
+
+  /// todo
+  static const String todoId = "todoId";
+  static const String groupTodoId = "groupTodoId";
+  static const String title = "title";
+  static const String repeat = "repeat";
+  static const String repeatTag = "repeatTag";
+  static const String timeTag = "timeTag";
+  static const String memo = "memo";
+  static const String fromDate = "fromDate";
+  static const String toDate = "toDate";
+  static const String date = "date";
+  static const String isDone = "isDone";
+  static const String isAfterUpdate = "isAfterUpdate";
+  static const String isAfterDelete = "isAfterDelete";
+
+  /// User
+  static const String me = "me";
+
+
+  /// role
+  static const String dad = "DAD";
+  static const String mom = "MOM";
+  static const String son = "SON";
+  static const String dau = "DAU";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  static const String privateInformation =
+      """개인정보카카오아이엑스 주식회사(이하 “회사”)는 이용자의 개인정보를 매우 중요하게 여기며, 개인정보의 수집, 이용, 제공이 필요한 경우에는 이용자의 동의를 기반으로 하여 이용자의 개인정보 자기결정 권리를 보장합니다.
 
   회사는 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법 등 정보통신서비스 제공자가 준수하여야 하는 관련 법령과 개인정보 보호 규정 및 가이드라인을 준수하여 이용자의 개인정보 보호를 위해 최선을 다 하고 있습니다.
 
@@ -66,7 +152,7 @@ class Strings {
   또한, 카카오아이엑스는 ‘개인정보 유효기간제’에 따라 1년간 서비스를 이용하지 않은 회원의 개인정보를 별도로 분리 보관 또는 삭제하고 있으며, 분리 보관된 개인정보는 4년간 보관 후 지체없이 파기합니다.
 
   """;
-  static String operatingPolicy = """
+  static const String operatingPolicy = """
   운영정책카카오아이엑스 주식회사(이하 “회사”)는 이용자의 개인정보를 매우 중요하게 여기며, 개인정보의 수집, 이용, 제공이 필요한 경우에는 이용자의 동의를 기반으로 하여 이용자의 개인정보 자기결정 권리를 보장합니다.
 
 회사는 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법 등 정보통신서비스 제공자가 준수하여야 하는 관련 법령과 개인정보 보호 규정 및 가이드라인을 준수하여 이용자의 개인정보 보호를 위해 최선을 다 하고 있습니다.

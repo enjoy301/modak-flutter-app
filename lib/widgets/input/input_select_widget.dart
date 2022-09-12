@@ -30,6 +30,7 @@ class _InputSelectWidgetState extends State<InputSelectWidget> {
     return GestureDetector(
       onTap: widget.onTap ??
           () {
+            FocusScope.of(context).requestFocus(FocusNode());
             defaultModalWidget(context, widget.buttons);
           },
       child: Container(
