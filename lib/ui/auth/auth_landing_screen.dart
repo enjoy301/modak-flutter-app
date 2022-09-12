@@ -76,25 +76,25 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () async {
-                          final appIdCredential =
-                              await SignInWithApple.getAppleIDCredential(
-                                  scopes: [
-                                AppleIDAuthorizationScopes.fullName,
-                                AppleIDAuthorizationScopes.email
-                              ]);
-                          debugPrint(appIdCredential.userIdentifier);
-                        },
-                        child: Image.asset(
-                          "lib/assets/images/auth/apple_login.png",
-                          width: 60,
-                          height: 60,
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: GestureDetector(
+                    //     onTap: () async {
+                    //       final appIdCredential =
+                    //           await SignInWithApple.getAppleIDCredential(
+                    //               scopes: [
+                    //             AppleIDAuthorizationScopes.fullName,
+                    //             AppleIDAuthorizationScopes.email
+                    //           ]);
+                    //       debugPrint(appIdCredential.userIdentifier);
+                    //     },
+                    //     child: Image.asset(
+                    //       "lib/assets/images/auth/apple_login.png",
+                    //       width: 60,
+                    //       height: 60,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
@@ -22,6 +23,10 @@ class _TodoLandingCalendarState extends State<TodoLandingCalendar> {
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         decoration: BoxDecoration(gradient: Coloring.main),
         child: TableCalendar(
+            onPageChanged: (DateTime dateTime) {
+              provider.focusedDateTime = dateTime;
+              provider.getTodosByScroll(dateTime);
+            },
             locale: 'ko-KR',
             calendarStyle: CalendarStyle(
               rowDecoration: BoxDecoration(
@@ -32,12 +37,12 @@ class _TodoLandingCalendarState extends State<TodoLandingCalendar> {
             daysOfWeekVisible: false,
             rowHeight: 104,
             selectedDayPredicate: (datetime) =>
-                provider.focusedDateTime == datetime,
+                provider.selectedDateTime == datetime,
             firstDay: DateTime.utc(DateTime.now().year - 20, 1, 1),
             lastDay: DateTime.utc(DateTime.now().year + 20, 1, 1),
             onDaySelected: (selectedDay, focusedDay) {
               setState(() => {
-                    provider.setFocusedDatetime(selectedDay),
+                    provider.selectedDateTime = selectedDay,
                   });
             },
             calendarFormat: CalendarFormat.week,
@@ -62,29 +67,31 @@ class _TodoLandingCalendarState extends State<TodoLandingCalendar> {
             calendarBuilders:
                 CalendarBuilders(defaultBuilder: (context, day, focusedDay) {
               return TodoDateWidget(
+                colors: provider.colorMap[DateFormat("yyyy-MM-dd").format(day)] ?? [],
                 selectedDay: day,
                 isSelected: false,
               );
             }, selectedBuilder: (context, day, focusedDay) {
               return TodoDateWidget(
+                colors: provider.colorMap[DateFormat("yyyy-MM-dd").format(day)] ?? [],
                 selectedDay: day,
                 isSelected: true,
               );
             }, outsideBuilder: (context, day, focusedDay) {
               return TodoDateWidget(
+                colors: provider.colorMap[DateFormat("yyyy-MM-dd").format(day)] ?? [],
                 selectedDay: day,
                 isSelected: false,
               );
-            }, todayBuilder: (context, day, focusedDay) {
+            },todayBuilder: (context, day, focusedDay) {
               return TodoDateWidget(
+                colors: provider.colorMap[DateFormat("yyyy-MM-dd").format(day)] ?? [],
                 selectedDay: day,
                 isSelected: false,
                 isToday: true,
               );
-            })),
+            }, )),
       );
     });
   }
 }
-
-

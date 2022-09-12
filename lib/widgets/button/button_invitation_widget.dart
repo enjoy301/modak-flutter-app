@@ -4,7 +4,6 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/utils/dynamic_link_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,7 +33,6 @@ class ButtonInvitationWidget extends StatelessWidget {
 ${PrefsUtil.getInt("family_id")}님께서 당신을 모닥에 초대하셨습니다.
  링크를 클릭하여 가족 채팅방에 참여하세요.
   앱이 없다면 다운로드 링크로 이동합니다.
-  ${await DynamicLinkUtil.getInvitationLink()}
   """,
               },
             );
@@ -51,8 +49,8 @@ ${PrefsUtil.getInt("family_id")}님께서 당신을 모닥에 초대하셨습니
               text:
                   "모닥에서 ${PrefsUtil.getInt("family_id")} 님이 당신을 가족방에 초대하셨습니다. 클릭하여 방으로 이동하세요. 아직 앱이 설치되있지 않을시 스토어로 이동합니다.",
               link: Link(
-                webUrl: await DynamicLinkUtil.getInvitationLink(),
-                mobileWebUrl: await DynamicLinkUtil.getInvitationLink(),
+                webUrl: Uri(),
+                mobileWebUrl: Uri(),
               ));
           try {
             Uri uri =

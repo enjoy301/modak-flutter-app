@@ -17,31 +17,37 @@ class UserAdapter extends TypeAdapter<_$_User> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$_User(
-      name: fields[0] as String,
-      birthDay: fields[1] as String,
-      isLunar: fields[2] as bool,
-      role: fields[3] as String,
-      fcmToken: fields[4] as String,
-      color: fields[5] as String,
+      memberId: fields[0] as int,
+      name: fields[1] as String,
+      birthDay: fields[2] as String,
+      isLunar: fields[3] as bool,
+      role: fields[4] as String,
+      fcmToken: fields[5] as String,
+      color: fields[6] as String,
+      timeTags: (fields[7] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_User obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(8)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.memberId)
       ..writeByte(1)
-      ..write(obj.birthDay)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.isLunar)
+      ..write(obj.birthDay)
       ..writeByte(3)
-      ..write(obj.role)
+      ..write(obj.isLunar)
       ..writeByte(4)
-      ..write(obj.fcmToken)
+      ..write(obj.role)
       ..writeByte(5)
-      ..write(obj.color);
+      ..write(obj.fcmToken)
+      ..writeByte(6)
+      ..write(obj.color)
+      ..writeByte(7)
+      ..write(obj.timeTags);
   }
 
   @override
@@ -60,19 +66,24 @@ class UserAdapter extends TypeAdapter<_$_User> {
 // **************************************************************************
 
 _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
+      memberId: json['memberId'] as int,
       name: json['name'] as String,
       birthDay: json['birthDay'] as String,
       isLunar: json['isLunar'] as bool,
       role: json['role'] as String,
       fcmToken: json['fcmToken'] as String,
       color: json['color'] as String,
+      timeTags:
+          (json['timeTags'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
+      'memberId': instance.memberId,
       'name': instance.name,
       'birthDay': instance.birthDay,
       'isLunar': instance.isLunar,
       'role': instance.role,
       'fcmToken': instance.fcmToken,
       'color': instance.color,
+      'timeTags': instance.timeTags,
     };

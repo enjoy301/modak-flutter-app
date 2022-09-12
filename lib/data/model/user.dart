@@ -8,12 +8,14 @@ part 'user.freezed.dart';
 class User with _$User {
   @HiveType(typeId: 0)
   factory User(
-      {@HiveField(0) required String name,
-      @HiveField(1) required String birthDay,
-      @HiveField(2) required bool isLunar,
-      @HiveField(3) required String role,
-      @HiveField(4) required String fcmToken,
-      @HiveField(5) required String color}) = _User;
+      {@HiveField(0) required int memberId,
+      @HiveField(1) required String name,
+      @HiveField(2) required String birthDay,
+      @HiveField(3) required bool isLunar,
+      @HiveField(4) required String role,
+      @HiveField(5) required String fcmToken,
+      @HiveField(6) required String color,
+      @HiveField(7) required List<String> timeTags}) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

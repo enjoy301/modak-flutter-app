@@ -84,10 +84,20 @@ class LocalDataSource {
     User? user = userBox.get(Strings.me);
     return user;
   }
+
+  List<User> getFamilyMembers() {
+      List<dynamic> rawFamilyMembers = userBox.get(Strings.familyMembers) ?? [];
+      List<User> familyMembers = List<User>.from(rawFamilyMembers);
+      return familyMembers;
+  }
   /// user
   /// set
   Future<bool> updateMe(User user) async {
     return tryFunction(() async => await userBox.put(Strings.me, user));
+  }
+
+  Future<bool> updateFamilyMember(List<User> familyMembers) async {
+    return tryFunction(() async => await userBox.put(Strings.familyMembers, familyMembers));
   }
 
   bool tryFunction(Function() function) {

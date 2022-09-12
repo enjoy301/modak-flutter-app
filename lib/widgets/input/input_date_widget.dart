@@ -10,21 +10,25 @@ class InputDateWidget extends StatelessWidget {
       required this.title,
       required this.contents,
       required this.onChanged,
-      required this.currTime})
+      required this.currTime,
+      this.maxTime, this.minTime})
       : super(key: key);
 
   final String title;
   final String contents;
   final Function(DateTime dateTime) onChanged;
   final DateTime currTime;
+  final DateTime? maxTime;
+  final DateTime? minTime;
 
   @override
   Widget build(BuildContext context) {
       return GestureDetector(
         onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
           DatePicker.showDatePicker(context,
-              minTime: DateTime.utc(1950),
-              maxTime: DateTime.now(),
+              minTime: minTime ?? DateTime.utc(1950),
+              maxTime: maxTime ?? DateTime.now(),
               currentTime: currTime,
               onConfirm: onChanged);
         },

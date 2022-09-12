@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
-import 'package:modak_flutter_app/data/model/user.dart';
-import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
@@ -30,8 +27,8 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
 
-    return Consumer2<UserProvider, UserModifyVM>(
-        builder: (context, userProvider, provider, child) {
+    return Consumer<UserModifyVM>(
+        builder: (context, provider, child) {
       return FutureBuilder(future: Future<void>(() async {
         await provider.init();
         controller.text = provider.user!.name;

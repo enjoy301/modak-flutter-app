@@ -3,16 +3,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/auth/register/register_name_agreement_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/register_role_screen.dart';
+import 'package:provider/provider.dart';
 
 class AuthRegisterVM extends ChangeNotifier {
-
   final List<String> _buttonText = [
     "다음으로",
     "회원가입",
   ];
-
 
   Future<void> init() async {
     _userRepository = await UserRepository.create();
@@ -77,11 +77,11 @@ class AuthRegisterVM extends ChangeNotifier {
     notifyListeners();
   }
 
-  void goNextPage() {
+  void goNextPage(BuildContext context) {
     if (_page < 1) {
       _page += 1;
     } else {
-      _trySignUp();
+      _trySignUp(context);
     }
     notifyListeners();
   }
@@ -111,22 +111,33 @@ class AuthRegisterVM extends ChangeNotifier {
 
   Widget getPage(AuthRegisterVM provider, TextEditingController controller) {
     if (_page == 0) {
-      return RegisterNameAgreementScreen(provider: provider, controller: controller,);
+      return RegisterNameAgreementScreen(
+        provider: provider,
+        controller: controller,
+      );
     } else if (_page == 1) {
-      return RegisterRoleScreen(provider: provider,);
+      return RegisterRoleScreen(
+        provider: provider,
+      );
     }
-    return RegisterRoleScreen(provider: provider,);
+    return RegisterRoleScreen(
+      provider: provider,
+    );
   }
 
   String getButtonText() {
     return _buttonText[page];
   }
 
-  _trySignUp() async {
-    String response = await _userRepository.signUp();
-    switch(response) {
+  _trySignUp(BuildContext context) async {
+    Map<String, dynamic> response = await _userRepository.signUp();
+    switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "회원가입 성공");
+        await Future(() => context.read<UserProvider>().me =
+            response[Strings.response][Strings.me]);
+        await Future(() => context.read<UserProvider>().familyMembers =
+            response[Strings.response][Strings.familyMembers]);
         Get.offAllNamed("/main");
         break;
       case Strings.valueAlreadyExist:

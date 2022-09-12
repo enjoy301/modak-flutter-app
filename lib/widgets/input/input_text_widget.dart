@@ -42,6 +42,7 @@ class _InputTextWidgetState extends State<InputTextWidget> {
         controller: widget.textEditingController,
         onChanged: widget.onChanged,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(15),
             hintText: widget.hint,
             hintStyle: TextStyle(
               color: Coloring.gray_20,

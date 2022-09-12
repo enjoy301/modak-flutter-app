@@ -46,7 +46,7 @@ class _AuthRegisterScreenState extends State<AuthRegisterScreen> {
                 child: ButtonMainWidget(
                   title: provider.getButtonText(),
                   onPressed: () {
-                    provider.goNextPage();
+                    provider.goNextPage(context);
                   },
                   isValid: provider.getIsPageDone(),
                 )),

@@ -50,10 +50,11 @@ class UserModifyVM extends ChangeNotifier {
 
   onModifyClick(BuildContext context) async {
     if (user == null) return;
-    String response = await _userRepository.updateMeInfo(user!);
-    if (response == Strings.success) {
+    Map<String, dynamic> response = await _userRepository.updateMeInfo(user!);
+
+    if (response['message'] == Strings.success) {
       Fluttertoast.showToast(msg: "정보 수정 완료");
-      Future(() => context.read<UserProvider>().user = user);
+      await Future(() => context.read<UserProvider>().me = user);
       Get.back();
     } else {
       Fluttertoast.showToast(msg: "정보 수정 실패");

@@ -21,6 +21,8 @@ import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_screen.dart';
+import 'package:modak_flutter_app/ui/todo/write/todo_write_VM.dart';
+import 'package:modak_flutter_app/ui/todo/write/todo_write_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
@@ -62,6 +64,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => TodoProvider()),
         ChangeNotifierProvider(create: (_) => AlbumProvider()),
+
         /// main page provider
         ChangeNotifierProvider(create: (_) => TodoLandingVM()),
         ChangeNotifierProvider(create: (_) => UserLandingVM()),
@@ -85,6 +88,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Font_Poppins',
         backgroundColor: Colors.white,
       ),
+      home: Home(),
       initialRoute: "/auth/splash",
       routes: {
         "/main": (context) => LandingBottomNavigator(),
@@ -100,19 +104,39 @@ class _MyAppState extends State<MyApp> {
               create: (_) => AuthRegisterVM(),
               child: AuthRegisterScreen(),
             ),
-        "/todo/landing": (context) => ChangeNotifierProvider(
-              create: (_) => TodoLandingVM(),
-              child: TodoLandingScreen(),
+        "/todo/landing": (context) =>
+            setRoute(context, TodoLandingVM(), TodoLandingScreen()),
+        "/todo/write": (context) => ChangeNotifierProvider(
+              create: (_) => TodoWriteVM(),
+              child: TodoWriteScreen(),
             ),
-        "/user/landing": (context) => ChangeNotifierProvider(
+        "user/landing": (context) => ChangeNotifierProvider(
               create: (_) => UserLandingVM(),
               child: UserLandingScreen(),
             ),
         "/user/modify": (context) => ChangeNotifierProvider(
               create: (_) => UserModifyVM(),
               child: UserModifyScreen(),
-            )
+            ),
       },
     );
   }
 }
+
+ChangeNotifierProvider setRoute(
+    BuildContext context, ChangeNotifier vm, Widget screen) {
+  return ChangeNotifierProvider(
+    create: (_) => vm,
+    child: screen,
+  );
+}
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("씨발");
+  }
+}
+

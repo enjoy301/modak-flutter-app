@@ -17,56 +17,52 @@ class UserLandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<UserProvider, UserLandingVM>(
         builder: (context, userProvider, provider, child) {
-      return FutureBuilder(
-          future: userProvider.init(),
-          builder: (context, snapshot) {
-            return Scaffold(
-                backgroundColor: Colors.white,
-                appBar: headerDefaultWidget(title: "유저"),
-                body: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 32,
-                    right: 30,
-                    left: 30,
+      return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: headerDefaultWidget(title: "유저"),
+          body: Padding(
+            padding: const EdgeInsets.only(
+              top: 32,
+              right: 30,
+              left: 30,
+            ),
+            child: Column(
+              children: [
+                UserProfileWidget(
+                  user: userProvider.me,
+                  onPressed: () {
+                    Get.toNamed("/user/modify");
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: Coloring.gray_40,
                   ),
-                  child: Column(
-                    children: [
-                      UserProfileWidget(
-                        user: userProvider.user,
-                        onPressed: () {
-                          Get.toNamed("/user/modify");
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 32.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 1,
-                          color: Coloring.gray_40,
-                        ),
-                      ),
-                      ButtonMainWidget(
-                        title: "가족 정보 보기",
-                        onPressed: () {
-                          Get.to(() => UserFamilyScreen());
-                        },
-                        // onPressed: provider.navigateToFamilyInfo(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: ButtonMainWidget(
-                          title: "초대 하기",
-                          onPressed: () {
-                            Get.to(() => CommonInvitationScreen(
-                                  withSkipButton: false,
-                                ));
-                          },
-                        ),
-                      )
-                    ],
+                ),
+                ButtonMainWidget(
+                  title: "가족 정보 보기",
+                  onPressed: () {
+                    Get.to(() => UserFamilyScreen());
+                  },
+                  // onPressed: provider.navigateToFamilyInfo(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: ButtonMainWidget(
+                    title: "초대 하기",
+                    onPressed: () {
+                      Get.to(() => CommonInvitationScreen(
+                            withSkipButton: false,
+                          ));
+                    },
                   ),
-                ));
-          });
+                )
+              ],
+            ),
+          ));
     });
   }
 }

@@ -53,9 +53,17 @@ mixin _$Todo {
   @HiveField(7)
   set repeatTag(String? value) => throw _privateConstructorUsedError;
   @HiveField(8)
-  String? get memo => throw _privateConstructorUsedError;
+  List<int>? get repeat => throw _privateConstructorUsedError;
   @HiveField(8)
+  set repeat(List<int>? value) => throw _privateConstructorUsedError;
+  @HiveField(9)
+  String? get memo => throw _privateConstructorUsedError;
+  @HiveField(9)
   set memo(String? value) => throw _privateConstructorUsedError;
+  @HiveField(10)
+  String get date => throw _privateConstructorUsedError;
+  @HiveField(10)
+  set date(String value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -75,7 +83,9 @@ abstract class $TodoCopyWith<$Res> {
       @HiveField(5) bool isDone,
       @HiveField(6) String? timeTag,
       @HiveField(7) String? repeatTag,
-      @HiveField(8) String? memo});
+      @HiveField(8) List<int>? repeat,
+      @HiveField(9) String? memo,
+      @HiveField(10) String date});
 }
 
 /// @nodoc
@@ -96,7 +106,9 @@ class _$TodoCopyWithImpl<$Res> implements $TodoCopyWith<$Res> {
     Object? isDone = freezed,
     Object? timeTag = freezed,
     Object? repeatTag = freezed,
+    Object? repeat = freezed,
     Object? memo = freezed,
+    Object? date = freezed,
   }) {
     return _then(_value.copyWith(
       todoId: todoId == freezed
@@ -131,10 +143,18 @@ class _$TodoCopyWithImpl<$Res> implements $TodoCopyWith<$Res> {
           ? _value.repeatTag
           : repeatTag // ignore: cast_nullable_to_non_nullable
               as String?,
+      repeat: repeat == freezed
+          ? _value.repeat
+          : repeat // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       memo: memo == freezed
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String?,
+      date: date == freezed
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -153,7 +173,9 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
       @HiveField(5) bool isDone,
       @HiveField(6) String? timeTag,
       @HiveField(7) String? repeatTag,
-      @HiveField(8) String? memo});
+      @HiveField(8) List<int>? repeat,
+      @HiveField(9) String? memo,
+      @HiveField(10) String date});
 }
 
 /// @nodoc
@@ -175,7 +197,9 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res>
     Object? isDone = freezed,
     Object? timeTag = freezed,
     Object? repeatTag = freezed,
+    Object? repeat = freezed,
     Object? memo = freezed,
+    Object? date = freezed,
   }) {
     return _then(_$_Todo(
       todoId: todoId == freezed
@@ -210,10 +234,18 @@ class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res>
           ? _value.repeatTag
           : repeatTag // ignore: cast_nullable_to_non_nullable
               as String?,
+      repeat: repeat == freezed
+          ? _value.repeat
+          : repeat // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       memo: memo == freezed
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String?,
+      date: date == freezed
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -231,7 +263,9 @@ class _$_Todo implements _Todo {
       @HiveField(5) required this.isDone,
       @HiveField(6) required this.timeTag,
       @HiveField(7) required this.repeatTag,
-      @HiveField(8) required this.memo});
+      @HiveField(8) required this.repeat,
+      @HiveField(9) required this.memo,
+      @HiveField(10) required this.date});
 
   factory _$_Todo.fromJson(Map<String, dynamic> json) => _$$_TodoFromJson(json);
 
@@ -261,11 +295,17 @@ class _$_Todo implements _Todo {
   String? repeatTag;
   @override
   @HiveField(8)
+  List<int>? repeat;
+  @override
+  @HiveField(9)
   String? memo;
+  @override
+  @HiveField(10)
+  String date;
 
   @override
   String toString() {
-    return 'Todo(todoId: $todoId, groupTodoId: $groupTodoId, memberId: $memberId, title: $title, color: $color, isDone: $isDone, timeTag: $timeTag, repeatTag: $repeatTag, memo: $memo)';
+    return 'Todo(todoId: $todoId, groupTodoId: $groupTodoId, memberId: $memberId, title: $title, color: $color, isDone: $isDone, timeTag: $timeTag, repeatTag: $repeatTag, repeat: $repeat, memo: $memo, date: $date)';
   }
 
   @JsonKey(ignore: true)
@@ -291,7 +331,9 @@ abstract class _Todo implements Todo {
       @HiveField(5) required bool isDone,
       @HiveField(6) required String? timeTag,
       @HiveField(7) required String? repeatTag,
-      @HiveField(8) required String? memo}) = _$_Todo;
+      @HiveField(8) required List<int>? repeat,
+      @HiveField(9) required String? memo,
+      @HiveField(10) required String date}) = _$_Todo;
 
   factory _Todo.fromJson(Map<String, dynamic> json) = _$_Todo.fromJson;
 
@@ -337,9 +379,19 @@ abstract class _Todo implements Todo {
   set repeatTag(String? value);
   @override
   @HiveField(8)
-  String? get memo;
+  List<int>? get repeat;
   @HiveField(8)
+  set repeat(List<int>? value);
+  @override
+  @HiveField(9)
+  String? get memo;
+  @HiveField(9)
   set memo(String? value);
+  @override
+  @HiveField(10)
+  String get date;
+  @HiveField(10)
+  set date(String value);
   @override
   @JsonKey(ignore: true)
   _$$_TodoCopyWith<_$_Todo> get copyWith => throw _privateConstructorUsedError;

@@ -3,8 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
-import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
-import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 
 class AuthLandingVM extends ChangeNotifier {
   AuthLandingVM() {
@@ -16,8 +14,8 @@ class AuthLandingVM extends ChangeNotifier {
   late final UserRepository? userRepository;
    void onKakaoClick() async {
     if (userRepository != null) {
-      String response = await userRepository!.kakaoSocialLogin();
-      switch (response) {
+      Map<String, dynamic> response = await userRepository!.kakaoSocialLogin();
+      switch (response[Strings.message]) {
         case Strings.success:
           Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");
           Get.offAllNamed("/main");

@@ -16,7 +16,9 @@ class Todo with _$Todo{
     @HiveField(5) required bool isDone,
     @HiveField(6) required String? timeTag,
     @HiveField(7) required String? repeatTag,
-    @HiveField(8) required String? memo,
+    @HiveField(8) required List<int>? repeat,
+    @HiveField(9) required String? memo,
+    @HiveField(10) required String date,
   }) = _Todo;
 
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);

@@ -7,6 +7,11 @@ import 'package:modak_flutter_app/data/model/chat_model.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 
 class ChatProvider extends ChangeNotifier {
+
+  init() async {
+
+  }
+
   /// PREFIX: 채팅
 
   /// 모든 채팅
