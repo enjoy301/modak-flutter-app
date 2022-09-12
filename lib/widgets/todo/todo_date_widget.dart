@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/provider/todo_provider.dart';
+import 'package:modak_flutter_app/utils/extension_util.dart';
 
 class TodoDateWidget extends StatelessWidget {
   const TodoDateWidget(
       {Key? key,
+        required this.colors,
       required this.selectedDay,
       required this.isSelected,
       this.isToday = false})
       : super(key: key);
 
+  final List<String> colors;
   final DateTime selectedDay;
   final bool isSelected;
   final bool isToday;
@@ -62,15 +66,18 @@ class TodoDateWidget extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 4,
-                height: 4,
-                child: CircleAvatar(
-                  backgroundColor: Colors.orangeAccent,
-                ),
-              )
-            ],
+            children: colors
+                .map((e) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 1.5),
+                      child: SizedBox(
+                        width: 4,
+                        height: 4,
+                        child: CircleAvatar(
+                          backgroundColor: e.toColor()!,
+                        ),
+                      ),
+                    ))
+                .toList(),
           )
         ],
       ),

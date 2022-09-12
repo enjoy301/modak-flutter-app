@@ -43,24 +43,27 @@ class TodoDayWeekWidget extends StatelessWidget {
       },
     };
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: isEnabled ? data[dayOfTheWeek]['color'] : Coloring.gray_50,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-            child: Text(
-          data[dayOfTheWeek]['title'],
-          style: TextStyle(
-            color: Coloring.gray_10,
-            fontSize: Font.size_smallText,
-            fontWeight: Font.weight_regular,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: isEnabled ? data[dayOfTheWeek]['color'] : Coloring.gray_50,
+            borderRadius: BorderRadius.circular(20),
           ),
-        )),
+          child: Center(
+              child: Text(
+            data[dayOfTheWeek]['title'],
+            style: TextStyle(
+              color: Coloring.gray_10,
+              fontSize: Font.size_smallText,
+              fontWeight: Font.weight_regular,
+            ),
+          )),
+        ),
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -7,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
-import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/file_system_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 

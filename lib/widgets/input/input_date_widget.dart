@@ -3,8 +3,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/provider/auth_provider.dart';
-import 'package:provider/provider.dart';
 
 class InputDateWidget extends StatelessWidget {
   const InputDateWidget(
@@ -12,23 +10,26 @@ class InputDateWidget extends StatelessWidget {
       required this.title,
       required this.contents,
       required this.onChanged,
-      required this.currTime})
+      required this.currTime,
+      this.maxTime, this.minTime})
       : super(key: key);
 
   final String title;
   final String contents;
   final Function(DateTime dateTime) onChanged;
   final DateTime currTime;
+  final DateTime? maxTime;
+  final DateTime? minTime;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(builder: (context, provider, child) {
       return GestureDetector(
         onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
           DatePicker.showDatePicker(context,
-              minTime: DateTime.utc(1950),
-              maxTime: DateTime.now(),
-              currentTime: provider.birthDay ?? DateTime.now(),
+              minTime: minTime ?? DateTime.utc(1950),
+              maxTime: maxTime ?? DateTime.now(),
+              currentTime: currTime,
               onConfirm: onChanged);
         },
         child: Container(
@@ -67,6 +68,5 @@ class InputDateWidget extends StatelessWidget {
           ),
         ),
       );
-    });
   }
 }

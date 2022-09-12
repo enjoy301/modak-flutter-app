@@ -3,6 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class AlbumProvider extends ChangeNotifier {
+
+  init() {
+
+  }
+
   static int messengerLastId = 0;
 
   List<File> _messengerAlbumFiles = [];
