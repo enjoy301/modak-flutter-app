@@ -53,9 +53,10 @@ class TodoRepository {
     return {Strings.message: Strings.fail};
   }
 
-  Future<Map<String, dynamic>> updateTodo(Todo todo, bool isAfterUpdate, String fromDate, String toDate) async {
-    Map<String, dynamic> response = await remoteDataSource!.updateTodo(
-        todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
+  Future<Map<String, dynamic>> doneTodo(
+      Todo todo, bool isDone, String fromDate, String toDate) async {
+    Map<String, dynamic> response = await remoteDataSource!
+        .doneTodo(todo, isDone ? 1 : 0, fromDate, toDate);
     if (response[Strings.result]) {
       return {
         Strings.message: Strings.success,
@@ -68,9 +69,27 @@ class TodoRepository {
     return {Strings.message: Strings.fail};
   }
 
-  Future<Map<String, dynamic>> deleteTodo(Todo todo, bool isAfterUpdate, String fromDate, String toDate) async {
+  Future<Map<String, dynamic>> updateTodo(
+      Todo todo, bool isAfterUpdate, String fromDate, String toDate) async {
+    Map<String, dynamic> response = await remoteDataSource!
+        .updateTodo(todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
+    print(response["response"].data["data"]);
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "color": response["response"].data["data"]["color"],
+          "items": response["response"].data["data"]["items"],
+        },
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
 
-    Map<String, dynamic> response = await remoteDataSource!.deleteTodo(todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
+  Future<Map<String, dynamic>> deleteTodo(
+      Todo todo, bool isAfterUpdate, String fromDate, String toDate) async {
+    Map<String, dynamic> response = await remoteDataSource!
+        .deleteTodo(todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
     print(response);
     if (response[Strings.result]) {
       return {

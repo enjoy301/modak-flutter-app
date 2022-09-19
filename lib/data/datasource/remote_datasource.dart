@@ -135,12 +135,8 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> getTodos(String fromDate, String toDate) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.post(
-          "${dotenv.get(Strings.apiEndPoint)}/api/todo/from-to-date",
-          data: {
-            Strings.fromDate: fromDate,
-            Strings.toDate: toDate,
-          });
+      return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/todo/from-to-date?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",);
     });
   }
 

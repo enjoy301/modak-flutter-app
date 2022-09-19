@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/data/model/todo.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
-import 'package:modak_flutter_app/data/repository/todo_repository.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,12 +12,10 @@ class TodoWriteVM extends ChangeNotifier {
   }
   _init() async {
     _userRepository = await UserRepository.create();
-    _todoRepository = await TodoRepository.create();
     _manager = _userRepository.getMe();
   }
 
   late final UserRepository _userRepository;
-  late final TodoRepository _todoRepository;
 
   String _title = "";
   String get title => _title;
