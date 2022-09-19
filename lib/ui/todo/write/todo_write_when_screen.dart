@@ -6,18 +6,16 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/ui/todo/write/todo_write_VM.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
 class TodoWriteWhenScreen extends StatefulWidget {
   const TodoWriteWhenScreen({
     Key? key,
-    required this.todoWriteVM,
+    required this.previousTag,
   }) : super(key: key);
 
-  final TodoWriteVM todoWriteVM;
-  final bool isWriting = false;
+  final String? previousTag;
 
   @override
   State<TodoWriteWhenScreen> createState() => _TodoWriteWhenScreenState();
@@ -37,51 +35,63 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
     "침대에서",
   ];
 
+  String? selectedTag;
+  @override
+  void initState() {
+    selectedTag = widget.previousTag;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(builder: (context, userProvider, child) {
-      return GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
+      return WillPopScope(
+        onWillPop: () async {
+          Get.back(result: selectedTag);
+          return true;
         },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: headerDefaultWidget(
-              title: "언제 할래요?",
-              leading: FunctionalIcon.back,
-              onClickLeading: () {
-                Get.back();
-              }),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Wrap(
-                children: defaultTimeTag.map((timeTag) {
-                      return TimeTagWidget(
-                        timeTag,
-                        provider: userProvider,
-                        isSelected: widget.todoWriteVM.timeTag == timeTag,
-                        onPressed: () {
-                          setState(() {
-                            widget.todoWriteVM.timeTag = timeTag;
-                          });
-                        },
-                      ) as Widget;
-                    }).toList() +
-                    userProvider.me!.timeTags
-                        .map((timeTag) => TimeTagWidget(timeTag,
-                                provider: userProvider,
-                                isCustom: true,
-                                isSelected: widget.todoWriteVM.timeTag ==
-                                    timeTag, onPressed: () {
-                              setState(() {
-                                widget.todoWriteVM.timeTag = timeTag;
-                              });
-                            }))
-                        .toList() +
-                    [
-                      TimeTagWriteWidget(provider: userProvider),
-                    ],
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: headerDefaultWidget(
+                title: "언제 할래요?",
+                leading: FunctionalIcon.back,
+                onClickLeading: () {
+                  Get.back(result: selectedTag);
+                }),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Wrap(
+                  children: defaultTimeTag.map((timeTag) {
+                        return TimeTagWidget(
+                          timeTag,
+                          provider: userProvider,
+                          isSelected: selectedTag == timeTag,
+                          onPressed: () {
+                            setState(() {
+                              selectedTag = timeTag;
+                            });
+                          },
+                        ) as Widget;
+                      }).toList() +
+                      userProvider.me!.timeTags
+                          .map((timeTag) => TimeTagWidget(timeTag,
+                                  provider: userProvider,
+                                  isCustom: true,
+                                  isSelected: selectedTag ==
+                                      timeTag, onPressed: () {
+                                setState(() {
+                                  selectedTag = timeTag;
+                                });
+                              }))
+                          .toList() +
+                      [
+                        TimeTagWriteWidget(provider: userProvider),
+                      ],
+                ),
               ),
             ),
           ),

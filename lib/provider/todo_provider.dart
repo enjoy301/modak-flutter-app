@@ -100,13 +100,34 @@ class TodoProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> doneTodo(Todo todo, bool isDone) async {
+    Map<String, dynamic> response = await _todoRepository!.doneTodo(
+        todo,
+        isDone,
+        formatter.format(todoSavedFromDate),
+        formatter.format(todoSavedToDate));
+    switch (response[Strings.message]) {
+      case Strings.success:
+        Fluttertoast.showToast(msg: "성공적으로 추가");
+        syncTodos(
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["color"]),
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["items"]));
+        return true;
+      case Strings.fail:
+        Fluttertoast.showToast(msg: "할 일 등록 실패");
+        return false;
+    }
+    return false;
+  }
+
   Future<bool> updateTodo(Todo todo, bool isAfterUpdate) async {
     Map<String, dynamic> response = await _todoRepository!.updateTodo(
         todo,
         isAfterUpdate,
         formatter.format(todoSavedFromDate),
         formatter.format(todoSavedToDate));
-
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "성공적으로 추가");

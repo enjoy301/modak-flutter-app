@@ -7,6 +7,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/model/todo.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
+import 'package:modak_flutter_app/ui/todo/write/todo_modify_screen.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
@@ -46,13 +47,13 @@ class _TodoLandingListState extends State<TodoLandingList> {
                         margin: EdgeInsets.only(left: 10, right: 12),
                         child: GestureDetector(
                           onTap: () {
-                            print("hey");
+                            provider.doneTodo(todo, !todo.isDone);
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 16),
                             decoration: BoxDecoration(
-                              color: todos[index]
+                              color: todo.isDone ? Coloring.gray_50 : todos[index]
                                   .color
                                   .toColor()
                                   ?.withOpacity(0.3),
@@ -69,16 +70,20 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                       height: 7,
                                       margin: EdgeInsets.only(right: 16),
                                       decoration: BoxDecoration(
-                                        color: todo.color.toColor(),
+                                        color: todo.isDone ? Coloring.gray_20 : todo.color.toColor(),
                                         borderRadius:
                                             BorderRadius.circular(1000),
                                       ),
                                     ),
                                     Text(todos[index].title,
                                         style: TextStyle(
-                                          color: Coloring.gray_10,
+                                          color: todo.isDone ? Coloring.gray_20 : Coloring.gray_10,
                                           fontSize: Font.size_mediumText,
                                           fontWeight: Font.weight_semiBold,
+                                          decoration: todo.isDone ? TextDecoration.lineThrough : TextDecoration.none,
+                                          decorationStyle: TextDecorationStyle.solid,
+                                          decorationThickness: 3,
+                                          decorationColor: Coloring.gray_20
                                         )),
                                     Expanded(
                                       child: Text(""),
@@ -94,6 +99,7 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                                 constraints: BoxConstraints(),
                                                 child: Icon(
                                                   LightIcons.ArrowDown2,
+                                                  color: todo.isDone ? Coloring.gray_20 : Coloring.gray_10,
                                                   size: 16,
                                                 ),
                                               ),
@@ -102,6 +108,7 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                                 constraints: BoxConstraints(),
                                                 child: Icon(
                                                   LightIcons.ArrowUp2,
+                                                  color: todo.isDone ? Coloring.gray_20 : Coloring.gray_10,
                                                   size: 16,
                                                 ),
                                               ),
@@ -134,14 +141,15 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                     ),
                                     expanded: Text(todo.memo ?? "",
                                         style: TextStyle(
-                                          color: Coloring.gray_10,
+                                          color: todo.isDone ? Coloring.gray_20 : Coloring.gray_10,
                                           fontSize: Font.size_smallText,
                                           fontWeight: Font.weight_medium,
                                         ),
                                         textAlign: TextAlign.left),
                                     collapsed: SizedBox(
                                       height: 0,
-                                    )),
+                                    ),
+                                ),
                               ],
                             ),
                           ),
@@ -153,12 +161,29 @@ class _TodoLandingListState extends State<TodoLandingList> {
                           defaultModalWidget(
                             context,
                             [
-                              // TextButton(
-                              //     onPressed: () {
-                              //       Get.back();
-                              //       Get.to(TodoWriteScreen());
-                              //     },
-                              //     child: Text("수정하기")),
+                              TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    if (todo.repeatTag != null) {
+                                      defaultModalWidget(context, [
+                                        TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                              Get.to(TodoModifyScreen(todo: todo, isAfterUpdate: false,));
+                                            },
+                                            child: Text("단일 변경")),
+                                        TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                              Get.to(TodoModifyScreen(todo: todo, isAfterUpdate: true,));
+                                            },
+                                            child: Text("이후 변경"))
+                                      ]);
+                                    } else {
+                                      Get.to(TodoModifyScreen(todo: todo, isAfterUpdate: false,));
+                                    }
+                                  },
+                                  child: Text("수정하기")),
                               TextButton(
                                   onPressed: () {
                                     Get.back();
