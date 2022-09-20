@@ -40,6 +40,9 @@ class Strings {
   static const String fcmToken = "fcmToken";
   static const String color = "color";
 
+  /// home
+  static const String content = "content";
+
   /// todo
   static const String todoId = "todoId";
   static const String groupTodoId = "groupTodoId";

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/route_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/data/model/todo.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
@@ -15,7 +16,6 @@ typedef RequestFunction = Future<Response<dynamic>> Function();
 
 class RemoteDataSource {
   static final storage = FlutterSecureStorage();
-
 
   /**
    *
@@ -48,7 +48,7 @@ class RemoteDataSource {
       return await Dio(BaseOptions(headers: {
         Strings.headerHost: "www.never.com",
         Strings.headerRefreshToken:
-        await storage.read(key: Strings.refreshToken),
+            await storage.read(key: Strings.refreshToken),
       })).get(
           "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/login/token");
     }, isUpdatingAccessToken: true, isUpdatingRefreshToken: true);
@@ -59,7 +59,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       return await Dio(BaseOptions(headers: {
         Strings.headerProviderName:
-        await storage.read(key: Strings.providerName),
+            await storage.read(key: Strings.providerName),
         Strings.headerProviderId: await storage.read(key: Strings.providerId),
       })).get("${dotenv.get(Strings.apiEndPoint)}/api/member/login/social");
     },
@@ -124,7 +124,73 @@ class RemoteDataSource {
     });
   }
 
+  /**
+   *
+   * 홈 정보 관련 함수들
+   *
+   */
 
+  /// 홈 정보를 요청하는 함수
+  Future<Map<String, dynamic>> getHomeInfo() {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/home/${await storage.read(key: Strings.memberId)}");
+    });
+  }
+
+  /// 오늘의 한 마디를 조회하는 함수
+  Future<Map<String, dynamic>> getTodayTalk(String fromDate, String toDate) {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate");
+    });
+  }
+
+  /// 오늘의 한 마디를 등록하는 함수
+  Future<Map<String, dynamic>> postTodayTalk(String content) {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.post(
+          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}",
+          data: {
+            Strings.content: content,
+            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+          });
+    });
+  }
+
+  /// 오늘의 한 마디를 수정하는 함수
+  Future<Map<String, dynamic>> updateTodayTalk(String content) {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}",
+          data: {
+            Strings.content: content,
+            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+          });
+    });
+  }
+
+  /// 오늘의 한 마디를 삭제하는 함수
+  Future<Map<String, dynamic>> deleteTodayTalk() {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.delete(
+          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
+    });
+  }
+
+  /// 오늘의 운세를 가져오는 함수
+  Future<Map<String, dynamic>> getTodayFortune() {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/today-fortune/${await storage.read(key: Strings.memberId)}");
+    });
+  }
   /**
    *
    * 할 일 관련 함수들
@@ -136,7 +202,8 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/todo/from-to-date?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",);
+        "${dotenv.get(Strings.apiEndPoint)}/api/todo/from-to-date?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",
+      );
     });
   }
 
@@ -163,17 +230,19 @@ class RemoteDataSource {
       Todo todo, int isAfterUpdate, String fromDate, String toDate) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.put("${dotenv.get(Strings.apiEndPoint)}/api/todo/${todo.todoId}", data: {
-        Strings.memberId: await storage.read(key: Strings.memberId),
-        Strings.title: todo.title,
-        Strings.timeTag: todo.timeTag,
-        Strings.repeat: todo.repeat,
-        Strings.memo: todo.memo,
-        Strings.date: todo.date,
-        Strings.fromDate: fromDate,
-        Strings.toDate: toDate,
-        Strings.isAfterUpdate: isAfterUpdate,
-      });
+      return auth.put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/todo/${todo.todoId}",
+          data: {
+            Strings.memberId: await storage.read(key: Strings.memberId),
+            Strings.title: todo.title,
+            Strings.timeTag: todo.timeTag,
+            Strings.repeat: todo.repeat,
+            Strings.memo: todo.memo,
+            Strings.date: todo.date,
+            Strings.fromDate: fromDate,
+            Strings.toDate: toDate,
+            Strings.isAfterUpdate: isAfterUpdate,
+          });
     });
   }
 
@@ -208,7 +277,6 @@ class RemoteDataSource {
           });
     });
   }
-
 
   /**
    *
@@ -308,7 +376,7 @@ class RemoteDataSource {
         Strings.headerHost: "www.never.com",
         Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
         Strings.headerRefreshToken:
-        await storage.read(key: Strings.refreshToken),
+            await storage.read(key: Strings.refreshToken),
       })).get("${dotenv.get(Strings.apiEndPoint)}/api/token/reissue");
     });
   }
