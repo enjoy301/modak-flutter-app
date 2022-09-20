@@ -46,6 +46,7 @@ class UserRepository {
     bool isKakaoLoginSuccess = await remoteDataSource!.kakaoLogin();
     if (isKakaoLoginSuccess) {
       Map<String, dynamic> response = await remoteDataSource!.socialLogin();
+      print(response['response']);
       if (response[Strings.result]) {
         List updateResult = await updateMeAndFamilyInfo(response);
         User me = updateResult[0];

@@ -18,6 +18,7 @@ import 'package:modak_flutter_app/ui/auth/auth_splash_VM.dart';
 import 'package:modak_flutter_app/ui/auth/auth_splash_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_VM.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
+import 'package:modak_flutter_app/ui/home/home_notification_screen.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_screen.dart';
@@ -92,6 +93,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: "/auth/splash",
       routes: {
         "/main": (context) => LandingBottomNavigator(),
+        "/home/notification": (context) => HomeNotificationScreen(),
         "/auth/splash": (context) => ChangeNotifierProvider(
               create: (_) => AuthSplashVM(),
               child: AuthSplashScreen(),
