@@ -30,6 +30,14 @@ class UserProvider extends ChangeNotifier {
     _familyMembers = familyMembers;
     notifyListeners();
   }
+
+  double _fontScale = 2;
+  double get fontScale => _fontScale;
+
+  set fontScale(double fontScale) {
+    _fontScale = fontScale;
+    notifyListeners();
+  }
   
   updateMeTag(List<String> timeTags) async {
     Map<String, dynamic> response = await _userRepository!.updateMeTag(timeTags);

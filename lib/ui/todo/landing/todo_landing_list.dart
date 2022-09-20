@@ -10,6 +10,7 @@ import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_modify_screen.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/todo/todo_listitem_tag_widget.dart';
 import 'package:provider/provider.dart';
@@ -75,7 +76,7 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                             BorderRadius.circular(1000),
                                       ),
                                     ),
-                                    Text(todos[index].title,
+                                    ScalableTextWidget(todos[index].title,
                                         style: TextStyle(
                                           color: todo.isDone ? Coloring.gray_20 : Coloring.gray_10,
                                           fontSize: Font.size_mediumText,
