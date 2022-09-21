@@ -10,6 +10,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
+import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/auth/auth_landing_VM.dart';
@@ -18,6 +19,7 @@ import 'package:modak_flutter_app/ui/auth/auth_splash_VM.dart';
 import 'package:modak_flutter_app/ui/auth/auth_splash_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_VM.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
+import 'package:modak_flutter_app/ui/home/home_fortune_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_notification_screen.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
@@ -61,6 +63,7 @@ void main() async {
   // 상태관리 provider 정의
   initializeDateFormatting().then((_) => runApp(MultiProvider(providers: [
         /// share provider
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => TodoProvider()),
@@ -89,11 +92,11 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Font_Poppins',
         backgroundColor: Colors.white,
       ),
-      home: Home(),
       initialRoute: "/auth/splash",
       routes: {
         "/main": (context) => LandingBottomNavigator(),
         "/home/notification": (context) => HomeNotificationScreen(),
+        "/home/fortune": (context) => HomeFortuneScreen(),
         "/auth/splash": (context) => ChangeNotifierProvider(
               create: (_) => AuthSplashVM(),
               child: AuthSplashScreen(),
@@ -106,8 +109,10 @@ class _MyAppState extends State<MyApp> {
               create: (_) => AuthRegisterVM(),
               child: AuthRegisterScreen(),
             ),
-        "/todo/landing": (context) =>
-            setRoute(context, TodoLandingVM(), TodoLandingScreen()),
+        "/todo/landing": (context) => ChangeNotifierProvider(
+              create: (_) => TodoLandingVM(),
+              child: TodoLandingScreen(),
+            ),
         "/todo/write": (context) => ChangeNotifierProvider(
               create: (_) => TodoWriteVM(),
               child: TodoWriteScreen(),
@@ -124,21 +129,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-ChangeNotifierProvider setRoute(
-    BuildContext context, ChangeNotifier vm, Widget screen) {
-  return ChangeNotifierProvider(
-    create: (_) => vm,
-    child: screen,
-  );
-}
-
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text("씨발");
-  }
-}
-

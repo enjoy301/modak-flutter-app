@@ -4,6 +4,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
+import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/auth/auth_splash_VM.dart';
@@ -19,13 +20,14 @@ class AuthSplashScreen extends StatefulWidget {
 class _AuthSplashScreenState extends State<AuthSplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer5<UserProvider, TodoProvider, ChatProvider, AlbumProvider, AuthSplashVM>(
-      builder: (context, userProvider, todoProvider, chatProvider, albumProvider, provider, child) {
+    return Consumer6<UserProvider, HomeProvider, TodoProvider, ChatProvider, AlbumProvider, AuthSplashVM>(
+      builder: (context, userProvider, homeProvider, todoProvider, chatProvider, albumProvider, provider, child) {
         return FutureBuilder(
           future: Future<void>(() async {
             /// 로그인 및 데이터 받아오기 로컬 DB 업데이트
             await provider.init();
             /// 로컬 DB 데이터 메모리에 올림
+            await homeProvider.init();
             await userProvider.init();
             await todoProvider.init();
             await chatProvider.init();

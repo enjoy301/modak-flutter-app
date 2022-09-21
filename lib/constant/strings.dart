@@ -42,6 +42,7 @@ class Strings {
 
   /// home
   static const String content = "content";
+  static const String todayFortune = "todayFortune";
 
   /// todo
   static const String todoId = "todoId";

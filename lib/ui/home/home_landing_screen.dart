@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/provider/home_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class HomeLandingScreen extends StatefulWidget {
@@ -29,7 +31,6 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
       FamilyFortuneWidget(),
       FamilyFortuneWidget(),
       FamilyFortuneWidget(),
-
     ]
   ];
 
@@ -96,52 +97,64 @@ class FamilyFortuneWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, right: 18, left: 18),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Coloring.point_pureorange,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8, left: 20),
-              child: Text(
-                "하루 한 문장",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: Font.size_largeText,
-                  fontWeight: Font.weight_semiBold,
-                ),
+    return Consumer<HomeProvider>(
+      builder: (context, homeProvider, child) {
+        return GestureDetector(
+          onTap: () {
+            Get.toNamed("/home/fortune");
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20, right: 18, left: 18),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Coloring.point_pureorange,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, left: 20),
+                    child: Text(
+                      "하루 한 문장",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Font.size_largeText,
+                        fontWeight: Font.weight_semiBold,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0, right: 20, left: 25),
+                          child: Text(
+                            homeProvider.todayFortune == null ?
+                                "클릭해서 오늘의 운세를 확인하세요!" :
+                            "${homeProvider.todayFortune!}\n\n\n",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Font.size_h3,
+                              fontWeight: Font.weight_medium,
+                            ),
+                            maxLines: 4,
+                          ),
+                        ),
+                      ),
+                      Image.asset(
+                        "lib/assets/images/others/Man1.png",
+                        width: 90,
+                        height: 190,
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, right: 20, left: 25),
-                  child: Text(
-                    "날카로운 표현은 자중" + "\n\n\n",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: Font.size_h3,
-                      fontWeight: Font.weight_medium,
-                    ),
-                    maxLines: 4,
-                  ),
-                ),
-                Expanded(child: Text("")),
-                Image.asset(
-                  "lib/assets/images/others/Man1.png",
-                  width: 90,
-                  height: 190,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 }

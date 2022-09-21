@@ -135,7 +135,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/home/${await storage.read(key: Strings.memberId)}");
+          "${dotenv.get(Strings.apiEndPoint)}/api/home/${await storage.read(key: Strings.memberId)}?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
     });
   }
 
@@ -356,6 +356,7 @@ class RemoteDataSource {
       }
     } catch (e) {
       if (e is DioError) {
+        print(e.response);
         return {
           Strings.result: false,
           Strings.response: e,
