@@ -44,6 +44,7 @@ class Strings {
   static const String content = "content";
   static const String todayFortune = "todayFortune";
   static const String familyCode = "familyCode";
+  static const String invitationCode = "invitationCode";
   static const String memberAndFamilyMembers = "memberAndFamilyMembers";
 
   /// todo
@@ -63,7 +64,6 @@ class Strings {
 
   /// User
   static const String me = "me";
-
 
   /// role
   static const String dad = "DAD";

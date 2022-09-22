@@ -122,6 +122,16 @@ class UserRepository {
     return {Strings.message: Strings.fail};
   }
 
+  Future<Map<String, dynamic>> updateFamilyId(String familyCode) async {
+    Map<String, dynamic> response =
+        await remoteDataSource!.updateFamilyId(familyCode);
+    print(response);
+    if (response[Strings.result]) {
+      return {Strings.message: Strings.success};
+    }
+    return {Strings.message: Strings.fail};
+  }
+
   String? getName() {
     return localDataSource!.getName();
   }
@@ -190,7 +200,9 @@ class UserRepository {
         role: meRaw[Strings.role],
         fcmToken: "",
         color: meRaw[Strings.color],
-        timeTags: meRaw['tags'] == null ? List<String>.from([]) : List<String>.from(meRaw['tags']));
+        timeTags: meRaw['tags'] == null
+            ? List<String>.from([])
+            : List<String>.from(meRaw['tags']));
 
     List<User> familyMembers = [me];
     for (Map<String, dynamic> familyMemberRaw

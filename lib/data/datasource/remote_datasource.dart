@@ -124,6 +124,16 @@ class RemoteDataSource {
     });
   }
 
+  /// 가족 아이디를 변경하는 함수
+  Future<Map<String, dynamic>> updateFamilyId(String familyCode) {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/invitation", data: {
+            Strings.invitationCode: familyCode,
+      },);
+    }, isUpdatingFamilyId: true);
+  }
   /**
    *
    * 홈 정보 관련 함수들
