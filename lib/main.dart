@@ -26,6 +26,7 @@ import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_screen.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_VM.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_screen.dart';
+import 'package:modak_flutter_app/ui/user/invitation/user_invitation_landing_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
@@ -125,6 +126,7 @@ class _MyAppState extends State<MyApp> {
               create: (_) => UserModifyVM(),
               child: UserModifyScreen(),
             ),
+        "/user/invitation/landing": (context) => UserInvitationLandingScreen(),
       },
     );
   }

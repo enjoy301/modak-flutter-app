@@ -6,17 +6,18 @@ class HomeProvider extends ChangeNotifier {
 
   init() async {
     _homeRepository = await HomeRepository.create();
-    getHomeInfo();
-    // getTodayFortune();
+    await getHomeInfo();
   }
 
   HomeRepository? _homeRepository;
+  String? familyCode;
   String? todayFortune;
 
   Future<bool> getHomeInfo() async {
     Map<String, dynamic> response = await _homeRepository!.getHomeInfo();
     if (response[Strings.message] == Strings.success) {
-      todayFortune = response[Strings.response][Strings.todayFortune];
+      familyCode = response[Strings.response][Strings.familyCode];
+      todayFortune = response[Strings.response][Strings.todayFortune][Strings.content];
       notifyListeners();
       return true;
     }

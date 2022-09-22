@@ -22,12 +22,12 @@ class HomeRepository {
 
   Future<Map<String, dynamic>> getHomeInfo() async {
     Map<String, dynamic> response = await remoteDataSource!.getHomeInfo();
-    print(response);
     if (response[Strings.result]) {
       Map<String, dynamic> data = response[Strings.response].data["data"];
       print(data);
       return {Strings.message: Strings.success, Strings.response: {
         Strings.todayFortune: data[Strings.todayFortune],
+        Strings.familyCode: data[Strings.memberAndFamilyMembers][Strings.familyCode],
       }};
     }
     return {Strings.message: Strings.fail};

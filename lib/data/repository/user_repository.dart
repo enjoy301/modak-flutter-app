@@ -27,8 +27,6 @@ class UserRepository {
       User me = updateResult[0];
       List<User> familyMembers = updateResult[1];
 
-      print(response['response']);
-
       return {
         Strings.response: {
           Strings.me: me,
