@@ -33,6 +33,7 @@ import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_screen.dart';
+import 'package:modak_flutter_app/ui/user/user_settings_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
@@ -128,6 +129,7 @@ class _MyAppState extends State<MyApp> {
               create: (_) => UserModifyVM(),
               child: UserModifyScreen(),
             ),
+        "/user/settings": (context) => UserSettingsScreen(),
         "/user/invitation/landing": (context) => UserInvitationLandingScreen(),
         "/user/invitation/input": (context) => ChangeNotifierProvider(
             create: (_) => UserInvitationInputVM(),

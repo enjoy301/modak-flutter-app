@@ -9,15 +9,23 @@ class UserProvider extends ChangeNotifier {
     _userRepository = await UserRepository.create();
     _me = _userRepository!.getMe();
     _familyMembers = _userRepository!.getFamilyMembers();
+    _sizeSettings = _userRepository!.getSizeSettings();
   }
 
   UserRepository? _userRepository;
+  List<double> fontScale = [1.0, 1.5, 2.0];
+
+  double getFontScale() {
+    return fontScale[_sizeSettings];
+  }
 
   User? _me;
   List<User>? _familyMembers = [];
+  int _sizeSettings = 0;
 
   User? get me => _me;
   List<User>? get familyMembers => _familyMembers;
+  int get sizeSettings => _sizeSettings;
 
   set me(User? me) {
     if (me == null) return;
@@ -31,14 +39,13 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  double _fontScale = 2;
-  double get fontScale => _fontScale;
-
-  set fontScale(double fontScale) {
-    _fontScale = fontScale;
+  set sizeSettings(int sizeSettings) {
+    _sizeSettings = sizeSettings;
+    _userRepository!.setSizeSettings(sizeSettings);
     notifyListeners();
   }
-  
+
+
   updateMeTag(List<String> timeTags) async {
     Map<String, dynamic> response = await _userRepository!.updateMeTag(timeTags);
     switch (response[Strings.message]) {

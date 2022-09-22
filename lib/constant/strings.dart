@@ -64,6 +64,7 @@ class Strings {
 
   /// User
   static const String me = "me";
+  static const String sizeSettings = "sizeSettings";
 
   /// role
   static const String dad = "DAD";

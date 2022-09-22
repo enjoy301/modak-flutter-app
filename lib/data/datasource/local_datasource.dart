@@ -86,10 +86,16 @@ class LocalDataSource {
   }
 
   List<User> getFamilyMembers() {
-      List<dynamic> rawFamilyMembers = userBox.get(Strings.familyMembers) ?? [];
-      List<User> familyMembers = List<User>.from(rawFamilyMembers);
-      return familyMembers;
+    List<dynamic> rawFamilyMembers = userBox.get(Strings.familyMembers) ?? [];
+    List<User> familyMembers = List<User>.from(rawFamilyMembers);
+    return familyMembers;
   }
+
+  int getSizeSettings() {
+    int sizeSettings = userBox.get(Strings.sizeSettings) ?? 0;
+    return sizeSettings;
+  }
+
   /// user
   /// set
   Future<bool> updateMe(User user) async {
@@ -97,7 +103,13 @@ class LocalDataSource {
   }
 
   Future<bool> updateFamilyMember(List<User> familyMembers) async {
-    return tryFunction(() async => await userBox.put(Strings.familyMembers, familyMembers));
+    return tryFunction(
+        () async => await userBox.put(Strings.familyMembers, familyMembers));
+  }
+
+  Future<bool> updateSizeSettings(int sizeSettings) async {
+    return tryFunction(
+        () async => await userBox.put(Strings.sizeSettings, sizeSettings));
   }
 
   bool tryFunction(Function() function) {

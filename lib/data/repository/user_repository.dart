@@ -165,28 +165,36 @@ class UserRepository {
     return localDataSource!.getFamilyMembers();
   }
 
-  void setName(String name) {
-    localDataSource!.updateName(name);
+  int getSizeSettings() {
+    return localDataSource!.getSizeSettings();
   }
 
-  void setBirthDay(DateTime birthDay) {
-    localDataSource!.updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
+  void setName(String name) async {
+    await localDataSource!.updateName(name);
   }
 
-  void setIsLunar(bool isLunar) {
-    localDataSource!.updateIsLunar(isLunar);
+  void setBirthDay(DateTime birthDay) async {
+    await localDataSource!.updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
   }
 
-  void setRole(String role) {
-    localDataSource!.updateRole(role);
+  void setIsLunar(bool isLunar) async {
+    await localDataSource!.updateIsLunar(isLunar);
   }
 
-  void setIsRegisterProgress(bool isRegisterProgress) {
-    localDataSource!.updateIsRegisterProgress(isRegisterProgress);
+  void setRole(String role) async {
+    await localDataSource!.updateRole(role);
   }
 
-  void setMe(User user) {
-    localDataSource!.updateMe(user);
+  void setIsRegisterProgress(bool isRegisterProgress) async {
+    await localDataSource!.updateIsRegisterProgress(isRegisterProgress);
+  }
+
+  void setMe(User user) async {
+    await localDataSource!.updateMe(user);
+  }
+
+  void setSizeSettings(int sizeSettings) async {
+    await localDataSource!.updateSizeSettings(sizeSettings);
   }
 
   Future<List> updateMeAndFamilyInfo(Map<String, dynamic> response) async {

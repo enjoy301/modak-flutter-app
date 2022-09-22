@@ -27,7 +27,7 @@ class _ScalableTextWidgetState extends State<ScalableTextWidget> {
         style: TextStyle(
           color: widget.style.color,
           fontSize:
-              widget.style.fontSize! * context.watch<UserProvider>().fontScale,
+              widget.style.fontSize! * context.watch<UserProvider>().getFontScale(),
           fontWeight: widget.style.fontWeight,
           decoration: widget.style.decoration,
           decorationStyle: widget.style.decorationStyle,

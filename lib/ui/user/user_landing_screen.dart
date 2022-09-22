@@ -106,7 +106,7 @@ class UserLandingScreen extends StatelessWidget {
                     child: ButtonMainWidget(
                       title: "설정",
                       onPressed: () {
-                        Get.to(() => UserFamilyScreen());
+                        Get.toNamed("/user/settings");
                       },
                       // onPressed: provider.navigateToFamilyInfo(),
                     ),
