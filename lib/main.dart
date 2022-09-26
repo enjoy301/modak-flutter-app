@@ -20,6 +20,7 @@ import 'package:modak_flutter_app/ui/auth/auth_splash_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_VM.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
 import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
+import 'package:modak_flutter_app/ui/chat/letter/landing/chat_letter_detail_screen.dart';
 import 'package:modak_flutter_app/ui/chat/letter/landing/chat_letter_landing_screen.dart';
 import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_content_screen.dart';
 import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_envelop_screen.dart';

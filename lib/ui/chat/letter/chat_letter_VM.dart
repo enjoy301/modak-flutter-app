@@ -79,14 +79,16 @@ class ChatLetterVM extends ChangeNotifier {
   }
 
   Future<bool> sendLetter(BuildContext context) async {
-    Map<String, dynamic> response = await _chatRepository.sendLetter(Letter(
+    Letter letter = Letter(
         fromMemberId: context.read<UserProvider>().me!.memberId,
         toMemberId: _toMember!.memberId,
         content: _content,
         envelope: _envelope,
-        date: DateFormat("yyyy-MM-dd").format(DateTime.now())));
+        date: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+    Map<String, dynamic> response = await _chatRepository.sendLetter(letter);
     switch (response[Strings.message]) {
       case Strings.success:
+        lettersSent.add(letter);
         Fluttertoast.showToast(msg: "메시지 전송 성공");
         clearLetter();
         return true;

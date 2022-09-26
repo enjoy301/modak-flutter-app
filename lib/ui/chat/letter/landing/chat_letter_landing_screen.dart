@@ -36,7 +36,7 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
                     title: "우편함",
                     leading: FunctionalIcon.back,
                     onClickLeading: () {
-                      Get.back();
+                      Get.offAllNamed("/main");
                     },
                     bottom: PreferredSize(
                       preferredSize: Size.fromHeight(40),
@@ -47,8 +47,14 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
                           isScrollable: true,
                           indicator: UnderlineTabIndicator(
                             insets: EdgeInsets.only(bottom: 10),
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 2
+                            )
                           ),
                           labelPadding: EdgeInsets.symmetric(horizontal: 20),
+                          labelColor: Colors.blueAccent,
+                          unselectedLabelColor: Colors.black,
                           indicatorPadding: EdgeInsets.symmetric(horizontal: 10),
                         ),
                       ),

@@ -11,7 +11,7 @@ class LetterWidget extends StatefulWidget {
 
   final Letter letter;
   final Function()? onTap;
-  final onSelected;
+  final bool onSelected;
 
   @override
   State<LetterWidget> createState() => _LetterWidgetState();
