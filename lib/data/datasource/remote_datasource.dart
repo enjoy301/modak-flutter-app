@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:modak_flutter_app/data/model/letter.dart';
 import 'package:modak_flutter_app/data/model/todo.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
@@ -129,9 +130,11 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/invitation", data: {
-            Strings.invitationCode: familyCode,
-      },);
+        "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/invitation",
+        data: {
+          Strings.invitationCode: familyCode,
+        },
+      );
     }, isUpdatingFamilyId: true);
   }
   /**
@@ -290,6 +293,38 @@ class RemoteDataSource {
 
   /**
    *
+   * 채팅 함수
+   *
+   */
+
+  /// 편지들을 조회하는 함수
+  Future<Map<String, dynamic>> getLetters() {
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.get(
+            "${dotenv.get(Strings.apiEndPoint)}/api/letter/${await storage.read(key: Strings.memberId)}");
+      },
+    );
+  }
+
+  /// 편지를 발송하는 함수
+  Future<Map<String, dynamic>> sendLetter(Letter letter) {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.post(
+          "${dotenv.get(Strings.apiEndPoint)}/api/letter/${await storage.read(key: Strings.memberId)}",
+          data: {
+            Strings.content: letter.content,
+            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+            Strings.toMemberId: letter.toMemberId,
+            Strings.envelope: letter.envelope.toString(),
+          });
+    });
+  }
+
+  /**
+   *
    * 보조 함수들
    *
    */
@@ -366,7 +401,6 @@ class RemoteDataSource {
       }
     } catch (e) {
       if (e is DioError) {
-        print(e.response);
         return {
           Strings.result: false,
           Strings.response: e,

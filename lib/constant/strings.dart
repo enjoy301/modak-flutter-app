@@ -62,8 +62,14 @@ class Strings {
   static const String isAfterUpdate = "isAfterUpdate";
   static const String isAfterDelete = "isAfterDelete";
 
+  /// Chat
+  static const String letter = "letter";
+  static const String envelope = "envelope";
+
   /// User
   static const String me = "me";
+  static const String fromMemberId = "fromMemberId";
+  static const String toMemberId = "toMemberId";
   static const String sizeSettings = "sizeSettings";
 
   /// role

@@ -9,6 +9,7 @@ AppBar headerDefaultWidget({
   Function()? onClickLeading,
   Function()? onClickTrailing,
   Color? bgColor = Colors.white,
+  PreferredSizeWidget? bottom,
 }) {
   Map<FunctionalIcon, Image> iconData = {
     FunctionalIcon.none: Image.asset(
@@ -62,5 +63,6 @@ AppBar headerDefaultWidget({
         )),
     backgroundColor: bgColor,
     elevation: 0,
+    bottom: bottom,
   );
 }

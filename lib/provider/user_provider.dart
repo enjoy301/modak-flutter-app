@@ -20,12 +20,22 @@ class UserProvider extends ChangeNotifier {
   }
 
   User? _me;
-  List<User>? _familyMembers = [];
+  List<User> _familyMembers = [];
   int _sizeSettings = 0;
 
   User? get me => _me;
-  List<User>? get familyMembers => _familyMembers;
+  List<User> get familyMembers => _familyMembers;
   int get sizeSettings => _sizeSettings;
+
+  List<User> get familyMembersWithoutMe {
+    List<User> familyMembersWithoutMe = [];
+    for (User familyMember in _familyMembers!) {
+      if (familyMember.name != me?.name) {
+        familyMembersWithoutMe.add(familyMember);
+      }
+    }
+    return familyMembersWithoutMe;
+  }
 
   set me(User? me) {
     if (me == null) return;
@@ -34,7 +44,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set familyMembers(List<User>? familyMembers) {
+  set familyMembers(List<User> familyMembers) {
     _familyMembers = familyMembers;
     notifyListeners();
   }
@@ -45,7 +55,22 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> extractName(List<User> users) {
+    List<String> familyNames = [];
+    for (User user in users) {
+      familyNames.add(user.name);
+    }
+    return familyNames;
+  }
 
+  User? findUserById(int id) {
+    for (User familyMember in _familyMembers) {
+      if (familyMember.memberId == id) {
+        return familyMember;
+      }
+    }
+    return null;
+  }
   updateMeTag(List<String> timeTags) async {
     Map<String, dynamic> response = await _userRepository!.updateMeTag(timeTags);
     switch (response[Strings.message]) {
@@ -68,6 +93,8 @@ class UserProvider extends ChangeNotifier {
     me!.timeTags.remove(tag);
     updateMeTag(me!.timeTags);
   }
+
+
 
 
 }

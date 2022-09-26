@@ -101,7 +101,7 @@ class FamilyFortuneWidget extends StatelessWidget {
       builder: (context, homeProvider, child) {
         return GestureDetector(
           onTap: () {
-            Get.toNamed("/home/fortune");
+            Get.toNamed("/chat/letter/landing");
           },
           child: Padding(
             padding: const EdgeInsets.only(top: 20, right: 18, left: 18),
