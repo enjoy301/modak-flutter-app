@@ -19,6 +19,10 @@ import 'package:modak_flutter_app/ui/auth/auth_splash_VM.dart';
 import 'package:modak_flutter_app/ui/auth/auth_splash_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_VM.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_screen.dart';
+import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
+import 'package:modak_flutter_app/ui/chat/letter/landing/chat_letter_landing_screen.dart';
+import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_content_screen.dart';
+import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_envelop_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_fortune_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_notification_screen.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
@@ -76,6 +80,7 @@ void main() async {
         /// main page provider
         ChangeNotifierProvider(create: (_) => TodoLandingVM()),
         ChangeNotifierProvider(create: (_) => UserLandingVM()),
+        ChangeNotifierProvider(create: (_) => ChatLetterVM()),
       ], child: const MyApp())));
 }
 
@@ -121,6 +126,9 @@ class _MyAppState extends State<MyApp> {
               create: (_) => TodoWriteVM(),
               child: TodoWriteScreen(),
             ),
+        "/chat/letter/landing": (context) => ChatLetterLandingScreen(),
+        "/letter/write/content": (context) => LetterWriteContentScreen(),
+        "/letter/write/envelop": (context) => LetterWriteEnvelopScreen(),
         "user/landing": (context) => ChangeNotifierProvider(
               create: (_) => UserLandingVM(),
               child: UserLandingScreen(),

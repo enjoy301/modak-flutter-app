@@ -17,7 +17,7 @@ class HomeProvider extends ChangeNotifier {
     Map<String, dynamic> response = await _homeRepository!.getHomeInfo();
     if (response[Strings.message] == Strings.success) {
       familyCode = response[Strings.response][Strings.familyCode];
-      todayFortune = response[Strings.response][Strings.todayFortune][Strings.content];
+      todayFortune = response[Strings.response][Strings.todayFortune]?[Strings.content];
       notifyListeners();
       return true;
     }

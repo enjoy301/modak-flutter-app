@@ -32,7 +32,6 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
             await todoProvider.init();
             await chatProvider.init();
             await albumProvider.init();
-
             /// redirection
             await Future(() => provider.redirection(context));
           }),

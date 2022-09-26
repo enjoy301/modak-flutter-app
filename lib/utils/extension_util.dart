@@ -46,6 +46,10 @@ extension StringToType on String? {
     }
   }
 
+  EnvelopeType? toEnvelopeType() {
+    return EnvelopeType.values.firstWhere((e) => e.toString() == this);
+  }
+
   String? mediaType() {
     if (this == null) return null;
     RegExp regExp = RegExp(r'png|mp4|jpg');
@@ -81,3 +85,4 @@ extension ColorToString on Color {
     return toString().substring(8, 16);
   }
 }
+
