@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/data/model/letter.dart';
+import 'package:modak_flutter_app/data/model/chat_model.dart';
 import 'package:modak_flutter_app/data/model/todo.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
@@ -320,6 +321,41 @@ class RemoteDataSource {
             Strings.toMemberId: letter.toMemberId,
             Strings.envelope: letter.envelope.toString(),
           });
+    });
+  }
+
+  // 채팅 목록 불러오는 함수
+  Future<Map<String, dynamic>> getChats(int count, int lastId) {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth.get(
+        "${dotenv.get(Strings.apiEndPoint)}/api/message/chat?count=$count&lastId=$lastId",
+      );
+    });
+  }
+
+  // 커넥션 목록 불러오는 함수
+  Future<Map<String, dynamic>> getConnections() {
+    return _tryRequest(() async {
+      final Dio auth = await authDio();
+      return auth
+          .get("${dotenv.get(Strings.apiEndPoint)}/api/message/connection");
+    });
+  }
+
+  // 채팅 보내는 함수
+  Future<Map<String, dynamic>> postChat(ChatModel chat) {
+    return _tryRequest(() async {
+      final Dio dio = Dio();
+      return dio.post(
+        "https://api.modak-talk.com/message",
+        data: {
+          "user_id": chat.userId,
+          "family_id": 1,
+          "content": chat.content,
+          "metadata": chat.metaData,
+        },
+      );
     });
   }
 

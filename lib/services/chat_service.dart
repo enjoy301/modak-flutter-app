@@ -39,11 +39,11 @@ void getChats(BuildContext context) async {
   );
 
   List<dynamic> chatList = (jsonDecode(chatResponse.data as String)['message']);
-  Future(() => context.read<ChatProvider>().setChat(chatList));
+  // Future(() => context.read<ChatProvider>().setChat(chatList));
 
   List<dynamic> connectionList =
       (jsonDecode(connectionResponse.data as String)['connection_data']);
-  Future(() => context.read<ChatProvider>().setConnection(connectionList));
+  // Future(() => context.read<ChatProvider>().setConnection(connectionList));
 }
 
 Future<Map<String, dynamic>> sendMedia(
