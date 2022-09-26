@@ -67,7 +67,7 @@ class _InputChatWidgetState extends State<InputChatWidget> {
           provider.currentMyChat != ""
               ? IconButton(
                   onPressed: () {
-                    sendChat(ChatModel(
+                    provider.postChat(ChatModel(
                       userId: PrefsUtil.getInt("user_id") ?? -1,
                       content: textEditingController.value.text,
                       sendAt: 0.0,

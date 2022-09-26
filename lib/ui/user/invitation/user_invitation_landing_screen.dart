@@ -27,7 +27,7 @@ class _UserInvitationLandingScreenState
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: headerDefaultWidget(
-        title: "가족 초대하기",
+          title: "가족 초대하기",
           trailing: FunctionalIcon.close,
           onClickTrailing: () {
             Get.back();
@@ -84,19 +84,20 @@ class _UserInvitationLandingScreenState
                 padding: const EdgeInsets.only(top: 40),
                 child: GestureDetector(
                   onTap: () {
-                    Share.share("[MODAK]\n가족 방에 초대되셨습니다\n초대코드: ${homeProvider.familyCode}" ?? "");
+                    Share.share(
+                        "[MODAK]\n가족 방에 초대되셨습니다\n초대코드: ${homeProvider.familyCode ?? ""}");
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                     decoration: BoxDecoration(
-                      color: Color(0xFFC5B697),
-                      borderRadius: BorderRadius.circular(6)
-                    ),
-                    child: Text("공유하기", style: TextStyle(
-                      color: Colors.white,
-                      fontSize: Font.size_largeText,
-                      fontWeight: Font.weight_regular,
-                    )),
+                        color: Color(0xFFC5B697),
+                        borderRadius: BorderRadius.circular(6)),
+                    child: Text("공유하기",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Font.size_largeText,
+                          fontWeight: Font.weight_regular,
+                        )),
                   ),
                 ),
               ),
