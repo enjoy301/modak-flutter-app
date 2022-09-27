@@ -53,7 +53,7 @@ class RemoteDataSource {
             await storage.read(key: Strings.refreshToken),
       })).get(
           "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/login/token");
-    }, isUpdatingAccessToken: true, isUpdatingRefreshToken: true);
+    }, isUpdatingAccessToken: true, isUpdatingRefreshToken: true, isUpdatingFamilyId: true, isUpdatingMemberId: true);
   }
 
   /// 소셜 로그인을 시도하는 함수
@@ -433,10 +433,11 @@ class RemoteDataSource {
         await storage.write(
             key: Strings.familyId,
             value:
-                response.data['data']['result'][Strings.familyId].toString());
+                response.data['data']['memberResult'][Strings.familyId].toString());
       }
     } catch (e) {
       if (e is DioError) {
+        print(e.response?.data['code']);
         return {
           Strings.result: false,
           Strings.response: e,

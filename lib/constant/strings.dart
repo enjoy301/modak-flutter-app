@@ -46,6 +46,7 @@ class Strings {
   static const String familyCode = "familyCode";
   static const String invitationCode = "invitationCode";
   static const String memberAndFamilyMembers = "memberAndFamilyMembers";
+  static const String todayTalk = "todayTalk";
 
   /// todo
   static const String todoId = "todoId";
