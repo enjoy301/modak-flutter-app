@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/data/model/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
+import '../../../provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ChatDialogWidget extends StatefulWidget {
   const ChatDialogWidget({Key? key, required this.chat}) : super(key: key);
-  final ChatModel chat;
+  final Chat chat;
   @override
   State<ChatDialogWidget> createState() => _ChatDialogWidgetState();
 }
@@ -19,7 +21,8 @@ class ChatDialogWidget extends StatefulWidget {
 class _ChatDialogWidgetState extends State<ChatDialogWidget> {
   @override
   Widget build(BuildContext context) {
-    final bool isMine = widget.chat.userId == PrefsUtil.getInt("user_id");
+    final bool isMine =
+        widget.chat.userId == context.read<UserProvider>().me!.memberId;
     return Container(
       margin: EdgeInsets.only(top: 9, right: 10, bottom: 8, left: 10),
       child: Row(
@@ -37,7 +40,9 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                   isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.chat.readCount <= 0 ? "" : widget.chat.readCount.toString(),
+                  widget.chat.unReadCount <= 0
+                      ? ""
+                      : widget.chat.unReadCount.toString(),
                   style: TextStyle(
                     color: Coloring.info_yellow,
                     fontSize: Font.size_caption,

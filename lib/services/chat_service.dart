@@ -3,48 +3,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:modak_flutter_app/data/model/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
-
-Future<bool> sendChat(ChatModel chat) async {
-  final response =
-      await Dio().post('${dotenv.get("CHAT_HTTP")}/dev/messages', data: {
-    'family_id': PrefsUtil.getInt("family_id"),
-    'user_id': PrefsUtil.getInt("user_id"),
-    'content': chat.content,
-    'metadata': chat.metaData,
-  });
-
-  print(response.statusCode);
-  if (response.statusCode == 200) {
-    return true;
-  }
-  return false;
-}
-
-void getChats(BuildContext context) async {
-  final chatResponse = await Dio(BaseOptions(queryParameters: {
-    'f': PrefsUtil.getInt("family_id"),
-    'c': 100,
-  })).get(
-    '${dotenv.get("CHAT_HTTP")}/dev/messages/0',
-  );
-
-  final connectionResponse = await Dio(BaseOptions(queryParameters: {
-    'f': PrefsUtil.getInt("family_id"),
-  })).get(
-    '${dotenv.get("CHAT_HTTP")}/dev/connections',
-  );
-
-  List<dynamic> chatList = (jsonDecode(chatResponse.data as String)['message']);
-  // Future(() => context.read<ChatProvider>().setChat(chatList));
-
-  List<dynamic> connectionList =
-      (jsonDecode(connectionResponse.data as String)['connection_data']);
-  // Future(() => context.read<ChatProvider>().setConnection(connectionList));
-}
 
 Future<Map<String, dynamic>> sendMedia(
     MultipartFile? file, String type, int imageCount) async {

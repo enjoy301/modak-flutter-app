@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/data/model/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
   const DialogBubbleWidget({Key? key, required this.chat}) : super(key: key);
 
-  final ChatModel chat;
+  final Chat chat;
   @override
   State<DialogBubbleWidget> createState() => _DialogBubbleWidgetState();
 }
 
 class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
-
   @override
   Widget build(BuildContext context) {
     final bool isMine = widget.chat.userId == PrefsUtil.getInt("user_id");

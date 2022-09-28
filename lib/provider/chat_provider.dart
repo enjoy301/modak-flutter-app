@@ -5,8 +5,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
-import 'package:modak_flutter_app/data/model/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/data/repository/chat_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
@@ -25,15 +26,14 @@ class ChatProvider extends ChangeNotifier {
   ChatRepository? _chatRepository;
 
   /// PREFIX: 채팅
-
-  late List<ChatModel> _chats = [];
-  List<ChatModel> get chats => _chats;
+  late List<Chat> _chats = [];
+  List<Chat> get chats => _chats;
 
   late WebSocketChannel _channel;
   WebSocketChannel get channel => _channel;
 
   final Map<int, Map<String, dynamic>> _connections = {};
-  int _connectionCount = 0;
+  int _disconnectCount = 0;
 
   // 웹 소켓 연결, chat 호출 connection 호출
   void initial(BuildContext context) async {
@@ -48,13 +48,13 @@ class ChatProvider extends ChangeNotifier {
 
         if (item.containsKey("message_data")) {
           Map<String, dynamic> message = item["message_data"];
-          addChat(
-            ChatModel(
+          _addChat(
+            Chat(
               userId: message['user_id'],
               content: message['content'],
-              sendAt: 1.1,
+              sendAt: message['send_at'],
               metaData: message['metadata'],
-              readCount: _connectionCount,
+              unReadCount: _disconnectCount,
             ),
           );
         } else if (item.containsKey("connection_data")) {
@@ -67,17 +67,18 @@ class ChatProvider extends ChangeNotifier {
     );
 
     /// 채팅 목록 불러오기
-    Map<String, dynamic> response1 = await _chatRepository!.getChats(30, 0);
+    Map<String, dynamic> chatResponse = await _chatRepository!.getChats(30, 0);
 
-    if (response1[Strings.message] == Strings.fail) {
+    if (chatResponse[Strings.message] == Strings.fail) {
       Fluttertoast.showToast(msg: "채팅 목록 불러오기 실패");
       return;
     }
 
     /// 현재 connection 불러오기
-    Map<String, dynamic> response0 = await _chatRepository!.getConnections();
+    Map<String, dynamic> connectionResponse =
+        await _chatRepository!.getConnections();
 
-    if (response0[Strings.message] == Strings.fail) {
+    if (connectionResponse[Strings.message] == Strings.fail) {
       Fluttertoast.showToast(msg: "커넥션 불러오기 실패");
       return;
     }
@@ -85,62 +86,99 @@ class ChatProvider extends ChangeNotifier {
     int memberId =
         await Future(() => context.read<UserProvider>().me!.memberId);
 
-    _connectionCount = 0;
-    for (Map<String, dynamic> connection in response0['response']['data']) {
+    _disconnectCount = 0;
+    for (Map<String, dynamic> connection in connectionResponse['response']
+        ['data']) {
       if (connection['memberId'] == memberId) {
         connection['joining'] = true;
       }
-      if (connection['joining']) {
-        _connectionCount++;
+      if (connection['joining'] == false) {
+        _disconnectCount++;
       }
+      connection['lastJoined'] =
+          DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch /
+              1000;
       _connections[connection['memberId']] = connection;
     }
 
     _chats = [];
-    List<dynamic> messages = response1['response']['data'];
+    List<dynamic> messages = chatResponse['response']['data'];
+
     for (Map<String, dynamic> message in messages) {
+      log("${DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000}");
       _chats.add(
-        ChatModel(
+        Chat(
           userId: message['memberId'],
           content: message['content'],
-          sendAt: 1.1,
+          sendAt:
+              DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000 -
+                  32400,
           metaData: {"type_code": "plain"},
-          readCount: _connectionCount,
+          unReadCount: _disconnectCount,
         ),
       );
     }
+    updateUnreadCount();
   }
 
   /// PREFIX: 커넥션 관리
   void updateConnection(Map<String, dynamic> connection) {
-    int id = connection['id'];
-    bool isJoining = connection['is_joining'];
+    int id = connection['memberId'];
+    bool isJoining = connection['joining'];
 
     if (isJoining) {
-      _connectionCount++;
-      _connections[id] = connection;
+      _disconnectCount--;
     } else {
-      _connectionCount--;
+      connection['lastJoined'] =
+          DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch /
+              1000;
+      _disconnectCount++;
+    }
+    _connections[id] = connection;
+
+    updateUnreadCount();
+  }
+
+  void updateUnreadCount() {
+    for (Chat chat in _chats) {
+      int unReadCount = 0;
+      for (dynamic connection in _connections.values) {
+        if (connection['joining']) {
+          continue;
+        }
+
+        // log("${chat.content} chat: ${chat.sendAt} conn: ${connection['lastJoined']} connid: ${connection['memberId']} / chat이 크다! ${chat.sendAt > connection['lastJoined']}");
+
+        /// 현재 접속 중이 아니면서 && chat 보낸 시점보다 lastJoined가 더 작을 때 (더 옛날)
+        if (chat.sendAt > connection['lastJoined']) {
+          unReadCount++;
+        }
+      }
+      log("");
+      chat.unReadCount = unReadCount;
     }
 
     notifyListeners();
   }
 
-  void postChat(ChatModel chat) async {
-    Map<String, dynamic> response = await _chatRepository!.postChat(chat);
+  void postChat(BuildContext context, String chat) async {
+    _addChat(
+      Chat(
+        userId: context.read<UserProvider>().me!.memberId,
+        content: chat,
+        sendAt: DateTime.now().millisecondsSinceEpoch / 1000,
+        metaData: {"type_code": "plain"},
+        unReadCount: _disconnectCount,
+      ),
+    );
 
-    log(response.toString());
+    Map<String, dynamic> response = await _chatRepository!.postChat(chat);
   }
 
   /// 채팅리스트에 뒤에 추가합니다.
-  void addChat(ChatModel chat) {
+  void _addChat(Chat chat) {
     _chats.add(chat);
     notifyListeners();
-  }
-
-  /// index 번째의 채팅을 가져옵니다.
-  ChatModel getChatAt(int index) {
-    return chats[index];
   }
 
   /// 내가 작성중인 채팅
@@ -159,6 +197,8 @@ class ChatProvider extends ChangeNotifier {
   void setCurrentMyChatType(ChatType currentMyChatType) {
     _currentMyChatType = currentMyChatType;
   }
+
+  ///
 
   /// PREFIX: 앨범 사진 보관
 

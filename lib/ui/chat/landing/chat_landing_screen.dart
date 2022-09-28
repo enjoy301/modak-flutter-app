@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
-import 'package:modak_flutter_app/data/model/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/chat/landing/chat_landing_dialog.dart';
 import 'package:modak_flutter_app/ui/chat/landing/function/chat_landing_function.dart';
