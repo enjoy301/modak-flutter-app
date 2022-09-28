@@ -169,12 +169,21 @@ class UserRepository {
     return localDataSource!.getSizeSettings();
   }
 
+  bool getTodoAlarmReceive() {
+    return localDataSource!.getTodoAlarmReceive();
+  }
+
+  bool getChatAlarmReceive() {
+    return localDataSource!.getChatAlarmReceive();
+  }
+
   void setName(String name) async {
     await localDataSource!.updateName(name);
   }
 
   void setBirthDay(DateTime birthDay) async {
-    await localDataSource!.updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
+    await localDataSource!
+        .updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
   }
 
   void setIsLunar(bool isLunar) async {
@@ -195,6 +204,14 @@ class UserRepository {
 
   void setSizeSettings(int sizeSettings) async {
     await localDataSource!.updateSizeSettings(sizeSettings);
+  }
+
+  void setTodoAlarmReceive(bool todoAlarmReceive) async {
+    await localDataSource!.updateTodoAlarmReceive(todoAlarmReceive);
+  }
+
+  void setChatAlarmReceive(bool chatAlarmReceive) async {
+    await localDataSource!.updateChatAlarmReceive(chatAlarmReceive);
   }
 
   Future<List> updateMeAndFamilyInfo(Map<String, dynamic> response) async {

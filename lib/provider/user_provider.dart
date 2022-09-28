@@ -10,6 +10,9 @@ class UserProvider extends ChangeNotifier {
     _me = _userRepository!.getMe();
     _familyMembers = _userRepository!.getFamilyMembers();
     _sizeSettings = _userRepository!.getSizeSettings();
+    _todoAlarmReceive = _userRepository!.getTodoAlarmReceive();
+    _chatAlarmReceive = _userRepository!.getChatAlarmReceive();
+    notifyListeners();
   }
 
   UserRepository? _userRepository;
@@ -22,14 +25,18 @@ class UserProvider extends ChangeNotifier {
   User? _me;
   List<User> _familyMembers = [];
   int _sizeSettings = 0;
+  bool _todoAlarmReceive = true;
+  bool _chatAlarmReceive = true;
 
   User? get me => _me;
   List<User> get familyMembers => _familyMembers;
   int get sizeSettings => _sizeSettings;
+  bool get todoAlarmReceive => _todoAlarmReceive;
+  bool get chatAlarmReceive => _chatAlarmReceive;
 
   List<User> get familyMembersWithoutMe {
     List<User> familyMembersWithoutMe = [];
-    for (User familyMember in _familyMembers!) {
+    for (User familyMember in _familyMembers) {
       if (familyMember.name != me?.name) {
         familyMembersWithoutMe.add(familyMember);
       }
@@ -52,6 +59,18 @@ class UserProvider extends ChangeNotifier {
   set sizeSettings(int sizeSettings) {
     _sizeSettings = sizeSettings;
     _userRepository!.setSizeSettings(sizeSettings);
+    notifyListeners();
+  }
+
+  set todoAlarmReceive(bool todoAlarmReceive) {
+    _todoAlarmReceive = todoAlarmReceive;
+    _userRepository!.setTodoAlarmReceive(todoAlarmReceive);
+    notifyListeners();
+  }
+
+  set chatAlarmReceive(bool chatAlarmReceive) {
+    _chatAlarmReceive = chatAlarmReceive;
+    _userRepository!.setChatAlarmReceive(chatAlarmReceive);
     notifyListeners();
   }
 

@@ -5,11 +5,12 @@ import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 
 class CommonPolicyScreen extends StatefulWidget {
   const CommonPolicyScreen(
-      {Key? key, required this.policyType, required this.isChecked})
+      {Key? key, required this.policyType, this.isChecked = false, this.withCheck = true})
       : super(key: key);
 
   final PolicyType policyType;
   final bool isChecked;
+  final bool withCheck;
 
   @override
   State<CommonPolicyScreen> createState() => _CommonPolicyScreenState();
@@ -57,7 +58,7 @@ class _CommonPolicyScreenState extends State<CommonPolicyScreen> {
             child: Text(data[widget.policyType]['contents']),
           ),
         ),
-        bottomNavigationBar: SizedBox(
+        bottomNavigationBar: widget.withCheck ? SizedBox(
           height: 70,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +71,7 @@ class _CommonPolicyScreenState extends State<CommonPolicyScreen> {
               Text(data[widget.policyType]['agreementText']),
             ],
           ),
-        ),
+        ) : null,
       ),
     );
   }

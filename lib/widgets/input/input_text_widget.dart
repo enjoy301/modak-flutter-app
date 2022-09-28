@@ -37,7 +37,7 @@ class _InputTextWidgetState extends State<InputTextWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextFormField(
-        autofocus: true,
+        autofocus: false,
         minLines: widget.minLines,
         maxLines: widget.maxLines,
         controller: widget.textEditingController,

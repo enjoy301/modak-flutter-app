@@ -72,7 +72,8 @@ class Strings {
   static const String fromMemberId = "fromMemberId";
   static const String toMemberId = "toMemberId";
   static const String sizeSettings = "sizeSettings";
-
+  static const String todoAlarmReceive = "todoAlarmReceive";
+  static const String chatAlarmReceive = "chatAlarmReceive";
   /// role
   static const String dad = "DAD";
   static const String mom = "MOM";

@@ -38,7 +38,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                 stuckAmount = 1.0 - stuckAmount.clamp(0.0, 1.0);
                 return Container(
                   height: 60.0,
-                  color: Color.lerp(Colors.white, Coloring.bg_red, stuckAmount),
+                  color: Color.lerp(Colors.white, Colors.redAccent[100], stuckAmount),
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   alignment: Alignment.centerLeft,
                   child: Row(
@@ -116,7 +116,6 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                               ),
                             ),
                     if (index == 1) FamilyFortuneWidget(),
-                    if (index == 1) FamilyFortuneWidget(),
                   ])),
             );
           },
@@ -134,7 +133,7 @@ class FamilyFortuneWidget extends StatelessWidget {
     return Consumer<HomeProvider>(builder: (context, homeProvider, child) {
       return GestureDetector(
         onTap: () {
-          Get.toNamed("/chat/letter/landing");
+          Get.toNamed("/home/fortune");
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 20, right: 18, left: 18),

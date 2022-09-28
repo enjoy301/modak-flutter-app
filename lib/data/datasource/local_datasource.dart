@@ -96,6 +96,16 @@ class LocalDataSource {
     return sizeSettings;
   }
 
+  bool getTodoAlarmReceive() {
+    bool todoAlarmReceive = userBox.get(Strings.todoAlarmReceive) ?? true;
+    return todoAlarmReceive;
+  }
+
+  bool getChatAlarmReceive() {
+    bool chatAlarmReceive = userBox.get(Strings.chatAlarmReceive) ?? true;
+    return chatAlarmReceive;
+  }
+
   /// user
   /// set
   Future<bool> updateMe(User user) async {
@@ -110,6 +120,16 @@ class LocalDataSource {
   Future<bool> updateSizeSettings(int sizeSettings) async {
     return tryFunction(
         () async => await userBox.put(Strings.sizeSettings, sizeSettings));
+  }
+
+  Future<bool> updateTodoAlarmReceive(bool todoAlarmReceive) async {
+    return tryFunction(() async =>
+        await userBox.put(Strings.todoAlarmReceive, todoAlarmReceive));
+  }
+
+  Future<bool> updateChatAlarmReceive(bool chatAlarmReceive) async {
+    return tryFunction(() async =>
+        await userBox.put(Strings.chatAlarmReceive, chatAlarmReceive));
   }
 
   bool tryFunction(Function() function) {
