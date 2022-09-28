@@ -25,7 +25,7 @@ class _ChatLandingDialogState extends State<ChatLandingDialog> {
             controller: scrollController,
             itemCount: context.watch<ChatProvider>().chats.length,
             itemBuilder: (BuildContext context, int index) {
-              return ChatDialogWidget(chat: provider.getChatAt(index));
+              return ChatDialogWidget(chat: provider.chats[index]);
             },
           );
         },

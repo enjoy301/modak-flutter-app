@@ -5,7 +5,7 @@ import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
 import 'package:modak_flutter_app/data/model/letter.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'dart:developer';
-import 'package:modak_flutter_app/data/model/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat.dart';
 
 class ChatRepository {
   ChatRepository._create();
@@ -87,10 +87,8 @@ class ChatRepository {
     return {Strings.message: Strings.fail};
   }
 
-  Future<Map<String, dynamic>> postChat(ChatModel chat) async {
+  Future<Map<String, dynamic>> postChat(String chat) async {
     Map<String, dynamic> response = await remoteDataSource!.postChat(chat);
-
-    log("repository postChat ${response.toString()}");
 
     return {Strings.message: Strings.success};
   }

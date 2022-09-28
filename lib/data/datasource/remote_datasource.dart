@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/data/model/letter.dart';
-import 'package:modak_flutter_app/data/model/chat_model.dart';
+import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/data/model/todo.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
@@ -53,7 +55,11 @@ class RemoteDataSource {
             await storage.read(key: Strings.refreshToken),
       })).get(
           "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/login/token");
-    }, isUpdatingAccessToken: true, isUpdatingRefreshToken: true, isUpdatingFamilyId: true, isUpdatingMemberId: true);
+    },
+        isUpdatingAccessToken: true,
+        isUpdatingRefreshToken: true,
+        isUpdatingMemberId: true,
+        isUpdatingFamilyId: true);
   }
 
   /// 소셜 로그인을 시도하는 함수
@@ -344,16 +350,16 @@ class RemoteDataSource {
   }
 
   // 채팅 보내는 함수
-  Future<Map<String, dynamic>> postChat(ChatModel chat) {
+  Future<Map<String, dynamic>> postChat(String chat) {
     return _tryRequest(() async {
       final Dio dio = Dio();
       return dio.post(
         "https://api.modak-talk.com/message",
         data: {
-          "user_id": chat.userId,
-          "family_id": 1,
-          "content": chat.content,
-          "metadata": chat.metaData,
+          "user_id": await storage.read(key: Strings.memberId),
+          "family_id": await storage.read(key: Strings.familyId),
+          "content": chat,
+          "metadata": {"type_code": "plain"},
         },
       );
     });
@@ -432,12 +438,13 @@ class RemoteDataSource {
       if (isUpdatingFamilyId) {
         await storage.write(
             key: Strings.familyId,
-            value:
-                response.data['data']['memberResult'][Strings.familyId].toString());
+            value: response.data['data'][Strings.memberAndFamilyMembers]
+                    [Strings.memberResult][Strings.familyId]
+                .toString());
       }
     } catch (e) {
       if (e is DioError) {
-        print(e.response?.data['code']);
+        log("e: $e");
         return {
           Strings.result: false,
           Strings.response: e,
