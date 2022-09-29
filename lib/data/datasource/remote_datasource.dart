@@ -20,7 +20,6 @@ typedef RequestFunction = Future<Response<dynamic>> Function();
 
 class RemoteDataSource {
   static final storage = FlutterSecureStorage();
-
   /**
    *
    * 유저 관련 함수들
@@ -352,12 +351,14 @@ class RemoteDataSource {
   // 채팅 보내는 함수
   Future<Map<String, dynamic>> postChat(String chat) {
     return _tryRequest(() async {
+      log("${await storage.read(key: Strings.memberId)}");
+      log("${await storage.read(key: Strings.familyId)}");
       final Dio dio = Dio();
       return dio.post(
         "https://api.modak-talk.com/message",
         data: {
-          "user_id": await storage.read(key: Strings.memberId),
-          "family_id": await storage.read(key: Strings.familyId),
+          "user_id": int.parse((await storage.read(key: Strings.memberId))!),
+          "family_id": int.parse((await storage.read(key: Strings.familyId))!),
           "content": chat,
           "metadata": {"type_code": "plain"},
         },
@@ -430,6 +431,7 @@ class RemoteDataSource {
             value: response.headers[Strings.headerRefreshToken]![0]);
       }
       if (isUpdatingMemberId) {
+        print(response.data);
         await storage.write(
             key: Strings.memberId,
             value: response.data['data']['memberResult'][Strings.memberId]
@@ -438,8 +440,7 @@ class RemoteDataSource {
       if (isUpdatingFamilyId) {
         await storage.write(
             key: Strings.familyId,
-            value: response.data['data'][Strings.memberAndFamilyMembers]
-                    [Strings.memberResult][Strings.familyId]
+            value: response.data['data'][Strings.memberResult][Strings.familyId]
                 .toString());
       }
     } catch (e) {

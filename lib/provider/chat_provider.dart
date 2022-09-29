@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
+import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
 import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/data/repository/chat_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
@@ -38,7 +39,7 @@ class ChatProvider extends ChangeNotifier {
   // 웹 소켓 연결, chat 호출 connection 호출
   void initial(BuildContext context) async {
     _channel = IOWebSocketChannel.connect(
-      "wss://ws.modak-talk.com?family-id=1&user-id=2",
+      "wss://ws.modak-talk.com?family-id=${await RemoteDataSource.storage.read(key: Strings.familyId)}&user-id=${context.read<UserProvider>().me!.memberId}",
       pingInterval: Duration(minutes: 9),
     );
 
@@ -105,7 +106,6 @@ class ChatProvider extends ChangeNotifier {
     List<dynamic> messages = chatResponse['response']['data'];
 
     for (Map<String, dynamic> message in messages) {
-      log("${DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000}");
       _chats.add(
         Chat(
           userId: message['memberId'],
@@ -154,7 +154,6 @@ class ChatProvider extends ChangeNotifier {
           unReadCount++;
         }
       }
-      log("");
       chat.unReadCount = unReadCount;
     }
 
