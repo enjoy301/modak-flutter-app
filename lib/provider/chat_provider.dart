@@ -111,8 +111,7 @@ class ChatProvider extends ChangeNotifier {
           userId: message['memberId'],
           content: message['content'],
           sendAt:
-              DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000 -
-                  32400,
+              DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000,
           metaData: {"type_code": "plain"},
           unReadCount: _disconnectCount,
         ),
@@ -161,6 +160,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   void postChat(BuildContext context, String chat) async {
+    log("${DateTime.now().millisecondsSinceEpoch / 1000}");
     _addChat(
       Chat(
         userId: context.read<UserProvider>().me!.memberId,
