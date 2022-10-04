@@ -46,7 +46,7 @@ class ChatProvider extends ChangeNotifier {
     _channel.stream.listen(
       (event) {
         var item = jsonDecode(event) as Map;
-
+        log("$item");
         if (item.containsKey("message_data")) {
           Map<String, dynamic> message = item["message_data"];
           _addChat(

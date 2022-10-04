@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -9,13 +10,23 @@ import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/utils/file_system_util.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 
+import '../constant/strings.dart';
+import '../data/datasource/remote_datasource.dart';
+
 Future<Map<String, dynamic>> getMediaNames() async {
   try {
-    Response response = await Dio(BaseOptions(queryParameters: {
-      'f': PrefsUtil.getInt("family_id"),
-      'c': 100,
-    })).get(
-      "${dotenv.get("CHAT_HTTP")}/dev/media/${AlbumProvider.messengerLastId}",
+    var familyId = await RemoteDataSource.storage.read(key: Strings.familyId);
+
+    Response response = await Dio(
+      BaseOptions(
+        queryParameters: {
+          'familyId': familyId,
+          'count': 100,
+          'lastId': AlbumProvider.messengerLastId,
+        },
+      ),
+    ).get(
+      "${dotenv.get("CHAT_HTTP")}/media",
     );
 
     return {
@@ -44,15 +55,20 @@ Future<Map<String, dynamic>> getMedia(List<dynamic> items) async {
     }
   }
 
+  log("response -> $requestList");
+
   if (requestList.isNotEmpty) {
     Response response =
-        await Dio().post("${dotenv.get("CHAT_HTTP")}/dev/media/url", data: {
+        await Dio().post("${dotenv.get("CHAT_HTTP")}/media/get-url", data: {
       'list': requestList,
     });
 
-    List<dynamic> urlList = jsonDecode(response.data)['url_list'];
+    log("response -> $response");
+
+    List<dynamic> urlList = jsonDecode(response.toString())['url_list'];
 
     for (String url in urlList) {
+      log("url -> $url");
       RegExp regExp = RegExp(r'.com\/(\w|\W)+\?');
       String temp = (regExp.stringMatch(url).toString());
       String fileName = temp.substring(5, temp.length - 1);
