@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/chat/landing/chat_landing_dialog.dart';
 import 'package:modak_flutter_app/ui/chat/landing/function/chat_landing_function.dart';
@@ -25,6 +24,7 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: headerBackWidget(context),
+      backgroundColor: Colors.white,
       body: FutureBuilder(
           future: Future(() => context.read<ChatProvider>().initial(context)),
           builder: (context, snapshot) {
