@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
@@ -44,7 +45,7 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
     {'name': "룰렛", 'icon': LightIcons.TicketStar, 'color': Coloring.bg_yellow},
     {'name': "위치 공유", 'icon': LightIcons.Location, 'color': Coloring.bg_purple},
     {
-      'name': "일정 추가",
+      'name': "편지 보내기",
       'icon': LightIcons.Calendar,
       'color': Coloring.point_pureorange
     },
@@ -82,7 +83,7 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
                       onPressed: () async {
                         Future(() => Navigator.pop(context));
 
-                        MultipartFile? image = await getImageFromCamera();
+                        dio.MultipartFile? image = await getImageFromCamera();
 
                         Map<String, dynamic> response =
                             await sendMedia(image, "png", 1);
@@ -97,7 +98,7 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
                   TextButton(
                       onPressed: () async {
                         Future(() => Navigator.pop(context));
-                        MultipartFile? video = await getVideoFromCamera();
+                        dio.MultipartFile? video = await getVideoFromCamera();
                         Map<String, dynamic> response =
                             await sendMedia(video, "mp4", 0);
                         if (response['result'] != "FAIL") {
@@ -131,7 +132,7 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
             ChatFunctionIconWidget(
               data: functionIconWidgetValues[5],
               onTap: () {
-                print(6);
+                Get.toNamed("/chat/letter/landing");
               },
             ),
             ChatFunctionIconWidget(

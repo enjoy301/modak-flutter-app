@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.modak_flutter_app">
+    package="com.wowbros.modak">
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
@@ -11,6 +11,7 @@
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/launcher_icon">
+
        <activity
                android:name="com.aboutyou.dart_packages.sign_in_with_apple.SignInWithAppleCallback"
                android:exported="true">

@@ -36,36 +36,41 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
               controller: controller, // Optional
               builder: (BuildContext context, double stuckAmount) {
                 stuckAmount = 1.0 - stuckAmount.clamp(0.0, 1.0);
-                return Container(
-                  height: 60.0,
-                  color: Color.lerp(Colors.white, Colors.redAccent[100], stuckAmount),
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          headerTitle[index],
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: Font.size_h1,
-                              fontWeight: Font.weight_semiBold),
-                        ),
-                      ),
-                      Offstage(
-                        offstage: stuckAmount <= 0.0,
-                        child: Opacity(
-                          opacity: stuckAmount,
-                          child: IconButton(
-                            icon: const Icon(Icons.notifications_none,
-                                color: Colors.black),
-                            onPressed: () {
-                              Get.toNamed("/home/notification");
-                            },
+                return GestureDetector(
+                  onTap: () {
+                    homeProvider.getHomeInfo();
+                  },
+                  child: Container(
+                    height: 60.0,
+                    color: Color.lerp(Colors.white, Colors.redAccent[100], stuckAmount),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            headerTitle[index],
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: Font.size_h1,
+                                fontWeight: Font.weight_semiBold),
                           ),
                         ),
-                      ),
-                    ],
+                        Offstage(
+                          offstage: stuckAmount <= 0.0,
+                          child: Opacity(
+                            opacity: stuckAmount,
+                            child: IconButton(
+                              icon: const Icon(Icons.notifications_none,
+                                  color: Colors.black),
+                              onPressed: () {
+                                Get.toNamed("/home/notification");
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

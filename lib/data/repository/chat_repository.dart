@@ -24,7 +24,7 @@ class ChatRepository {
     Map<String, dynamic> response = await remoteDataSource!.getLetters();
     if (response[Strings.result]) {
       List<dynamic> data =
-          response[Strings.response].data['data']['sentLetterList'];
+          response[Strings.response].data['data']['letterList'];
       List<Letter> letterList = [];
       for (dynamic rawLetter in data) {
         letterList.add(Letter(

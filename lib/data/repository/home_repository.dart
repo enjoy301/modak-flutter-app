@@ -20,9 +20,9 @@ class HomeRepository {
 
   Future<Map<String, dynamic>> getHomeInfo() async {
     Map<String, dynamic> response = await remoteDataSource!.getHomeInfo();
+
     if (response[Strings.result]) {
       Map<String, dynamic> data = response[Strings.response].data["data"];
-      print(data);
       return {
         Strings.message: Strings.success,
         Strings.response: {

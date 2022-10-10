@@ -1,4 +1,4 @@
-package com.example.modak_flutter_app
+package com.wowbros.modak
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -11,24 +11,22 @@ class AuthLandingVM extends ChangeNotifier {
   _init() async {
     userRepository = await UserRepository.create();
   }
-  late final UserRepository? userRepository;
-   void onKakaoClick() async {
-    if (userRepository != null) {
-      Map<String, dynamic> response = await userRepository!.kakaoSocialLogin();
-      switch (response[Strings.message]) {
-        case Strings.success:
-          Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");
-          Get.offAllNamed("/main");
-          break;
-        case Strings.fail:
-          Fluttertoast.showToast(msg: "로그인에 실패하셨습니다");
-          break;
-        case Strings.noUser:
-          Fluttertoast.showToast(msg: "회원가입 페이지로 이동합니다");
-          Get.offAllNamed("/auth/register");
-          break;
-      }
-    }
 
+  late final UserRepository? userRepository;
+  void onSocialClick(String type) async {
+    Map<String, dynamic> response = await userRepository!.socialLogin(type);
+    switch (response[Strings.message]) {
+      case Strings.success:
+        Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");
+        Get.offAllNamed("/main");
+        break;
+      case Strings.fail:
+        Fluttertoast.showToast(msg: "로그인에 실패하셨습니다");
+        break;
+      case Strings.noUser:
+        Fluttertoast.showToast(msg: "회원가입 페이지로 이동합니다");
+        Get.offAllNamed("/auth/register");
+        break;
+    }
   }
 }

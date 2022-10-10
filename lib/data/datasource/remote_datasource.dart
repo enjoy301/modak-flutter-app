@@ -5,12 +5,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:modak_flutter_app/data/model/letter.dart';
 import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/data/model/todo.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 /// result: indicates whether communication was successful or not [ True | False ]
 /// response: returns response [ Response Object | Error Object ]
@@ -32,7 +34,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       return await Dio(BaseOptions(headers: {
         Strings.headerHost: "www.never.com",
-      })).post("${dotenv.get(Strings.apiEndPoint)}/api/member", data: {
+      })).post("${dotenv.get(Strings.apiEndPoint)}/api/v2/auth", data: {
         Strings.providerName: await storage.read(key: Strings.providerName),
         Strings.providerId: await storage.read(key: Strings.providerId),
         Strings.name: name,
@@ -52,8 +54,7 @@ class RemoteDataSource {
         Strings.headerHost: "www.never.com",
         Strings.headerRefreshToken:
             await storage.read(key: Strings.refreshToken),
-      })).get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/login/token");
+      })).get("${dotenv.get(Strings.apiEndPoint)}/api/v2/auth/login/token");
     },
         isUpdatingAccessToken: true,
         isUpdatingRefreshToken: true,
@@ -68,7 +69,7 @@ class RemoteDataSource {
         Strings.headerProviderName:
             await storage.read(key: Strings.providerName),
         Strings.headerProviderId: await storage.read(key: Strings.providerId),
-      })).get("${dotenv.get(Strings.apiEndPoint)}/api/member/login/social");
+      })).get("${dotenv.get(Strings.apiEndPoint)}/api/v2/auth/login/social");
     },
         isUpdatingAccessToken: true,
         isUpdatingRefreshToken: true,
@@ -93,6 +94,31 @@ class RemoteDataSource {
     return true;
   }
 
+  /// 애플 로그인을 시도하는 함수
+  Future<bool> appleLogin() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: "modak.wowbros.com",
+          redirectUri: Uri.parse(
+              "https://fluorescent-hip-reason.glitch.me/callbacks/sign_in_with_apple"),
+        ),
+      );
+      Map<String, dynamic> tokenParsed =
+          Jwt.parseJwt(appleCredential.identityToken!);
+      String userId = tokenParsed['sub'];
+      storage.write(key: Strings.providerName, value: "APPLE");
+      storage.write(key: Strings.providerId, value: userId);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
   /// 나에 대한 정보를 요청하는 함수
   Future<Map<String, dynamic>> getMeInfo(String accessToken, int userId) async {
     return _tryRequest(() async {
@@ -108,7 +134,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/member",
           data: {
             Strings.name: user.name,
             Strings.birthDay: user.birthDay,
@@ -124,7 +150,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/tag",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/tags",
           data: {
             "tags": timeTags,
           });
@@ -136,7 +162,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.put(
-        "${dotenv.get(Strings.apiEndPoint)}/api/member/${await storage.read(key: Strings.memberId)}/invitation",
+        "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/invitations",
         data: {
           Strings.invitationCode: familyCode,
         },
@@ -153,8 +179,9 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> getHomeInfo() {
     return _tryRequest(() async {
       final Dio auth = await authDio();
+      print("시작");
       return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/home/${await storage.read(key: Strings.memberId)}?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/home?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
     });
   }
 
@@ -163,7 +190,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate");
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate");
     });
   }
 
@@ -172,7 +199,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.post(
-          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk",
           data: {
             Strings.content: content,
             Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
@@ -185,7 +212,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk",
           data: {
             Strings.content: content,
             Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
@@ -198,7 +225,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.delete(
-          "${dotenv.get(Strings.apiEndPoint)}/api/today-talk/${await storage.read(key: Strings.memberId)}?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
     });
   }
 
@@ -207,7 +234,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/today-fortune/${await storage.read(key: Strings.memberId)}");
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-fortune");
     });
   }
   /**
@@ -221,7 +248,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.get(
-        "${dotenv.get(Strings.apiEndPoint)}/api/todo/from-to-date?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",
+        "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",
       );
     });
   }
@@ -231,7 +258,7 @@ class RemoteDataSource {
       Todo todo, String fromDate, String toDate) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.post("${dotenv.get(Strings.apiEndPoint)}/api/todo", data: {
+      return auth.post("${dotenv.get(Strings.apiEndPoint)}/api/v2/todo", data: {
         Strings.memberId: await storage.read(key: Strings.memberId),
         Strings.title: todo.title,
         Strings.timeTag: todo.timeTag,
@@ -250,7 +277,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/todo/${todo.todoId}",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}",
           data: {
             Strings.memberId: await storage.read(key: Strings.memberId),
             Strings.title: todo.title,
@@ -271,7 +298,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/todo/done/${todo.todoId}",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}/done",
           data: {
             Strings.date: todo.date,
             Strings.fromDate: fromDate,
@@ -287,7 +314,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.delete(
-          "${dotenv.get(Strings.apiEndPoint)}/api/todo/${todo.todoId}",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}",
           data: {
             Strings.date: todo.date,
             Strings.fromDate: fromDate,
@@ -309,7 +336,7 @@ class RemoteDataSource {
       () async {
         final Dio auth = await authDio();
         return auth.get(
-            "${dotenv.get(Strings.apiEndPoint)}/api/letter/${await storage.read(key: Strings.memberId)}");
+            "${dotenv.get(Strings.apiEndPoint)}/api/v2/letter");
       },
     );
   }
@@ -319,7 +346,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.post(
-          "${dotenv.get(Strings.apiEndPoint)}/api/letter/${await storage.read(key: Strings.memberId)}",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/letter",
           data: {
             Strings.content: letter.content,
             Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
@@ -445,7 +472,8 @@ class RemoteDataSource {
       }
     } catch (e) {
       if (e is DioError) {
-        log("e: $e");
+        log("e: ${e.response?.toString()}");
+        log(e.toString());
         return {
           Strings.result: false,
           Strings.response: e,
@@ -467,7 +495,7 @@ class RemoteDataSource {
         Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
         Strings.headerRefreshToken:
             await storage.read(key: Strings.refreshToken),
-      })).get("${dotenv.get(Strings.apiEndPoint)}/api/token/reissue");
+      })).get("${dotenv.get(Strings.apiEndPoint)}/api/v2/token/reissue");
     });
   }
 }

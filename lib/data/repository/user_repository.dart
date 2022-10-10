@@ -40,16 +40,24 @@ class UserRepository {
     };
   }
 
-  Future<Map<String, dynamic>> kakaoSocialLogin() async {
-    bool isKakaoLoginSuccess = await remoteDataSource!.kakaoLogin();
-    if (isKakaoLoginSuccess) {
+  Future<Map<String, dynamic>> socialLogin(String type) async {
+    bool isSuccessful = false;
+    /// 타입에 따라 성공적으로 각각의 provider 요청에 성공했는지 보는 함수
+    switch (type) {
+      case "KAKAO":
+        isSuccessful = await remoteDataSource!.kakaoLogin();
+        break;
+      case "APPLE":
+        isSuccessful = await remoteDataSource!.appleLogin();
+        break;
+    }
+    /// 성공했을 때 처리하는 함수
+    if (isSuccessful) {
       Map<String, dynamic> response = await remoteDataSource!.socialLogin();
-      print(response['response']);
       if (response[Strings.result]) {
         List updateResult = await updateMeAndFamilyInfo(response);
         User me = updateResult[0];
         List<User> familyMembers = updateResult[1];
-
         return {
           Strings.response: {
             Strings.me: me,
@@ -57,7 +65,8 @@ class UserRepository {
           },
           Strings.message: Strings.success,
         };
-      } else if (response[Strings.message] == "NoSuchMemberException") {
+      }
+      if (response[Strings.message] == "NoSuchMemberException") {
         return {Strings.message: Strings.noUser};
       }
     }
@@ -67,10 +76,10 @@ class UserRepository {
   Future<Map<String, dynamic>> signUp() async {
     String? name = localDataSource!.getName();
     String? birthDay = localDataSource!.getBirthDay();
-    bool? isLunar = localDataSource!.getIsLunar();
+    bool? isLunar = localDataSource!.getIsLunar() ?? false;
     String? role = localDataSource!.getRole();
 
-    if ([name, birthDay, isLunar, role].contains(null)) {
+    if ([name, birthDay, role].contains(null)) {
       return {Strings.message: Strings.noValue};
     }
     Map<String, dynamic> response = await remoteDataSource!
