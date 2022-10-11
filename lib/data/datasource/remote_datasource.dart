@@ -165,7 +165,7 @@ class RemoteDataSource {
         "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/invitations",
         data: {
           Strings.invitationCode: familyCode,
-        },
+        },  
       );
     }, isUpdatingFamilyId: true);
   }
