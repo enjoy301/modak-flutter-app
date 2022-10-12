@@ -46,7 +46,7 @@ class ChatProvider extends ChangeNotifier {
     _channel.stream.listen(
       (event) {
         var item = jsonDecode(event) as Map;
-        log("$item");
+        log("message -> $item");
         if (item.containsKey("message_data")) {
           Map<String, dynamic> message = item["message_data"];
           _addChat(
@@ -112,7 +112,7 @@ class ChatProvider extends ChangeNotifier {
           content: message['content'],
           sendAt:
               DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000,
-          metaData: {"type_code": "plain"},
+          metaData: message['metaData'],
           unReadCount: _disconnectCount,
         ),
       );

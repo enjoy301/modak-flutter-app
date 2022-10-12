@@ -55,7 +55,7 @@ Future<Map<String, dynamic>> getMedia(List<dynamic> items) async {
     }
   }
 
-  log("response -> $requestList");
+  log("requestList -> $requestList");
 
   if (requestList.isNotEmpty) {
     Response response =
@@ -63,7 +63,7 @@ Future<Map<String, dynamic>> getMedia(List<dynamic> items) async {
       'list': requestList,
     });
 
-    log("response -> $response");
+    log("get presigned url -> $response");
 
     List<dynamic> urlList = jsonDecode(response.toString())['url_list'];
 

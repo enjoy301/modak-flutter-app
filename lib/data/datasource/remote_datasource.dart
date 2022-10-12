@@ -133,15 +133,14 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> updateMeInfo(User user) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/member",
-          data: {
-            Strings.name: user.name,
-            Strings.birthDay: user.birthDay,
-            Strings.isLunar: user.isLunar ? 1 : 0,
-            Strings.role: user.role,
-            Strings.color: user.color,
-          });
+      return auth
+          .put("${dotenv.get(Strings.apiEndPoint)}/api/v2/member", data: {
+        Strings.name: user.name,
+        Strings.birthDay: user.birthDay,
+        Strings.isLunar: user.isLunar ? 1 : 0,
+        Strings.role: user.role,
+        Strings.color: user.color,
+      });
     });
   }
 
@@ -149,11 +148,10 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> updateMeTag(List<String> timeTags) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/tags",
-          data: {
-            "tags": timeTags,
-          });
+      return auth
+          .put("${dotenv.get(Strings.apiEndPoint)}/api/v2/member/tags", data: {
+        "tags": timeTags,
+      });
     });
   }
 
@@ -165,7 +163,7 @@ class RemoteDataSource {
         "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/invitations",
         data: {
           Strings.invitationCode: familyCode,
-        },  
+        },
       );
     }, isUpdatingFamilyId: true);
   }
@@ -198,12 +196,11 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> postTodayTalk(String content) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.post(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk",
-          data: {
-            Strings.content: content,
-            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-          });
+      return auth
+          .post("${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk", data: {
+        Strings.content: content,
+        Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      });
     });
   }
 
@@ -211,12 +208,11 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> updateTodayTalk(String content) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.put(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk",
-          data: {
-            Strings.content: content,
-            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-          });
+      return auth
+          .put("${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk", data: {
+        Strings.content: content,
+        Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      });
     });
   }
 
@@ -233,8 +229,8 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> getTodayFortune() {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-fortune");
+      return auth
+          .get("${dotenv.get(Strings.apiEndPoint)}/api/v2/today-fortune");
     });
   }
   /**
@@ -335,8 +331,7 @@ class RemoteDataSource {
     return _tryRequest(
       () async {
         final Dio auth = await authDio();
-        return auth.get(
-            "${dotenv.get(Strings.apiEndPoint)}/api/v2/letter");
+        return auth.get("${dotenv.get(Strings.apiEndPoint)}/api/v2/letter");
       },
     );
   }
@@ -345,14 +340,13 @@ class RemoteDataSource {
   Future<Map<String, dynamic>> sendLetter(Letter letter) {
     return _tryRequest(() async {
       final Dio auth = await authDio();
-      return auth.post(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/letter",
-          data: {
-            Strings.content: letter.content,
-            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-            Strings.toMemberId: letter.toMemberId,
-            Strings.envelope: letter.envelope.toString(),
-          });
+      return auth
+          .post("${dotenv.get(Strings.apiEndPoint)}/api/v2/letter", data: {
+        Strings.content: letter.content,
+        Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+        Strings.toMemberId: letter.toMemberId,
+        Strings.envelope: letter.envelope.toString(),
+      });
     });
   }
 
@@ -361,7 +355,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth.get(
-        "${dotenv.get(Strings.apiEndPoint)}/api/message/chat?count=$count&lastId=$lastId",
+        "${dotenv.get(Strings.apiEndPoint)}/api/v2/message/chats?count=$count&lastId=$lastId",
       );
     });
   }
@@ -371,7 +365,7 @@ class RemoteDataSource {
     return _tryRequest(() async {
       final Dio auth = await authDio();
       return auth
-          .get("${dotenv.get(Strings.apiEndPoint)}/api/message/connection");
+          .get("${dotenv.get(Strings.apiEndPoint)}/api/v2/message/connections");
     });
   }
 
