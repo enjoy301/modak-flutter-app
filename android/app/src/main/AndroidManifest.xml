@@ -6,7 +6,7 @@
 
    <application
         android:label="모닥"
-        android:name="com.wowbros.modak"
+        android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/launcher_icon">
 
