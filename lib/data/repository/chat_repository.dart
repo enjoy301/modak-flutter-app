@@ -3,8 +3,11 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
+import 'package:modak_flutter_app/data/dto/chat/media_upload_DTO.dart';
 import 'package:modak_flutter_app/data/dto/letter.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
+
+import '../dto/chat/chat_paging_DTO.dart';
 
 class ChatRepository {
   ChatRepository._privateConstructor() {
@@ -49,9 +52,9 @@ class ChatRepository {
     return {Strings.message: Strings.fail};
   }
 
-  Future<Map<String, dynamic>> getChats(int count, int lastId) async {
+  Future<Map<String, dynamic>> getChats(ChatPagingDTO chatPagingDTO) async {
     Map<String, dynamic> response =
-        await remoteDataSource.getChats(count, lastId);
+        await remoteDataSource.getChats(chatPagingDTO);
 
     if (response[Strings.result]) {
       return {
@@ -117,20 +120,18 @@ class ChatRepository {
 
   /// 미디어 업로드 함수
   Future<Map<String, dynamic>> uploadMedia(
-    Map<String, dynamic> mediaUrlData,
-    MultipartFile file,
-    String type,
-    int imageCount,
-    String memberId,
-    String familyId,
-  ) async {
+      MediaUploadDTO mediaUploadDTO) async {
+    Map<String, dynamic> mediaUrlData = mediaUploadDTO.mediaUrlData;
+    String familyId = mediaUploadDTO.familyId;
+    String memberId = mediaUploadDTO.memberId;
+
     String xAmzAlgorithm = mediaUrlData['fields']['x-amz-algorithm'];
     String xAmzCredential = mediaUrlData['fields']['x-amz-credential'];
     String xAmzDate = mediaUrlData['fields']['x-amz-date'];
     String xAmzSecurityToken = mediaUrlData['fields']['x-amz-security-token'];
     String policy = mediaUrlData['fields']['policy'];
     String xAmzSignature = mediaUrlData['fields']['x-amz-signature'];
-    int xAmzMetaImageCount = imageCount;
+    int xAmzMetaImageCount = mediaUploadDTO.imageCount;
 
     FormData formData = FormData.fromMap(
       {
@@ -144,7 +145,7 @@ class ChatRepository {
         "x-amz-meta-user_id": memberId,
         "x-amz-meta-family_id": familyId,
         "x-amz-meta-image_count": xAmzMetaImageCount,
-        "file": file,
+        "file": mediaUploadDTO.file,
       },
     );
 

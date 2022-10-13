@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/data/dto/chat/chat_paging_DTO.dart';
 import 'package:modak_flutter_app/data/dto/letter.dart';
 import 'package:modak_flutter_app/data/dto/todo.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
@@ -444,9 +445,10 @@ class RemoteDataSource {
 
   /**
    *
-   * 채팅 함수
+   * 편지 함수
    *
    */
+
   /// 편지들을 조회하는 함수
   Future<Map<String, dynamic>> getLetters() {
     return _tryRequest(
@@ -477,13 +479,19 @@ class RemoteDataSource {
     );
   }
 
+  /**
+   *
+   *  채팅 관련 함수
+   *
+   */
+
   /// 채팅 목록 불러오는 함수
-  Future<Map<String, dynamic>> getChats(int count, int lastId) {
+  Future<Map<String, dynamic>> getChats(ChatPagingDTO chatPagingDTO) {
     return _tryRequest(
       () async {
         final Dio auth = await authDio();
         return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/message/chats?count=$count&lastId=$lastId",
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/message/chats?count=${chatPagingDTO.count}&lastId=${chatPagingDTO.lastId}",
         );
       },
     );
@@ -551,9 +559,13 @@ class RemoteDataSource {
     );
   }
 
-  ///
-  /// 앨범 함수들
-  ///
+  /**
+   *
+   *  앨범 관련 함수
+   *
+   */
+
+  /// 미디어 key name 얻는 함수
   Future<Map<String, dynamic>> getMediaNames(int lastId) async {
     return _tryRequest(
       () async {
@@ -573,6 +585,7 @@ class RemoteDataSource {
     );
   }
 
+  /// 미디어 다운로드 함수
   Future<Map<String, dynamic>> getMediaDownloadURL(
       List<dynamic> requestList) async {
     return _tryRequest(
@@ -592,6 +605,7 @@ class RemoteDataSource {
    * 보조 함수들
    *
    */
+
   /// accessToken, refresh Token 검증하는 과정이 포함된 Dio
   /// accessToken 을 포함할 시에 아래 Dio 를 통해 요청
   Future<Dio> authDio() async {

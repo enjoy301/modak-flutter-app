@@ -8,6 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
+import 'package:modak_flutter_app/data/dto/chat/chat_paging_DTO.dart';
+import 'package:modak_flutter_app/data/dto/chat/media_upload_DTO.dart';
 import 'package:modak_flutter_app/data/repository/chat_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
@@ -66,7 +68,12 @@ class ChatProvider extends ChangeNotifier {
     );
 
     /// 채팅 목록 불러오기
-    Map<String, dynamic> chatResponse = await _chatRepository.getChats(30, 0);
+    Map<String, dynamic> chatResponse = await _chatRepository.getChats(
+      ChatPagingDTO(
+        count: 100,
+        lastId: 0,
+      ),
+    );
 
     if (chatResponse[Strings.message] == Strings.fail) {
       Fluttertoast.showToast(msg: "채팅 목록 불러오기 실패");
@@ -182,8 +189,16 @@ class ChatProvider extends ChangeNotifier {
     Map<String, dynamic> mediaUrlData =
         jsonDecode(getMediaUrlResponse['response'].data);
 
-    Map<String, dynamic> uploadMediaResponse = await _chatRepository
-        .uploadMedia(mediaUrlData, file!, type, imageCount, "1", "1");
+    Map<String, dynamic> response = await _chatRepository.uploadMedia(
+      MediaUploadDTO(
+        mediaUrlData: mediaUrlData,
+        file: file!,
+        type: type,
+        imageCount: imageCount,
+        memberId: "1",
+        familyId: "1",
+      ),
+    );
   }
 
   /// 채팅리스트에 뒤에 추가합니다.
