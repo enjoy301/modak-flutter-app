@@ -1,3 +1,4 @@
+import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
 
@@ -15,4 +16,34 @@ class AlbumRepository {
       AlbumRepository._privateConstructor();
   static late final LocalDataSource localDataSource;
   static late final RemoteDataSource remoteDataSource;
+
+  Future<Map<String, dynamic>> getMediaNames(int lastId) async {
+    Map<String, dynamic> response =
+        await remoteDataSource.getMediaNames(lastId);
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "names": response,
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
+  Future<Map<String, dynamic>> getMediaURL(List<dynamic> requestList) async {
+    Map<String, dynamic> response =
+        await remoteDataSource.getMediaDownloadURL(requestList);
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "response": response,
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
 }

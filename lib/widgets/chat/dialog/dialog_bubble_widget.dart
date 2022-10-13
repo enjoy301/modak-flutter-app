@@ -6,11 +6,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
+import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
-  const DialogBubbleWidget({Key? key, required this.chat, required this.isMine, this.isHead = true}) : super(key: key);
+  const DialogBubbleWidget(
+      {Key? key, required this.chat, required this.isMine, this.isHead = true})
+      : super(key: key);
 
   final Chat chat;
   final bool isMine;
@@ -28,32 +30,42 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
       onTapCancel: () {},
       onLongPress: () {
         defaultModalWidget(context, [
-          TextButton(onPressed: () {
-            Clipboard.setData(ClipboardData(text: widget.chat.content));
-            Fluttertoast.showToast(msg: "클립보드에 복사되었습니다");
-            Get.back();
-          }, child: Text("클립보드 복사")),
-          TextButton(onPressed: () {
-            Get.back();
-          }, child: Text("집안일 등록")),
-          TextButton(onPressed: () {
-            Get.back();
-          }, child: Text("룰렛 돌리기")),
+          TextButton(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: widget.chat.content));
+                Fluttertoast.showToast(msg: "클립보드에 복사되었습니다");
+                Get.back();
+              },
+              child: Text("클립보드 복사")),
+          TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("집안일 등록")),
+          TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("룰렛 돌리기")),
         ]);
       },
       child: Row(
         children: [
-          !widget.isMine && widget.isHead ? Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.rotationX(pi),
-            child: CustomPaint(
-              painter: CustomShape(Coloring.bg_orange, "receive"),
-            ),
-          ) : SizedBox(),
+          !widget.isMine && widget.isHead
+              ? Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(pi),
+                  child: CustomPaint(
+                    painter: CustomShape(Coloring.bg_orange, "receive"),
+                  ),
+                )
+              : SizedBox(),
           Container(
             constraints: BoxConstraints(minWidth: 30, maxWidth: 250),
             decoration: BoxDecoration(
-              color: widget.isMine ? Coloring.point_pureorange : Coloring.bg_orange,
+              color: widget.isMine
+                  ? Coloring.point_pureorange
+                  : Coloring.bg_orange,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
@@ -68,18 +80,21 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
               ),
             ),
           ),
-          widget.isMine && widget.isHead ? Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.rotationX(pi),
-            child: CustomPaint(
-              painter: CustomShape(Coloring.point_pureorange, "send"),
-            ),
-          ) : SizedBox(),
+          widget.isMine && widget.isHead
+              ? Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(pi),
+                  child: CustomPaint(
+                    painter: CustomShape(Coloring.point_pureorange, "send"),
+                  ),
+                )
+              : SizedBox(),
         ],
       ),
     );
   }
 }
+
 class CustomShape extends CustomPainter {
   final Color bgColor;
   final String type;

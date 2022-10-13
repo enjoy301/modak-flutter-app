@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
+import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/utils/time.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/chat_dialog_widget.dart';
@@ -31,10 +31,13 @@ class _ChatLandingDialogState extends State<ChatLandingDialog> {
               itemCount: chatProvider.chats.length,
               itemBuilder: (BuildContext context, int index) {
                 Chat chat = chatProvider.chats[index];
-                bool isHead = true; bool isTail = true; bool isDateChanged = true;
+                bool isHead = true;
+                bool isTail = true;
+                bool isDateChanged = true;
 
                 if (index > 0) {
-                  isDateChanged = !compareChatByDay(chat, chatProvider.chats[index - 1]);
+                  isDateChanged =
+                      !compareChatByDay(chat, chatProvider.chats[index - 1]);
                 }
                 if (index > 0 &&
                     compareChat(chat, chatProvider.chats[index - 1])) {

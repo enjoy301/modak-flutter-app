@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:modak_flutter_app/data/model/todo.dart';
-import 'package:modak_flutter_app/data/model/user.dart';
+import 'package:modak_flutter_app/data/dto/todo.dart';
+import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:provider/provider.dart';

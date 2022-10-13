@@ -4,7 +4,7 @@ import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/data/model/user.dart';
+import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/common/checkbox_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
@@ -14,7 +14,8 @@ import 'package:modak_flutter_app/widgets/input/input_select_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 
 class UserFamilyModifyScreen extends StatefulWidget {
-  const UserFamilyModifyScreen({Key? key, required this.familyMember}) : super(key: key);
+  const UserFamilyModifyScreen({Key? key, required this.familyMember})
+      : super(key: key);
 
   final User familyMember;
 
@@ -28,12 +29,11 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: headerDefaultWidget(
-        title: "가족 정보 수정",
-        leading: FunctionalIcon.back,
-        onClickLeading: () {
-          Get.back();
-        }
-      ),
+          title: "가족 정보 수정",
+          leading: FunctionalIcon.back,
+          onClickLeading: () {
+            Get.back();
+          }),
       body: Padding(
         padding: const EdgeInsets.only(
           top: 32,
@@ -46,13 +46,13 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
             children: [
               Center(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(1000),
-                    child: Image.asset(
-                      "lib/assets/images/family/profile/dad_profile.png",
-                      width: 110,
-                      height: 110,
-                    ),
-                  )),
+                borderRadius: BorderRadius.circular(1000),
+                child: Image.asset(
+                  "lib/assets/images/family/profile/dad_profile.png",
+                  width: 110,
+                  height: 110,
+                ),
+              )),
               Padding(
                 padding: const EdgeInsets.only(
                   top: 48,
@@ -70,7 +70,9 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
               IgnorePointer(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 13),
-                  child: InputTextWidget(textEditingController: TextEditingController(text: widget.familyMember.name)),
+                  child: InputTextWidget(
+                      textEditingController: TextEditingController(
+                          text: widget.familyMember.name)),
                 ),
               ),
               IgnorePointer(
@@ -127,8 +129,7 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
                     title: "생일",
                     contents: widget.familyMember.birthDay,
                     currTime: DateTime.parse(widget.familyMember.birthDay),
-                    onChanged: (DateTime dateTime) {
-                    }),
+                    onChanged: (DateTime dateTime) {}),
               ),
             ],
           ),

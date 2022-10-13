@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
-import 'package:modak_flutter_app/data/model/user.dart';
+import 'package:modak_flutter_app/data/dto/user.dart';
 
 /// response: returns response which should be updated
 /// message: acknowledges result of request

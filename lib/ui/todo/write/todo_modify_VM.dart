@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:modak_flutter_app/data/model/todo.dart';
-import 'package:modak_flutter_app/data/model/user.dart';
+import 'package:modak_flutter_app/data/dto/todo.dart';
+import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -34,9 +34,9 @@ class TodoModifyVM extends ChangeNotifier {
 
   Future<bool> updateTodo(BuildContext context) async {
     if (todo.repeatTag == null) {
-      todo.repeat = [0,0,0,0,0,0,0];
+      todo.repeat = [0, 0, 0, 0, 0, 0, 0];
     } else {
-      todo.repeat = [1,1,1,1,1,1,1];
+      todo.repeat = [1, 1, 1, 1, 1, 1, 1];
     }
     return await context.read<TodoProvider>().updateTodo(todo, isAfterUpdate);
   }

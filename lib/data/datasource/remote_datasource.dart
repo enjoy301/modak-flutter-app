@@ -6,12 +6,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:modak_flutter_app/data/model/letter.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
-import 'package:modak_flutter_app/data/model/todo.dart';
-import 'package:modak_flutter_app/data/model/user.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart' as kakao;
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/data/dto/letter.dart';
+import 'package:modak_flutter_app/data/dto/todo.dart';
+import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 /// result: indicates whether communication was successful or not [ True | False ]
@@ -478,7 +477,7 @@ class RemoteDataSource {
     );
   }
 
-  // 채팅 목록 불러오는 함수
+  /// 채팅 목록 불러오는 함수
   Future<Map<String, dynamic>> getChats(int count, int lastId) {
     return _tryRequest(
       () async {
@@ -490,7 +489,7 @@ class RemoteDataSource {
     );
   }
 
-  // 커넥션 목록 불러오는 함수
+  /// 커넥션 목록 불러오는 함수
   Future<Map<String, dynamic>> getConnections() {
     return _tryRequest(
       () async {
@@ -502,7 +501,7 @@ class RemoteDataSource {
     );
   }
 
-  // 채팅 보내는 함수
+  /// 일반 채팅 보내는 함수
   Future<Map<String, dynamic>> postChat(String chat) {
     return _tryRequest(
       () async {
@@ -518,6 +517,70 @@ class RemoteDataSource {
             ),
             "content": chat,
             "metadata": {"type_code": "plain"},
+          },
+        );
+      },
+    );
+  }
+
+  /// upload url 발급
+  Future<Map<String, dynamic>> getMediaUploadUrl() async {
+    return _tryRequest(
+      () async {
+        return await Dio().get(
+          "${dotenv.get("CHAT_HTTP")}/media/post-url",
+        );
+      },
+    );
+  }
+
+  /// 미디어 업로드 함수
+  Future<Map<String, dynamic>> uploadMedia(FormData formData) async {
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            headers: {
+              "Content-Type": "multipart/form-data",
+              'Connection': 'keep-alive',
+              "Accept": "*/*"
+            },
+          ),
+        ).post(dotenv.get("S3_ENDPOINT"), data: formData);
+      },
+    );
+  }
+
+  ///
+  /// 앨범 함수들
+  ///
+  Future<Map<String, dynamic>> getMediaNames(int lastId) async {
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            queryParameters: {
+              'familyId':
+                  await RemoteDataSource.storage.read(key: Strings.familyId),
+              'count': 100,
+              'lastId': lastId,
+            },
+          ),
+        ).get(
+          "${dotenv.get("CHAT_HTTP")}/media",
+        );
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> getMediaDownloadURL(
+      List<dynamic> requestList) async {
+    return _tryRequest(
+      () async {
+        return await Dio().post(
+          "${dotenv.get("CHAT_HTTP")}/media/get-url",
+          data: {
+            'list': requestList,
           },
         );
       },

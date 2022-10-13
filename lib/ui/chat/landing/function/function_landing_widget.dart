@@ -1,21 +1,15 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
-import 'package:modak_flutter_app/services/chat_service.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_function_icon_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 
 class FunctionLandingWidget extends StatefulWidget {
@@ -84,28 +78,14 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
                         Future(() => Navigator.pop(context));
 
                         dio.MultipartFile? image = await getImageFromCamera();
-
-                        Map<String, dynamic> response =
-                            await sendMedia(image, "png", 1);
-
-                        if (response['result'] != "FAIL") {
-                          print(response['response']);
-                        } else {
-                          print(response['message']);
-                        }
+                        provider.postMedia(image, "png", 1);
                       },
                       child: Text("사진 찍기")),
                   TextButton(
                       onPressed: () async {
                         Future(() => Navigator.pop(context));
                         dio.MultipartFile? video = await getVideoFromCamera();
-                        Map<String, dynamic> response =
-                            await sendMedia(video, "mp4", 0);
-                        if (response['result'] != "FAIL") {
-                          print(response['response']);
-                        } else {
-                          print(response['message']);
-                        }
+                        provider.postMedia(video, "mp4", 0);
                       },
                       child: Text("동영상 촬영"))
                 ]);

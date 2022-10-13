@@ -3,9 +3,7 @@ import 'package:modak_flutter_app/assets/icons/dark/DarkIcons_icons.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
-import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:provider/provider.dart';
 

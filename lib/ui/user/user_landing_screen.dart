@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/strings.dart';
-import 'package:modak_flutter_app/constant/user_colors.dart';
-
-import 'package:modak_flutter_app/data/model/user.dart';
+import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
@@ -57,11 +54,15 @@ class UserLandingScreen extends StatelessWidget {
                           itemCount: userProvider.familyMembersWithoutMe.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(top: 32, bottom: 16),
+                              padding:
+                                  const EdgeInsets.only(top: 32, bottom: 16),
                               child: UserProfileWidget(
-                                user: userProvider.familyMembersWithoutMe[index],
+                                user:
+                                    userProvider.familyMembersWithoutMe[index],
                                 onPressed: () {
-                                  Get.to(UserFamilyModifyScreen(familyMember: userProvider.familyMembersWithoutMe[index]));
+                                  Get.to(UserFamilyModifyScreen(
+                                      familyMember: userProvider
+                                          .familyMembersWithoutMe[index]));
                                 },
                               ),
                             );

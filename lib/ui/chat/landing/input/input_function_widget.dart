@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:modak_flutter_app/assets/icons/dark/DarkIcons_icons.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
@@ -12,10 +10,7 @@ import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../services/chat_service.dart';
 
 class InputFunctionWidget extends StatefulWidget {
   const InputFunctionWidget({Key? key}) : super(key: key);
@@ -52,9 +47,7 @@ class _InputFunctionWidgetState extends State<InputFunctionWidget> {
                       counter += 1;
                     }
                   }
-                  Map<String, dynamic> response =
-                      await sendMedia(zipFile, "zip", counter);
-                  print(response['result']);
+                  provider.postMedia(zipFile, "zip", counter);
 
                   provider.clearSelectedMedia();
                   provider.setIsFunctionOpened(false);

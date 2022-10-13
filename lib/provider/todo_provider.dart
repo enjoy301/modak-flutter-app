@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
-import 'package:modak_flutter_app/data/model/todo.dart';
+import 'package:modak_flutter_app/data/dto/todo.dart';
 import 'package:modak_flutter_app/data/repository/todo_repository.dart';
 
 class TodoProvider extends ChangeNotifier {

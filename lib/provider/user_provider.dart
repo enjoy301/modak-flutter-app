@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
-import 'package:modak_flutter_app/data/model/user.dart';
+import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
 
 class UserProvider extends ChangeNotifier {

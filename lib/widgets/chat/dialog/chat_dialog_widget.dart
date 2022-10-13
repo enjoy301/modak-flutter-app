@@ -6,12 +6,13 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
+import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
-import '../../../provider/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../../provider/user_provider.dart';
 
 class ChatDialogWidget extends StatefulWidget {
   const ChatDialogWidget({
@@ -75,9 +76,12 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                         padding: const EdgeInsets.only(right: 10),
                         child: GestureDetector(
                           onTap: () {
-                            Get.to(UserFamilyModifyScreen(
+                            Get.to(
+                              UserFamilyModifyScreen(
                                 familyMember: userProvider
-                                    .findUserById(widget.chat.userId)!));
+                                    .findUserById(widget.chat.userId)!,
+                              ),
+                            );
                           },
                           child: Image.asset(
                             "lib/assets/images/family/profile/dad_profile.png",

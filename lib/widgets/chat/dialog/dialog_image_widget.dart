@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
+import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DialogImageWidget extends StatefulWidget {

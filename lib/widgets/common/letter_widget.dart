@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
-import 'package:modak_flutter_app/data/model/letter.dart';
+import 'package:modak_flutter_app/data/dto/letter.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
