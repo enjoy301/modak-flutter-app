@@ -7,21 +7,22 @@ import 'package:modak_flutter_app/data/model/todo.dart';
 /// message: acknowledges result of request
 
 class TodoRepository {
-  TodoRepository._create();
-
-  static Future<TodoRepository> create() async {
-    TodoRepository albumRepository = TodoRepository._create();
-    localDataSource ??= await LocalDataSource.create();
-    remoteDataSource ??= RemoteDataSource();
-    return albumRepository;
+  TodoRepository._privateConstructor() {
+    localDataSource = LocalDataSource();
+    remoteDataSource = RemoteDataSource();
   }
 
-  static LocalDataSource? localDataSource;
-  static RemoteDataSource? remoteDataSource;
+  factory TodoRepository() {
+    return _instance;
+  }
+
+  static final TodoRepository _instance = TodoRepository._privateConstructor();
+  static late final LocalDataSource localDataSource;
+  static late final RemoteDataSource remoteDataSource;
 
   Future<Map<String, dynamic>> getTodos(String fromDate, String toDate) async {
     Map<String, dynamic> response =
-        await remoteDataSource!.getTodos(fromDate, toDate);
+        await remoteDataSource.getTodos(fromDate, toDate);
     if (response[Strings.result]) {
       return {
         Strings.response: {
@@ -40,7 +41,7 @@ class TodoRepository {
       return {Strings.message: Strings.noValue};
     }
     Map<String, dynamic> response =
-        await remoteDataSource!.postTodo(todo, fromDate, toDate);
+        await remoteDataSource.postTodo(todo, fromDate, toDate);
     if (response[Strings.result]) {
       return {
         Strings.message: Strings.success,
@@ -55,8 +56,8 @@ class TodoRepository {
 
   Future<Map<String, dynamic>> doneTodo(
       Todo todo, bool isDone, String fromDate, String toDate) async {
-    Map<String, dynamic> response = await remoteDataSource!
-        .doneTodo(todo, isDone ? 1 : 0, fromDate, toDate);
+    Map<String, dynamic> response =
+        await remoteDataSource.doneTodo(todo, isDone ? 1 : 0, fromDate, toDate);
     if (response[Strings.result]) {
       return {
         Strings.message: Strings.success,
@@ -71,9 +72,9 @@ class TodoRepository {
 
   Future<Map<String, dynamic>> updateTodo(
       Todo todo, bool isAfterUpdate, String fromDate, String toDate) async {
-    Map<String, dynamic> response = await remoteDataSource!
-        .updateTodo(todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
-    print(response["response"].data["data"]);
+    Map<String, dynamic> response = await remoteDataSource.updateTodo(
+        todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
+
     if (response[Strings.result]) {
       return {
         Strings.message: Strings.success,
@@ -88,9 +89,8 @@ class TodoRepository {
 
   Future<Map<String, dynamic>> deleteTodo(
       Todo todo, bool isAfterUpdate, String fromDate, String toDate) async {
-    Map<String, dynamic> response = await remoteDataSource!
-        .deleteTodo(todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
-    print(response);
+    Map<String, dynamic> response = await remoteDataSource.deleteTodo(
+        todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
     if (response[Strings.result]) {
       return {
         Strings.message: Strings.success,

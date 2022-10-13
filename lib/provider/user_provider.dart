@@ -6,16 +6,16 @@ import 'package:modak_flutter_app/data/repository/user_repository.dart';
 
 class UserProvider extends ChangeNotifier {
   init() async {
-    _userRepository = await UserRepository.create();
-    _me = _userRepository!.getMe();
-    _familyMembers = _userRepository!.getFamilyMembers();
-    _sizeSettings = _userRepository!.getSizeSettings();
-    _todoAlarmReceive = _userRepository!.getTodoAlarmReceive();
-    _chatAlarmReceive = _userRepository!.getChatAlarmReceive();
+    _userRepository = UserRepository();
+    _me = _userRepository.getMe();
+    _familyMembers = _userRepository.getFamilyMembers();
+    _sizeSettings = _userRepository.getSizeSettings();
+    _todoAlarmReceive = _userRepository.getTodoAlarmReceive();
+    _chatAlarmReceive = _userRepository.getChatAlarmReceive();
     notifyListeners();
   }
 
-  UserRepository? _userRepository;
+  static late final UserRepository _userRepository;
   List<double> fontScale = [1.0, 1.5, 2.0];
 
   double getFontScale() {
@@ -29,9 +29,13 @@ class UserProvider extends ChangeNotifier {
   bool _chatAlarmReceive = true;
 
   User? get me => _me;
+
   List<User> get familyMembers => _familyMembers;
+
   int get sizeSettings => _sizeSettings;
+
   bool get todoAlarmReceive => _todoAlarmReceive;
+
   bool get chatAlarmReceive => _chatAlarmReceive;
 
   List<User> get familyMembersWithoutMe {
@@ -47,7 +51,7 @@ class UserProvider extends ChangeNotifier {
   set me(User? me) {
     if (me == null) return;
     _me = me;
-    _userRepository!.setMe(me);
+    _userRepository.setMe(me);
     notifyListeners();
   }
 
@@ -58,19 +62,19 @@ class UserProvider extends ChangeNotifier {
 
   set sizeSettings(int sizeSettings) {
     _sizeSettings = sizeSettings;
-    _userRepository!.setSizeSettings(sizeSettings);
+    _userRepository.setSizeSettings(sizeSettings);
     notifyListeners();
   }
 
   set todoAlarmReceive(bool todoAlarmReceive) {
     _todoAlarmReceive = todoAlarmReceive;
-    _userRepository!.setTodoAlarmReceive(todoAlarmReceive);
+    _userRepository.setTodoAlarmReceive(todoAlarmReceive);
     notifyListeners();
   }
 
   set chatAlarmReceive(bool chatAlarmReceive) {
     _chatAlarmReceive = chatAlarmReceive;
-    _userRepository!.setChatAlarmReceive(chatAlarmReceive);
+    _userRepository.setChatAlarmReceive(chatAlarmReceive);
     notifyListeners();
   }
 
@@ -90,8 +94,9 @@ class UserProvider extends ChangeNotifier {
     }
     return null;
   }
+
   updateMeTag(List<String> timeTags) async {
-    Map<String, dynamic> response = await _userRepository!.updateMeTag(timeTags);
+    Map<String, dynamic> response = await _userRepository.updateMeTag(timeTags);
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "성공적으로 업데이트");
@@ -112,8 +117,4 @@ class UserProvider extends ChangeNotifier {
     me!.timeTags.remove(tag);
     updateMeTag(me!.timeTags);
   }
-
-
-
-
 }

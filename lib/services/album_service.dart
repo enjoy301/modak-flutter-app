@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/utils/file_system_util.dart';
-import 'package:modak_flutter_app/utils/prefs_util.dart';
 
 import '../constant/strings.dart';
 import '../data/datasource/remote_datasource.dart';
@@ -58,10 +57,12 @@ Future<Map<String, dynamic>> getMedia(List<dynamic> items) async {
   log("requestList -> $requestList");
 
   if (requestList.isNotEmpty) {
-    Response response =
-        await Dio().post("${dotenv.get("CHAT_HTTP")}/media/get-url", data: {
-      'list': requestList,
-    });
+    Response response = await Dio().post(
+      "${dotenv.get("CHAT_HTTP")}/media/get-url",
+      data: {
+        'list': requestList,
+      },
+    );
 
     log("get presigned url -> $response");
 

@@ -10,13 +10,12 @@ import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class ChatLetterVM extends ChangeNotifier {
-
   ChatLetterVM() {
     init();
   }
 
   init() async {
-    _chatRepository = await ChatRepository.create();
+    _chatRepository = ChatRepository();
   }
 
   late final ChatRepository _chatRepository;
@@ -36,7 +35,8 @@ class ChatLetterVM extends ChangeNotifier {
         for (Letter letter in response[Strings.response]["letters"]) {
           letters.add(letter);
           // ignore: use_build_context_synchronously
-          if (letter.fromMemberId == context.read<UserProvider>().me!.memberId) {
+          if (letter.fromMemberId ==
+              context.read<UserProvider>().me!.memberId) {
             lettersSent.add(letter);
           } else {
             lettersReceived.add(letter);

@@ -9,10 +9,11 @@ class TodoLandingVM extends ChangeNotifier {
   }
 
   init() async {
-    _todoRepository = await TodoRepository.create();
+    _todoRepository = TodoRepository();
   }
 
-  late final TodoRepository _todoRepository;
+  static late final TodoRepository _todoRepository;
+
   getTodosByScroll(DateTime dateTime, BuildContext context) {
     context.read<TodoProvider>().getTodosByScroll(dateTime);
   }

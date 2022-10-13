@@ -9,12 +9,17 @@ class TodoProvider extends ChangeNotifier {
   DateFormat formatter = DateFormat("yyyy-MM-dd");
 
   init() async {
-    _todoRepository = await TodoRepository.create();
-    await getTodosByScroll(DateTime.now().subtract(Duration(
-        days: DateTime.now().weekday == 7 ? 0 : DateTime.now().weekday)));
+    _todoRepository = TodoRepository();
+    await getTodosByScroll(
+      DateTime.now().subtract(
+        Duration(
+          days: DateTime.now().weekday == 7 ? 0 : DateTime.now().weekday,
+        ),
+      ),
+    );
   }
 
-  TodoRepository? _todoRepository;
+  static late final TodoRepository _todoRepository;
 
   final Map<String, List<String>> _colorMap = {};
 
@@ -26,8 +31,11 @@ class TodoProvider extends ChangeNotifier {
   int todoCount = 40;
 
   Map<String, List<String>> get colorMap => _colorMap;
+
   Map<String, List<Todo>> get todoMap => _todoMap;
+
   DateTime get focusedDateTime => _focusedDateTime;
+
   DateTime get selectedDateTime => _selectedDateTime;
 
   set focusedDateTime(DateTime focusedDateTime) {
@@ -48,8 +56,8 @@ class TodoProvider extends ChangeNotifier {
       return true;
     }
 
-    Map<String, dynamic> response = await _todoRepository!
-        .getTodos(formatter.format(fromDate), formatter.format(toDate));
+    Map<String, dynamic> response = await _todoRepository.getTodos(
+        formatter.format(fromDate), formatter.format(toDate));
 
     switch (response[Strings.message]) {
       case Strings.success:
@@ -80,7 +88,7 @@ class TodoProvider extends ChangeNotifier {
       toDate = formatter.format(todoSavedToDate);
     }
     Map<String, dynamic> response =
-        await _todoRepository!.postTodo(todo, fromDate, toDate);
+        await _todoRepository.postTodo(todo, fromDate, toDate);
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "성공적으로 추가");
@@ -101,11 +109,8 @@ class TodoProvider extends ChangeNotifier {
   }
 
   Future<bool> doneTodo(Todo todo, bool isDone) async {
-    Map<String, dynamic> response = await _todoRepository!.doneTodo(
-        todo,
-        isDone,
-        formatter.format(todoSavedFromDate),
-        formatter.format(todoSavedToDate));
+    Map<String, dynamic> response = await _todoRepository.doneTodo(todo, isDone,
+        formatter.format(todoSavedFromDate), formatter.format(todoSavedToDate));
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "성공적으로 추가");
@@ -123,7 +128,7 @@ class TodoProvider extends ChangeNotifier {
   }
 
   Future<bool> updateTodo(Todo todo, bool isAfterUpdate) async {
-    Map<String, dynamic> response = await _todoRepository!.updateTodo(
+    Map<String, dynamic> response = await _todoRepository.updateTodo(
         todo,
         isAfterUpdate,
         formatter.format(todoSavedFromDate),
@@ -145,7 +150,7 @@ class TodoProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteTodo(Todo todo, bool isAfterUpdate) async {
-    Map<String, dynamic> response = await _todoRepository!.deleteTodo(
+    Map<String, dynamic> response = await _todoRepository.deleteTodo(
         todo,
         isAfterUpdate,
         formatter.format(todoSavedFromDate),
@@ -175,18 +180,20 @@ class TodoProvider extends ChangeNotifier {
     for (String key in itemsResponse.keys) {
       List<Todo> todos = [];
       for (Map<String, dynamic> item in itemsResponse[key]!) {
-        todos.add(Todo(
-            todoId: item[Strings.todoId],
-            groupTodoId: item[Strings.groupTodoId],
-            memberId: item[Strings.memberId],
-            title: item[Strings.title],
-            color: item[Strings.color],
-            isDone: item[Strings.isDone] == 1 ? true : false,
-            timeTag: item[Strings.timeTag],
-            repeatTag: item[Strings.repeatTag],
-            repeat: null,
-            memo: item[Strings.memo],
-            date: key));
+        todos.add(
+          Todo(
+              todoId: item[Strings.todoId],
+              groupTodoId: item[Strings.groupTodoId],
+              memberId: item[Strings.memberId],
+              title: item[Strings.title],
+              color: item[Strings.color],
+              isDone: item[Strings.isDone] == 1 ? true : false,
+              timeTag: item[Strings.timeTag],
+              repeatTag: item[Strings.repeatTag],
+              repeat: null,
+              memo: item[Strings.memo],
+              date: key),
+        );
       }
       _todoMap[key] = todos;
     }

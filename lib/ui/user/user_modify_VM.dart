@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class UserModifyVM extends ChangeNotifier {
   init() async {
-    _userRepository = await UserRepository.create();
+    _userRepository = UserRepository();
     user = _userRepository.getMe()!;
     isLoaded = true;
   }

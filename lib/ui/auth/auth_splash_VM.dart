@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class AuthSplashVM extends ChangeNotifier {
   init() async {
-    _userRepository = await UserRepository.create();
+    _userRepository = UserRepository();
   }
 
   redirection(BuildContext context) async {
@@ -19,7 +19,8 @@ class AuthSplashVM extends ChangeNotifier {
     }
     Map<String, dynamic> response = await _userRepository.tokenLogin();
     if (response[Strings.message] == Strings.success) {
-      await Future(() => context.read<UserProvider>().me = _userRepository.getMe());
+      await Future(
+          () => context.read<UserProvider>().me = _userRepository.getMe());
       Get.offAllNamed("/main");
     } else {
       Get.offAllNamed("/auth/landing");

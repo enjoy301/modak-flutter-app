@@ -15,7 +15,7 @@ class AuthRegisterVM extends ChangeNotifier {
   ];
 
   Future<void> init() async {
-    _userRepository = await UserRepository.create();
+    _userRepository = UserRepository();
 
     _name = _userRepository.getName() ?? "";
     _birthDay = _userRepository.getBirthDay();
@@ -36,11 +36,17 @@ class AuthRegisterVM extends ChangeNotifier {
   bool _isOperatingPolicyAgreed = false;
 
   int get page => _page;
+
   String get name => _name;
+
   DateTime? get birthDay => _birthDay;
+
   bool get isLunar => _isLunar;
+
   String get role => _role;
+
   bool get isPrivateInformationAgreed => _isPrivateInformationAgreed;
+
   bool get isOperatingPolicyAgreed => _isOperatingPolicyAgreed;
 
   set name(String name) {

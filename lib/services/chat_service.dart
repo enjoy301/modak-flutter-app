@@ -1,19 +1,16 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:modak_flutter_app/data/model/chat.dart';
-import 'package:modak_flutter_app/provider/chat_provider.dart';
-import 'package:modak_flutter_app/utils/prefs_util.dart';
-import 'package:provider/provider.dart';
 
 import '../constant/strings.dart';
 import '../data/datasource/remote_datasource.dart';
 
 Future<Map<String, dynamic>> sendMedia(
-    MultipartFile? file, String type, int imageCount) async {
+  MultipartFile? file,
+  String type,
+  int imageCount,
+) async {
   if (file == null) {
     return {"result": "FAIL", "message": "FILE_NULL"};
   }

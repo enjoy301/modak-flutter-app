@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/repository/home_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
@@ -10,12 +9,12 @@ import 'package:provider/provider.dart';
 
 class HomeProvider extends ChangeNotifier {
   init() async {
-    _homeRepository = await HomeRepository.create();
+    _homeRepository = HomeRepository();
     await getHomeInfo();
     await getTodayTalk(DateTime.now());
   }
 
-  HomeRepository? _homeRepository;
+  static late final HomeRepository _homeRepository;
   String? familyCode;
   String? todayFortune;
   final Map<String, Map<int, String>> todayTalkMap = {};
@@ -36,7 +35,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<bool> getHomeInfo() async {
-    Map<String, dynamic> response = await _homeRepository!.getHomeInfo();
+    Map<String, dynamic> response = await _homeRepository.getHomeInfo();
     if (response[Strings.message] == Strings.success) {
       familyCode = response[Strings.response][Strings.familyCode];
       todayFortune =
@@ -48,7 +47,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<bool> getTodayFortune() async {
-    Map<String, dynamic> response = await _homeRepository!.getTodayFortune();
+    Map<String, dynamic> response = await _homeRepository.getTodayFortune();
     if (response[Strings.message] == Strings.success) {
       todayFortune = response[Strings.response][Strings.todayFortune];
       notifyListeners();
@@ -68,10 +67,11 @@ class HomeProvider extends ChangeNotifier {
     String lastDateString = getFormattedDate(dateTime: lastDate);
 
     Map<String, dynamic> response =
-        await _homeRepository!.getTodayTalk(firstDateString, lastDateString);
+        await _homeRepository.getTodayTalk(firstDateString, lastDateString);
     switch (response[Strings.message]) {
       case Strings.success:
-        Map<String, Map<int, String>> todayTalkWeekMap = response[Strings.response][Strings.todayTalk];
+        Map<String, Map<int, String>> todayTalkWeekMap =
+            response[Strings.response][Strings.todayTalk];
         for (String date in todayTalkWeekMap.keys) {
           todayTalkMap[date] = todayTalkWeekMap[date]!;
         }
@@ -89,7 +89,7 @@ class HomeProvider extends ChangeNotifier {
   Future<bool> postTodayTalk(BuildContext context, String content) async {
     String date = getFormattedDate();
     Map<String, dynamic> response =
-        await _homeRepository!.postTodayTalk(content);
+        await _homeRepository.postTodayTalk(content);
     switch (response[Strings.message]) {
       case Strings.success:
         if (todayTalkMap[date] == null) todayTalkMap[date] = <int, String>{};

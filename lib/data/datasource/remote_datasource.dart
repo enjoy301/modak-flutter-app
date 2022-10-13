@@ -21,7 +21,16 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 typedef RequestFunction = Future<Response<dynamic>> Function();
 
 class RemoteDataSource {
+  RemoteDataSource._privateConstructor();
+  static final RemoteDataSource _instance =
+      RemoteDataSource._privateConstructor();
+
+  factory RemoteDataSource() {
+    return _instance;
+  }
+
   static final storage = FlutterSecureStorage();
+
   /**
    *
    * 유저 관련 함수들
@@ -29,52 +38,84 @@ class RemoteDataSource {
    */
 
   /// 회원가입을 요청하는 함수
-  Future<Map<String, dynamic>> signUp(String name, String birthDay, int isLunar,
-      String role, String fcmToken, int familyId) async {
-    return _tryRequest(() async {
-      return await Dio(BaseOptions(headers: {
-        Strings.headerHost: "www.never.com",
-      })).post("${dotenv.get(Strings.apiEndPoint)}/api/v2/auth", data: {
-        Strings.providerName: await storage.read(key: Strings.providerName),
-        Strings.providerId: await storage.read(key: Strings.providerId),
-        Strings.name: name,
-        Strings.birthDay: birthDay,
-        Strings.isLunar: isLunar,
-        Strings.role: role,
-        Strings.fcmToken: "fcmToken",
-        Strings.familyId: -1,
-      });
-    });
+  Future<Map<String, dynamic>> signUp(
+    String name,
+    String birthDay,
+    int isLunar,
+    String role,
+    String fcmToken,
+    int familyId,
+  ) async {
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            headers: {
+              Strings.headerHost: "www.never.com",
+            },
+          ),
+        ).post(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/auth",
+          data: {
+            Strings.providerName: await storage.read(key: Strings.providerName),
+            Strings.providerId: await storage.read(key: Strings.providerId),
+            Strings.name: name,
+            Strings.birthDay: birthDay,
+            Strings.isLunar: isLunar,
+            Strings.role: role,
+            Strings.fcmToken: "fcmToken",
+            Strings.familyId: -1,
+          },
+        );
+      },
+    );
   }
 
   /// 토큰 로그인을 시도하는 함수
   Future<Map<String, dynamic>> tokenLogin() async {
-    return _tryRequest(() async {
-      return await Dio(BaseOptions(headers: {
-        Strings.headerHost: "www.never.com",
-        Strings.headerRefreshToken:
-            await storage.read(key: Strings.refreshToken),
-      })).get("${dotenv.get(Strings.apiEndPoint)}/api/v2/auth/login/token");
-    },
-        isUpdatingAccessToken: true,
-        isUpdatingRefreshToken: true,
-        isUpdatingMemberId: true,
-        isUpdatingFamilyId: true);
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            headers: {
+              Strings.headerHost: "www.never.com",
+              Strings.headerRefreshToken:
+                  await storage.read(key: Strings.refreshToken),
+            },
+          ),
+        ).get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/auth/login/token",
+        );
+      },
+      isUpdatingAccessToken: true,
+      isUpdatingRefreshToken: true,
+      isUpdatingMemberId: true,
+      isUpdatingFamilyId: true,
+    );
   }
 
   /// 소셜 로그인을 시도하는 함수
   Future<Map<String, dynamic>> socialLogin() async {
-    return _tryRequest(() async {
-      return await Dio(BaseOptions(headers: {
-        Strings.headerProviderName:
-            await storage.read(key: Strings.providerName),
-        Strings.headerProviderId: await storage.read(key: Strings.providerId),
-      })).get("${dotenv.get(Strings.apiEndPoint)}/api/v2/auth/login/social");
-    },
-        isUpdatingAccessToken: true,
-        isUpdatingRefreshToken: true,
-        isUpdatingMemberId: true,
-        isUpdatingFamilyId: true);
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            headers: {
+              Strings.headerProviderName:
+                  await storage.read(key: Strings.providerName),
+              Strings.headerProviderId:
+                  await storage.read(key: Strings.providerId),
+            },
+          ),
+        ).get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/auth/login/social",
+        );
+      },
+      isUpdatingAccessToken: true,
+      isUpdatingRefreshToken: true,
+      isUpdatingMemberId: true,
+      isUpdatingFamilyId: true,
+    );
   }
 
   /// 카카오 로그인을 시도하는 함수
@@ -86,8 +127,14 @@ class RemoteDataSource {
         await kakao.UserApi.instance.loginWithKakaoAccount();
       }
       kakao.User user = await kakao.UserApi.instance.me();
-      storage.write(key: Strings.providerName, value: "KAKAO");
-      storage.write(key: Strings.providerId, value: user.id.toString());
+      storage.write(
+        key: Strings.providerName,
+        value: "KAKAO",
+      );
+      storage.write(
+        key: Strings.providerId,
+        value: user.id.toString(),
+      );
     } catch (e) {
       return false;
     }
@@ -105,11 +152,13 @@ class RemoteDataSource {
         webAuthenticationOptions: WebAuthenticationOptions(
           clientId: "modak.wowbros.com",
           redirectUri: Uri.parse(
-              "https://fluorescent-hip-reason.glitch.me/callbacks/sign_in_with_apple"),
+            "https://fluorescent-hip-reason.glitch.me/callbacks/sign_in_with_apple",
+          ),
         ),
       );
-      Map<String, dynamic> tokenParsed =
-          Jwt.parseJwt(appleCredential.identityToken!);
+      Map<String, dynamic> tokenParsed = Jwt.parseJwt(
+        appleCredential.identityToken!,
+      );
       String userId = tokenParsed['sub'];
       storage.write(key: Strings.providerName, value: "APPLE");
       storage.write(key: Strings.providerId, value: userId);
@@ -121,52 +170,71 @@ class RemoteDataSource {
 
   /// 나에 대한 정보를 요청하는 함수
   Future<Map<String, dynamic>> getMeInfo(String accessToken, int userId) async {
-    return _tryRequest(() async {
-      return await Dio(BaseOptions(headers: {
-        Strings.headerAccessToken: accessToken,
-      })).get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/member/${userId.toString()}");
-    });
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            headers: {
+              Strings.headerAccessToken: accessToken,
+            },
+          ),
+        ).get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/member/${userId.toString()}",
+        );
+      },
+    );
   }
 
   /// 유저 정보를 업데이트 하는 함수
   Future<Map<String, dynamic>> updateMeInfo(User user) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth
-          .put("${dotenv.get(Strings.apiEndPoint)}/api/v2/member", data: {
-        Strings.name: user.name,
-        Strings.birthDay: user.birthDay,
-        Strings.isLunar: user.isLunar ? 1 : 0,
-        Strings.role: user.role,
-        Strings.color: user.color,
-      });
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/member",
+          data: {
+            Strings.name: user.name,
+            Strings.birthDay: user.birthDay,
+            Strings.isLunar: user.isLunar ? 1 : 0,
+            Strings.role: user.role,
+            Strings.color: user.color,
+          },
+        );
+      },
+    );
   }
 
   /// 나의 태그 정보를 업데이트 하는 함수
   Future<Map<String, dynamic>> updateMeTag(List<String> timeTags) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth
-          .put("${dotenv.get(Strings.apiEndPoint)}/api/v2/member/tags", data: {
-        "tags": timeTags,
-      });
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/tags",
+          data: {
+            "tags": timeTags,
+          },
+        );
+      },
+    );
   }
 
   /// 가족 아이디를 변경하는 함수
   Future<Map<String, dynamic>> updateFamilyId(String familyCode) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.put(
-        "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/invitations",
-        data: {
-          Strings.invitationCode: familyCode,
-        },
-      );
-    }, isUpdatingFamilyId: true);
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/member/invitations",
+          data: {
+            Strings.invitationCode: familyCode,
+          },
+        );
+      },
+      isUpdatingFamilyId: true,
+    );
   }
+
   /**
    *
    * 홈 정보 관련 함수들
@@ -175,64 +243,88 @@ class RemoteDataSource {
 
   /// 홈 정보를 요청하는 함수
   Future<Map<String, dynamic>> getHomeInfo() {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      print("시작");
-      return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/home?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+
+        return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/home?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}",
+        );
+      },
+    );
   }
 
   /// 오늘의 한 마디를 조회하는 함수
   Future<Map<String, dynamic>> getTodayTalk(String fromDate, String toDate) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.get(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate");
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+
+        return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",
+        );
+      },
+    );
   }
 
   /// 오늘의 한 마디를 등록하는 함수
   Future<Map<String, dynamic>> postTodayTalk(String content) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth
-          .post("${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk", data: {
-        Strings.content: content,
-        Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-      });
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.post(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk",
+          data: {
+            Strings.content: content,
+            Strings.date: DateFormat("yyyy-MM-dd").format(
+              DateTime.now(),
+            ),
+          },
+        );
+      },
+    );
   }
 
   /// 오늘의 한 마디를 수정하는 함수
   Future<Map<String, dynamic>> updateTodayTalk(String content) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth
-          .put("${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk", data: {
-        Strings.content: content,
-        Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-      });
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.put(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk",
+          data: {
+            Strings.content: content,
+            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+          },
+        );
+      },
+    );
   }
 
   /// 오늘의 한 마디를 삭제하는 함수
   Future<Map<String, dynamic>> deleteTodayTalk() {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.delete(
-          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}");
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.delete(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-talk?${Strings.date}=${DateFormat("yyyy-MM-dd").format(DateTime.now())}",
+        );
+      },
+    );
   }
 
   /// 오늘의 운세를 가져오는 함수
   Future<Map<String, dynamic>> getTodayFortune() {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth
-          .get("${dotenv.get(Strings.apiEndPoint)}/api/v2/today-fortune");
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/today-fortune",
+        );
+      },
+    );
   }
+
   /**
    *
    * 할 일 관련 함수들
@@ -241,38 +333,53 @@ class RemoteDataSource {
 
   /// 할 일 정보를 요청하는 함수
   Future<Map<String, dynamic>> getTodos(String fromDate, String toDate) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.get(
-        "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",
-      );
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo?${Strings.fromDate}=$fromDate&${Strings.toDate}=$toDate",
+        );
+      },
+    );
   }
 
   /// 할 일을 등록하는 함수
   Future<Map<String, dynamic>> postTodo(
-      Todo todo, String fromDate, String toDate) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.post("${dotenv.get(Strings.apiEndPoint)}/api/v2/todo", data: {
-        Strings.memberId: await storage.read(key: Strings.memberId),
-        Strings.title: todo.title,
-        Strings.timeTag: todo.timeTag,
-        Strings.repeat: todo.repeat,
-        Strings.memo: todo.memo,
-        Strings.date: todo.date,
-        Strings.fromDate: fromDate,
-        Strings.toDate: toDate,
-      });
-    });
+    Todo todo,
+    String fromDate,
+    String toDate,
+  ) {
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.post(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo",
+          data: {
+            Strings.memberId: await storage.read(key: Strings.memberId),
+            Strings.title: todo.title,
+            Strings.timeTag: todo.timeTag,
+            Strings.repeat: todo.repeat,
+            Strings.memo: todo.memo,
+            Strings.date: todo.date,
+            Strings.fromDate: fromDate,
+            Strings.toDate: toDate,
+          },
+        );
+      },
+    );
   }
 
   /// 할 일을 업데이트 하는 함수
   Future<Map<String, dynamic>> updateTodo(
-      Todo todo, int isAfterUpdate, String fromDate, String toDate) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.put(
+    Todo todo,
+    int isAfterUpdate,
+    String fromDate,
+    String toDate,
+  ) {
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.put(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}",
           data: {
             Strings.memberId: await storage.read(key: Strings.memberId),
@@ -284,40 +391,56 @@ class RemoteDataSource {
             Strings.fromDate: fromDate,
             Strings.toDate: toDate,
             Strings.isAfterUpdate: isAfterUpdate,
-          });
-    });
+          },
+        );
+      },
+    );
   }
 
   /// 할 일을 완료 함수
   Future<Map<String, dynamic>> doneTodo(
-      Todo todo, int isDone, String fromDate, String toDate) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.put(
+    Todo todo,
+    int isDone,
+    String fromDate,
+    String toDate,
+  ) {
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.put(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}/done",
           data: {
             Strings.date: todo.date,
             Strings.fromDate: fromDate,
             Strings.toDate: toDate,
             Strings.isDone: isDone,
-          });
-    });
+          },
+        );
+      },
+    );
   }
 
   /// 할 일을 제거하는 함수
   Future<Map<String, dynamic>> deleteTodo(
-      Todo todo, int isAfterUpdate, String fromDate, String toDate) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.delete(
+    Todo todo,
+    int isAfterUpdate,
+    String fromDate,
+    String toDate,
+  ) {
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.delete(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}",
           data: {
             Strings.date: todo.date,
             Strings.fromDate: fromDate,
             Strings.toDate: toDate,
             Strings.isAfterDelete: isAfterUpdate,
-          });
-    });
+          },
+        );
+      },
+    );
   }
 
   /**
@@ -325,66 +448,80 @@ class RemoteDataSource {
    * 채팅 함수
    *
    */
-
   /// 편지들을 조회하는 함수
   Future<Map<String, dynamic>> getLetters() {
     return _tryRequest(
       () async {
         final Dio auth = await authDio();
-        return auth.get("${dotenv.get(Strings.apiEndPoint)}/api/v2/letter");
+        return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/letter",
+        );
       },
     );
   }
 
   /// 편지를 발송하는 함수
   Future<Map<String, dynamic>> sendLetter(Letter letter) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth
-          .post("${dotenv.get(Strings.apiEndPoint)}/api/v2/letter", data: {
-        Strings.content: letter.content,
-        Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
-        Strings.toMemberId: letter.toMemberId,
-        Strings.envelope: letter.envelope.toString(),
-      });
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.post(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/letter",
+          data: {
+            Strings.content: letter.content,
+            Strings.date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+            Strings.toMemberId: letter.toMemberId,
+            Strings.envelope: letter.envelope.toString(),
+          },
+        );
+      },
+    );
   }
 
   // 채팅 목록 불러오는 함수
   Future<Map<String, dynamic>> getChats(int count, int lastId) {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth.get(
-        "${dotenv.get(Strings.apiEndPoint)}/api/v2/message/chats?count=$count&lastId=$lastId",
-      );
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/message/chats?count=$count&lastId=$lastId",
+        );
+      },
+    );
   }
 
   // 커넥션 목록 불러오는 함수
   Future<Map<String, dynamic>> getConnections() {
-    return _tryRequest(() async {
-      final Dio auth = await authDio();
-      return auth
-          .get("${dotenv.get(Strings.apiEndPoint)}/api/v2/message/connections");
-    });
+    return _tryRequest(
+      () async {
+        final Dio auth = await authDio();
+        return auth.get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/message/connections",
+        );
+      },
+    );
   }
 
   // 채팅 보내는 함수
   Future<Map<String, dynamic>> postChat(String chat) {
-    return _tryRequest(() async {
-      log("${await storage.read(key: Strings.memberId)}");
-      log("${await storage.read(key: Strings.familyId)}");
-      final Dio dio = Dio();
-      return dio.post(
-        "https://api.modak-talk.com/message",
-        data: {
-          "user_id": int.parse((await storage.read(key: Strings.memberId))!),
-          "family_id": int.parse((await storage.read(key: Strings.familyId))!),
-          "content": chat,
-          "metadata": {"type_code": "plain"},
-        },
-      );
-    });
+    return _tryRequest(
+      () async {
+        final Dio dio = Dio();
+        return dio.post(
+          "https://api.modak-talk.com/message",
+          data: {
+            "user_id": int.parse(
+              (await storage.read(key: Strings.memberId))!,
+            ),
+            "family_id": int.parse(
+              (await storage.read(key: Strings.familyId))!,
+            ),
+            "content": chat,
+            "metadata": {"type_code": "plain"},
+          },
+        );
+      },
+    );
   }
 
   /**
@@ -392,40 +529,52 @@ class RemoteDataSource {
    * 보조 함수들
    *
    */
-
   /// accessToken, refresh Token 검증하는 과정이 포함된 Dio
   /// accessToken 을 포함할 시에 아래 Dio 를 통해 요청
   Future<Dio> authDio() async {
     final Dio dio = Dio();
-    dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (options, handler) async {
-      String? accessToken = await storage.read(key: Strings.accessToken);
-      options.headers[Strings.headerAccessToken] = accessToken;
-      return handler.next(options);
-    }, onError: (error, handler) async {
-      if (error.response?.data['code'] == "ExpiredAccessTokenException") {
-        Map<String, dynamic> response = await _reIssueAccessToken();
-        if (response[Strings.result]) {
-          await storage.write(
-              key: Strings.accessToken,
-              value: response[Strings.response]
-                  .headers[Strings.headerAccessToken]![0]);
-          final clonedRequest = await Dio().request(error.requestOptions.path,
-              options: Options(method: error.requestOptions.method, headers: {
-                Strings.headerAccessToken:
-                    await storage.read(key: Strings.accessToken),
-              }),
-              data: error.requestOptions.data,
-              queryParameters: error.requestOptions.queryParameters);
-          return handler.resolve(clonedRequest);
-        }
-        if (response[Strings.message] == "ExpiredRefreshTokenException") {
-          storage.deleteAll();
-          Get.offAllNamed("/auth/landing");
-        }
-      }
-      return handler.next(error);
-    }));
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (
+          options,
+          handler,
+        ) async {
+          String? accessToken = await storage.read(key: Strings.accessToken);
+          options.headers[Strings.headerAccessToken] = accessToken;
+          return handler.next(options);
+        },
+        onError: (error, handler) async {
+          if (error.response?.data['code'] == "ExpiredAccessTokenException") {
+            Map<String, dynamic> response = await _reIssueAccessToken();
+            if (response[Strings.result]) {
+              await storage.write(
+                key: Strings.accessToken,
+                value: response[Strings.response]
+                    .headers[Strings.headerAccessToken]![0],
+              );
+              final clonedRequest = await Dio().request(
+                error.requestOptions.path,
+                options: Options(
+                  method: error.requestOptions.method,
+                  headers: {
+                    Strings.headerAccessToken:
+                        await storage.read(key: Strings.accessToken),
+                  },
+                ),
+                data: error.requestOptions.data,
+                queryParameters: error.requestOptions.queryParameters,
+              );
+              return handler.resolve(clonedRequest);
+            }
+            if (response[Strings.message] == "ExpiredRefreshTokenException") {
+              storage.deleteAll();
+              Get.offAllNamed("/auth/landing");
+            }
+          }
+          return handler.next(error);
+        },
+      ),
+    );
 
     return dio;
   }
@@ -443,26 +592,29 @@ class RemoteDataSource {
       response = await function.call();
       if (isUpdatingAccessToken) {
         await storage.write(
-            key: Strings.accessToken,
-            value: response.headers[Strings.headerAccessToken]![0]);
+          key: Strings.accessToken,
+          value: response.headers[Strings.headerAccessToken]![0],
+        );
       }
       if (isUpdatingRefreshToken) {
         await storage.write(
-            key: Strings.refreshToken,
-            value: response.headers[Strings.headerRefreshToken]![0]);
+          key: Strings.refreshToken,
+          value: response.headers[Strings.headerRefreshToken]![0],
+        );
       }
       if (isUpdatingMemberId) {
-        print(response.data);
         await storage.write(
-            key: Strings.memberId,
-            value: response.data['data']['memberResult'][Strings.memberId]
-                .toString());
+          key: Strings.memberId,
+          value: response.data['data']['memberResult'][Strings.memberId]
+              .toString(),
+        );
       }
       if (isUpdatingFamilyId) {
         await storage.write(
-            key: Strings.familyId,
-            value: response.data['data'][Strings.memberResult][Strings.familyId]
-                .toString());
+          key: Strings.familyId,
+          value: response.data['data'][Strings.memberResult][Strings.familyId]
+              .toString(),
+        );
       }
     } catch (e) {
       if (e is DioError) {
@@ -483,13 +635,22 @@ class RemoteDataSource {
 
   /// accessToken 재발급을 요청하는 함수
   Future<Map<String, dynamic>> _reIssueAccessToken() async {
-    return _tryRequest(() async {
-      return await Dio(BaseOptions(headers: {
-        Strings.headerHost: "www.never.com",
-        Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
-        Strings.headerRefreshToken:
-            await storage.read(key: Strings.refreshToken),
-      })).get("${dotenv.get(Strings.apiEndPoint)}/api/v2/token/reissue");
-    });
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            headers: {
+              Strings.headerHost: "www.never.com",
+              Strings.headerAccessToken:
+                  await storage.read(key: Strings.accessToken),
+              Strings.headerRefreshToken:
+                  await storage.read(key: Strings.refreshToken),
+            },
+          ),
+        ).get(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/token/reissue",
+        );
+      },
+    );
   }
 }

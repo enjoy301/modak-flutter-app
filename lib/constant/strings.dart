@@ -72,32 +72,14 @@ class Strings {
   static const String fromMemberId = "fromMemberId";
   static const String toMemberId = "toMemberId";
   static const String sizeSettings = "sizeSettings";
-  static const String todoAlarmReceive = "todoAlarmReceive";
-  static const String chatAlarmReceive = "chatAlarmReceive";
+  static const String isTodoAlarmReceive = "isTodoAlarmReceive";
+  static const String isChatAlarmReceive = "isChatAlarmReceive";
+
   /// role
   static const String dad = "DAD";
   static const String mom = "MOM";
   static const String son = "SON";
   static const String dau = "DAU";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   static const String privateInformation =
       """개인정보카카오아이엑스 주식회사(이하 “회사”)는 이용자의 개인정보를 매우 중요하게 여기며, 개인정보의 수집, 이용, 제공이 필요한 경우에는 이용자의 동의를 기반으로 하여 이용자의 개인정보 자기결정 권리를 보장합니다.

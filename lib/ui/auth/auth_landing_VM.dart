@@ -8,11 +8,13 @@ class AuthLandingVM extends ChangeNotifier {
   AuthLandingVM() {
     _init();
   }
+
   _init() async {
-    userRepository = await UserRepository.create();
+    userRepository = UserRepository();
   }
 
   late final UserRepository? userRepository;
+
   void onSocialClick(String type) async {
     Map<String, dynamic> response = await userRepository!.socialLogin(type);
     switch (response[Strings.message]) {

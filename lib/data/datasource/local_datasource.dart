@@ -4,21 +4,22 @@ import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/model/user.dart';
 
 class LocalDataSource {
-  LocalDataSource._create();
+  LocalDataSource._privateConstructor();
+  static final LocalDataSource _instance =
+      LocalDataSource._privateConstructor();
 
-  static Future<LocalDataSource> create() async {
-    LocalDataSource localDataSource = LocalDataSource._create();
-    return localDataSource;
+  factory LocalDataSource() {
+    return _instance;
   }
 
   static Box authBox = Hive.box("auth");
   static Box userBox = Hive.box("user");
   static Box todoBox = Hive.box("todo");
-  static Box chatBox = Hive.box("chat");
-  static Box albumBox = Hive.box("album");
+  // static Box chatBox = Hive.box("chat");
+  // static Box albumBox = Hive.box("album");
 
   /// auth
-  /// get
+  /// └ getters
   String? getName() {
     String? name = authBox.get(Strings.name);
     return name;
@@ -45,18 +46,32 @@ class LocalDataSource {
   }
 
   /// auth
-  /// set
+  /// └ setters
   Future<bool> updateName(String name) async {
-    return tryFunction(() async => await authBox.put(Strings.name, name));
+    return tryFunction(
+      () async => await authBox.put(
+        Strings.name,
+        name,
+      ),
+    );
   }
 
   Future<bool> updateBirthDay(String birthDay) async {
     return tryFunction(
-        () async => await authBox.put(Strings.birthDay, birthDay));
+      () async => await authBox.put(
+        Strings.birthDay,
+        birthDay,
+      ),
+    );
   }
 
   Future<bool> updateIsLunar(bool isLunar) async {
-    return tryFunction(() async => await authBox.put(Strings.isLunar, isLunar));
+    return tryFunction(
+      () async => await authBox.put(
+        Strings.isLunar,
+        isLunar,
+      ),
+    );
   }
 
   Future<bool> updateRole(String role) async {
@@ -64,22 +79,31 @@ class LocalDataSource {
       Strings.dad,
       Strings.mom,
       Strings.son,
-      Strings.dau
+      Strings.dau,
     ];
     if (!roleType.contains(role)) {
       Future.error("wrong type");
       return false;
     }
-    return tryFunction(() async => await authBox.put(Strings.role, role));
+    return tryFunction(
+      () async => await authBox.put(
+        Strings.role,
+        role,
+      ),
+    );
   }
 
   Future<bool> updateIsRegisterProgress(bool isRegisterProgress) async {
-    return tryFunction(() async =>
-        await authBox.put(Strings.isRegisterProgress, isRegisterProgress));
+    return tryFunction(
+      () async => await authBox.put(
+        Strings.isRegisterProgress,
+        isRegisterProgress,
+      ),
+    );
   }
 
   /// user
-  /// get
+  /// └ getters
   User? getMe() {
     User? user = userBox.get(Strings.me);
     return user;
@@ -96,18 +120,18 @@ class LocalDataSource {
     return sizeSettings;
   }
 
-  bool getTodoAlarmReceive() {
-    bool todoAlarmReceive = userBox.get(Strings.todoAlarmReceive) ?? true;
-    return todoAlarmReceive;
+  bool getIsTodoAlarmReceive() {
+    bool isTodoAlarmReceive = userBox.get(Strings.isTodoAlarmReceive) ?? true;
+    return isTodoAlarmReceive;
   }
 
-  bool getChatAlarmReceive() {
-    bool chatAlarmReceive = userBox.get(Strings.chatAlarmReceive) ?? true;
-    return chatAlarmReceive;
+  bool getIsChatAlarmReceive() {
+    bool isChatAlarmReceive = userBox.get(Strings.isChatAlarmReceive) ?? true;
+    return isChatAlarmReceive;
   }
 
   /// user
-  /// set
+  /// └ setters
   Future<bool> updateMe(User user) async {
     return tryFunction(() async => await userBox.put(Strings.me, user));
   }
@@ -122,16 +146,17 @@ class LocalDataSource {
         () async => await userBox.put(Strings.sizeSettings, sizeSettings));
   }
 
-  Future<bool> updateTodoAlarmReceive(bool todoAlarmReceive) async {
+  Future<bool> updateTodoAlarmReceive(bool isTodoAlarmReceive) async {
     return tryFunction(() async =>
-        await userBox.put(Strings.todoAlarmReceive, todoAlarmReceive));
+        await userBox.put(Strings.isTodoAlarmReceive, isTodoAlarmReceive));
   }
 
-  Future<bool> updateChatAlarmReceive(bool chatAlarmReceive) async {
+  Future<bool> updateChatAlarmReceive(bool isChatAlarmReceive) async {
     return tryFunction(() async =>
-        await userBox.put(Strings.chatAlarmReceive, chatAlarmReceive));
+        await userBox.put(Strings.isChatAlarmReceive, isChatAlarmReceive));
   }
 
+  /// util
   bool tryFunction(Function() function) {
     try {
       function.call();

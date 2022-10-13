@@ -4,15 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
 import 'package:modak_flutter_app/data/model/chat.dart';
 import 'package:modak_flutter_app/data/repository/chat_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
-import 'package:modak_flutter_app/widgets/user/user_profile_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -21,10 +18,10 @@ import '../constant/strings.dart';
 
 class ChatProvider extends ChangeNotifier {
   init() async {
-    _chatRepository = await ChatRepository.create();
+    _chatRepository = ChatRepository();
   }
 
-  ChatRepository? _chatRepository;
+  static late final ChatRepository _chatRepository;
 
   /// PREFIX: 채팅
   late List<Chat> _chats = [];
@@ -68,7 +65,7 @@ class ChatProvider extends ChangeNotifier {
     );
 
     /// 채팅 목록 불러오기
-    Map<String, dynamic> chatResponse = await _chatRepository!.getChats(30, 0);
+    Map<String, dynamic> chatResponse = await _chatRepository.getChats(30, 0);
 
     if (chatResponse[Strings.message] == Strings.fail) {
       Fluttertoast.showToast(msg: "채팅 목록 불러오기 실패");
@@ -77,7 +74,7 @@ class ChatProvider extends ChangeNotifier {
 
     /// 현재 connection 불러오기
     Map<String, dynamic> connectionResponse =
-        await _chatRepository!.getConnections();
+        await _chatRepository.getConnections();
 
     if (connectionResponse[Strings.message] == Strings.fail) {
       Fluttertoast.showToast(msg: "커넥션 불러오기 실패");
@@ -171,7 +168,7 @@ class ChatProvider extends ChangeNotifier {
       ),
     );
 
-    Map<String, dynamic> response = await _chatRepository!.postChat(chat);
+    Map<String, dynamic> response = await _chatRepository.postChat(chat);
   }
 
   /// 채팅리스트에 뒤에 추가합니다.
@@ -210,10 +207,7 @@ class ChatProvider extends ChangeNotifier {
     if (media != null) {
       _medias.add(media);
       _thumbnailMedias.add(await getVideoThumbnail(media));
-      print(media.path);
     }
-    print(_medias.length);
-    print(_thumbnailMedias.length);
     notifyListeners();
     return true;
   }

@@ -20,7 +20,9 @@ import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class TodoModifyScreen extends StatefulWidget {
-  const TodoModifyScreen({Key? key, required this.todo, required this.isAfterUpdate}) : super(key: key);
+  const TodoModifyScreen(
+      {Key? key, required this.todo, required this.isAfterUpdate})
+      : super(key: key);
 
   final Todo todo;
   final bool isAfterUpdate;
@@ -103,7 +105,7 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                               contents: provider.manager == null
                                   ? userProvider.me!.name
                                   : provider.manager!.name,
-                              buttons: userProvider.familyMembers!
+                              buttons: userProvider.familyMembers
                                   .map((User familyMember) {
                                 return TextButton(
                                   onPressed: () {
@@ -117,22 +119,29 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                               }).toList(),
                               leftIconData: LightIcons.Profile),
                         ),
-                        provider.todo.repeatTag == null ?
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 13),
-                          child: InputDateWidget(
-                              title: "날짜",
-                              contents: provider.todo.date,
-                              onChanged: (DateTime dateTime) {
-                                provider.todo.date =
-                                    DateFormat("yyyy-MM-dd").format(dateTime);
-                                provider.notify();
-                              },
-                              minTime:
-                                  DateTime.now().subtract(Duration(days: 400)),
-                              maxTime: DateTime.now().add(Duration(days: 400)),
-                              currTime: DateTime.parse(provider.todo.date)),
-                        ) : SizedBox(height: 0, width: 0,),
+                        provider.todo.repeatTag == null
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 13),
+                                child: InputDateWidget(
+                                    title: "날짜",
+                                    contents: provider.todo.date,
+                                    onChanged: (DateTime dateTime) {
+                                      provider.todo.date =
+                                          DateFormat("yyyy-MM-dd")
+                                              .format(dateTime);
+                                      provider.notify();
+                                    },
+                                    minTime: DateTime.now()
+                                        .subtract(Duration(days: 400)),
+                                    maxTime:
+                                        DateTime.now().add(Duration(days: 400)),
+                                    currTime:
+                                        DateTime.parse(provider.todo.date)),
+                              )
+                            : SizedBox(
+                                height: 0,
+                                width: 0,
+                              ),
                         InputSelectWidget(
                           title: "언제",
                           contents: provider.todo.timeTag ?? "언제든지",

@@ -8,20 +8,21 @@ import 'package:modak_flutter_app/data/model/user.dart';
 /// message: acknowledges result of request
 
 class UserRepository {
-  UserRepository._create();
-
-  static Future<UserRepository> create() async {
-    UserRepository albumRepository = UserRepository._create();
-    localDataSource ??= await LocalDataSource.create();
-    remoteDataSource ??= RemoteDataSource();
-    return albumRepository;
+  UserRepository._privateConstructor() {
+    localDataSource = LocalDataSource();
+    remoteDataSource = RemoteDataSource();
   }
 
-  static LocalDataSource? localDataSource;
-  static RemoteDataSource? remoteDataSource;
+  factory UserRepository() {
+    return _instance;
+  }
+
+  static final UserRepository _instance = UserRepository._privateConstructor();
+  static late final LocalDataSource localDataSource;
+  static late final RemoteDataSource remoteDataSource;
 
   Future<Map<String, dynamic>> tokenLogin() async {
-    Map<String, dynamic> response = await remoteDataSource!.tokenLogin();
+    Map<String, dynamic> response = await remoteDataSource.tokenLogin();
     if (response[Strings.result]) {
       List updateResult = await updateMeAndFamilyInfo(response);
       User me = updateResult[0];
@@ -42,18 +43,20 @@ class UserRepository {
 
   Future<Map<String, dynamic>> socialLogin(String type) async {
     bool isSuccessful = false;
+
     /// 타입에 따라 성공적으로 각각의 provider 요청에 성공했는지 보는 함수
     switch (type) {
       case "KAKAO":
-        isSuccessful = await remoteDataSource!.kakaoLogin();
+        isSuccessful = await remoteDataSource.kakaoLogin();
         break;
       case "APPLE":
-        isSuccessful = await remoteDataSource!.appleLogin();
+        isSuccessful = await remoteDataSource.appleLogin();
         break;
     }
+
     /// 성공했을 때 처리하는 함수
     if (isSuccessful) {
-      Map<String, dynamic> response = await remoteDataSource!.socialLogin();
+      Map<String, dynamic> response = await remoteDataSource.socialLogin();
       if (response[Strings.result]) {
         List updateResult = await updateMeAndFamilyInfo(response);
         User me = updateResult[0];
@@ -74,18 +77,18 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> signUp() async {
-    String? name = localDataSource!.getName();
-    String? birthDay = localDataSource!.getBirthDay();
-    bool? isLunar = localDataSource!.getIsLunar() ?? false;
-    String? role = localDataSource!.getRole();
+    String? name = localDataSource.getName();
+    String? birthDay = localDataSource.getBirthDay();
+    bool? isLunar = localDataSource.getIsLunar() ?? false;
+    String? role = localDataSource.getRole();
 
     if ([name, birthDay, role].contains(null)) {
       return {Strings.message: Strings.noValue};
     }
-    Map<String, dynamic> response = await remoteDataSource!
-        .signUp(name!, birthDay!, isLunar! ? 1 : 0, role!, "fcmToken", -1);
+    Map<String, dynamic> response = await remoteDataSource.signUp(
+        name!, birthDay!, isLunar ? 1 : 0, role!, "fcmToken", -1);
     if (response[Strings.result]) {
-      await localDataSource!.updateIsRegisterProgress(false);
+      await localDataSource.updateIsRegisterProgress(false);
 
       List updateResult = await updateMeAndFamilyInfo(response);
       User me = updateResult[0];
@@ -106,9 +109,9 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> updateMeInfo(User user) async {
-    Map<String, dynamic> response = await remoteDataSource!.updateMeInfo(user);
+    Map<String, dynamic> response = await remoteDataSource.updateMeInfo(user);
     if (response[Strings.result]) {
-      await localDataSource!.updateMe(user);
+      await localDataSource.updateMe(user);
 
       /// TODO
       return {Strings.message: Strings.success};
@@ -117,11 +120,11 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> updateMeTag(List<String> tags) async {
-    Map<String, dynamic> response = await remoteDataSource!.updateMeTag(tags);
+    Map<String, dynamic> response = await remoteDataSource.updateMeTag(tags);
     if (response[Strings.result]) {
-      User? user = localDataSource!.getMe();
+      User? user = localDataSource.getMe();
       if (user != null) user.timeTags == tags;
-      localDataSource!.updateMe(user!);
+      localDataSource.updateMe(user!);
 
       return {
         Strings.response: {Strings.timeTag: tags},
@@ -133,7 +136,7 @@ class UserRepository {
 
   Future<Map<String, dynamic>> updateFamilyId(String familyCode) async {
     Map<String, dynamic> response =
-        await remoteDataSource!.updateFamilyId(familyCode);
+        await remoteDataSource.updateFamilyId(familyCode);
     print(response);
     if (response[Strings.result]) {
       return {Strings.message: Strings.success};
@@ -142,11 +145,11 @@ class UserRepository {
   }
 
   String? getName() {
-    return localDataSource!.getName();
+    return localDataSource.getName();
   }
 
   DateTime? getBirthDay() {
-    String? birthDay = localDataSource!.getBirthDay();
+    String? birthDay = localDataSource.getBirthDay();
     if (birthDay == null) {
       return null;
     }
@@ -155,72 +158,72 @@ class UserRepository {
   }
 
   bool? getIsLunar() {
-    return localDataSource!.getIsLunar();
+    return localDataSource.getIsLunar();
   }
 
   String? getRole() {
-    return localDataSource!.getRole();
+    return localDataSource.getRole();
   }
 
   bool? getIsRegisterProgress() {
-    return localDataSource!.getIsRegisterProgress();
+    return localDataSource.getIsRegisterProgress();
   }
 
   User? getMe() {
-    return localDataSource!.getMe();
+    return localDataSource.getMe();
   }
 
   List<User> getFamilyMembers() {
-    return localDataSource!.getFamilyMembers();
+    return localDataSource.getFamilyMembers();
   }
 
   int getSizeSettings() {
-    return localDataSource!.getSizeSettings();
+    return localDataSource.getSizeSettings();
   }
 
   bool getTodoAlarmReceive() {
-    return localDataSource!.getTodoAlarmReceive();
+    return localDataSource.getIsTodoAlarmReceive();
   }
 
   bool getChatAlarmReceive() {
-    return localDataSource!.getChatAlarmReceive();
+    return localDataSource.getIsChatAlarmReceive();
   }
 
   void setName(String name) async {
-    await localDataSource!.updateName(name);
+    await localDataSource.updateName(name);
   }
 
   void setBirthDay(DateTime birthDay) async {
-    await localDataSource!
+    await localDataSource
         .updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
   }
 
   void setIsLunar(bool isLunar) async {
-    await localDataSource!.updateIsLunar(isLunar);
+    await localDataSource.updateIsLunar(isLunar);
   }
 
   void setRole(String role) async {
-    await localDataSource!.updateRole(role);
+    await localDataSource.updateRole(role);
   }
 
   void setIsRegisterProgress(bool isRegisterProgress) async {
-    await localDataSource!.updateIsRegisterProgress(isRegisterProgress);
+    await localDataSource.updateIsRegisterProgress(isRegisterProgress);
   }
 
   void setMe(User user) async {
-    await localDataSource!.updateMe(user);
+    await localDataSource.updateMe(user);
   }
 
   void setSizeSettings(int sizeSettings) async {
-    await localDataSource!.updateSizeSettings(sizeSettings);
+    await localDataSource.updateSizeSettings(sizeSettings);
   }
 
   void setTodoAlarmReceive(bool todoAlarmReceive) async {
-    await localDataSource!.updateTodoAlarmReceive(todoAlarmReceive);
+    await localDataSource.updateTodoAlarmReceive(todoAlarmReceive);
   }
 
   void setChatAlarmReceive(bool chatAlarmReceive) async {
-    await localDataSource!.updateChatAlarmReceive(chatAlarmReceive);
+    await localDataSource.updateChatAlarmReceive(chatAlarmReceive);
   }
 
   Future<List> updateMeAndFamilyInfo(Map<String, dynamic> response) async {
@@ -252,8 +255,8 @@ class UserRepository {
           timeTags: []);
       familyMembers.add(familyMember);
     }
-    await localDataSource!.updateMe(me);
-    await localDataSource!.updateFamilyMember(familyMembers);
+    await localDataSource.updateMe(me);
+    await localDataSource.updateFamilyMember(familyMembers);
 
     return [me, familyMembers];
   }
