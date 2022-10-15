@@ -24,45 +24,49 @@ class _InputChatWidgetState extends State<InputChatWidget> {
         return Row(
           children: [
             IconButton(
-                onPressed: () {
-                  provider.isFunctionOpenedToggle();
-                  FocusScope.of(context).unfocus();
-                },
-                icon: Icon(
-                  LightIcons.Plus,
-                  size: 20,
-                )),
+              onPressed: () {
+                provider.isFunctionOpenedToggle();
+                FocusScope.of(context).unfocus();
+              },
+              icon: Icon(
+                LightIcons.Plus,
+                size: 20,
+              ),
+            ),
             Expanded(
-                child: Container(
-              margin: EdgeInsets.symmetric(vertical: 6),
-              constraints: BoxConstraints(maxHeight: 100),
-              child: TextField(
-                style: TextStyle(
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 6),
+                constraints: BoxConstraints(maxHeight: 100),
+                child: TextField(
+                  style: TextStyle(
                     fontSize: Font.size_largeText,
-                    fontWeight: Font.weight_regular),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                controller: textEditingController,
-                onTap: () {
-                  provider.setIsFunctionOpened(false);
-                },
-                onChanged: (String chat) {
-                  provider.setCurrentMyChat(chat);
-                },
-                decoration: InputDecoration(
-                  hintText: "메시지를 입력하세요",
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 6, horizontal: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(17),
+                    fontWeight: Font.weight_regular,
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  controller: textEditingController,
+                  onTap: () {
+                    provider.setIsFunctionOpened(false);
+                  },
+                  onChanged: (String chat) {
+                    provider.setCurrentMyChat(chat);
+                  },
+                  decoration: InputDecoration(
+                    hintText: "메시지를 입력하세요",
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 6, horizontal: 14),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(17),
+                    ),
+                    focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Coloring.gray_10),
-                      borderRadius: BorderRadius.circular(17)),
+                      borderRadius: BorderRadius.circular(17),
+                    ),
+                  ),
                 ),
               ),
-            )),
-            provider.currentMyChat != ""
+            ),
+            provider.currentMyChat.trim() != ""
                 ? IconButton(
                     onPressed: () {
                       provider.postChat(
@@ -85,7 +89,10 @@ class _InputChatWidgetState extends State<InputChatWidget> {
                     },
                     icon: provider.isEmotionOpened
                         ? IconGradientWidget(
-                            DarkIcons.Heart, 20, Coloring.sub_purple)
+                            DarkIcons.Heart,
+                            20,
+                            Coloring.sub_purple,
+                          )
                         : Icon(
                             LightIcons.Heart,
                             size: 20,
@@ -99,6 +106,7 @@ class _InputChatWidgetState extends State<InputChatWidget> {
 
   @override
   void initState() {
+    super.initState();
     textEditingController.text = context.read<ChatProvider>().currentMyChat;
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
@@ -36,14 +37,16 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
       'icon': LightIcons.Work,
       'color': Coloring.bg_orange,
     },
-    {'name': "룰렛", 'icon': LightIcons.TicketStar, 'color': Coloring.bg_yellow},
-    {'name': "위치 공유", 'icon': LightIcons.Location, 'color': Coloring.bg_purple},
     {
-      'name': "편지 보내기",
+      'name': "룰렛",
+      'icon': LightIcons.TicketStar,
+      'color': Coloring.bg_yellow,
+    },
+    {
+      'name': "편지",
       'icon': LightIcons.Calendar,
       'color': Coloring.point_pureorange
     },
-    {'name': "할 일 공유", 'icon': LightIcons.Plus, 'color': Coloring.gray_30},
   ];
   @override
   Widget build(BuildContext context) {
@@ -52,10 +55,9 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
         return GridView(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-
-              /// TODO 화면 비율에 따라 짤리지 않도록 변경
-              childAspectRatio: 0.8,
-              crossAxisCount: 4),
+            childAspectRatio: 0.8,
+            crossAxisCount: 4,
+          ),
           children: [
             ChatFunctionIconWidget(
               data: functionIconWidgetValues[0],
@@ -72,53 +74,45 @@ class _FunctionLandingWidgetState extends State<FunctionLandingWidget> {
             ChatFunctionIconWidget(
               data: functionIconWidgetValues[1],
               onTap: () async {
-                defaultModalWidget(context, [
-                  TextButton(
-                      onPressed: () async {
-                        Future(() => Navigator.pop(context));
+                defaultModalWidget(
+                  context,
+                  [
+                    TextButton(
+                        onPressed: () async {
+                          Future(() => Navigator.pop(context));
 
-                        dio.MultipartFile? image = await getImageFromCamera();
-                        provider.postMedia(image, "png", 1);
-                      },
-                      child: Text("사진 찍기")),
-                  TextButton(
-                      onPressed: () async {
-                        Future(() => Navigator.pop(context));
-                        dio.MultipartFile? video = await getVideoFromCamera();
-                        provider.postMedia(video, "mp4", 0);
-                      },
-                      child: Text("동영상 촬영"))
-                ]);
+                          dio.MultipartFile? image = await getImageFromCamera();
+                          provider.postMedia(image, "png", 1);
+                        },
+                        child: Text("사진 찍기")),
+                    TextButton(
+                        onPressed: () async {
+                          Future(() => Navigator.pop(context));
+                          dio.MultipartFile? video = await getVideoFromCamera();
+                          provider.postMedia(video, "mp4", 0);
+                        },
+                        child: Text("동영상 촬영"))
+                  ],
+                );
               },
             ),
             ChatFunctionIconWidget(
               data: functionIconWidgetValues[2],
               onTap: () {
-                provider.setFunctionState(FunctionState.onWay);
+                log("오는 길에~");
+                // provider.setFunctionState(FunctionState.onWay);
               },
             ),
             ChatFunctionIconWidget(
               data: functionIconWidgetValues[3],
               onTap: () {
-                print(4);
+                log("룰렛 돌리기~");
               },
             ),
             ChatFunctionIconWidget(
               data: functionIconWidgetValues[4],
               onTap: () {
-                print(5);
-              },
-            ),
-            ChatFunctionIconWidget(
-              data: functionIconWidgetValues[5],
-              onTap: () {
                 Get.toNamed("/chat/letter/landing");
-              },
-            ),
-            ChatFunctionIconWidget(
-              data: functionIconWidgetValues[6],
-              onTap: () {
-                print(7);
               },
             ),
           ],
