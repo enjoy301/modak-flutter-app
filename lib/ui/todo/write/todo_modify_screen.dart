@@ -51,6 +51,7 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
             if (!loaded) {
               loaded = true;
               provider.todo = widget.todo;
+              provider.manager = userProvider.findUserById(provider.todo.memberId);
               provider.isAfterUpdate = widget.isAfterUpdate;
               titleController.text = provider.todo.title;
               memoController.text = provider.todo.memo ?? "";

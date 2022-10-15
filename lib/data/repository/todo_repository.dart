@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
@@ -23,14 +25,11 @@ class TodoRepository {
   Future<Map<String, dynamic>> getTodos(String fromDate, String toDate) async {
     Map<String, dynamic> response =
         await remoteDataSource.getTodos(fromDate, toDate);
-    print(response['response']);
     if (response[Strings.result]) {
+      Map<String, dynamic> data = response[Strings.response].data["data"];
       return {
-        Strings.response: {
-          "color": response["response"].data["data"]["color"],
-          "items": response["response"].data["data"]["items"],
-        },
-        Strings.message: Strings.success
+        Strings.response: data,
+        Strings.message: Strings.success,
       };
     }
     return {Strings.message: Strings.fail};
@@ -44,12 +43,10 @@ class TodoRepository {
     Map<String, dynamic> response =
         await remoteDataSource.postTodo(todo, fromDate, toDate);
     if (response[Strings.result]) {
+      Map<String, dynamic> data = response[Strings.response].data["data"]["updateLists"];
       return {
         Strings.message: Strings.success,
-        Strings.response: {
-          "color": response["response"].data["data"]["updateLists"]["color"],
-          "items": response["response"].data["data"]["updateLists"]["items"],
-        },
+        Strings.response: data,
       };
     }
     return {Strings.message: Strings.fail};
@@ -60,12 +57,10 @@ class TodoRepository {
     Map<String, dynamic> response =
         await remoteDataSource.doneTodo(todo, isDone ? 1 : 0, fromDate, toDate);
     if (response[Strings.result]) {
+      Map<String, dynamic> data = response[Strings.response].data["data"]["updateLists"];
       return {
         Strings.message: Strings.success,
-        Strings.response: {
-          "color": response["response"].data["data"]["updateLists"]["color"],
-          "items": response["response"].data["data"]["updateLists"]["items"],
-        },
+        Strings.response: data,
       };
     }
     return {Strings.message: Strings.fail};
@@ -77,12 +72,10 @@ class TodoRepository {
         todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
 
     if (response[Strings.result]) {
+      Map<String, dynamic> data = response[Strings.response].data["data"];
       return {
         Strings.message: Strings.success,
-        Strings.response: {
-          "color": response["response"].data["data"]["color"],
-          "items": response["response"].data["data"]["items"],
-        },
+        Strings.response: data,
       };
     }
     return {Strings.message: Strings.fail};
@@ -93,12 +86,10 @@ class TodoRepository {
     Map<String, dynamic> response = await remoteDataSource.deleteTodo(
         todo, isAfterUpdate ? 1 : 0, fromDate, toDate);
     if (response[Strings.result]) {
+      Map<String, dynamic> data = response[Strings.response].data["data"];
       return {
         Strings.message: Strings.success,
-        Strings.response: {
-          "color": response["response"].data["data"]["color"],
-          "items": response["response"].data["data"]["items"],
-        },
+        Strings.response: data,
       };
     }
     return {Strings.message: Strings.fail};
