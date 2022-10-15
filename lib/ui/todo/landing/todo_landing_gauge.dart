@@ -16,13 +16,13 @@ class _TodoLandingGaugeState extends State<TodoLandingGauge> {
   @override
   Widget build(BuildContext context) {
     var total = 100;
-    return Consumer<TodoProvider>(builder: (context, provider, child) {
+    return Consumer<TodoProvider>(builder: (context, todoProvider, child) {
       return Padding(
         padding: const EdgeInsets.only(top: 24, right: 30, left: 30),
         child: Column(
           children: [
             LinearPercentIndicator(
-              percent: provider.todoCount / total,
+              percent: (todoProvider.todoCount % total) / total,
               lineHeight: 10,
               backgroundColor: Coloring.gray_40,
               linearGradient: Coloring.sub_purple as LinearGradient,
@@ -30,13 +30,13 @@ class _TodoLandingGaugeState extends State<TodoLandingGauge> {
             ),
             Row(
               children: [
-                Text("0",
+                Text((total * (todoProvider.todoCount ~/ 100)).toString(),
                     style: TextStyle(
                       color: Coloring.gray_10,
                       fontSize: Font.size_caption,
                       fontWeight: Font.weight_regular,
                     )),
-                Expanded(flex: provider.todoCount, child: Text("")),
+                Expanded(flex: todoProvider.todoCount % 100, child: Text("")),
                 Text(
                   context.watch<TodoProvider>().todoCount.toString(),
                   style: TextStyle(
@@ -45,9 +45,9 @@ class _TodoLandingGaugeState extends State<TodoLandingGauge> {
                     fontWeight: Font.weight_regular,
                   ),
                 ),
-                Expanded(flex: total - provider.todoCount, child: Text("")),
+                Expanded(flex: total * (todoProvider.todoCount ~/ 100 + 1).toInt() - todoProvider.todoCount, child: Text("")),
                 Text(
-                  total.toString(),
+                  (total * (todoProvider.todoCount / 100 + 1).toInt()).toString(),
                   style: TextStyle(
                     color: Coloring.gray_10,
                     fontSize: Font.size_caption,

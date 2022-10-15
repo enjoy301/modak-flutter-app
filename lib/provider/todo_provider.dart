@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -28,15 +30,13 @@ class TodoProvider extends ChangeNotifier {
   DateTime todoSavedToDate = DateUtils.dateOnly(DateTime.now());
   DateTime _focusedDateTime = DateTime.now();
   DateTime _selectedDateTime = DateTime.now();
-  int todoCount = 0;
+  int _todoCount = 0;
 
   Map<String, List<String>> get colorMap => _colorMap;
-
   Map<String, List<Todo>> get todoMap => _todoMap;
-
   DateTime get focusedDateTime => _focusedDateTime;
-
   DateTime get selectedDateTime => _selectedDateTime;
+  int get todoCount => _todoCount;
 
   set focusedDateTime(DateTime focusedDateTime) {
     _focusedDateTime = focusedDateTime;
@@ -45,6 +45,11 @@ class TodoProvider extends ChangeNotifier {
 
   set selectedDateTime(DateTime selectedDateTime) {
     _selectedDateTime = selectedDateTime;
+    notifyListeners();
+  }
+
+  set todoCount(int todoCount) {
+    _todoCount = todoCount;
     notifyListeners();
   }
 
@@ -65,7 +70,8 @@ class TodoProvider extends ChangeNotifier {
             Map<String, List<dynamic>>.from(
                 response[Strings.response]["color"]),
             Map<String, List<dynamic>>.from(
-                response[Strings.response]["items"]));
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
 
         Fluttertoast.showToast(msg: "할 일 성공적으로 가져옴");
         todoSavedFromDate =
@@ -96,7 +102,8 @@ class TodoProvider extends ChangeNotifier {
             Map<String, List<dynamic>>.from(
                 response[Strings.response]["color"]),
             Map<String, List<dynamic>>.from(
-                response[Strings.response]["items"]));
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "할 일 등록 실패");
@@ -113,12 +120,18 @@ class TodoProvider extends ChangeNotifier {
         formatter.format(todoSavedFromDate), formatter.format(todoSavedToDate));
     switch (response[Strings.message]) {
       case Strings.success:
+        log(response.toString());
+        try {
+          syncTodos(
+              Map<String, List<dynamic>>.from(
+                  response[Strings.response]["color"]),
+              Map<String, List<dynamic>>.from(
+                  response[Strings.response]["items"]),
+              response[Strings.response]["gauge"]);
+        } catch (e) {
+          log(e.toString());
+        }
         Fluttertoast.showToast(msg: "성공적으로 추가");
-        syncTodos(
-            Map<String, List<dynamic>>.from(
-                response[Strings.response]["color"]),
-            Map<String, List<dynamic>>.from(
-                response[Strings.response]["items"]));
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "할 일 등록 실패");
@@ -142,7 +155,8 @@ class TodoProvider extends ChangeNotifier {
             Map<String, List<dynamic>>.from(
                 response[Strings.response]["color"]),
             Map<String, List<dynamic>>.from(
-                response[Strings.response]["items"]));
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "할 일 등록 실패");
@@ -165,7 +179,8 @@ class TodoProvider extends ChangeNotifier {
             Map<String, List<dynamic>>.from(
                 response[Strings.response]["color"]),
             Map<String, List<dynamic>>.from(
-                response[Strings.response]["items"]));
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "삭제 실패");
@@ -175,7 +190,7 @@ class TodoProvider extends ChangeNotifier {
   }
 
   syncTodos(Map<String, List<dynamic>> colorResponse,
-      Map<String, List<dynamic>> itemsResponse) {
+      Map<String, List<dynamic>> itemsResponse, int todoCount) {
     for (String key in colorResponse.keys) {
       _colorMap[key] = List<String>.from(colorResponse[key]!);
     }
@@ -199,7 +214,7 @@ class TodoProvider extends ChangeNotifier {
       }
       _todoMap[key] = todos;
     }
-
+    _todoCount = todoCount;
     notifyListeners();
   }
 }
