@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 class TodoModifyVM extends ChangeNotifier {
   bool isAfterUpdate = false;
+  bool isTimeSelected = false;
 
   Todo _todo = Todo(
       todoId: -1,
@@ -29,7 +30,11 @@ class TodoModifyVM extends ChangeNotifier {
   User? _manager;
   User? get manager => _manager;
   set manager(User? manager) {
-    if (manager != null) _manager = manager;
+    if (manager != null) {
+      _manager = manager;
+      _todo.memberId = manager.memberId;
+    }
+    notifyListeners();
   }
 
   Future<bool> updateTodo(BuildContext context) async {

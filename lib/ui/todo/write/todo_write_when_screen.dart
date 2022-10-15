@@ -1,20 +1,24 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/utils/date.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
 class TodoWriteWhenScreen extends StatefulWidget {
   const TodoWriteWhenScreen({
     Key? key,
+    this.isTimeSelected = false,
     required this.previousTag,
   }) : super(key: key);
 
+  final bool isTimeSelected;
   final String? previousTag;
 
   @override
@@ -36,9 +40,13 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
   ];
 
   String? selectedTag;
+  bool isTimeSelected = false;
+  String timeSelectTag = "시간 선택" ;
   @override
   void initState() {
     selectedTag = widget.previousTag;
+    isTimeSelected = widget.isTimeSelected;
+    timeSelectTag = isTimeSelected ? selectedTag ?? "시간 선택" : "시간 선택";
     super.initState();
   }
   @override
@@ -46,8 +54,8 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
     return Consumer<UserProvider>(builder: (context, userProvider, child) {
       return WillPopScope(
         onWillPop: () async {
-          Get.back(result: selectedTag);
-          return true;
+          Get.back(result: [isTimeSelected, selectedTag]);
+          return false;
         },
         child: GestureDetector(
           onTap: () {
@@ -59,38 +67,57 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                 title: "언제 할래요?",
                 leading: FunctionalIcon.back,
                 onClickLeading: () {
-                  Get.back(result: selectedTag);
+                  Get.back(result: [isTimeSelected, selectedTag]);
                 }),
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Wrap(
-                  children: defaultTimeTag.map((timeTag) {
-                        return TimeTagWidget(
-                          timeTag,
-                          provider: userProvider,
-                          isSelected: selectedTag == timeTag,
-                          onPressed: () {
-                            setState(() {
-                              selectedTag = timeTag;
-                            });
-                          },
-                        ) as Widget;
-                      }).toList() +
-                      userProvider.me!.timeTags
-                          .map((timeTag) => TimeTagWidget(timeTag,
-                                  provider: userProvider,
-                                  isCustom: true,
-                                  isSelected: selectedTag ==
-                                      timeTag, onPressed: () {
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TimeTagWidget(timeSelectTag, provider: userProvider, isSelected: isTimeSelected, onPressed: () {
+                      DatePicker.showTime12hPicker(context, onConfirm: (DateTime dateTime) {
+                        String text = Date.getFormattedDate(format: "hh:mm a", dateTime: dateTime);
+
+                        setState(() {
+                          isTimeSelected = true;
+                           timeSelectTag = text;
+                           selectedTag = text;
+                         });
+                      },locale: LocaleType.ko);
+                    }),
+                    Wrap(children:
+                      defaultTimeTag.map((timeTag) {
+                            return TimeTagWidget(
+                              timeTag,
+                              provider: userProvider,
+                              isSelected: selectedTag == timeTag,
+                              onPressed: () {
                                 setState(() {
+                                  isTimeSelected = false;
                                   selectedTag = timeTag;
                                 });
-                              }))
-                          .toList() +
-                      [
-                        TimeTagWriteWidget(provider: userProvider),
-                      ],
+                              },
+                            ) as Widget;
+                          }).toList() +
+                          userProvider.me!.timeTags
+                              .map((timeTag) => TimeTagWidget(timeTag,
+                                      provider: userProvider,
+                                      isCustom: true,
+                                      isSelected: selectedTag ==
+                                          timeTag, onPressed: () {
+                                    setState(() {
+                                      selectedTag = timeTag;
+                                    });
+                                  }))
+                              .toList() +
+
+                          [
+                            TimeTagWriteWidget(provider: userProvider),
+
+                    ],
+                    ),
+                  ],
                 ),
               ),
             ),

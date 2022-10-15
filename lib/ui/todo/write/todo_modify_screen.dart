@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,15 +107,33 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                                   ? userProvider.me!.name
                                   : provider.manager!.name,
                               buttons: userProvider.familyMembers
-                                  .map((User familyMember) {
+                                  .mapIndexed((int index, User familyMember) {
                                 return TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    foregroundColor: MaterialStateColor.resolveWith((states) => familyMember.color.toColor()!),
+                                    backgroundColor: familyMember.color
+                                        .toColor()!
+                                        .withOpacity(0.2),
+                                    tapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(
+                                                index == 0 ? 10 : 0),
+                                            bottom: Radius.circular(index == userProvider.familyMembers.length - 1 ? 10 : 0))),
+                                  ),
                                   onPressed: () {
                                     provider.manager = familyMember;
                                     Get.back();
                                   },
-                                  child: Container(
-                                      color: familyMember.color.toColor(),
-                                      child: Text(familyMember.name)),
+                                  child: Text(
+                                    familyMember.name,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: Font.size_mediumText,
+                                        fontWeight: Font.weight_medium),
+                                  ),
                                 );
                               }).toList(),
                               leftIconData: LightIcons.Profile),
@@ -149,9 +168,11 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             dynamic result = await Get.to(TodoWriteWhenScreen(
                               previousTag: provider.todo.timeTag,
-                            ));
-                            if (result.runtimeType == String) {
-                              provider.todo.timeTag = result;
+                              isTimeSelected: provider.isTimeSelected,
+                            ), preventDuplicates: false);
+                            if (result[1].runtimeType == String) {
+                              provider.isTimeSelected = result[0];
+                              provider.todo.timeTag = result[1];
                               provider.notify();
                             }
                           },
@@ -196,7 +217,7 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                 ),
                 child: ButtonMainWidget(
                   title: "수정",
-                  isValid: provider.todo.title.isNotEmpty,
+                  isValid: provider.todo.title.trim().isNotEmpty,
                   onPressed: () async {
                     bool isSuccess = await provider.updateTodo(context);
                     if (isSuccess) Get.back();

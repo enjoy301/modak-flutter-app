@@ -5,7 +5,7 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/utils/time.dart';
+import 'package:modak_flutter_app/utils/date.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -60,7 +60,7 @@ class _HomeTalkViewScreenState extends State<HomeTalkViewScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: homeProvider
-                              .todayTalkMap[getFormattedDate(
+                              .todayTalkMap[Date.getFormattedDate(
                                   dateTime: homeProvider.selectedDateTime)]
                               ?.keys
                               .map((key) {
@@ -87,7 +87,7 @@ class _HomeTalkViewScreenState extends State<HomeTalkViewScreen> {
                                     fontSize: Font.size_mediumText,
                                     fontWeight: Font.weight_semiBold,
                                   ),),
-                                  Text(homeProvider.todayTalkMap[getFormattedDate(
+                                  Text(homeProvider.todayTalkMap[Date.getFormattedDate(
                                       dateTime: homeProvider.selectedDateTime)]![key]!, style: TextStyle(
                                     color: Coloring.gray_0,
                                     fontSize: Font.size_largeText,

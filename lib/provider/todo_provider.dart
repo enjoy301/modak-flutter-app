@@ -28,7 +28,7 @@ class TodoProvider extends ChangeNotifier {
   DateTime todoSavedToDate = DateUtils.dateOnly(DateTime.now());
   DateTime _focusedDateTime = DateTime.now();
   DateTime _selectedDateTime = DateTime.now();
-  int todoCount = 40;
+  int todoCount = 0;
 
   Map<String, List<String>> get colorMap => _colorMap;
 
@@ -128,6 +128,8 @@ class TodoProvider extends ChangeNotifier {
   }
 
   Future<bool> updateTodo(Todo todo, bool isAfterUpdate) async {
+    todo.title = todo.title.trim();
+    todo.memo = todo.memo?.trim();
     Map<String, dynamic> response = await _todoRepository.updateTodo(
         todo,
         isAfterUpdate,

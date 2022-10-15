@@ -30,7 +30,7 @@ class InputDateWidget extends StatelessWidget {
               minTime: minTime ?? DateTime.utc(1950),
               maxTime: maxTime ?? DateTime.now(),
               currentTime: currTime,
-              onConfirm: onChanged);
+              onConfirm: onChanged, locale: LocaleType.ko);
         },
         child: Container(
           padding: EdgeInsets.only(top: 15, right: 15, bottom: 11, left: 15),

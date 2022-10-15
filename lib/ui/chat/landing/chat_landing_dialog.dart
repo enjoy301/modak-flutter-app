@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
-import 'package:modak_flutter_app/utils/time.dart';
+import 'package:modak_flutter_app/utils/date.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/chat_dialog_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +63,7 @@ class _ChatLandingDialogState extends State<ChatLandingDialog> {
 }
 
 String getChatDateString(Chat chat) {
-  String chatTime = getFormattedDate(
+  String chatTime = Date.getFormattedDate(
       format: "yyyy-MM-dd HH:mm",
       dateTime: DateTime.fromMicrosecondsSinceEpoch(
           chat.sendAt.toInt() * pow(10, 6).toInt()));

@@ -355,7 +355,7 @@ class RemoteDataSource {
         return auth.post(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo",
           data: {
-            Strings.memberId: await storage.read(key: Strings.memberId),
+            Strings.memberId: todo.memberId == -1 ? await storage.read(key: Strings.memberId) : todo.memberId,
             Strings.title: todo.title,
             Strings.timeTag: todo.timeTag,
             Strings.repeat: todo.repeat,
@@ -382,7 +382,7 @@ class RemoteDataSource {
         return auth.put(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}",
           data: {
-            Strings.memberId: await storage.read(key: Strings.memberId),
+            Strings.memberId: todo.memberId == -1 ? await storage.read(key: Strings.memberId) : todo.memberId,
             Strings.title: todo.title,
             Strings.timeTag: todo.timeTag,
             Strings.repeat: todo.repeat,

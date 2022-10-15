@@ -7,7 +7,7 @@ import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/home/talk/home_talk_view_screen.dart';
 import 'package:modak_flutter_app/ui/home/talk/home_talk_write_screen.dart';
-import 'package:modak_flutter_app/utils/time.dart';
+import 'package:modak_flutter_app/utils/date.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -78,7 +78,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                   color: Colors.white,
                   child: Column(children: [
                     if (index == 0)
-                      homeProvider.todayTalkMap[getFormattedDate()]
+                      homeProvider.todayTalkMap[Date.getFormattedDate()]
                                   ?[userProvider.me!.memberId] ==
                               null
                           ? GestureDetector(
@@ -107,7 +107,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                 options:
                                     CarouselOptions(enlargeCenterPage: true),
                                 items: homeProvider
-                                    .todayTalkMap[getFormattedDate()]?.keys
+                                    .todayTalkMap[Date.getFormattedDate()]?.keys
                                     .map((int member) {
                                   return GestureDetector(
                                       onTap: () {
@@ -116,7 +116,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                       child: FamilyTalkWidget(
                                         name: userProvider.findUserById(member)?.name ?? "익명",
                                           content: homeProvider.todayTalkMap[
-                                              getFormattedDate()]![member]!));
+                                              Date.getFormattedDate()]![member]!));
                                 }).toList(),
                               ),
                             ),

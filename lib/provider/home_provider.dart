@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/repository/home_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/utils/time.dart';
+import 'package:modak_flutter_app/utils/date.dart';
 import 'package:provider/provider.dart';
 
 class HomeProvider extends ChangeNotifier {
@@ -57,14 +57,14 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<bool> getTodayTalk(DateTime dateTime) async {
-    if (todayTalkMap[getFormattedDate(dateTime: dateTime)] != null) {
+    if (todayTalkMap[Date.getFormattedDate(dateTime: dateTime)] != null) {
       return false;
     }
-    DateTime firstDate = getFirstDayOfWeek(dateTime);
+    DateTime firstDate = Date.getFirstDayOfWeek(dateTime);
     DateTime lastDate = firstDate.add(Duration(days: 6));
 
-    String firstDateString = getFormattedDate(dateTime: firstDate);
-    String lastDateString = getFormattedDate(dateTime: lastDate);
+    String firstDateString = Date.getFormattedDate(dateTime: firstDate);
+    String lastDateString = Date.getFormattedDate(dateTime: lastDate);
 
     Map<String, dynamic> response =
         await _homeRepository.getTodayTalk(firstDateString, lastDateString);
@@ -87,7 +87,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<bool> postTodayTalk(BuildContext context, String content) async {
-    String date = getFormattedDate();
+    String date = Date.getFormattedDate();
     Map<String, dynamic> response =
         await _homeRepository.postTodayTalk(content);
     switch (response[Strings.message]) {

@@ -23,6 +23,7 @@ class TodoRepository {
   Future<Map<String, dynamic>> getTodos(String fromDate, String toDate) async {
     Map<String, dynamic> response =
         await remoteDataSource.getTodos(fromDate, toDate);
+    print(response['response']);
     if (response[Strings.result]) {
       return {
         Strings.response: {

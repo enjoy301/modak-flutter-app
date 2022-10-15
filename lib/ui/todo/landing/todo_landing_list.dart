@@ -11,6 +11,7 @@ import 'package:modak_flutter_app/ui/todo/write/todo_modify_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
+import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/todo/todo_listitem_tag_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -103,25 +104,25 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                                   animationDuration: Duration(
                                                       microseconds: 0)),
                                               collapsed: Container(
-                                                padding: EdgeInsets.zero,
+                                                padding: EdgeInsets.all(6),
                                                 constraints: BoxConstraints(),
                                                 child: Icon(
                                                   LightIcons.ArrowDown2,
                                                   color: todo.isDone
                                                       ? Coloring.gray_20
                                                       : Coloring.gray_10,
-                                                  size: 16,
+                                                  size: 20,
                                                 ),
                                               ),
                                               expanded: Container(
-                                                padding: EdgeInsets.zero,
+                                                padding: EdgeInsets.all(6),
                                                 constraints: BoxConstraints(),
                                                 child: Icon(
                                                   LightIcons.ArrowUp2,
                                                   color: todo.isDone
                                                       ? Coloring.gray_20
                                                       : Coloring.gray_10,
-                                                  size: 16,
+                                                  size: 20,
                                                 ),
                                               ),
                                             ),
@@ -172,65 +173,57 @@ class _TodoLandingListState extends State<TodoLandingList> {
                     ),
                     IconButton(
                         onPressed: () {
-                          defaultModalWidget(
+                          listModalWidget(
                             context,
-                            [
-                              TextButton(
-                                  onPressed: () {
-                                    Get.back();
-                                    if (todo.repeatTag != null) {
-                                      defaultModalWidget(context, [
-                                        TextButton(
-                                            onPressed: () {
-                                              Get.back();
-                                              Get.to(TodoModifyScreen(
-                                                todo: todo,
-                                                isAfterUpdate: false,
-                                              ));
-                                            },
-                                            child: Text("단일 변경")),
-                                        TextButton(
-                                            onPressed: () {
-                                              Get.back();
-                                              Get.to(TodoModifyScreen(
-                                                todo: todo,
-                                                isAfterUpdate: true,
-                                              ));
-                                            },
-                                            child: Text("이후 변경"))
-                                      ]);
-                                    } else {
-                                      Get.to(TodoModifyScreen(
-                                        todo: todo,
-                                        isAfterUpdate: false,
-                                      ));
+                            {
+                              "수정 하기": () {
+                                Get.back();
+                                if (todo.repeatTag != null) {
+                                  listModalWidget(context, {
+                                    "단일 변경": () {
+                                      Get.back();
+                                      Get.to(
+                                          TodoModifyScreen(
+                                            todo: todo,
+                                            isAfterUpdate: false,
+                                          ),
+                                          preventDuplicates: false);
+                                    },
+                                    "이후 변경": () {
+                                      Get.back();
+                                      Get.to(
+                                          TodoModifyScreen(
+                                            todo: todo,
+                                            isAfterUpdate: true,
+                                          ),
+                                          preventDuplicates: false);
                                     }
-                                  },
-                                  child: Text("수정하기")),
-                              TextButton(
-                                  onPressed: () {
-                                    Get.back();
-                                    if (todo.repeatTag != null) {
-                                      defaultModalWidget(context, [
-                                        TextButton(
-                                            onPressed: () {
-                                              provider.deleteTodo(todo, false);
-                                              Get.back();
-                                            },
-                                            child: Text("단일 삭제")),
-                                        TextButton(
-                                            onPressed: () {
-                                              provider.deleteTodo(todo, true);
-                                              Get.back();
-                                            },
-                                            child: Text("이후 삭제"))
-                                      ]);
-                                    } else {
+                                  });
+                                } else {
+                                  Get.to(TodoModifyScreen(
+                                    todo: todo,
+                                    isAfterUpdate: false,
+                                  ));
+                                }
+                              },
+                              "삭제 하기": () {
+                                Get.back();
+                                if (todo.repeatTag != null) {
+                                  listModalWidget(context, {
+                                    "단일 삭제": () {
+                                      Get.back();
                                       provider.deleteTodo(todo, false);
+                                    },
+                                    "이후 삭제": () {
+                                      Get.back();
+                                      provider.deleteTodo(todo, true);
                                     }
-                                  },
-                                  child: Text("삭제하기"))
-                            ],
+                                  });
+                                } else {
+                                  provider.deleteTodo(todo, false);
+                                }
+                              },
+                            },
                           );
                         },
                         icon: Icon(

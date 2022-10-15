@@ -64,21 +64,23 @@ class TodoWriteVM extends ChangeNotifier {
   String memo = "";
 
   bool getIsValid() {
-    return title.isNotEmpty;
+    return title.trim().isNotEmpty;
   }
+
+  bool isTimeSelected = false;
 
   Future<bool> postTodo(BuildContext context) async {
     return await Future(() => context.read<TodoProvider>().postTodo(Todo(
-        todoId: 0,
-        groupTodoId: 0,
-        memberId: 0,
-        title: title,
+        todoId: -1,
+        groupTodoId: -1,
+        memberId: _manager == null ? -1 : _manager!.memberId,
+        title: title.trim(),
         color: "null",
         isDone: false,
         timeTag: timeTag,
         repeatTag: "null",
         repeat: repeat,
-        memo: memo,
+        memo: memo.trim(),
         date: DateFormat("yyyy-MM-dd").format(date))));
   }
 }
