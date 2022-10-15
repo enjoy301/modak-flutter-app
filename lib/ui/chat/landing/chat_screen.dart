@@ -1,38 +1,46 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/chat/landing/chat_dialog.dart';
 import 'package:modak_flutter_app/ui/chat/landing/chat_header.dart';
-import 'package:modak_flutter_app/ui/chat/landing/function/chat_landing_function.dart';
-import 'package:modak_flutter_app/ui/chat/landing/input/chat_landing_input.dart';
+import 'package:modak_flutter_app/ui/chat/landing/chat_input.dart';
+import 'package:modak_flutter_app/ui/chat/landing/function/chat_function.dart';
 import 'package:provider/provider.dart';
 
-class ChatLandingScreen extends StatefulWidget {
-  const ChatLandingScreen({Key? key}) : super(key: key);
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatLandingScreen> createState() => _ChatLandingScreenState();
+  State<ChatScreen> createState() => _ChatScreen();
 }
 
-class _ChatLandingScreenState extends State<ChatLandingScreen> {
+class _ChatScreen extends State<ChatScreen> {
+  late Future initial;
+  // var keyboardVisibilityController = KeyboardVisibilityController();
+  // late StreamSubscription<bool> keyboardSubscription;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: headerBackWidget(context),
+      appBar: chatHeader(context),
       backgroundColor: Colors.white,
       body: Consumer<ChatProvider>(
         builder: (context, provider, child) {
           return FutureBuilder(
-            future: Future(() => provider.initial()),
+            future: initial,
             builder: (context, snapshot) {
               return SafeArea(
                 child: Column(
                   children: [
                     Flexible(
-                      child: ChatLandingDialog(),
+                      child: ChatDialog(),
                     ),
-                    ChatLandingInput(),
-                    ChatLandingFunction(),
+                    provider.getInputState() == InputState.chat
+                        ? InputChatWidget()
+                        : SizedBox.shrink(),
+                    ChatFunction(),
 
                     /// this widget for 뒤로가기 시 반응
                     Visibility(
@@ -47,7 +55,7 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
                             FunctionState.onWay,
                             FunctionState.todo,
                           ].contains(provider.functionState)) {
-                            provider.setFunctionState(FunctionState.landing);
+                            provider.setFunctionState(FunctionState.list);
                             return Future(() => false);
                           }
 
@@ -73,9 +81,32 @@ class _ChatLandingScreenState extends State<ChatLandingScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    initial = context.read<ChatProvider>().initial();
+
+    // keyboardSubscription =
+    //     keyboardVisibilityController.onChange.listen((bool visible) {
+    //   if (visible) {
+    //     print("wiwiwiwiw");
+    //     if (context.read<ChatProvider>().isBottom == true) {
+    //       print("${context.read<ChatProvider>().isBottom}");
+    //       ScrollController scrollController =
+    //           context.read<ChatProvider>().scrollController;
+    //       scrollController.jumpTo(
+    //         scrollController.position.maxScrollExtent,
+    //       );
+    //     }
+    //   }
+    // });
+  }
+
+  @override
   void deactivate() {
     super.deactivate();
 
+    // keyboardSubscription.cancel();
     context.read<ChatProvider>().channel.sink.close();
   }
 }

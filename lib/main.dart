@@ -72,10 +72,10 @@ void main() async {
   initializeDateFormatting().then((_) => runApp(MultiProvider(providers: [
         /// share provider
         ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => TodoProvider()),
         ChangeNotifierProvider(create: (_) => AlbumProvider()),
+        ChangeNotifierProvider(create: (_) => ChatProvider()),
 
         /// main page provider
         ChangeNotifierProvider(create: (_) => TodoLandingVM()),

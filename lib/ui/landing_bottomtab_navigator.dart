@@ -3,7 +3,7 @@ import 'package:modak_flutter_app/assets/icons/dark/DarkIcons_icons.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/ui/album/album_landing_screen.dart';
-import 'package:modak_flutter_app/ui/chat/landing/chat_landing_screen.dart';
+import 'package:modak_flutter_app/ui/chat/landing/chat_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_landing_screen.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_landing_screen.dart';
@@ -22,7 +22,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
   final pages = [
     HomeLandingScreen(),
     TodoLandingScreen(),
-    ChatLandingScreen(),
+    ChatScreen(),
     AlbumLandingScreen(),
     UserLandingScreen(),
   ];
@@ -94,7 +94,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ChatLandingScreen()));
+                                  builder: (context) => ChatScreen()));
                         },
                         icon: currentIndex == 2
                             ? IconGradientWidget(

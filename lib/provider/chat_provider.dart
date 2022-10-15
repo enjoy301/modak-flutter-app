@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -6,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
-import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/data/dto/chat/chat_paging_DTO.dart';
 import 'package:modak_flutter_app/data/dto/chat/media_upload_DTO.dart';
@@ -18,6 +18,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../constant/strings.dart';
+import '../data/datasource/remote_datasource.dart';
 
 class ChatProvider extends ChangeNotifier {
   init() async {
@@ -25,6 +26,9 @@ class ChatProvider extends ChangeNotifier {
   }
 
   static late final ChatRepository _chatRepository;
+  static late String memberId;
+  static late String familyId;
+  static late String wssURL;
 
   /// PREFIX: 채팅
   late List<Chat> _chats = [];
@@ -37,16 +41,22 @@ class ChatProvider extends ChangeNotifier {
   int _disconnectCount = 0;
 
   // 웹 소켓 연결, chat 호출 connection 호출
-  void initial(BuildContext context) async {
+  Future initial() async {
+    isBottom = true;
+
+    memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
+    familyId = (await RemoteDataSource.storage.read(key: Strings.familyId))!;
+    wssURL = "wss://ws.modak-talk.com?family-id=$familyId&user-id=$memberId";
+
     _channel = IOWebSocketChannel.connect(
-      "wss://ws.modak-talk.com?family-id=${await RemoteDataSource.storage.read(key: Strings.familyId)}&user-id=${context.read<UserProvider>().me!.memberId}",
+      Uri.parse(wssURL),
       pingInterval: Duration(minutes: 9),
     );
 
     _channel.stream.listen(
       (event) {
         var item = jsonDecode(event) as Map;
-        log("message -> $item");
+
         if (item.containsKey("message_data")) {
           Map<String, dynamic> message = item["message_data"];
           _addChat(
@@ -89,9 +99,6 @@ class ChatProvider extends ChangeNotifier {
       return;
     }
 
-    int memberId =
-        await Future(() => context.read<UserProvider>().me!.memberId);
-
     _disconnectCount = 0;
     for (Map<String, dynamic> connection in connectionResponse['response']
         ['data']) {
@@ -122,6 +129,7 @@ class ChatProvider extends ChangeNotifier {
         ),
       );
     }
+
     updateUnreadCount();
   }
 
@@ -165,7 +173,8 @@ class ChatProvider extends ChangeNotifier {
   }
 
   void postChat(BuildContext context, String chat) async {
-    log("${DateTime.now().millisecondsSinceEpoch / 1000}");
+    isBottom = true;
+
     _addChat(
       Chat(
         userId: context.read<UserProvider>().me!.memberId,
@@ -177,6 +186,11 @@ class ChatProvider extends ChangeNotifier {
     );
 
     Map<String, dynamic> response = await _chatRepository.postChat(chat);
+
+    if (response['message'] == Strings.success) {
+    } else {
+      /// chat 삭제 로직
+    }
   }
 
   void postMedia(
@@ -205,6 +219,21 @@ class ChatProvider extends ChangeNotifier {
   void _addChat(Chat chat) {
     _chats.add(chat);
     notifyListeners();
+  }
+
+  ScrollController scrollController = ScrollController();
+  late bool isBottom;
+
+  void addScrollListener() {
+    scrollController.addListener(() {
+      if (scrollController.offset ==
+              scrollController.position.maxScrollExtent &&
+          !scrollController.position.outOfRange) {
+        isBottom = true;
+      } else {
+        isBottom = false;
+      }
+    });
   }
 
   /// 내가 작성중인 채팅
@@ -296,7 +325,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   /// 기능 창 상태
-  FunctionState _functionState = FunctionState.landing;
+  FunctionState _functionState = FunctionState.list;
   FunctionState get functionState => _functionState;
 
   void setFunctionState(FunctionState functionState) {
@@ -307,13 +336,13 @@ class ChatProvider extends ChangeNotifier {
   /// 기능 창 상태를 기반으로 입력 칸 상태를 결정함
   InputState getInputState() {
     /// todo상태, onway상태에서 inputState를 none으로 설정
-    if ([FunctionState.todo, FunctionState.onWay].contains(_functionState)) {
-      return InputState.none;
-    }
+    // if ([FunctionState.todo, FunctionState.onWay].contains(_functionState)) {
+    //   return InputState.none;
+    // }
 
-    /// album기능에서 inputState를 function으로 설정
-    if ([FunctionState.album].contains(_functionState)) {
-      return InputState.function;
+    /// function 메튜 -> album 선택일 때 inputState를 album으로 변경
+    if (_functionState == FunctionState.album) {
+      return InputState.none;
     }
 
     /// 그 외 상태에서 inputState를 chat으로 설정
@@ -338,7 +367,7 @@ class ChatProvider extends ChangeNotifier {
   /// TODO refresh 추가 및 정리
   void refresh() {
     _isFunctionOpened = false;
-    _functionState = FunctionState.landing;
+    _functionState = FunctionState.list;
     _chats.clear();
   }
 }

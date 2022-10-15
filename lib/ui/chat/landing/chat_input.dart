@@ -25,8 +25,8 @@ class _InputChatWidgetState extends State<InputChatWidget> {
           children: [
             IconButton(
               onPressed: () {
-                provider.isFunctionOpenedToggle();
                 FocusScope.of(context).unfocus();
+                provider.isFunctionOpenedToggle();
               },
               icon: Icon(
                 LightIcons.Plus,

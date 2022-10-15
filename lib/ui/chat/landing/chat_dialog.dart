@@ -7,16 +7,17 @@ import 'package:modak_flutter_app/utils/date.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/chat_dialog_widget.dart';
 import 'package:provider/provider.dart';
 
-class ChatLandingDialog extends StatefulWidget {
-  const ChatLandingDialog({Key? key}) : super(key: key);
+class ChatDialog extends StatefulWidget {
+  const ChatDialog({Key? key}) : super(key: key);
 
   @override
-  State<ChatLandingDialog> createState() => _ChatLandingDialogState();
+  State<ChatDialog> createState() => _ChatDialog();
 }
 
-class _ChatLandingDialogState extends State<ChatLandingDialog> {
+class _ChatDialog extends State<ChatDialog> {
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => scrollToEnd(context));
     return Consumer<ChatProvider>(
       builder: (context, provider, child) {
         return GestureDetector(
@@ -57,13 +58,29 @@ class _ChatLandingDialogState extends State<ChatLandingDialog> {
     );
   }
 
-  // @override
-  // void didUpdateWidget(ChatLandingDialog oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   ScrollController scrollController =
-  //       context.read<ChatProvider>().scrollController;
-  //   scrollController.jumpTo(scrollController.position.maxScrollExtent);
-  // }
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<ChatProvider>().addScrollListener();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    context.read<ChatProvider>().scrollController.dispose();
+  }
+}
+
+void scrollToEnd(BuildContext context) {
+  if (context.read<ChatProvider>().isBottom == true) {
+    ScrollController scrollController =
+        context.read<ChatProvider>().scrollController;
+    scrollController.jumpTo(
+      scrollController.position.maxScrollExtent,
+    );
+  }
 }
 
 String getChatDateString(Chat chat) {

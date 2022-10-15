@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:provider/provider.dart';
 
-AppBar headerBackWidget(BuildContext context) {
+AppBar chatHeader(BuildContext context) {
   return AppBar(
     leading: IconButton(
       icon: Icon(Icons.arrow_back, color: Colors.black),
