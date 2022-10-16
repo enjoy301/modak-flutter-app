@@ -209,8 +209,9 @@ class ChatProvider extends ChangeNotifier {
   ) async {
     Map<String, dynamic> getMediaUrlResponse =
         await _chatRepository.getMediaUrl();
+
     Map<String, dynamic> mediaUrlData =
-        jsonDecode(getMediaUrlResponse['response'].data);
+        jsonDecode(getMediaUrlResponse['response']['data']);
 
     Map<String, dynamic> response = await _chatRepository.uploadMedia(
       MediaUploadDTO(
@@ -218,8 +219,8 @@ class ChatProvider extends ChangeNotifier {
         file: file!,
         type: type,
         imageCount: imageCount,
-        memberId: "1",
-        familyId: "1",
+        memberId: memberId,
+        familyId: familyId,
       ),
     );
   }

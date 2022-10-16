@@ -355,7 +355,9 @@ class RemoteDataSource {
         return auth.post(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo",
           data: {
-            Strings.memberId: todo.memberId == -1 ? await storage.read(key: Strings.memberId) : todo.memberId,
+            Strings.memberId: todo.memberId == -1
+                ? await storage.read(key: Strings.memberId)
+                : todo.memberId,
             Strings.title: todo.title,
             Strings.timeTag: todo.timeTag,
             Strings.repeat: todo.repeat,
@@ -382,7 +384,9 @@ class RemoteDataSource {
         return auth.put(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}",
           data: {
-            Strings.memberId: todo.memberId == -1 ? await storage.read(key: Strings.memberId) : todo.memberId,
+            Strings.memberId: todo.memberId == -1
+                ? await storage.read(key: Strings.memberId)
+                : todo.memberId,
             Strings.title: todo.title,
             Strings.timeTag: todo.timeTag,
             Strings.repeat: todo.repeat,
@@ -585,7 +589,7 @@ class RemoteDataSource {
     );
   }
 
-  /// 미디어 다운로드 함수
+  /// 미디어 다운로드 url 발급 함수
   Future<Map<String, dynamic>> getMediaDownloadURL(
       List<dynamic> requestList) async {
     return _tryRequest(

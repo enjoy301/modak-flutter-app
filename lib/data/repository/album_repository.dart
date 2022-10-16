@@ -25,7 +25,7 @@ class AlbumRepository {
       return {
         Strings.message: Strings.success,
         Strings.response: {
-          "names": response,
+          "data": response["response"].data,
         }
       };
     }
@@ -40,7 +40,7 @@ class AlbumRepository {
       return {
         Strings.message: Strings.success,
         Strings.response: {
-          "response": response,
+          "data": response["response"].data,
         }
       };
     }

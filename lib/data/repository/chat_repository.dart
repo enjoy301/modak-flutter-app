@@ -108,7 +108,7 @@ class ChatRepository {
       return {
         Strings.message: Strings.success,
         Strings.response: {
-          "url": response,
+          "data": response['response'].data,
         },
       };
     }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/widgets/album/album_container_widget.dart';
@@ -48,14 +46,6 @@ class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
   @override
   void initState() {
     super.initState();
-    getMedia();
-  }
-
-  getMedia() async {
-    Map<String, dynamic> result =
-        await context.read<AlbumProvider>().mediaLoading();
-    List<File> files = result['response'];
-
-    Future(() => context.read<AlbumProvider>().setFileToMessengerAlbum(files));
+    context.read<AlbumProvider>().mediaLoading();
   }
 }

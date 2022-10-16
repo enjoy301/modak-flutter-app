@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modak_flutter_app/data/repository/album_repository.dart';
 
+import '../constant/strings.dart';
 import '../utils/file_system_util.dart';
 
 class AlbumProvider extends ChangeNotifier {
@@ -18,23 +19,32 @@ class AlbumProvider extends ChangeNotifier {
 
   static int messengerLastId = 0;
 
+  late List<dynamic> _messengerMedias;
+  get messengerMedias => _messengerMedias;
+
   List<File> _messengerAlbumFiles = [];
   get messengerAlbumFiles => _messengerAlbumFiles;
   File? _messengerThumbnail;
   get messengerThumbnail => _messengerThumbnail;
 
-  Future<Map<String, dynamic>> mediaLoading() async {
+  void mediaLoading() async {
     Map<String, dynamic> getMediaNamesResponse =
         await _albumRepository.getMediaNames(0);
-    if (getMediaNamesResponse['result'] == "FAIL") {
-      return getMediaNamesResponse;
+
+    if (getMediaNamesResponse['result'] == Strings.fail) {
+      return;
     }
 
     List<dynamic> images =
-        jsonDecode(getMediaNamesResponse['response'].data)['album'];
+        jsonDecode(getMediaNamesResponse['response']['data'])['album'];
     Map<String, dynamic> getMediaResponse = await getMedia(images);
 
-    return getMediaResponse;
+    if (getMediaResponse['result'] == Strings.fail) {
+      return;
+    }
+
+    _messengerMedias = images;
+    setFileToMessengerAlbum(getMediaResponse['response']);
   }
 
   Future<Map<String, dynamic>> getMedia(List<dynamic> items) async {
@@ -55,7 +65,8 @@ class AlbumProvider extends ChangeNotifier {
       Map<String, dynamic> response =
           await _albumRepository.getMediaURL(requestList);
 
-      List<dynamic> urlList = jsonDecode(response.toString())['url_list'];
+      List<dynamic> urlList =
+          jsonDecode(response['response']['data'])['url_list'];
 
       for (String url in urlList) {
         log("url -> $url");
