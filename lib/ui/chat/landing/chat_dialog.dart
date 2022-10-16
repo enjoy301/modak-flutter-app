@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
@@ -28,23 +26,37 @@ class _ChatDialog extends State<ChatDialog> {
           child: ListView.builder(
             controller: provider.scrollController,
             itemCount: provider.chats.length,
+            reverse: true,
             itemBuilder: (BuildContext context, int index) {
               Chat chat = provider.chats[index];
-              bool isHead = true;
-              bool isTail = true;
-              bool isDateChanged = true;
 
-              if (index > 0) {
-                isDateChanged =
-                    !compareChatByDay(chat, provider.chats[index - 1]);
-              }
-              if (index > 0 && compareChat(chat, provider.chats[index - 1])) {
-                isHead = false;
-              }
-              if (index < provider.chats.length - 1 &&
-                  compareChat(chat, provider.chats[index + 1])) {
-                isTail = false;
-              }
+              /// 마지막 인덱스임 || 먼저 보내진거랑 비교했을 때 다른거(index+1)
+              bool isHead = index == provider.chats.length - 1
+                  ? true
+                  : isSameChat(
+                        provider.chats[index],
+                        provider.chats[index + 1],
+                      ) ==
+                      false;
+
+              /// 첫 인덱스임 || 나중에 보내진거랑 다른거(index-1)
+              bool isTail = index == 0
+                  ? true
+                  : isSameChat(
+                        provider.chats[index - 1],
+                        provider.chats[index],
+                      ) ==
+                      false;
+
+              /// 마지막 인덱스임 || 먼저 보내진거랑 다른거(index+1
+              bool isDateChanged = index == provider.chats.length - 1
+                  ? true
+                  : isSameDay(
+                        provider.chats[index],
+                        provider.chats[index + 1],
+                      ) ==
+                      false;
+
               return ChatDialogWidget(
                 chat: chat,
                 isHead: isHead,
@@ -64,54 +76,52 @@ class _ChatDialog extends State<ChatDialog> {
 
     context.read<ChatProvider>().addScrollListener();
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    context.read<ChatProvider>().scrollController.dispose();
-  }
 }
 
-void scrollToEnd(BuildContext context) {
-  if (context.read<ChatProvider>().isBottom == true) {
-    ScrollController scrollController =
-        context.read<ChatProvider>().scrollController;
-    scrollController.jumpTo(
-      scrollController.position.maxScrollExtent,
-    );
-  }
+void scrollToEnd(BuildContext context) async {
+  await Future.delayed(
+    Duration(milliseconds: 100),
+    () {
+      if (context.read<ChatProvider>().isBottom == true) {
+        ScrollController scrollController =
+            context.read<ChatProvider>().scrollController;
+
+        scrollController.animateTo(
+          0,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        );
+        //
+      }
+    },
+  );
 }
 
-String getChatDateString(Chat chat) {
-  String chatTime = Date.getFormattedDate(
-      format: "yyyy-MM-dd HH:mm",
-      dateTime: DateTime.fromMicrosecondsSinceEpoch(
-          chat.sendAt.toInt() * pow(10, 6).toInt()));
-  return chatTime;
+String timestampToString(int timestamp) {
+  return Date.getFormattedDate(
+    format: "yyyy-MM-dd HH:mm",
+    dateTime: DateTime.fromMillisecondsSinceEpoch(timestamp * 1000),
+  );
 }
 
-bool compareChatByMinute(Chat chat, Chat chat2) {
-  String chatTime = getChatDateString(chat);
-  String chatTime2 = getChatDateString(chat2);
-  return chatTime == chatTime2;
+bool isSameDay(Chat chat, Chat chat2) {
+  return DateTime.fromMillisecondsSinceEpoch(
+        chat.sendAt.toInt() * 1000,
+      ).day ==
+      DateTime.fromMillisecondsSinceEpoch(
+        chat2.sendAt.toInt() * 1000,
+      ).day;
 }
 
-bool compareChatByDay(Chat chat, Chat chat2) {
-  return DateTime.fromMicrosecondsSinceEpoch(
-              chat.sendAt.toInt() * pow(10, 6).toInt())
-          .day ==
-      DateTime.fromMicrosecondsSinceEpoch(
-              chat2.sendAt.toInt() * pow(10, 6).toInt())
-          .day;
+bool isSameMinute(Chat chat, Chat chat2) {
+  return timestampToString(chat.sendAt.toInt()) ==
+      timestampToString(chat2.sendAt.toInt());
 }
 
-bool compareChatByUser(Chat chat, Chat chat2) {
-  int userId = chat.userId;
-  int userId2 = chat2.userId;
-  return userId == userId2;
+bool isSameUser(Chat chat, Chat chat2) {
+  return chat.userId == chat2.userId;
 }
 
-bool compareChat(Chat chat, Chat chat2) {
-  return compareChatByMinute(chat, chat2) && compareChatByUser(chat, chat2);
+bool isSameChat(Chat chat, Chat chat2) {
+  return isSameMinute(chat, chat2) && isSameUser(chat, chat2);
 }

@@ -80,7 +80,7 @@ class ChatProvider extends ChangeNotifier {
     /// 채팅 목록 불러오기
     Map<String, dynamic> chatResponse = await _chatRepository.getChats(
       ChatPagingDTO(
-        count: 100,
+        count: 200,
         lastId: 0,
       ),
     );
@@ -129,6 +129,7 @@ class ChatProvider extends ChangeNotifier {
         ),
       );
     }
+    _chats = _chats.reversed.toList();
 
     updateUnreadCount();
   }
@@ -174,6 +175,7 @@ class ChatProvider extends ChangeNotifier {
 
   void postChat(BuildContext context, String chat) async {
     isBottom = true;
+    log("changed $isBottom");
 
     _addChat(
       Chat(
@@ -217,7 +219,8 @@ class ChatProvider extends ChangeNotifier {
 
   /// 채팅리스트에 뒤에 추가합니다.
   void _addChat(Chat chat) {
-    _chats.add(chat);
+    _chats.insert(0, chat);
+    // _chats.add(chat);
     notifyListeners();
   }
 
@@ -225,15 +228,17 @@ class ChatProvider extends ChangeNotifier {
   late bool isBottom;
 
   void addScrollListener() {
-    scrollController.addListener(() {
-      if (scrollController.offset ==
-              scrollController.position.maxScrollExtent &&
-          !scrollController.position.outOfRange) {
-        isBottom = true;
-      } else {
-        isBottom = false;
-      }
-    });
+    scrollController.addListener(
+      () {
+        if (scrollController.offset ==
+                scrollController.position.minScrollExtent &&
+            !scrollController.position.outOfRange) {
+          isBottom = true;
+        } else {
+          isBottom = false;
+        }
+      },
+    );
   }
 
   /// 내가 작성중인 채팅
