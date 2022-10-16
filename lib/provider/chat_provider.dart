@@ -39,6 +39,7 @@ class ChatProvider extends ChangeNotifier {
 
   final Map<int, Map<String, dynamic>> _connections = {};
   int _disconnectCount = 0;
+  int _lastChatId = 0;
 
   // 웹 소켓 연결, chat 호출 connection 호출
   Future initial() async {
@@ -80,8 +81,8 @@ class ChatProvider extends ChangeNotifier {
     /// 채팅 목록 불러오기
     Map<String, dynamic> chatResponse = await _chatRepository.getChats(
       ChatPagingDTO(
-        count: 200,
-        lastId: 0,
+        count: 30,
+        lastId: _lastChatId,
       ),
     );
 
@@ -116,6 +117,12 @@ class ChatProvider extends ChangeNotifier {
 
     _chats = [];
     List<dynamic> messages = chatResponse['response']['data'];
+
+    if (messages.isEmpty) {
+      return;
+    }
+
+    _lastChatId = chatResponse['response']['data'][0]['messageId'];
 
     for (Map<String, dynamic> message in messages) {
       _chats.add(
@@ -226,16 +233,63 @@ class ChatProvider extends ChangeNotifier {
 
   ScrollController scrollController = ScrollController();
   late bool isBottom;
+  bool isInfinityScrollLoading = false;
 
   void addScrollListener() {
     scrollController.addListener(
-      () {
+      () async {
         if (scrollController.offset ==
                 scrollController.position.minScrollExtent &&
             !scrollController.position.outOfRange) {
           isBottom = true;
         } else {
           isBottom = false;
+        }
+
+        if (scrollController.offset ==
+                scrollController.position.maxScrollExtent &&
+            !scrollController.position.outOfRange) {
+          if (isInfinityScrollLoading == true) {
+            return;
+          }
+
+          isInfinityScrollLoading = true;
+
+          Map<String, dynamic> chatResponse = await _chatRepository.getChats(
+            ChatPagingDTO(
+              count: 30,
+              lastId: _lastChatId,
+            ),
+          );
+
+          if (chatResponse[Strings.message] == Strings.fail) {
+            Fluttertoast.showToast(msg: "채팅 목록 불러오기 실패");
+            return;
+          }
+
+          if (chatResponse['response']['data'].length == 0) {
+            return;
+          }
+
+          _lastChatId = chatResponse['response']['data'][0]['messageId'];
+
+          for (Map<String, dynamic> message
+              in chatResponse['response']['data'].reversed.toList()) {
+            _chats.add(
+              Chat(
+                userId: message['memberId'],
+                content: message['content'],
+                sendAt:
+                    DateTime.parse(message['sendAt']).millisecondsSinceEpoch /
+                        1000,
+                metaData: message['metaData'],
+                unReadCount: _disconnectCount,
+              ),
+            );
+          }
+
+          notifyListeners();
+          isInfinityScrollLoading = false;
         }
       },
     );
