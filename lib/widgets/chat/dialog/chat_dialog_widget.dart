@@ -39,6 +39,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
       builder: (context, userProvider, child) {
         return Column(
           children: [
+            /// column children 1번 날짜 변경선
             widget.isDateChanged
                 ? Container(
                     width: double.infinity,
@@ -64,6 +65,8 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                     ),
                   )
                 : SizedBox(),
+
+            /// column children 2번 채팅 한 bubble 전체
             Container(
               margin: EdgeInsets.only(
                   top: !widget.isHead ? 2 : 9,
@@ -75,6 +78,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                 textDirection:
                     isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                 children: [
+                  /// row children 1번 프로필
                   !isMine && widget.isHead
                       ? Padding(
                           padding: const EdgeInsets.only(right: 10),
@@ -88,7 +92,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                               );
                             },
                             child: Image.asset(
-                              "lib/assets/images/family/profile/dad_profile.png",
+                              "lib/assets/images/family/profile/${context.read<UserProvider>().findUserById(widget.chat.userId)?.role.toLowerCase()}_profile.png",
                               width: 40,
                               height: 40,
                             ),
@@ -100,6 +104,8 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                               width: 50,
                               height: 40,
                             ),
+
+                  /// row children 2번 채팅 글 or 사진
                   (() {
                     if (widget.chat.metaData!['type_code'] == 'plain') {
                       return DialogBubbleWidget(
@@ -110,9 +116,11 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                     } else if (widget.chat.metaData!['type_code'] == 'image') {
                       return DialogImageWidget(chat: widget.chat);
                     } else {
-                      return Text("?");
+                      return SizedBox.shrink();
                     }
                   })(),
+
+                  /// row children 3번 unReadCount, 시간
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4),
                     child: Column(
