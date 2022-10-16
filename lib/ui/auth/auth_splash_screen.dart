@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
@@ -26,14 +28,19 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
       return FutureBuilder(future: Future<void>(() async {
         /// 로그인 및 데이터 받아오기 로컬 DB 업데이트
         await provider.init();
+        log("0");
 
         /// 로컬 DB 데이터 메모리에 올림
         await homeProvider.init();
+        log("1");
         await userProvider.init();
+        log("2");
         await todoProvider.init();
+        log("3");
         await chatProvider.init();
+        log("4");
         await albumProvider.init();
-
+        log("5");
         /// redirection
         await Future(() => provider.redirection(context));
       }), builder: (context, snapshot) {

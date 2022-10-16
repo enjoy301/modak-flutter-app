@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
+import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
-import 'package:modak_flutter_app/ui/user/user_landing_VM.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/user/user_profile_widget.dart';
@@ -19,11 +19,11 @@ class UserLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, UserLandingVM>(
-        builder: (context, userProvider, provider, child) {
+    return Consumer<UserProvider>(
+        builder: (context, userProvider, child) {
       return Scaffold(
           backgroundColor: Colors.white,
-          appBar: headerDefaultWidget(title: "유저"),
+          appBar: headerDefaultWidget(title: "유저",),
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(
@@ -48,27 +48,23 @@ class UserLandingScreen extends StatelessWidget {
                           height: 1,
                           color: Coloring.gray_40,
                         ),
-                      ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: userProvider.familyMembersWithoutMe.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
+                      )
+                    ] +
+                    userProvider.familyMembersWithoutMe
+                        .map((familyMember) => Padding(
                               padding:
-                                  const EdgeInsets.only(top: 32, bottom: 16),
+                                  const EdgeInsets.only(top: 16, bottom: 16),
                               child: UserProfileWidget(
-                                user:
-                                    userProvider.familyMembersWithoutMe[index],
+                                user: familyMember,
                                 onPressed: () {
                                   Get.to(UserFamilyModifyScreen(
-                                      familyMember: userProvider
-                                          .familyMembersWithoutMe[index]));
+                                      familyMember: familyMember));
                                 },
                               ),
-                            );
-                          })
-                    ] +
+                            ))
+                        .toList() +
                     <Widget>[
+                      if (userProvider.familyMembersWithoutMe.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: Container(

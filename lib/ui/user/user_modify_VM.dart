@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
@@ -12,7 +14,8 @@ import 'package:provider/provider.dart';
 class UserModifyVM extends ChangeNotifier {
   init() async {
     _userRepository = UserRepository();
-    user = _userRepository.getMe()!;
+    me = _userRepository.getMe()!;
+    beforeMe = me!.copyWith();
     isLoaded = true;
   }
 
@@ -20,41 +23,43 @@ class UserModifyVM extends ChangeNotifier {
 
   late final BuildContext context;
   bool isLoaded = false;
-  User? user;
+  User? beforeMe;
+  User? me;
 
   setName(String name) {
-    user!.name = name;
+    me!.name = name;
     notifyListeners();
   }
 
   setRole(String role) {
-    user!.role = role;
+    me!.role = role;
     Get.back();
     notifyListeners();
   }
 
   setColor(Color color) {
-    user!.color = color.colorToString();
+    me!.color = color.colorToString();
     notifyListeners();
   }
 
   setLunar(bool isLunar) {
-    user!.isLunar = isLunar;
+    me!.isLunar = isLunar;
     notifyListeners();
   }
 
   setBirthDay(DateTime birthDay) {
-    user!.birthDay = DateFormat("yyyy-MM-dd").format(birthDay);
+    me!.birthDay = DateFormat("yyyy-MM-dd").format(birthDay);
     notifyListeners();
   }
 
   onModifyClick(BuildContext context) async {
-    if (user == null) return;
-    Map<String, dynamic> response = await _userRepository.updateMeInfo(user!);
-
+    if (me == null || beforeMe == null) return;
+    Map<String, dynamic> response = await _userRepository.updateMeInfo(beforeMe!, me!);
     if (response['message'] == Strings.success) {
+      List<User> newFamilyMembers = response[Strings.response][Strings.familyMembers];
       Fluttertoast.showToast(msg: "정보 수정 완료");
-      await Future(() => context.read<UserProvider>().me = user);
+      await Future(() => context.read<UserProvider>().me = me);
+      await Future(() => context.read<UserProvider>().familyMembers = newFamilyMembers);
       Get.back();
     } else {
       Fluttertoast.showToast(msg: "정보 수정 실패");

@@ -41,7 +41,7 @@ class UserProvider extends ChangeNotifier {
   List<User> get familyMembersWithoutMe {
     List<User> familyMembersWithoutMe = [];
     for (User familyMember in _familyMembers) {
-      if (familyMember.name != me?.name) {
+      if (familyMember.memberId != me?.memberId) {
         familyMembersWithoutMe.add(familyMember);
       }
     }
@@ -77,6 +77,7 @@ class UserProvider extends ChangeNotifier {
     _userRepository.setChatAlarmReceive(chatAlarmReceive);
     notifyListeners();
   }
+
 
   List<String> extractName(List<User> users) {
     List<String> familyNames = [];
