@@ -44,7 +44,7 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
               ),
               Expanded(child: SizedBox()),
               GestureDetector(
-                onTap: () => provider.onSocialClick("KAKAO"),
+                onTap: () => provider.onSocialClick(context, "KAKAO"),
                 child: Container(
                   width: double.infinity,
                   margin: EdgeInsets.only(right: 30, bottom: 20, left: 30),
@@ -70,7 +70,7 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () => provider.onSocialClick("APPLE"),
+                onTap: () => provider.onSocialClick(context, "APPLE"),
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(vertical: 15),

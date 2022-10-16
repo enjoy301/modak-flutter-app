@@ -108,13 +108,26 @@ class UserRepository {
     return {Strings.message: Strings.fail};
   }
 
-  Future<Map<String, dynamic>> updateMeInfo(User user) async {
-    Map<String, dynamic> response = await remoteDataSource.updateMeInfo(user);
+  Future<Map<String, dynamic>> updateMeInfo(User beforeMe, User me) async {
+    Map<String, dynamic> response = await remoteDataSource.updateMeInfo(me);
     if (response[Strings.result]) {
-      await localDataSource.updateMe(user);
+      List<User> familyMembers = localDataSource.getFamilyMembers();
+      List<User> newFamilyMembers = [me];
+      for (User familyMember in familyMembers) {
+        if (beforeMe.memberId != familyMember.memberId) {
+          newFamilyMembers.add(familyMember);
+        }
+      }
+      await localDataSource.updateMe(me);
+      await localDataSource.updateFamilyMember(newFamilyMembers);
 
-      /// TODO
-      return {Strings.message: Strings.success};
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          Strings.me: me,
+          Strings.familyMembers: newFamilyMembers
+        }
+      };
     }
     return {Strings.message: Strings.fail};
   }

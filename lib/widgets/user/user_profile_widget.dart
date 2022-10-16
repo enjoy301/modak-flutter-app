@@ -36,7 +36,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
           ClipRRect(
             borderRadius: BorderRadius.circular(1000),
             child: Image.asset(
-              "lib/assets/images/family/profile/dau_profile.png",
+              "lib/assets/images/family/profile/${widget.user?.role.toLowerCase()}_profile.png",
               width: 56,
               height: 56,
             ),

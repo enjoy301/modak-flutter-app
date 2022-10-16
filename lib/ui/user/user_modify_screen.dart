@@ -4,6 +4,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
@@ -27,11 +28,11 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
 
-    return Consumer<UserModifyVM>(
-        builder: (context, provider, child) {
+    return Consumer2<UserProvider, UserModifyVM>(
+        builder: (context, userProvider, provider, child) {
       return FutureBuilder(future: Future<void>(() async {
         await provider.init();
-        controller.text = provider.user!.name;
+        controller.text = provider.me!.name;
       }), builder: (context, snapshot) {
         return GestureDetector(
           onTap: () {
@@ -41,7 +42,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
             appBar: headerDefaultWidget(
-                title: "수정하기",
+                title: "수정 하기",
                 leading: FunctionalIcon.close,
                 onClickLeading: () {
                   Navigator.pop(context);
@@ -60,7 +61,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(1000),
                       child: Image.asset(
-                        "lib/assets/images/family/profile/dad_profile.png",
+                        "lib/assets/images/family/profile/${provider.isLoaded ? provider.me!.role.toLowerCase() : userProvider.me!.role.toLowerCase()}_profile.png",
                         width: 110,
                         height: 110,
                       ),
@@ -83,14 +84,11 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                       padding: const EdgeInsets.only(bottom: 13),
                       child: InputTextWidget(
                           onChanged: (String name) {
-                            controller.text = name;
-                            controller.selection = TextSelection.fromPosition(
-                                TextPosition(offset: controller.text.length));
                             provider.setName(name);
                           },
                           textEditingController: controller,
                           isSuffix: provider.isLoaded
-                              ? provider.user!.name.isNotEmpty
+                              ? provider.me!.name.isNotEmpty
                               : false,
                           onClickSuffix: () {
                             provider.setName("");
@@ -101,7 +99,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                       child: InputSelectWidget(
                           title: "가족 역할",
                           contents: provider.isLoaded
-                              ? provider.user!.role.toDisplayString()
+                              ? provider.me!.role.toDisplayString()
                               : "",
                           buttons: [
                             TextButton(
@@ -129,7 +127,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                     ),
                     InputColorWidget(
                       color: provider.isLoaded
-                          ? provider.user!.color.toColor()!
+                          ? provider.me!.color.toColor()!
                           : Colors.white,
                       onColorChanged: (Color color) {
                         provider.setColor(color);
@@ -155,7 +153,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                             padding: EdgeInsets.only(right: 10),
                             child: CheckboxWidget(
                                 value: provider.isLoaded
-                                    ? provider.user!.isLunar
+                                    ? provider.me!.isLunar
                                     : false,
                                 onChanged: (bool? value) {
                                   provider.setLunar(value!);
@@ -176,9 +174,9 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                     InputDateWidget(
                         title: "생일",
                         contents:
-                            provider.isLoaded ? provider.user!.birthDay : "",
+                            provider.isLoaded ? provider.me!.birthDay : "",
                         currTime: provider.isLoaded
-                            ? DateTime.parse(provider.user!.birthDay)
+                            ? DateTime.parse(provider.me!.birthDay)
                             : DateTime.now(),
                         onChanged: (DateTime dateTime) {
                           provider.setBirthDay(dateTime);
