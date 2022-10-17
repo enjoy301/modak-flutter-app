@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
@@ -13,7 +14,10 @@ import 'package:modak_flutter_app/data/dto/chat/media_upload_DTO.dart';
 import 'package:modak_flutter_app/data/repository/chat_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:video_compress/video_compress.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -25,32 +29,63 @@ class ChatProvider extends ChangeNotifier {
     _chatRepository = ChatRepository();
   }
 
+  ///
+  /// [변수]
+  ///
   static late final ChatRepository _chatRepository;
-  static late String memberId;
-  static late String familyId;
-  static late String wssURL;
+  static late String _memberId;
+  static late String _familyId;
+  static late String _wssURL;
 
-  /// PREFIX: 채팅
   late List<Chat> _chats = [];
   List<Chat> get chats => _chats;
+  final Map<int, Map<String, dynamic>> _connections = {};
+  int _disconnectCount = 0;
+  late int _lastChatId;
 
   late WebSocketChannel _channel;
   WebSocketChannel get channel => _channel;
 
-  final Map<int, Map<String, dynamic>> _connections = {};
-  int _disconnectCount = 0;
-  int _lastChatId = 0;
+  late ScrollController _scrollController;
+  ScrollController get scrollController => _scrollController;
+  late bool isBottom;
+  bool isInfinityScrollLoading = false;
 
-  // 웹 소켓 연결, chat 호출 connection 호출
+  String _currentInput = "";
+  String get currentInput => _currentInput;
+
+  /// 채팅창 모드
+  late ChatMode _chatMode;
+  ChatMode get chatMode => _chatMode;
+
+  /// 모든 앨범 파일 썸네일 용
+  final List<File> _thumbnailMedias = [];
+  List<File> get thumbnailMedias => _thumbnailMedias;
+
+  /// 선택된 미디어 파일명
+  final List<File> _selectedMediaFiles = [];
+  List<File> get selectedMediaFiles => _selectedMediaFiles;
+
+  /// 모든 앨범 파일
+  final List<File> _mediaFiles = [];
+  List<File> get mediaFiles => _mediaFiles;
+
+  ///
+  /// [함수]
+  ///
+  /// 채팅 페이지 빌드 시 초기화 로직들 모음
   Future initial() async {
     isBottom = true;
+    _lastChatId = 0;
+    _scrollController = ScrollController();
+    _chatMode = ChatMode.textInput;
 
-    memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
-    familyId = (await RemoteDataSource.storage.read(key: Strings.familyId))!;
-    wssURL = "wss://ws.modak-talk.com?family-id=$familyId&user-id=$memberId";
+    _memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
+    _familyId = (await RemoteDataSource.storage.read(key: Strings.familyId))!;
+    _wssURL = "wss://ws.modak-talk.com?family-id=$_familyId&user-id=$_memberId";
 
     _channel = IOWebSocketChannel.connect(
-      Uri.parse(wssURL),
+      Uri.parse(_wssURL),
       pingInterval: Duration(minutes: 9),
     );
 
@@ -103,7 +138,7 @@ class ChatProvider extends ChangeNotifier {
     _disconnectCount = 0;
     for (Map<String, dynamic> connection in connectionResponse['response']
         ['data']) {
-      if (connection['memberId'] == memberId) {
+      if (connection['memberId'] == _memberId) {
         connection['joining'] = true;
       }
       if (connection['joining'] == false) {
@@ -141,7 +176,6 @@ class ChatProvider extends ChangeNotifier {
     updateUnreadCount();
   }
 
-  /// PREFIX: 커넥션 관리
   void updateConnection(Map<String, dynamic> connection) {
     int id = connection['memberId'];
     bool isJoining = connection['joining'];
@@ -167,8 +201,6 @@ class ChatProvider extends ChangeNotifier {
           continue;
         }
 
-        // log("${chat.content} chat: ${chat.sendAt} conn: ${connection['lastJoined']} connid: ${connection['memberId']} / chat이 크다! ${chat.sendAt > connection['lastJoined']}");
-
         /// 현재 접속 중이 아니면서 && chat 보낸 시점보다 lastJoined가 더 작을 때 (더 옛날)
         if (chat.sendAt > connection['lastJoined']) {
           unReadCount++;
@@ -180,9 +212,8 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void postChat(BuildContext context, String chat) async {
+  void postPlainChat(BuildContext context, String chat) async {
     isBottom = true;
-    log("changed $isBottom");
 
     _addChat(
       Chat(
@@ -202,40 +233,93 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  void postMedia(
-    MultipartFile? file,
-    String type,
-    int imageCount,
-  ) async {
-    Map<String, dynamic> getMediaUrlResponse =
-        await _chatRepository.getMediaUrl();
+  void postMediaFileFromCamera() async {}
 
-    Map<String, dynamic> mediaUrlData =
-        jsonDecode(getMediaUrlResponse['response']['data']);
+  void postMediaFilesFromAlbum() async {
+    if (_selectedMediaFiles.isEmpty) {
+      return;
+    }
+    _chatMode = ChatMode.textInput;
+
+    Map<String, dynamic> urlResponse =
+        await _chatRepository.getMediaUploadUrl();
+
+    if (urlResponse['message'] == Strings.fail) {
+      return;
+    }
+
+    Map<String, dynamic> mediaUrlData = jsonDecode(
+      urlResponse['response']['data'],
+    );
+
+    /// 압축 로직
+    await VideoCompress.deleteAllCache();
+    Directory? directory = await getExternalStorageDirectory();
+    List<File> compressedFiles = [];
+
+    int index = 0;
+    for (File file in _selectedMediaFiles) {
+      if ([".jpg", ".jpeg"].contains(extension(file.path))) {
+        var imageResult = (await FlutterImageCompress.compressAndGetFile(
+          file.absolute.path,
+          "${directory?.path}/Download/cached_media/messengers/temp$index${extension(file.path)}",
+          quality: 30,
+        ))!;
+        compressedFiles.add(imageResult);
+      } else if ([".mp4"].contains(extension(file.path))) {
+        var videoResult = ((await VideoCompress.compressVideo(
+          file.absolute.path,
+          quality: VideoQuality.LowQuality,
+          deleteOrigin: false,
+          includeAudio: true,
+        ))!
+            .file!);
+        compressedFiles.add(videoResult);
+      } else {
+        /// .png
+        log("이 파일형식 반영 안됨. ${extension(file.path)}");
+      }
+    }
+    log("count -> ${compressedFiles.length}");
+
+    if (compressedFiles.isEmpty) {
+      return;
+    }
+
+    /// zip으로 묶는 로직
+    MultipartFile zipFile = await compressFilesToZip(
+      compressedFiles,
+    );
 
     Map<String, dynamic> response = await _chatRepository.uploadMedia(
       MediaUploadDTO(
         mediaUrlData: mediaUrlData,
-        file: file!,
-        type: type,
-        imageCount: imageCount,
-        memberId: memberId,
-        familyId: familyId,
+        file: zipFile,
+        type: "zip",
+        imageCount: compressedFiles.length,
+        memberId: _memberId,
+        familyId: _familyId,
       ),
     );
+
+    if (response[Strings.message] == Strings.success) {
+      Fluttertoast.showToast(msg: "미디어 전송 성공");
+    } else {
+      Fluttertoast.showToast(msg: "미디어 전송 실패");
+    }
+
+    await VideoCompress.deleteAllCache();
+    clearSelectedMedia();
   }
 
   /// 채팅리스트에 뒤에 추가합니다.
   void _addChat(Chat chat) {
     _chats.insert(0, chat);
-    // _chats.add(chat);
+
     notifyListeners();
   }
 
-  ScrollController scrollController = ScrollController();
-  late bool isBottom;
-  bool isInfinityScrollLoading = false;
-
+  /// 채팅뷰의 scrollController의 listener
   void addScrollListener() {
     scrollController.addListener(
       () async {
@@ -296,138 +380,54 @@ class ChatProvider extends ChangeNotifier {
     );
   }
 
-  /// 내가 작성중인 채팅
-  String _currentMyChat = "";
-  String get currentMyChat => _currentMyChat;
-
-  void setCurrentMyChat(String chat) {
-    _currentMyChat = chat;
+  void setCurrentInput(String input) {
+    _currentInput = input;
     notifyListeners();
   }
 
-  /// 내가 작성중인 채팅 상태
-  ChatType _currentMyChatType = ChatType.general;
-  ChatType get currentMyChatType => _currentMyChatType;
-
-  void setCurrentMyChatType(ChatType currentMyChatType) {
-    _currentMyChatType = currentMyChatType;
-  }
-
-  ///
-
-  /// PREFIX: 앨범 사진 보관
-
-  /// 모든 앨범 파일
-  final List<File> _medias = [];
-  List<File> get medias => _medias;
-
   /// 앨범 리스트 뒤에 미디어와 썸네일 미디어를 추가합니다
-  Future<bool> addMedia(File? media) async {
-    if (media != null) {
-      _medias.add(media);
-      _thumbnailMedias.add(await getVideoThumbnail(media));
+  Future<bool> addMedia(File? mediaFile) async {
+    if (mediaFile != null) {
+      _mediaFiles.add(mediaFile);
+      _thumbnailMedias.add(await getVideoThumbnail(mediaFile));
     }
     notifyListeners();
     return true;
   }
 
-  /// index 번째의 미디어를 가져옵니다
-  File getMediaAt(int index) {
-    return _medias[index];
-  }
-
-  /// 모든 앨범 파일 썸네일 용
-  final List<File> _thumbnailMedias = [];
-  List<File> get thumbnailMedias => _thumbnailMedias;
-
-  /// index 번째의 썸네일 미디어를 가져옵니다
-  File getThumbnailMediaAt(int index) {
-    return _thumbnailMedias[index];
-  }
-
-  /// 선택된 앨범 index
-  final List<File> _selectedMedias = [];
-  List<File> get selectedMedias => _selectedMedias;
-
   /// 선택된 앨범 리스트를 추가합니다
   void addSelectedMedia(File file) {
-    _selectedMedias.add(file);
+    _selectedMediaFiles.add(file);
     notifyListeners();
+  }
+
+  bool isExistFile(File file) {
+    return _selectedMediaFiles.contains(file);
   }
 
   /// 선택된 앨범 리스트에서 특정 미디어를 제거합니다
-  bool removeSelectedMedia(File file) {
-    bool isExist = _selectedMedias.remove(file);
+  void removeSelectedMedia(File file) {
+    _selectedMediaFiles.remove(file);
+
     notifyListeners();
-    return isExist;
   }
 
   /// 선택 앨범을 모두 제거합니다
   void clearSelectedMedia() {
-    _selectedMedias.clear();
+    _selectedMediaFiles.clear();
+
     notifyListeners();
   }
 
-  /// PREFIX: 입력 칸, 기능 칸 상태
+  void setChatMode(ChatMode newChatMode) {
+    _chatMode = newChatMode;
 
-  /// 기능 창 열림 여부
-  bool _isFunctionOpened = false;
-  bool get isFunctionOpened => _isFunctionOpened;
-
-  void setIsFunctionOpened(bool isFunctionOpened) {
-    _isFunctionOpened = isFunctionOpened;
-    notifyListeners();
-  }
-
-  void isFunctionOpenedToggle() {
-    _isFunctionOpened = !_isFunctionOpened;
-    notifyListeners();
-  }
-
-  /// 기능 창 상태
-  FunctionState _functionState = FunctionState.list;
-  FunctionState get functionState => _functionState;
-
-  void setFunctionState(FunctionState functionState) {
-    _functionState = functionState;
-    notifyListeners();
-  }
-
-  /// 기능 창 상태를 기반으로 입력 칸 상태를 결정함
-  InputState getInputState() {
-    /// todo상태, onway상태에서 inputState를 none으로 설정
-    // if ([FunctionState.todo, FunctionState.onWay].contains(_functionState)) {
-    //   return InputState.none;
-    // }
-
-    /// function 메튜 -> album 선택일 때 inputState를 album으로 변경
-    if (_functionState == FunctionState.album) {
-      return InputState.none;
-    }
-
-    /// 그 외 상태에서 inputState를 chat으로 설정
-    return InputState.chat;
-  }
-
-  /// PREFIX: 감정 상태 칸
-  bool _isEmotionOpened = false;
-  bool get isEmotionOpened => _isEmotionOpened;
-
-  void setIsEmotionOpened(bool isEmotionOpened) {
-    _isEmotionOpened = isEmotionOpened;
-    notifyListeners();
-  }
-
-  void toggleIsEmotionOpened() {
-    _isEmotionOpened = !_isEmotionOpened;
     notifyListeners();
   }
 
   /// 채팅방에서 날갈 때 초기화 해야할 값 초기화
-  /// TODO refresh 추가 및 정리
   void refresh() {
-    _isFunctionOpened = false;
-    _functionState = FunctionState.list;
+    _chatMode = ChatMode.textInput;
     _chats.clear();
   }
 }

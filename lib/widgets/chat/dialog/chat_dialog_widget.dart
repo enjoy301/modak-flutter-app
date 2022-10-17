@@ -87,16 +87,15 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                     children: [
                       !isMine && widget.isHead
                           ? Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: ScalableTextWidget(
-                          "${context.read<UserProvider>().findUserById(widget.chat.userId)?.name}",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Coloring.gray_10,
-                              fontSize: Font.size_caption
-                          ),
-                        ),
-                      )
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: ScalableTextWidget(
+                                "${context.read<UserProvider>().findUserById(widget.chat.userId)?.name}",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Coloring.gray_10,
+                                    fontSize: Font.size_caption),
+                              ),
+                            )
                           : SizedBox.shrink(),
                       (() {
                         if (widget.chat.metaData!['type_code'] == 'plain') {
@@ -104,9 +103,12 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                             chat: widget.chat,
                             isMine: isMine,
                             isHead: widget.isHead,
+                            isTail: widget.isTail,
                           );
-                        } else if (widget.chat.metaData!['type_code'] == 'image') {
-                          return DialogImageWidget(chat: widget.chat, isMine: isMine);
+                        } else if (widget.chat.metaData!['type_code'] ==
+                            'image') {
+                          return DialogImageWidget(
+                              chat: widget.chat, isMine: isMine);
                         } else {
                           return SizedBox.shrink();
                         }
@@ -122,6 +124,3 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
     );
   }
 }
-
-
-

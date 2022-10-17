@@ -22,7 +22,6 @@ class _ChatDialog extends State<ChatDialog> {
           onTap: () {
             /// for 키보드 dispose
             FocusScope.of(context).unfocus();
-            print(provider.chats);
           },
           child: ListView.builder(
             controller: provider.scrollController,

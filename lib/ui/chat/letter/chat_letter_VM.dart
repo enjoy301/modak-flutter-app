@@ -9,6 +9,8 @@ import 'package:modak_flutter_app/data/repository/chat_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/datasource/remote_datasource.dart';
+
 class ChatLetterVM extends ChangeNotifier {
   ChatLetterVM() {
     init();
@@ -25,7 +27,9 @@ class ChatLetterVM extends ChangeNotifier {
   List<Letter> lettersSent = [];
   List<Letter> lettersReceived = [];
 
-  Future<bool> getLetters(BuildContext context) async {
+  Future getLetters() async {
+    String memberId =
+        (await RemoteDataSource.storage.read(key: Strings.memberId))!;
     Map<String, dynamic> response = await _chatRepository.getLetters();
     switch (response[Strings.message]) {
       case Strings.success:
@@ -35,8 +39,7 @@ class ChatLetterVM extends ChangeNotifier {
         for (Letter letter in response[Strings.response]["letters"]) {
           letters.add(letter);
           // ignore: use_build_context_synchronously
-          if (letter.fromMemberId ==
-              context.read<UserProvider>().me!.memberId) {
+          if (letter.fromMemberId.toString() == memberId) {
             lettersSent.add(letter);
           } else {
             lettersReceived.add(letter);
@@ -44,12 +47,11 @@ class ChatLetterVM extends ChangeNotifier {
         }
         notifyListeners();
         Fluttertoast.showToast(msg: "성공적으로 편지를 받아왔습니다");
-        return true;
+        break;
       case Strings.fail:
         Fluttertoast.showToast(msg: "편지를 받아오는데 실패하였습니다");
-        return false;
+        break;
     }
-    return false;
   }
 
   /// 편지 작성 중

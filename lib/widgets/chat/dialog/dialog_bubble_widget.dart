@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -14,11 +13,16 @@ import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
   const DialogBubbleWidget(
-      {Key? key, required this.chat, required this.isMine, this.isHead = true})
+      {Key? key,
+      required this.chat,
+      required this.isMine,
+      this.isHead = true,
+      this.isTail = true})
       : super(key: key);
   final Chat chat;
   final bool isMine;
   final bool isHead;
+  final bool isTail;
 
   @override
   State<DialogBubbleWidget> createState() => _DialogBubbleWidgetState();
@@ -32,6 +36,7 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => getSizeAndPosition());
   }
+
   getSizeAndPosition() {
     RenderBox box = _key.currentContext?.findRenderObject() as RenderBox;
     Size size = box.size;
@@ -79,9 +84,14 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
           /// row children 2번 글자 네모 박스
           Container(
             key: _key,
-            constraints: BoxConstraints(minWidth: 30, maxWidth: 250),
+            constraints: BoxConstraints(
+              minWidth: 30,
+              maxWidth: MediaQuery.of(context).size.width * 0.6,
+            ),
             decoration: BoxDecoration(
-              color: widget.isMine ? Coloring.point_pureorange : Coloring.bg_orange,
+              color: widget.isMine
+                  ? Coloring.point_pureorange
+                  : Coloring.bg_orange,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
@@ -100,9 +110,11 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
           /// row children 3번 시간과 읽은 수 표시
           ChatComponentInfoWidget(
             chat: widget.chat,
-            crossAxisAlignment:
-                widget.isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          )
+            crossAxisAlignment: widget.isMine
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
+            showTime: widget.isTail,
+          ),
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/chat/landing/function/function_album_widget.dart';
 import 'package:modak_flutter_app/ui/chat/landing/function/function_list_widget.dart';
-import 'package:modak_flutter_app/ui/chat/landing/function/function_onway_widget.dart';
 import 'package:provider/provider.dart';
 
 class ChatFunction extends StatefulWidget {
@@ -14,10 +13,10 @@ class ChatFunction extends StatefulWidget {
 }
 
 class _ChatFunction extends State<ChatFunction> {
-  final Map<FunctionState, Widget> functionStatePage = {
-    FunctionState.list: FunctionListWidget(),
-    FunctionState.album: FunctionAlbumWidget(),
-    FunctionState.onWay: FunctionOnWayWidget(),
+  final Map<ChatMode, Widget> functionStatePage = {
+    ChatMode.textInput: SizedBox.shrink(),
+    ChatMode.functionList: FunctionListWidget(),
+    ChatMode.functionAlbum: FunctionAlbumWidget(),
   };
 
   @override
@@ -26,10 +25,7 @@ class _ChatFunction extends State<ChatFunction> {
       builder: (context, provider, child) {
         return Container(
           color: Colors.white,
-          child: Visibility(
-            visible: provider.isFunctionOpened,
-            child: functionStatePage[provider.functionState] as Widget,
-          ),
+          child: functionStatePage[provider.chatMode] as Widget,
         );
       },
     );

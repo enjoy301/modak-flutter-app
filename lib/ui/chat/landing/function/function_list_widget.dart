@@ -64,8 +64,8 @@ class _FunctionListWidget extends State<FunctionListWidget> {
               ChatFunctionIconWidget(
                 data: functionIconWidgetValues[0],
                 onTap: () async {
-                  provider.setFunctionState(FunctionState.album);
-                  if (provider.medias.isEmpty) {
+                  provider.setChatMode(ChatMode.functionAlbum);
+                  if (provider.mediaFiles.isEmpty) {
                     List<File> files = await getImageFromAlbum();
                     for (File file in files) {
                       await provider.addMedia(file);
@@ -85,7 +85,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
 
                             dio.MultipartFile? image =
                                 await getImageFromCamera();
-                            provider.postMedia(image, "png", 1);
+                            // provider.postMediaFilesFromCamera(image, "png", 1);
                           },
                           child: Text("사진 찍기")),
                       TextButton(
@@ -93,7 +93,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                             Future(() => Navigator.pop(context));
                             dio.MultipartFile? video =
                                 await getVideoFromCamera();
-                            provider.postMedia(video, "mp4", 0);
+                            // provider.postMediaFilesFromCamera(video, "mp4", 0);
                           },
                           child: Text("동영상 촬영"))
                     ],

@@ -120,7 +120,6 @@ class TodoProvider extends ChangeNotifier {
         formatter.format(todoSavedFromDate), formatter.format(todoSavedToDate));
     switch (response[Strings.message]) {
       case Strings.success:
-        log(response.toString());
         try {
           syncTodos(
               Map<String, List<dynamic>>.from(

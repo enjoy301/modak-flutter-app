@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
@@ -14,7 +12,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../assets/icons/dark/DarkIcons_icons.dart';
 import '../../../../constant/enum/chat_enum.dart';
-import '../../../../utils/media_util.dart';
 
 class FunctionAlbumWidget extends StatefulWidget {
   const FunctionAlbumWidget({Key? key}) : super(key: key);
@@ -38,41 +35,29 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                 color: Colors.white,
                 child: Row(
                   children: [
+                    /// row 1번 취소 버튼
                     IconButton(
                       onPressed: () {
-                        provider.setFunctionState(FunctionState.list);
+                        provider.setChatMode(ChatMode.functionList);
+                        provider.clearSelectedMedia();
                       },
                       icon: Icon(Icons.cancel_sharp),
                     ),
+
+                    /// row 2번 앨범 소개 텍스트
                     Expanded(
                       child: Center(
                         child: Text("보내고 싶은 사진 혹은 영상을 선택하세요"),
                       ),
                     ),
+
+                    /// row 3번 전송 버튼
                     IconButton(
                       onPressed: () async {
-                        if (provider.selectedMedias.isNotEmpty) {
-                          MultipartFile zipFile = await compressFilesToZip(
-                            provider.selectedMedias,
-                          );
-
-                          int counter = 0;
-                          for (File file in provider.selectedMedias) {
-                            log("selected media types -> ${file.path.mediaType()}");
-                            if (file.path.mediaType() == "png" ||
-                                file.path.mediaType() == "jpg") {
-                              counter += 1;
-                            }
-                          }
-                          provider.postMedia(zipFile, "zip", counter);
-
-                          provider.clearSelectedMedia();
-                          provider.setIsFunctionOpened(false);
-                          provider.setFunctionState(FunctionState.list);
-                        }
+                        provider.postMediaFilesFromAlbum();
                       },
                       icon: IconGradientWidget(
-                        provider.selectedMedias.isEmpty
+                        provider.selectedMediaFiles.isEmpty
                             ? LightIcons.Send
                             : DarkIcons.Send,
                         25,
@@ -94,17 +79,15 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              File file = provider.getMediaAt(index);
-                              bool isExist = false;
-                              isExist = provider.removeSelectedMedia(file);
-                              if (!isExist) {
-                                provider.addSelectedMedia(file);
-                              }
+                              File file = provider.mediaFiles[index];
+                              provider.isExistFile(file)
+                                  ? provider.removeSelectedMedia(file)
+                                  : provider.addSelectedMedia(file);
                             },
                             child: Stack(
                               children: [
                                 Image.file(
-                                  provider.getThumbnailMediaAt(index),
+                                  provider.thumbnailMedias[index],
                                   width: 160,
                                   height: double.infinity,
                                   fit: BoxFit.cover,
@@ -125,8 +108,10 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                       ),
                                       child: Checkbox(
                                         activeColor: Color(0x00F6DFDF),
-                                        value: provider.selectedMedias.contains(
-                                            provider.getMediaAt(index)),
+                                        value: provider.selectedMediaFiles
+                                            .contains(
+                                          provider.mediaFiles[index],
+                                        ),
                                         onChanged: (bool? value) {},
                                       ),
                                     ),
@@ -137,21 +122,17 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                   left: 9,
                                   child: IconButton(
                                     onPressed: () {
-                                      print(
-                                          "mediaType: ${provider.getMediaAt(index).toString().mediaType()}");
                                       // ignore: unrelated_type_equality_checks
-                                      if (provider
-                                              .getMediaAt(index)
+                                      if (provider.mediaFiles[index]
                                               .toString()
                                               .mediaType() ==
                                           "mp4") {
-                                        print("correcto");
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 CommonVideoScreen(
-                                              file: provider.getMediaAt(index),
+                                              file: provider.mediaFiles[index],
                                             ),
                                           ),
                                         );
@@ -161,7 +142,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 CommonImageScreen(
-                                              file: provider.getMediaAt(index),
+                                              file: provider.mediaFiles[index],
                                             ),
                                           ),
                                         );

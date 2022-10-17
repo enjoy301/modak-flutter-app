@@ -1,9 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
-import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../ui/common/common_image_screen.dart';
@@ -60,24 +58,24 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
 
                       /// column num 2 이미지 or 동영상
                       fileList[index].path.endsWith(".mp4")
-                          ? FutureBuilder(
-                              future: getVideoThumbnail(fileList[index]),
-                              initialData: File(""),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<File> file) {
-                                return file.data!.uri.toString() == ''
-                                    ? Image.asset(
-                                        "lib/assets/images/others/empty_messenger_album.png",
-                                      )
-                                    : Image.file(
-                                        file.data!,
-                                        fit: BoxFit.cover,
-                                      );
-                              },
-                            )
+                          ? SizedBox.shrink()
+                          // ? FutureBuilder(
+                          //     future: getVideoThumbnail(fileList[index]),
+                          //     initialData: File(""),
+                          //     builder: (BuildContext context,
+                          //         AsyncSnapshot<File> file) {
+                          //       return file.data!.uri.toString() == ''
+                          //           ? Image.asset(
+                          //               "lib/assets/images/others/empty_messenger_album.png",
+                          //             )
+                          //           : Image.file(
+                          //               file.data!,
+                          //               fit: BoxFit.cover,
+                          //             );
+                          //     },
+                          //   )
                           : GestureDetector(
                               onTap: () {
-                                log("${provider.messengerMedias[index]}");
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
