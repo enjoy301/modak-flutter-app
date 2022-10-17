@@ -9,6 +9,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
@@ -85,7 +86,7 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
             ),
             child: Padding(
               padding: EdgeInsets.only(top: 9, right: 10, bottom: 8, left: 10),
-              child: Text(
+              child: ScalableTextWidget(
                 widget.chat.content,
                 style: TextStyle(
                   color: Colors.black,

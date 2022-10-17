@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class ChatDateWidget extends StatelessWidget {
   const ChatDateWidget({Key? key, required this.chat}) : super(key: key);
@@ -18,7 +19,7 @@ class ChatDateWidget extends StatelessWidget {
         color: Coloring.gray_40,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(
+      child: ScalableTextWidget(
         DateFormat("yyyy-MM-dd")
             .format(
           DateTime.fromMillisecondsSinceEpoch(

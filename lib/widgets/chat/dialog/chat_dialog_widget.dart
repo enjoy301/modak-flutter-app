@@ -9,6 +9,7 @@ import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_date_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/user_provider.dart';
@@ -87,7 +88,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                       !isMine && widget.isHead
                           ? Padding(
                         padding: const EdgeInsets.only(bottom: 5),
-                        child: Text(
+                        child: ScalableTextWidget(
                           "${context.read<UserProvider>().findUserById(widget.chat.userId)?.name}",
                           textAlign: TextAlign.left,
                           style: TextStyle(

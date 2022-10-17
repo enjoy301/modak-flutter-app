@@ -4,10 +4,11 @@ import 'package:provider/provider.dart';
 
 class ScalableTextWidget extends StatefulWidget {
   const ScalableTextWidget(this.text,
-      {Key? key, this.style = const TextStyle(), this.textAlign = TextAlign.start})
+      {Key? key, this.maxLines = 100000, this.style = const TextStyle(), this.textAlign = TextAlign.start})
       : super(key: key);
 
   final String text;
+  final int maxLines;
   final TextStyle style;
   final TextAlign textAlign;
 
@@ -24,6 +25,7 @@ class _ScalableTextWidgetState extends State<ScalableTextWidget> {
   @override
   Widget build(BuildContext context) {
     return Text(widget.text,
+        maxLines: widget.maxLines,
         style: TextStyle(
           color: widget.style.color,
           fontSize:
@@ -33,6 +35,7 @@ class _ScalableTextWidgetState extends State<ScalableTextWidget> {
           decorationStyle: widget.style.decorationStyle,
           decorationThickness: 3,
           decorationColor: widget.style.decorationColor,
+          overflow: widget.style.overflow,
         ), textAlign: widget.textAlign,);
   }
 }

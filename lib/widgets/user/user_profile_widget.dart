@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_small_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class UserProfileWidget extends StatefulWidget {
   const UserProfileWidget(
@@ -25,7 +28,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
         horizontal: 12,
         vertical: 18,
       ),
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width - 60,
       decoration: BoxDecoration(
         color: Coloring.bg_orange,
         borderRadius: BorderRadius.circular(22),
@@ -41,55 +44,63 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
               height: 56,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 12,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      widget.user != null ? widget.user!.name : "",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Font.size_largeText,
-                        fontWeight: Font.weight_semiBold,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: SizedBox(
-                        width: 10,
-                        height: 10,
-                        child: CircleAvatar(
-                          backgroundColor: widget.user != null
-                              ? widget.user!.color.toColor()
-                              : Colors.white,
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 12,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ScalableTextWidget(
+                          widget.user != null ? widget.user!.name : "",
+                          maxLines: 5,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Font.size_largeText,
+                            fontWeight: Font.weight_semiBold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    widget.user != null ? widget.user!.birthDay : "",
-                    style: TextStyle(
-                      color: Coloring.gray_10,
-                      fontSize: Font.size_smallText,
-                      fontWeight: Font.weight_regular,
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: SizedBox(
+                          width: 10,
+                          height: 10,
+                          child: CircleAvatar(
+                            backgroundColor: widget.user != null
+                                ? widget.user!.color.toColor()
+                                : Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      widget.user != null ? widget.user!.birthDay : "",
+                      style: TextStyle(
+                        color: Coloring.gray_10,
+                        fontSize: Font.size_smallText,
+                        fontWeight: Font.weight_regular,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-          Expanded(child: Text("")),
-          ButtonMainSmallWidget(
-            title: "수정하기",
-            onPressed: widget.onPressed,
+          SizedBox(
+            child: ButtonMainSmallWidget(
+              title: "수정하기",
+              onPressed: widget.onPressed,
+            ),
           ),
         ],
       ),

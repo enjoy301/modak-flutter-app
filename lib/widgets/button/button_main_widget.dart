@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/shadowing.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class ButtonMainWidget extends StatelessWidget {
   const ButtonMainWidget(
@@ -32,7 +33,7 @@ class ButtonMainWidget extends StatelessWidget {
             overlayColor: MaterialStateProperty.all(Colors.transparent),
           ),
             onPressed: isValid ? onPressed : null,
-            child: Text(
+            child: ScalableTextWidget(
               title,
               style: TextStyle(
                   color: isValid ? Colors.white : Coloring.gray_30,
