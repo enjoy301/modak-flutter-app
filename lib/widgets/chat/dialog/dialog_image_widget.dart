@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
-import 'package:modak_flutter_app/ui/common/common_image_screen.dart';
+import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -48,7 +48,7 @@ class _DialogImageWidgetState extends State<DialogImageWidget> {
                           );
                     } else {
                       return GestureDetector(
-                        onTap: () {Get.to(CommonImageScreen(file: File(snapshot.data!)));},
+                        onTap: () {Get.to(CommonMediasScreen(files: [File(snapshot.data!)]));},
                         child: Image.file(
                               File(snapshot.data!),
                               fit: BoxFit.cover,
