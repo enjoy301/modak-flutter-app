@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
-import 'package:modak_flutter_app/ui/common/common_image_screen.dart';
-import 'package:modak_flutter_app/ui/common/common_video_screen.dart';
+import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:provider/provider.dart';
@@ -150,8 +149,8 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                CommonVideoScreen(
-                                              file: provider.getMediaAt(index),
+                                                CommonMediasScreen(
+                                              files: [provider.getMediaAt(index)],
                                             ),
                                           ),
                                         );
@@ -160,8 +159,8 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                CommonImageScreen(
-                                              file: provider.getMediaAt(index),
+                                                CommonMediasScreen(
+                                              files: [provider.getMediaAt(index)],
                                             ),
                                           ),
                                         );

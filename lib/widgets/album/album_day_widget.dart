@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
+import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../ui/common/common_image_screen.dart';
 
 class AlbumDayWidget extends StatefulWidget {
   const AlbumDayWidget({Key? key}) : super(key: key);
@@ -81,8 +81,8 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CommonImageScreen(
-                                      file: fileList[index],
+                                    builder: (context) => CommonMediasScreen(
+                                      files: [fileList[index]],
                                     ),
                                   ),
                                 );
