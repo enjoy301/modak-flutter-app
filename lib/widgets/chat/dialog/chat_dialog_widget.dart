@@ -1,13 +1,12 @@
-import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
+import 'package:modak_flutter_app/widgets/chat/chat_date_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
 import 'package:provider/provider.dart';
@@ -40,31 +39,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
         return Column(
           children: [
             /// column children 1번 날짜 변경선
-            widget.isDateChanged
-                ? Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                    decoration: BoxDecoration(
-                      color: Coloring.gray_40,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      DateFormat("yyyy-MM-dd")
-                          .format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                              widget.chat.sendAt.toInt() * 1000,
-                            ),
-                          )
-                          .toString(),
-                      style: TextStyle(
-                        color: Coloring.gray_10,
-                        fontSize: Font.size_largeText,
-                        fontWeight: Font.weight_regular,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                : SizedBox(),
+            if (widget.isDateChanged) ChatDateWidget(chat: widget.chat),
 
             /// column children 2번 채팅 한 bubble 전체
             Container(
@@ -74,7 +49,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                   bottom: !widget.isTail ? 2 : 8,
                   left: 10),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 textDirection:
                     isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                 children: [
@@ -106,59 +81,36 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                             ),
 
                   /// row children 2번 채팅 글 or 사진
-                  (() {
-                    if (widget.chat.metaData!['type_code'] == 'plain') {
-                      return DialogBubbleWidget(
-                        chat: widget.chat,
-                        isMine: isMine,
-                        isHead: widget.isHead,
-                      );
-                    } else if (widget.chat.metaData!['type_code'] == 'image') {
-                      return DialogImageWidget(chat: widget.chat);
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  })(),
-
-                  /// row children 3번 unReadCount, 시간
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: isMine
-                          ? CrossAxisAlignment.end
-                          : CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.chat.unReadCount <= 0
-                              ? ""
-                              : widget.chat.unReadCount.toString(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      !isMine && widget.isHead
+                          ? Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          "${context.read<UserProvider>().findUserById(widget.chat.userId)?.name}",
+                          textAlign: TextAlign.left,
                           style: TextStyle(
-                            color: Coloring.info_yellow,
-                            fontSize: Font.size_caption,
-                            fontWeight: Font.weight_medium,
+                              color: Coloring.gray_10,
+                              fontSize: Font.size_caption
                           ),
                         ),
-                        widget.isTail
-                            ? Text(
-                                DateFormat("h:mm a")
-                                    .format(
-                                      DateTime.fromMicrosecondsSinceEpoch(
-                                        (widget.chat.sendAt *
-                                                pow(10, 6).toInt())
-                                            .round(),
-                                      ),
-                                    )
-                                    .toString(),
-                                style: TextStyle(
-                                  color: Coloring.gray_20,
-                                  fontSize: Font.size_caption,
-                                  fontWeight: Font.weight_regular,
-                                ),
-                              )
-                            : SizedBox()
-                      ],
-                    ),
+                      )
+                          : SizedBox.shrink(),
+                      (() {
+                        if (widget.chat.metaData!['type_code'] == 'plain') {
+                          return DialogBubbleWidget(
+                            chat: widget.chat,
+                            isMine: isMine,
+                            isHead: widget.isHead,
+                          );
+                        } else if (widget.chat.metaData!['type_code'] == 'image') {
+                          return DialogImageWidget(chat: widget.chat, isMine: isMine);
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      })(),
+                    ],
                   ),
                 ],
               ),
@@ -169,3 +121,6 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
     );
   }
 }
+
+
+

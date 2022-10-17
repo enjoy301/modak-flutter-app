@@ -28,6 +28,7 @@ class _ChatScreen extends State<ChatScreen> {
       backgroundColor: Colors.white,
       body: Consumer<ChatProvider>(
         builder: (context, provider, child) {
+          print(provider.chats);
           return FutureBuilder(
             future: initial,
             builder: (context, snapshot) {
