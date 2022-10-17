@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,9 +23,10 @@ class AuthLandingVM extends ChangeNotifier {
 
     switch (response[Strings.message]) {
       case Strings.success:
-        log(response[Strings.response].toString());
-        await Future(() => context.read<UserProvider>().familyMembers = response[Strings.response][Strings.familyMembers]);
-        await Future(() => context.read<UserProvider>().me = response[Strings.response][Strings.me]);
+        await Future(() => context.read<UserProvider>().familyMembers =
+            response[Strings.response][Strings.familyMembers]);
+        await Future(() => context.read<UserProvider>().me =
+            response[Strings.response][Strings.me]);
         Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");
         Get.offAllNamed("/main");
         break;

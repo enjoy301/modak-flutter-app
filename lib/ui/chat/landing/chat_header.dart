@@ -6,11 +6,8 @@ AppBar chatHeader(BuildContext context) {
   return AppBar(
     leading: IconButton(
       icon: Icon(Icons.arrow_back, color: Colors.black),
-      onPressed: () => {
-        context.read<ChatProvider>().setIsFunctionOpened(false),
-        context.read<ChatProvider>().refresh(),
-        Navigator.of(context).pop()
-      },
+      onPressed: () =>
+          {context.read<ChatProvider>().refresh(), Navigator.of(context).pop()},
     ),
     centerTitle: true,
     title: Text(

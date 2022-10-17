@@ -12,22 +12,31 @@ class LetterLandingReceived extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer2<UserProvider, ChatLetterVM>(
-        builder: (context, userProvider, provider, child) {
-      return RefreshIndicator(
-        onRefresh: () async {await provider.getLetters(context);},
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: ListView.builder(
+      builder: (context, userProvider, provider, child) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            provider.getLetters();
+          },
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ListView.builder(
               itemCount: provider.lettersReceived.length,
               itemBuilder: (context, index) {
                 return LetterWidget(
-                    letter: provider.lettersReceived[index], onTap: () {
-                  Get.to(ChatLetterDetailScreen(letter: provider.lettersReceived[index]));
-
-                },);
-              }),
-        ),
-      );
-    });
+                  letter: provider.lettersReceived[index],
+                  onTap: () {
+                    Get.to(
+                      ChatLetterDetailScreen(
+                        letter: provider.lettersReceived[index],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }

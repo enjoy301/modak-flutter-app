@@ -101,7 +101,7 @@ class ChatRepository {
   }
 
   /// 미디어 업로드 url 발급
-  Future<Map<String, dynamic>> getMediaUrl() async {
+  Future<Map<String, dynamic>> getMediaUploadUrl() async {
     Map<String, dynamic> response = await remoteDataSource.getMediaUploadUrl();
 
     if (response[Strings.result]) {

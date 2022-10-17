@@ -17,60 +17,62 @@ class ChatLetterDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer2<UserProvider, ChatLetterVM>(
-        builder: (context, userProvider, provider, child) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: headerDefaultWidget(
+      builder: (context, userProvider, provider, child) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: headerDefaultWidget(
             title: "편지",
             leading: FunctionalIcon.back,
             onClickLeading: () {
               Get.back();
-            }),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "To. ${userProvider.findUserById(letter.toMemberId)?.name ?? "익명"}",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Font.size_h3,
-                        fontWeight: Font.weight_regular,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    letter.content + "\n" * 19,
-                    maxLines: 200,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 60),
-                  child: Row(
+            },
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      Expanded(child: Text("")),
                       Text(
-                        "From. ${userProvider.findUserById(letter.fromMemberId)?.name ?? "익명"}",
+                        "To. ${userProvider.findUserById(letter.toMemberId)?.name ?? "익명"}",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: Font.size_h3,
                           fontWeight: Font.weight_regular,
                         ),
-                      )
+                      ),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      letter.content + "\n" * 19,
+                      maxLines: 200,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 60),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text("")),
+                        Text(
+                          "From. ${userProvider.findUserById(letter.fromMemberId)?.name ?? "익명"}",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Font.size_h3,
+                            fontWeight: Font.weight_regular,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

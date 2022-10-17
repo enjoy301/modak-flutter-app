@@ -1,9 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:path_provider/path_provider.dart';
@@ -88,6 +88,7 @@ Future<MultipartFile> compressFilesToZip(List<File> files) async {
 
   int counter = 1;
   for (File file in files) {
+    log("file -> ${file.path}");
     File copy = await file.copy(
         "${directory.path}/sendImage/$counter.${file.toString().mediaType()}");
     encoder.addFile(copy);
@@ -97,8 +98,10 @@ Future<MultipartFile> compressFilesToZip(List<File> files) async {
   encoder.close();
 
   File file = File("${directory.path}/sendImage/medias.zip");
-  MultipartFile zipFile = MultipartFile.fromFileSync(file.path,
-      contentType: MediaType("zip", "zip"));
+  MultipartFile zipFile = MultipartFile.fromFileSync(
+    file.path,
+    contentType: MediaType("zip", "zip"),
+  );
 
   return zipFile;
 }

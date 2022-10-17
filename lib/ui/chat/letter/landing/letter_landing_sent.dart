@@ -15,19 +15,28 @@ class LetterLandingSent extends StatelessWidget {
       builder: (context, userProvider, provider, child) {
         return RefreshIndicator(
           onRefresh: () async {
-            await provider.getLetters(context);
+            provider.getLetters();
           },
           child: Scaffold(
             backgroundColor: Colors.white,
-            body: ListView.builder(itemCount: provider.lettersSent.length, itemBuilder: (context, index) {
-              return LetterWidget(
-                  letter: provider.lettersSent[index], onTap: () {
-                    Get.to(ChatLetterDetailScreen(letter: provider.lettersSent[index]));
-              },);
-            }),
+            body: ListView.builder(
+              itemCount: provider.lettersSent.length,
+              itemBuilder: (context, index) {
+                return LetterWidget(
+                  letter: provider.lettersSent[index],
+                  onTap: () {
+                    Get.to(
+                      ChatLetterDetailScreen(
+                        letter: provider.lettersSent[index],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         );
-      }
+      },
     );
   }
 }

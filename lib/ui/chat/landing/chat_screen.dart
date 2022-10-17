@@ -18,8 +18,6 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreen extends State<ChatScreen> {
   late Future initial;
-  // var keyboardVisibilityController = KeyboardVisibilityController();
-  // late StreamSubscription<bool> keyboardSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,6 @@ class _ChatScreen extends State<ChatScreen> {
       backgroundColor: Colors.white,
       body: Consumer<ChatProvider>(
         builder: (context, provider, child) {
-          print(provider.chats);
           return FutureBuilder(
             future: initial,
             builder: (context, snapshot) {
@@ -38,7 +35,8 @@ class _ChatScreen extends State<ChatScreen> {
                     Flexible(
                       child: ChatDialog(),
                     ),
-                    provider.getInputState() == InputState.chat
+                    [ChatMode.textInput, ChatMode.functionList]
+                            .contains(provider.chatMode)
                         ? InputChatWidget()
                         : SizedBox.shrink(),
                     ChatFunction(),
@@ -50,19 +48,12 @@ class _ChatScreen extends State<ChatScreen> {
                       child: WillPopScope(
                         child: SizedBox.shrink(),
                         onWillPop: () {
-                          /// 앨범, 오는길에 일 때 뒤로가기를 누르면 채팅 입력으로 바뀜
-                          if ([
-                            FunctionState.album,
-                            FunctionState.onWay,
-                            FunctionState.todo,
-                          ].contains(provider.functionState)) {
-                            provider.setFunctionState(FunctionState.list);
+                          if (provider.chatMode == ChatMode.functionList) {
+                            provider.setChatMode(ChatMode.textInput);
                             return Future(() => false);
-                          }
-
-                          /// Function 메뉴가 열려있을 때 뒤로가기를 누르면 function 메뉴가 꺼짐
-                          if (provider.isFunctionOpened) {
-                            provider.isFunctionOpenedToggle();
+                          } else if (provider.chatMode ==
+                              ChatMode.functionAlbum) {
+                            provider.setChatMode(ChatMode.functionList);
                             return Future(() => false);
                           }
 
@@ -86,28 +77,12 @@ class _ChatScreen extends State<ChatScreen> {
     super.initState();
 
     initial = context.read<ChatProvider>().initial();
-
-    // keyboardSubscription =
-    //     keyboardVisibilityController.onChange.listen((bool visible) {
-    //   if (visible) {
-    //     print("wiwiwiwiw");
-    //     if (context.read<ChatProvider>().isBottom == true) {
-    //       print("${context.read<ChatProvider>().isBottom}");
-    //       ScrollController scrollController =
-    //           context.read<ChatProvider>().scrollController;
-    //       scrollController.jumpTo(
-    //         scrollController.position.maxScrollExtent,
-    //       );
-    //     }
-    //   }
-    // });
   }
 
   @override
   void deactivate() {
     super.deactivate();
 
-    // keyboardSubscription.cancel();
     context.read<ChatProvider>().channel.sink.close();
   }
 }

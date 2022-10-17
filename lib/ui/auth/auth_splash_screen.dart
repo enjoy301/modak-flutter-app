@@ -32,15 +32,11 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
 
         /// 로컬 DB 데이터 메모리에 올림
         await homeProvider.init();
-        log("1");
         await userProvider.init();
-        log("2");
         await todoProvider.init();
-        log("3");
         await chatProvider.init();
-        log("4");
         await albumProvider.init();
-        log("5");
+
         /// redirection
         await Future(() => provider.redirection(context));
       }), builder: (context, snapshot) {
