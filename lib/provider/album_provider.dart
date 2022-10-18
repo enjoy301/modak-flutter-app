@@ -19,75 +19,81 @@ class AlbumProvider extends ChangeNotifier {
 
   static int messengerLastId = 0;
 
-  List<dynamic> _messengerMedias = [];
-  List<File> _messengerAlbumFiles = [];
-  File? _messengerThumbnail;
+  /// 모든 미디어 파일들을 build할 때 쓰려고
+  late List<List<File>> _albumBuildFileList = [];
+  get albumBuildFileList => _albumBuildFileList;
 
-
-  get messengerMedias => _messengerMedias;
-  get messengerAlbumFiles => _messengerAlbumFiles;
-  get messengerThumbnail => _messengerThumbnail;
-
-  void mediaLoading() async {
-    Map<String, dynamic> getMediaNamesResponse =
-        await _albumRepository.getMediaNames(0);
-
-    if (getMediaNamesResponse['result'] == Strings.fail) {
+  /// 앨범 UI build시 실행되는 initial 함수
+  Future initialMediaLoading() async {
+    Map<String, dynamic> mediaInfoResponse =
+        await _albumRepository.getMediaInfoList(messengerLastId, 20);
+    if (mediaInfoResponse['result'] == Strings.fail) {
       return;
     }
 
-    List<dynamic> images =
-        jsonDecode(getMediaNamesResponse['response']['data'])['album'];
-    Map<String, dynamic> getMediaResponse = await getMedia(images);
+    List<dynamic> mediaInfoList =
+        jsonDecode(mediaInfoResponse['response']['data'])['album'];
+    log("$mediaInfoList");
 
-    if (getMediaResponse['result'] == Strings.fail) {
+    Map<String, dynamic> mediaFileListResponse = await loadMedia(mediaInfoList);
+    if (mediaFileListResponse['result'] == Strings.fail) {
       return;
     }
 
-    _messengerMedias = images;
-    setFileToMessengerAlbum(getMediaResponse['response']);
+    setAlbumBuildFileList(mediaFileListResponse['response']);
   }
 
-  Future<Map<String, dynamic>> getMedia(List<dynamic> items) async {
-    Directory? messengerDirectory = await FileSystemUtil.getMediaDirectory();
+  /// 미디어 info를 넘기면, 디렉토리에서 찾던 다운하던 로드하고 로드된 파일을 리턴함.
+  Future<Map<String, dynamic>> loadMedia(
+    List<dynamic> mediaInfoList,
+  ) async {
+    Directory? mediaDirectory = await FileSystemUtil.getMediaDirectory();
 
-    if (messengerDirectory == null) {
+    if (mediaDirectory == null) {
       return {"result": "FAIL", "message": "NOSUCHDIRECTORY"};
     }
 
-    List<String> requestList = [];
-    for (Map<String, dynamic> item in items) {
-      if (!File("${messengerDirectory.path}/${item['key']}").existsSync()) {
-        requestList.add(item['key']);
+    /// Directory 검색 후, 서버에 요청해야 할 파일 찾기
+    List<String> downloadKeyList = [];
+    for (Map<String, dynamic> mediaInfo in mediaInfoList) {
+      if (!File("${mediaDirectory.path}/${mediaInfo['key']}").existsSync()) {
+        downloadKeyList.add(mediaInfo['key']);
       }
     }
 
-    if (requestList.isNotEmpty) {
-      Map<String, dynamic> response =
-          await _albumRepository.getMediaURL(requestList);
+    /// 없는 미디어 다운로드
+    if (downloadKeyList.isNotEmpty) {
+      Map<String, dynamic> urlResponse = await _albumRepository.getMediaURL(
+        downloadKeyList,
+      );
 
-      List<dynamic> urlList =
-          jsonDecode(response['response']['data'])['url_list'];
+      List<dynamic> urlList = jsonDecode(
+        urlResponse['response']['data'],
+      )['url_list'];
 
       for (String url in urlList) {
-        log("url -> $url");
+        log("url $url");
         RegExp regExp = RegExp(r'.com\/(\w|\W)+\?');
         String temp = (regExp.stringMatch(url).toString());
         String fileName = temp.substring(5, temp.length - 1);
 
-        final ByteData imageData =
-            await NetworkAssetBundle(Uri.parse(url)).load("");
+        final ByteData imageData = await NetworkAssetBundle(
+          Uri.parse(url),
+        ).load("");
         final Uint8List bytes = imageData.buffer.asUint8List();
 
-        File file = await File('${messengerDirectory.path}/$fileName')
-            .create(recursive: true);
+        File file = await File(
+          '${mediaDirectory.path}/$fileName',
+        ).create(recursive: true);
         file.writeAsBytesSync(bytes);
       }
     }
 
     List<File> files = [];
-    for (Map<String, dynamic> item in items) {
-      files.add(File("${messengerDirectory.path}/${item['key']}"));
+    for (Map<String, dynamic> mediaInfo in mediaInfoList) {
+      files.add(
+        File("${mediaDirectory.path}/${mediaInfo['key']}"),
+      );
     }
 
     return {
@@ -96,41 +102,16 @@ class AlbumProvider extends ChangeNotifier {
     };
   }
 
-  void setFileToMessengerAlbum(List<File> fileList) {
-    _messengerAlbumFiles = [];
-
-    if (fileList.isNotEmpty) {
-      _messengerThumbnail = fileList[0];
-
-      for (File file in fileList) {
-        _messengerAlbumFiles.add(file);
-      }
-
-      notifyListeners();
+  void setAlbumBuildFileList(List<File> fileList) {
+    _albumBuildFileList = [fileList];
+    for (File mediaFile in fileList) {
+      log("-> ${mediaFile.absolute.path.split('/').last.split('s')[0]}");
     }
-  }
 
-  File getFileFromMessengerAlbumAt(int index) {
-    return _messengerAlbumFiles[index];
-  }
-
-  final List<File> _todoAlbumFiles = [];
-  get todoAlbumFiles => _todoAlbumFiles;
-  File? _todoThumbnail;
-  get todoThumbnail => _todoThumbnail;
-
-  void addFileToTodoAlbum(File file) {
-    _todoAlbumFiles.add(file);
     notifyListeners();
   }
 
-  File getFileFromTodoAlbumAt(int index) {
-    return _todoAlbumFiles[index];
-  }
-
   clear() {
-    _messengerMedias = [];
-    _messengerAlbumFiles = [];
-    _messengerThumbnail = null;
+    _albumBuildFileList = [];
   }
 }

@@ -256,7 +256,8 @@ class ChatProvider extends ChangeNotifier {
     /// 압축 로직
     await VideoCompress.deleteAllCache();
     Directory? directory = await getExternalStorageDirectory();
-    List<File> compressedFiles = [];
+    List<File> compressedImageFiles = [];
+    List<File> compressedVideoFiles = [];
 
     int index = 0;
     for (File file in _selectedMediaFiles) {
@@ -266,7 +267,7 @@ class ChatProvider extends ChangeNotifier {
           "${directory?.path}/Download/cached_media/messengers/temp$index${extension(file.path)}",
           quality: 30,
         ))!;
-        compressedFiles.add(imageResult);
+        compressedImageFiles.add(imageResult);
       } else if ([".mp4"].contains(extension(file.path))) {
         var videoResult = ((await VideoCompress.compressVideo(
           file.absolute.path,
@@ -275,38 +276,59 @@ class ChatProvider extends ChangeNotifier {
           includeAudio: true,
         ))!
             .file!);
-        compressedFiles.add(videoResult);
+        compressedVideoFiles.add(videoResult);
       } else {
         /// .png
         log("이 파일형식 반영 안됨. ${extension(file.path)}");
       }
     }
-    log("count -> ${compressedFiles.length}");
 
-    if (compressedFiles.isEmpty) {
-      return;
+    if (compressedImageFiles.isNotEmpty) {
+      MultipartFile zipFile = await mediaFilesToZip(
+        compressedImageFiles,
+      );
+
+      Map<String, dynamic> response = await _chatRepository.uploadMedia(
+        MediaUploadDTO(
+          mediaUrlData: mediaUrlData,
+          file: zipFile,
+          type: "zip",
+          imageCount: compressedImageFiles.length,
+          memberId: _memberId,
+          familyId: _familyId,
+        ),
+      );
+
+      if (response[Strings.message] == Strings.success) {
+        Fluttertoast.showToast(msg: "미디어 전송 성공");
+      } else {
+        Fluttertoast.showToast(msg: "미디어 전송 실패");
+      }
     }
 
-    /// zip으로 묶는 로직
-    MultipartFile zipFile = await compressFilesToZip(
-      compressedFiles,
-    );
+    if (compressedVideoFiles.isNotEmpty) {
+      for (File video in compressedVideoFiles) {
+        MultipartFile zipFile = await mediaFilesToZip(
+          [video],
+        );
 
-    Map<String, dynamic> response = await _chatRepository.uploadMedia(
-      MediaUploadDTO(
-        mediaUrlData: mediaUrlData,
-        file: zipFile,
-        type: "zip",
-        imageCount: compressedFiles.length,
-        memberId: _memberId,
-        familyId: _familyId,
-      ),
-    );
+        Map<String, dynamic> response = await _chatRepository.uploadMedia(
+          MediaUploadDTO(
+            mediaUrlData: mediaUrlData,
+            file: zipFile,
+            type: "zip",
+            imageCount: 1,
+            memberId: _memberId,
+            familyId: _familyId,
+          ),
+        );
 
-    if (response[Strings.message] == Strings.success) {
-      Fluttertoast.showToast(msg: "미디어 전송 성공");
-    } else {
-      Fluttertoast.showToast(msg: "미디어 전송 실패");
+        if (response[Strings.message] == Strings.success) {
+          Fluttertoast.showToast(msg: "미디어 전송 성공");
+        } else {
+          Fluttertoast.showToast(msg: "미디어 전송 실패");
+        }
+      }
     }
 
     await VideoCompress.deleteAllCache();
@@ -390,7 +412,7 @@ class ChatProvider extends ChangeNotifier {
   Future<bool> addMedia(File? mediaFile) async {
     if (mediaFile != null) {
       _mediaFiles.add(mediaFile);
-      _thumbnailMedias.add(await getVideoThumbnail(mediaFile));
+      _thumbnailMedias.add(await getVideoThumbnailFile(mediaFile));
     }
     notifyListeners();
     return true;
@@ -432,7 +454,5 @@ class ChatProvider extends ChangeNotifier {
     _chats.clear();
   }
 
-  clear() {
-
-  }
+  clear() {}
 }

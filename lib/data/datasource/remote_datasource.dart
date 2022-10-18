@@ -570,7 +570,7 @@ class RemoteDataSource {
    */
 
   /// 미디어 key name 얻는 함수
-  Future<Map<String, dynamic>> getMediaNames(int lastId) async {
+  Future<Map<String, dynamic>> getMediaInfoList(int lastId, int count) async {
     return _tryRequest(
       () async {
         return await Dio(
@@ -578,7 +578,7 @@ class RemoteDataSource {
             queryParameters: {
               'familyId':
                   await RemoteDataSource.storage.read(key: Strings.familyId),
-              'count': 100,
+              'count': count,
               'lastId': lastId,
             },
           ),

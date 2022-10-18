@@ -108,7 +108,12 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                         } else if (widget.chat.metaData!['type_code'] ==
                             'image') {
                           return DialogImageWidget(
-                              chat: widget.chat, isMine: isMine);
+                            chat: widget.chat,
+                            isMine: isMine,
+                          );
+                        } else if (widget.chat.metaData!['type_code'] ==
+                            'videoi') {
+                          return SizedBox.shrink();
                         } else {
                           return SizedBox.shrink();
                         }

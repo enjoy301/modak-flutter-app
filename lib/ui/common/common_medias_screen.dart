@@ -33,7 +33,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
   addFiles() async {
     for (File file in widget.files) {
       if (file.path.toString().mediaType() == "mp4") {
-        filesWithThumbnail.add(await getVideoThumbnail(file));
+        filesWithThumbnail.add(await getVideoThumbnailFile(file));
       } else {
         filesWithThumbnail.add(file);
       }
@@ -72,70 +72,101 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
             children: [
               PageView(
                 controller: _pageController,
-                onPageChanged: (index) => setState(() {
-                  imageIndex = index;
-                }),
+                onPageChanged: (index) => setState(
+                  () {
+                    imageIndex = index;
+                  },
+                ),
                 children: widget.files
-                    .mapIndexed((index, file) => Center(
+                    .mapIndexed(
+                      (index, file) => Center(
                         child: file.toString().mediaType() == "mp4"
                             ? CommonVideoScreen(
                                 file: file,
                               )
-                            : CommonImageScreen(file: file)))
+                            : CommonImageScreen(file: file),
+                      ),
+                    )
                     .toList(),
               ),
-              if (widget.files.length > 1) Positioned(
-                bottom: 0,
-                child: Opacity(
-                  opacity: showHeaderAndFooter ? 1 : 0,
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.black.withOpacity(0.5),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Center(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: filesWithThumbnail
-                                .mapIndexed((index, file) => GestureDetector(
-                                    onTap: () {
-                                      _pageController.jumpToPage(index);
-                                      setState(() {
-                                        imageIndex = index;
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 3),
-                                      child: Stack(
-                                        children: [
-                                          Center(
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(3),
-                                              child: Image.file(file, width: 50, height: 80, fit: BoxFit.cover, gaplessPlayback: true),
+              if (widget.files.length > 1)
+                Positioned(
+                  bottom: 0,
+                  child: Opacity(
+                    opacity: showHeaderAndFooter ? 1 : 0,
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.black.withOpacity(0.5),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Center(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: filesWithThumbnail
+                                  .mapIndexed(
+                                    (index, file) => GestureDetector(
+                                      onTap: () {
+                                        _pageController.jumpToPage(index);
+                                        setState(
+                                          () {
+                                            imageIndex = index;
+                                          },
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 3,
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            Center(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  3,
+                                                ),
+                                                child: Image.file(
+                                                  file,
+                                                  width: 50,
+                                                  height: 80,
+                                                  fit: BoxFit.cover,
+                                                  gaplessPlayback: true,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          if (index == imageIndex)
-                                            Center(child: Container(
-                                            width: 50, height: 80,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(3),
-                                              border: Border.all(color: Colors.white, width: 3),
-                                            ),
-                                          ),),
-                                        ],
+                                            if (index == imageIndex)
+                                              Center(
+                                                child: Container(
+                                                  width: 50,
+                                                  height: 80,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      3,
+                                                    ),
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 3,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
                                       ),
-                                    )))
-                                .toList(),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              )
+                )
             ],
           ),
         ),

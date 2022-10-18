@@ -12,46 +12,60 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 Future<MultipartFile?> getImageFromCamera() async {
   try {
-    XFile? file = await ImagePicker().pickImage(source: ImageSource.camera);
+    XFile? file = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
 
     if (file == null) {
-      print("failed to get image");
+      log("failed to get image");
       return null;
     }
-    int standard = DateTime.now().millisecond;
 
-    MultipartFile image = MultipartFile.fromFileSync(file.path,
-        contentType: MediaType("image", "png")); //갤러리에서 사진을 가져옵니다.
-    print((DateTime.now().millisecond - standard) / 1000);
+    /// 갤러리에서 사진을 가져옵니다.
+    MultipartFile image = MultipartFile.fromFileSync(
+      file.path,
+      contentType: MediaType("image", "png"),
+    );
 
     return image;
   } catch (e) {
-    print("failed to get image");
+    log("failed to get image, $e");
+    return null;
   }
-  return null;
 }
 
 Future<MultipartFile?> getVideoFromCamera() async {
   try {
-    XFile? file = await ImagePicker().pickVideo(source: ImageSource.camera);
+    XFile? file = await ImagePicker().pickVideo(
+      source: ImageSource.camera,
+    );
     if (file == null) {
-      print("failed to get image");
+      log("failed to get image");
       return null;
     }
-    MultipartFile video = MultipartFile.fromFileSync(file.path,
-        contentType: MediaType("image", "mp4")); //갤러리에서 사진을 가져옵니다.
+
+    /// 갤러리에서 비디오 가져오기
+    MultipartFile video = MultipartFile.fromFileSync(
+      file.path,
+      contentType: MediaType("image", "mp4"),
+    );
+
     return video;
   } catch (e) {
-    print("failed to get image");
+    log("failed to get image, $e");
+    return null;
   }
-  return null;
 }
 
 Future<List<File>> getImageFromAlbum() async {
-  final List<AssetPathEntity> paths =
-      await PhotoManager.getAssetPathList(onlyAll: true);
-  final List<AssetEntity> entities =
-      await paths[0].getAssetListPaged(page: 0, size: 80);
+  final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList(
+    onlyAll: true,
+  );
+  final List<AssetEntity> entities = await paths[0].getAssetListPaged(
+    page: 0,
+    size: 80,
+  );
+
   final List<File> files = [];
   for (AssetEntity entity in entities) {
     File? file = await entity.file;
@@ -62,21 +76,22 @@ Future<List<File>> getImageFromAlbum() async {
   return files;
 }
 
-Future<File> getVideoThumbnail(File file) async {
+Future<File> getVideoThumbnailFile(File file) async {
   String? type = file.toString().mediaType();
   if (type != "mp4") {
     return file;
   }
+
   String? fileName = await VideoThumbnail.thumbnailFile(
     video: file.path,
     thumbnailPath: (await getTemporaryDirectory()).path,
     imageFormat: ImageFormat.PNG,
-    quality: 100,
+    quality: 80,
   );
   return File(fileName!);
 }
 
-Future<MultipartFile> compressFilesToZip(List<File> files) async {
+Future<MultipartFile> mediaFilesToZip(List<File> files) async {
   Directory directory = await getTemporaryDirectory();
 
   if (await Directory("${directory.path}/sendImage").exists()) {

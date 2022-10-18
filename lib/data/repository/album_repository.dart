@@ -17,9 +17,9 @@ class AlbumRepository {
   static late final LocalDataSource localDataSource;
   static late final RemoteDataSource remoteDataSource;
 
-  Future<Map<String, dynamic>> getMediaNames(int lastId) async {
+  Future<Map<String, dynamic>> getMediaInfoList(int lastId, int count) async {
     Map<String, dynamic> response =
-        await remoteDataSource.getMediaNames(lastId);
+        await remoteDataSource.getMediaInfoList(lastId, count);
 
     if (response[Strings.result]) {
       return {
