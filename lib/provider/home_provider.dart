@@ -9,15 +9,16 @@ import 'package:provider/provider.dart';
 
 class HomeProvider extends ChangeNotifier {
   init() async {
-    _homeRepository = HomeRepository();
+    clear();
     await getHomeInfo();
     await getTodayTalk(DateTime.now());
+    notifyListeners();
   }
 
-  static late final HomeRepository _homeRepository;
+  final HomeRepository _homeRepository = HomeRepository();
   String? familyCode;
   String? todayFortune;
-  final Map<String, Map<int, String>> todayTalkMap = {};
+  Map<String, Map<int, String>> todayTalkMap = {};
   DateTime _selectedDatetime = DateTime.now();
   DateTime _focusedDateTime = DateTime.now();
 
@@ -102,7 +103,14 @@ class HomeProvider extends ChangeNotifier {
         Fluttertoast.showToast(msg: "등록 실패");
         return false;
     }
-    print(todayTalkMap);
     return false;
+  }
+
+  clear() {
+    familyCode = null;
+    todayFortune = null;
+    todayTalkMap = {};
+    _selectedDatetime = DateTime.now();
+    _focusedDateTime = DateTime.now();
   }
 }

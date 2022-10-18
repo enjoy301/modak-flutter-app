@@ -42,7 +42,8 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                   },
                   child: Container(
                     height: 60.0,
-                    color: Color.lerp(Colors.white, Colors.redAccent[100], stuckAmount),
+                    color: Color.lerp(
+                        Colors.white, Colors.redAccent[100], stuckAmount),
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     alignment: Alignment.centerLeft,
                     child: Row(
@@ -114,9 +115,13 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                         Get.to(HomeTalkViewScreen());
                                       },
                                       child: FamilyTalkWidget(
-                                        name: userProvider.findUserById(member)?.name ?? "익명",
+                                          name: userProvider
+                                                  .findUserById(member)
+                                                  ?.name ??
+                                              "익명",
                                           content: homeProvider.todayTalkMap[
-                                              Date.getFormattedDate()]![member]!));
+                                                  Date.getFormattedDate()]![
+                                              member]!));
                                 }).toList(),
                               ),
                             ),
@@ -197,73 +202,71 @@ class FamilyFortuneWidget extends StatelessWidget {
 }
 
 class FamilyTalkWidget extends StatelessWidget {
-  const FamilyTalkWidget({Key? key, required this.name, required this.content}) : super(key: key);
+  const FamilyTalkWidget({Key? key, required this.name, required this.content})
+      : super(key: key);
 
   final String name;
   final String content;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, HomeProvider>(
-        builder: (context, userProvider, homeProvider, child) {
-      return Container(
-        decoration: BoxDecoration(
-            color: Coloring.bg_blue, borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8, left: 20),
-              child: Text("우리 가족에게 한마디",
-                  style: TextStyle(
-                    color: Coloring.gray_0,
-                    fontSize: Font.size_largeText,
-                    fontWeight: Font.weight_semiBold,
-                  )),
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 15, right: 12, bottom: 20, left: 20),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Image.asset(
-                      "lib/assets/images/family/profile/dad_profile.png",
-                      width: 56,
-                      height: 56,
-                    ),
+    return Container(
+      decoration: BoxDecoration(
+          color: Coloring.bg_blue, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8, left: 20),
+            child: Text("우리 가족에게 한마디",
+                style: TextStyle(
+                  color: Coloring.gray_0,
+                  fontSize: Font.size_largeText,
+                  fontWeight: Font.weight_semiBold,
+                )),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 15, right: 12, bottom: 20, left: 20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset(
+                    "lib/assets/images/family/profile/dad_profile.png",
+                    width: 56,
+                    height: 56,
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(name,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: Font.size_mediumText,
-                          fontWeight: Font.weight_bold,
-                        )),
-                    SizedBox(
-                      width: 200,
-                      child: Text(
-                         "$content\n",
-                        style: TextStyle(
-                          color: Coloring.gray_0,
-                          fontSize: Font.size_largeText,
-                          fontWeight: Font.weight_medium,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        maxLines: 2,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: Font.size_mediumText,
+                        fontWeight: Font.weight_bold,
+                      )),
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      "$content\n",
+                      style: TextStyle(
+                        color: Coloring.gray_0,
+                        fontSize: Font.size_largeText,
+                        fontWeight: Font.weight_medium,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    )
-                  ],
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    });
+                      maxLines: 2,
+                    ),
+                  )
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
