@@ -123,7 +123,6 @@ class UserProvider extends ChangeNotifier {
 
   logout(BuildContext context) async {
    await  _userRepository.clearStorage();
-   Restart.restartApp();
    Get.offAndToNamed("/auth/splash");
   }
 

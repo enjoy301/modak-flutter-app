@@ -64,11 +64,12 @@ class TodoDateWidget extends StatelessWidget {
                     fontSize: Font.size_mediumText,
                     fontWeight: Font.weight_medium),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            alignment: WrapAlignment.center,
             children: colors
                 .map((e) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 1.5),
+                      padding: const EdgeInsets.only(right: 1.5, bottom: 1.5, left: 1.5),
                       child: SizedBox(
                         width: 4,
                         height: 4,
