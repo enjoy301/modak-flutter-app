@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
@@ -117,5 +119,15 @@ class UserProvider extends ChangeNotifier {
   removeMeTag(String tag) async {
     me!.timeTags.remove(tag);
     updateMeTag(me!.timeTags);
+  }
+
+  logout(BuildContext context) async {
+   await  _userRepository.clearStorage();
+   await Future(() => Phoenix.rebirth(context));
+   // Get.offAndToNamed("/auth/landing");
+  }
+
+  clearProvider() {
+
   }
 }

@@ -157,6 +157,13 @@ class LocalDataSource {
         await userBox.put(Strings.isChatAlarmReceive, isChatAlarmReceive));
   }
 
+  Future<bool> clearStorage() async {
+    await authBox.clear();
+    await userBox.clear();
+    await todoBox.clear();
+    return true;
+  }
+
   /// util
   bool tryFunction(Function() function) {
     try {
