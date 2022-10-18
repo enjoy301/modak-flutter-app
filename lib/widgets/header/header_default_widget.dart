@@ -4,6 +4,8 @@ import 'package:modak_flutter_app/constant/font.dart';
 
 AppBar headerDefaultWidget({
   String title = "",
+  IconButton? customLeading,
+  IconButton? customTrailing,
   FunctionalIcon leading = FunctionalIcon.none,
   FunctionalIcon trailing = FunctionalIcon.none,
   Function()? onClickLeading,
@@ -44,11 +46,11 @@ AppBar headerDefaultWidget({
     ),
   };
   return AppBar(
-    leading: TextButton(
+    leading: customLeading ?? TextButton(
       onPressed: onClickLeading,
       child: iconData[leading]!,
     ),
-    actions: [
+    actions: [customTrailing ??
       TextButton(
         onPressed: onClickTrailing,
         child: iconData[trailing]!,

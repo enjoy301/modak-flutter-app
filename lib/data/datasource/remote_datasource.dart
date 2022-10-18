@@ -610,6 +610,12 @@ class RemoteDataSource {
    *
    */
 
+  /// storage를 초기화 함
+  Future<bool> clearStorage() async {
+    await storage.deleteAll();
+    return true;
+  }
+
   /// accessToken, refresh Token 검증하는 과정이 포함된 Dio
   /// accessToken 을 포함할 시에 아래 Dio 를 통해 요청
   Future<Dio> authDio() async {

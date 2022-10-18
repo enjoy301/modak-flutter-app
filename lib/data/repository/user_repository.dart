@@ -239,6 +239,11 @@ class UserRepository {
     await localDataSource.updateChatAlarmReceive(chatAlarmReceive);
   }
 
+  clearStorage() async {
+    await localDataSource.clearStorage();
+    await remoteDataSource.clearStorage();
+  }
+
   Future<List> updateMeAndFamilyInfo(Map<String, dynamic> response) async {
     Map<String, dynamic> meRaw =
         response['response'].data['data'][Strings.memberResult];

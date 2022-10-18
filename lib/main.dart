@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/route_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -79,7 +80,7 @@ void main() async {
         /// main page provider
         ChangeNotifierProvider(create: (_) => TodoLandingVM()),
         ChangeNotifierProvider(create: (_) => ChatLetterVM()),
-      ], child: const MyApp())));
+      ], child: Phoenix(child: const MyApp()))));
 }
 
 class MyApp extends StatefulWidget {
