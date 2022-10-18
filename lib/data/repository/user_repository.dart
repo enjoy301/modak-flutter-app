@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
@@ -57,6 +59,7 @@ class UserRepository {
     /// 성공했을 때 처리하는 함수
     if (isSuccessful) {
       Map<String, dynamic> response = await remoteDataSource.socialLogin();
+      log(response.toString());
       if (response[Strings.result]) {
         List updateResult = await updateMeAndFamilyInfo(response);
         User me = updateResult[0];
@@ -150,7 +153,6 @@ class UserRepository {
   Future<Map<String, dynamic>> updateFamilyId(String familyCode) async {
     Map<String, dynamic> response =
         await remoteDataSource.updateFamilyId(familyCode);
-    print(response);
     if (response[Strings.result]) {
       return {Strings.message: Strings.success};
     }

@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
@@ -13,22 +14,22 @@ class AuthLandingVM extends ChangeNotifier {
   }
 
   _init() async {
-    userRepository = UserRepository();
   }
 
-  late final UserRepository? userRepository;
+  final UserRepository? userRepository = UserRepository();
 
   void onSocialClick(BuildContext context, String type) async {
     Map<String, dynamic> response = await userRepository!.socialLogin(type);
-
     switch (response[Strings.message]) {
       case Strings.success:
         await Future(() => context.read<UserProvider>().familyMembers =
             response[Strings.response][Strings.familyMembers]);
         await Future(() => context.read<UserProvider>().me =
-            response[Strings.response][Strings.me]);
+          response[Strings.response][Strings.me]);
+
+        log(response.toString());
         Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");
-        Get.offAllNamed("/main");
+        Get.offAllNamed("/auth/splash");
         break;
       case Strings.fail:
         Fluttertoast.showToast(msg: "로그인에 실패하셨습니다");

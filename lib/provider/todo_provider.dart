@@ -11,7 +11,7 @@ class TodoProvider extends ChangeNotifier {
   DateFormat formatter = DateFormat("yyyy-MM-dd");
 
   init() async {
-    _todoRepository = TodoRepository();
+    clear();
     await getTodosByScroll(
       DateTime.now().subtract(
         Duration(
@@ -19,13 +19,13 @@ class TodoProvider extends ChangeNotifier {
         ),
       ),
     );
+    notifyListeners();
   }
 
-  static late final TodoRepository _todoRepository;
+  final TodoRepository _todoRepository = TodoRepository();
 
-  final Map<String, List<String>> _colorMap = {};
-
-  final Map<String, List<Todo>> _todoMap = {};
+  Map<String, List<String>> _colorMap = {};
+  Map<String, List<Todo>> _todoMap = {};
   DateTime todoSavedFromDate = DateUtils.dateOnly(DateTime.now());
   DateTime todoSavedToDate = DateUtils.dateOnly(DateTime.now());
   DateTime _focusedDateTime = DateTime.now();
@@ -215,5 +215,15 @@ class TodoProvider extends ChangeNotifier {
     }
     _todoCount = todoCount;
     notifyListeners();
+  }
+
+  clear() {
+    _colorMap = {};
+    _todoMap = {};
+    todoSavedFromDate = DateUtils.dateOnly(DateTime.now());
+    todoSavedToDate = DateUtils.dateOnly(DateTime.now());
+    _focusedDateTime = DateTime.now();
+    _selectedDateTime = DateTime.now();
+    _todoCount = 0;
   }
 }

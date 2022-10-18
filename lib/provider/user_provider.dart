@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
+import 'package:restart_app/restart_app.dart';
 
 class UserProvider extends ChangeNotifier {
   init() async {
-    _userRepository = UserRepository();
+    clear();
     _me = _userRepository.getMe();
     _familyMembers = _userRepository.getFamilyMembers();
     _sizeSettings = _userRepository.getSizeSettings();
@@ -17,7 +17,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  static late final UserRepository _userRepository;
+  final UserRepository _userRepository = UserRepository();
   List<double> fontScale = [1.0, 1.5, 2.0];
 
   double getFontScale() {
@@ -123,11 +123,12 @@ class UserProvider extends ChangeNotifier {
 
   logout(BuildContext context) async {
    await  _userRepository.clearStorage();
-   await Future(() => Phoenix.rebirth(context));
-   // Get.offAndToNamed("/auth/landing");
+   Restart.restartApp();
+   Get.offAndToNamed("/auth/splash");
   }
 
-  clearProvider() {
-
+  clear() {
+    _me = null;
+    _familyMembers = [];
   }
 }

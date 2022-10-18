@@ -26,13 +26,14 @@ import '../data/datasource/remote_datasource.dart';
 
 class ChatProvider extends ChangeNotifier {
   init() async {
-    _chatRepository = ChatRepository();
+    clear();
+    notifyListeners();
   }
 
   ///
   /// [변수]
   ///
-  static late final ChatRepository _chatRepository;
+  final ChatRepository _chatRepository = ChatRepository();
   static late String _memberId;
   static late String _familyId;
   static late String _wssURL;
@@ -429,5 +430,9 @@ class ChatProvider extends ChangeNotifier {
   void refresh() {
     _chatMode = ChatMode.textInput;
     _chats.clear();
+  }
+
+  clear() {
+
   }
 }

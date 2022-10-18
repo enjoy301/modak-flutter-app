@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,19 +11,21 @@ import '../utils/file_system_util.dart';
 
 class AlbumProvider extends ChangeNotifier {
   init() {
-    _albumRepository = AlbumRepository();
+    clear();
+    notifyListeners();
   }
 
-  static late final AlbumRepository _albumRepository;
+  final AlbumRepository _albumRepository = AlbumRepository();
 
   static int messengerLastId = 0;
 
-  late List<dynamic> _messengerMedias;
-  get messengerMedias => _messengerMedias;
-
+  List<dynamic> _messengerMedias = [];
   List<File> _messengerAlbumFiles = [];
-  get messengerAlbumFiles => _messengerAlbumFiles;
   File? _messengerThumbnail;
+
+
+  get messengerMedias => _messengerMedias;
+  get messengerAlbumFiles => _messengerAlbumFiles;
   get messengerThumbnail => _messengerThumbnail;
 
   void mediaLoading() async {
@@ -125,5 +126,11 @@ class AlbumProvider extends ChangeNotifier {
 
   File getFileFromTodoAlbumAt(int index) {
     return _todoAlbumFiles[index];
+  }
+
+  clear() {
+    _messengerMedias = [];
+    _messengerAlbumFiles = [];
+    _messengerThumbnail = null;
   }
 }

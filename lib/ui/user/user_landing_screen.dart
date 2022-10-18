@@ -104,7 +104,6 @@ class UserLandingScreen extends StatelessWidget {
                                 okText: "로그아웃",
                                 noText: "취소", onOkPressed: () {
                               userProvider.logout(context);
-                              Get.deleteAll();
                             }, onNoPressed: () {
                               Get.back();
                             });
