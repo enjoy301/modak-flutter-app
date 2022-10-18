@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
@@ -67,18 +65,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 6),
-                        child: SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: CircleAvatar(
-                            backgroundColor: widget.user != null
-                                ? widget.user!.color.toColor()
-                                : Colors.white,
-                          ),
-                        ),
-                      )
+
                     ],
                   ),
                   Padding(
@@ -93,6 +80,18 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                     ),
                   )
                 ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 6, right: 6),
+            child: SizedBox(
+              width: 10,
+              height: 10,
+              child: CircleAvatar(
+                backgroundColor: widget.user != null
+                    ? widget.user!.color.toColor()
+                    : Colors.white,
               ),
             ),
           ),
