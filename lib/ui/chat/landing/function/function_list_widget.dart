@@ -111,6 +111,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                 data: functionIconWidgetValues[3],
                 onTap: () {
                   log("룰렛 돌리기~");
+                  Get.toNamed("/chat/roulette/landing");
                 },
               ),
               ChatFunctionIconWidget(

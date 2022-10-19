@@ -24,6 +24,7 @@ import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
 import 'package:modak_flutter_app/ui/chat/letter/landing/chat_letter_landing_screen.dart';
 import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_content_screen.dart';
 import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_envelop_screen.dart';
+import 'package:modak_flutter_app/ui/chat/roulette/chat_roulette_landing_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_fortune_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_notification_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
@@ -128,6 +129,7 @@ class _MyAppState extends State<MyApp> {
         "/chat/letter/landing": (context) => ChatLetterLandingScreen(),
         "/letter/write/content": (context) => LetterWriteContentScreen(),
         "/letter/write/envelop": (context) => LetterWriteEnvelopScreen(),
+        "/chat/roulette/landing": (context) => ChatRouletteLandingScreen(),
         "user/landing": (context) => UserLandingScreen(),
         "/user/modify": (context) => ChangeNotifierProvider(
               create: (_) => UserModifyVM(),

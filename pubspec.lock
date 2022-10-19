@@ -370,6 +370,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.2"
+  flutter_fortune_wheel:
+    dependency: "direct main"
+    description:
+      name: flutter_fortune_wheel
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
+  flutter_hooks:
+    dependency: transitive
+    description:
+      name: flutter_hooks
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.18.5+1"
   flutter_image_compress:
     dependency: "direct main"
     description:
@@ -982,6 +996,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
   restart_app:
     dependency: "direct main"
     description:
@@ -989,6 +1010,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0+1"
+  rxdart:
+    dependency: "direct main"
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.5"
   share:
     dependency: "direct main"
     description:
