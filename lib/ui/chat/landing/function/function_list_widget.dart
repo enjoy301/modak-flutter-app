@@ -64,7 +64,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
               ChatFunctionIconWidget(
                 data: functionIconWidgetValues[0],
                 onTap: () async {
-                  provider.setChatMode(ChatMode.functionAlbum);
+                  provider.chatMode = ChatMode.functionAlbum;
                   if (provider.mediaFiles.isEmpty) {
                     List<File> files = await getImageFromAlbum();
                     for (File file in files) {

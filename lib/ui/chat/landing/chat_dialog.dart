@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/utils/date.dart';
@@ -22,6 +23,8 @@ class _ChatDialog extends State<ChatDialog> {
           onTap: () {
             /// for 키보드 dispose
             FocusScope.of(context).unfocus();
+            provider.feelMode = false;
+            provider.chatMode = ChatMode.textInput;
           },
           child: ListView.builder(
             controller: provider.scrollController,

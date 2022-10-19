@@ -127,6 +127,8 @@ flutter:
     -  lib/assets/
     -  lib/assets/functional_image/
     -  lib/assets/images/auth/
+    -  lib/assets/images/chat/
+    -  lib/assets/images/chat/feeling/
     -  lib/assets/images/family/
     -  lib/assets/images/family/profile/
     -  lib/assets/images/others/
