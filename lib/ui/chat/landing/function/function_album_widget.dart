@@ -37,7 +37,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                     /// row 1번 취소 버튼
                     IconButton(
                       onPressed: () {
-                        provider.setChatMode(ChatMode.functionList);
+                        provider.chatMode = ChatMode.functionList;
                         provider.clearSelectedMedia();
                       },
                       icon: Icon(Icons.cancel_sharp),

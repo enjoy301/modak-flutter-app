@@ -55,6 +55,9 @@ class ChatProvider extends ChangeNotifier {
   String _currentInput = "";
   String get currentInput => _currentInput;
 
+  bool _feelMode = false;
+  bool get feelMode => _feelMode;
+
   /// 채팅창 모드
   late ChatMode _chatMode;
   ChatMode get chatMode => _chatMode;
@@ -442,9 +445,17 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setChatMode(ChatMode newChatMode) {
-    _chatMode = newChatMode;
+  set feelMode(bool feelMode) {
+    _feelMode = feelMode;
+    _chatMode = ChatMode.textInput;
+    notifyListeners();
+  }
 
+  set chatMode(ChatMode chatMode) {
+    _chatMode = chatMode;
+    if (chatMode != ChatMode.textInput) {
+      _feelMode = false;
+    }
     notifyListeners();
   }
 

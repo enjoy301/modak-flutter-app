@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/chat/landing/chat_dialog.dart';
+import 'package:modak_flutter_app/ui/chat/landing/chat_feeling.dart';
 import 'package:modak_flutter_app/ui/chat/landing/chat_header.dart';
 import 'package:modak_flutter_app/ui/chat/landing/chat_input.dart';
 import 'package:modak_flutter_app/ui/chat/landing/function/chat_function.dart';
@@ -23,7 +24,6 @@ class _ChatScreen extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: chatHeader(context),
-      backgroundColor: Colors.white,
       body: Consumer<ChatProvider>(
         builder: (context, provider, child) {
           return FutureBuilder(
@@ -35,6 +35,7 @@ class _ChatScreen extends State<ChatScreen> {
                     Flexible(
                       child: ChatDialog(),
                     ),
+                    if (provider.feelMode) ChatFeeling(),
                     [ChatMode.textInput, ChatMode.functionList]
                             .contains(provider.chatMode)
                         ? InputChatWidget()
@@ -48,12 +49,16 @@ class _ChatScreen extends State<ChatScreen> {
                       child: WillPopScope(
                         child: SizedBox.shrink(),
                         onWillPop: () {
+                          if (provider.feelMode) {
+                            provider.feelMode = false;
+                            return Future(() => false);
+                          }
                           if (provider.chatMode == ChatMode.functionList) {
-                            provider.setChatMode(ChatMode.textInput);
+                            provider.chatMode = ChatMode.textInput;
                             return Future(() => false);
                           } else if (provider.chatMode ==
                               ChatMode.functionAlbum) {
-                            provider.setChatMode(ChatMode.functionList);
+                            provider.chatMode = ChatMode.functionList;
                             return Future(() => false);
                           }
 
