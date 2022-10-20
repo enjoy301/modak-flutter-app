@@ -25,7 +25,6 @@ import 'package:modak_flutter_app/ui/chat/letter/landing/chat_letter_landing_scr
 import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_content_screen.dart';
 import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_envelop_screen.dart';
 import 'package:modak_flutter_app/ui/chat/roulette/chat_roulette_landing_screen.dart';
-import 'package:modak_flutter_app/ui/home/home_fortune_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_notification_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
@@ -105,7 +104,6 @@ class _MyAppState extends State<MyApp> {
       routes: {
         "/main": (context) => LandingBottomNavigator(),
         "/home/notification": (context) => HomeNotificationScreen(),
-        "/home/fortune": (context) => HomeFortuneScreen(),
         "/auth/splash": (context) => ChangeNotifierProvider(
               create: (_) => AuthSplashVM(),
               child: AuthSplashScreen(),

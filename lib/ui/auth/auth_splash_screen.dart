@@ -39,6 +39,7 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
           await chatProvider.init();
           await albumProvider.init();
         }
+
         /// redirection
         await Future(() => provider.redirection(context));
       }), builder: (context, snapshot) {
