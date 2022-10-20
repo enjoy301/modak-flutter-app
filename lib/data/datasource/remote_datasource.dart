@@ -705,7 +705,6 @@ class RemoteDataSource {
       }
     } catch (e) {
       if (e is DioError) {
-        log("e: ${e.response?.toString()}");
         log(e.toString());
         return {
           Strings.result: false,

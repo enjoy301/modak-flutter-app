@@ -27,53 +27,79 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                 : Container(
                     margin: EdgeInsets.all(5),
                     child: ListView.builder(
+                      controller: provider.scrollController,
                       itemCount: provider.albumBuildFileList.length,
                       itemBuilder: (BuildContext context, int dateIndex) {
-                        return GridView.builder(
-                          shrinkWrap: true,
-                          controller: scrollController,
-                          itemCount:
-                              provider.albumBuildFileList[dateIndex].length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1,
-                            mainAxisSpacing: 5,
-                            crossAxisSpacing: 5,
-                          ),
-                          itemBuilder: (BuildContext context, int mediaIndex) {
-                            return provider
-                                    .albumBuildFileList[dateIndex][mediaIndex]
-                                    .path
-                                    .endsWith(".mp4")
-                                ? SizedBox.shrink()
-                                : GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              CommonMediasScreen(
-                                            files: [
-                                              provider.albumBuildFileList[
-                                                  dateIndex][mediaIndex]
-                                            ],
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.all(12),
+                              child: Text(
+                                "${provider.albumBuildFileList[dateIndex][0].absolute.path.split('/').last.split('T')[0]}",
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            GridView.builder(
+                              shrinkWrap: true,
+                              controller: scrollController,
+                              itemCount:
+                                  provider.albumBuildFileList[dateIndex].length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: 1,
+                                mainAxisSpacing: 5,
+                                crossAxisSpacing: 5,
+                              ),
+                              itemBuilder:
+                                  (BuildContext context, int mediaIndex) {
+                                return provider
+                                        .albumBuildFileList[dateIndex]
+                                            [mediaIndex]
+                                        .path
+                                        .endsWith(".mp4")
+                                    ? SizedBox.shrink()
+                                    : GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CommonMediasScreen(
+                                                files: [
+                                                  provider.albumBuildFileList[
+                                                      dateIndex][mediaIndex]
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            1,
                                           ),
+                                          child: (() {
+                                            return Image.file(
+                                              provider.albumBuildFileList[
+                                                  dateIndex][mediaIndex],
+                                              fit: BoxFit.cover,
+                                              height: double.infinity,
+                                              width: double.infinity,
+                                            );
+                                          })(),
+                                          // child: Image.file(
+                                          //   provider.albumBuildFileList[
+                                          //       dateIndex][mediaIndex],
+                                          //   fit: BoxFit.cover,
+                                          //   height: double.infinity,
+                                          //   width: double.infinity,
+                                          // ),
                                         ),
                                       );
-                                    },
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(5),
-                                      child: Image.file(
-                                        provider.albumBuildFileList[dateIndex]
-                                            [mediaIndex],
-                                        fit: BoxFit.cover,
-                                        height: double.infinity,
-                                        width: double.infinity,
-                                      ),
-                                    ),
-                                  );
-                          },
+                              },
+                            ),
+                          ],
                         );
                       },
                     ),
@@ -89,5 +115,6 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
     super.initState();
 
     initial = context.read<AlbumProvider>().initialMediaLoading();
+    context.read<AlbumProvider>().addScrollListener();
   }
 }

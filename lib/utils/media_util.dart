@@ -103,7 +103,6 @@ Future<MultipartFile> mediaFilesToZip(List<File> files) async {
 
   int counter = 1;
   for (File file in files) {
-    log("file -> ${file.path}");
     File copy = await file.copy(
         "${directory.path}/sendImage/$counter.${file.toString().mediaType()}");
     encoder.addFile(copy);

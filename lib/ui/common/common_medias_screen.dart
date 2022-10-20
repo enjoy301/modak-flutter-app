@@ -52,10 +52,11 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
               backgroundColor: Colors.black.withOpacity(0.5),
               actions: [
                 IconButton(
-                    onPressed: () {
-                      downloadToGallery(widget.files[imageIndex]);
-                    },
-                    icon: Icon(Icons.download))
+                  onPressed: () {
+                    downloadToGallery(widget.files[imageIndex]);
+                  },
+                  icon: Icon(Icons.download),
+                )
               ],
               elevation: 0,
             )

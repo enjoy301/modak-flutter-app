@@ -77,7 +77,7 @@ class _ChatDialog extends State<ChatDialog> {
   void initState() {
     super.initState();
 
-    context.read<ChatProvider>().addScrollListener();
+    context.read<ChatProvider>().addScrollListener(context);
   }
 }
 

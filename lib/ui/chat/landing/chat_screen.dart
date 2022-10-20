@@ -81,7 +81,7 @@ class _ChatScreen extends State<ChatScreen> {
   void initState() {
     super.initState();
 
-    initial = context.read<ChatProvider>().initial();
+    initial = context.read<ChatProvider>().initial(context);
   }
 
   @override
