@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/data/dto/fortune.dart';
 import 'package:modak_flutter_app/data/repository/home_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/date.dart';
@@ -17,7 +18,7 @@ class HomeProvider extends ChangeNotifier {
 
   final HomeRepository _homeRepository = HomeRepository();
   String? familyCode;
-  String? todayFortune;
+  Fortune? todayFortune;
   Map<String, Map<int, String>> todayTalkMap = {};
   DateTime _selectedDatetime = DateTime.now();
   DateTime _focusedDateTime = DateTime.now();
@@ -39,8 +40,7 @@ class HomeProvider extends ChangeNotifier {
     Map<String, dynamic> response = await _homeRepository.getHomeInfo();
     if (response[Strings.message] == Strings.success) {
       familyCode = response[Strings.response][Strings.familyCode];
-      todayFortune =
-          response[Strings.response][Strings.todayFortune]?[Strings.content];
+      todayFortune = response[Strings.response][Strings.todayFortune];
       notifyListeners();
       return true;
     }
@@ -51,6 +51,7 @@ class HomeProvider extends ChangeNotifier {
     Map<String, dynamic> response = await _homeRepository.getTodayFortune();
     if (response[Strings.message] == Strings.success) {
       todayFortune = response[Strings.response][Strings.todayFortune];
+      print(response[Strings.response]);
       notifyListeners();
       return true;
     }

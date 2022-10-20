@@ -1,6 +1,7 @@
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
+import 'package:modak_flutter_app/data/dto/fortune.dart';
 
 /// response: returns response which should be updated
 /// message: acknowledges result of request
@@ -24,10 +25,15 @@ class HomeRepository {
 
     if (response[Strings.result]) {
       Map<String, dynamic> data = response[Strings.response].data["data"];
+      Map<String, dynamic>? todayFortuneData = data[Strings.todayFortune];
       return {
         Strings.message: Strings.success,
         Strings.response: {
-          Strings.todayFortune: data[Strings.todayFortune],
+          Strings.todayFortune: todayFortuneData == null
+              ? null
+              : Fortune(
+                  type: todayFortuneData['type'],
+                  content: todayFortuneData[Strings.content]),
           Strings.familyCode: data[Strings.memberAndFamilyMembers]
               [Strings.familyCode],
         }
@@ -39,11 +45,13 @@ class HomeRepository {
   Future<Map<String, dynamic>> getTodayFortune() async {
     Map<String, dynamic> response = await remoteDataSource.getTodayFortune();
     if (response[Strings.result]) {
-      Map<String, dynamic> data = response[Strings.response].data["data"];
+      Map<String, dynamic>? data = response[Strings.response].data["data"];
       return {
         Strings.message: Strings.success,
         Strings.response: {
-          Strings.todayFortune: data[Strings.content],
+          Strings.todayFortune: data == null
+              ? null
+              : Fortune(type: data['type'], content: data[Strings.content])
         }
       };
     }
