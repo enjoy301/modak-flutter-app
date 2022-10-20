@@ -112,7 +112,7 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                             isMine: isMine,
                           );
                         } else if (widget.chat.metaData!['type_code'] ==
-                            'videoi') {
+                            'video') {
                           return SizedBox.shrink();
                         } else {
                           return SizedBox.shrink();

@@ -3,13 +3,20 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class FileSystemUtil {
-  static Future<Directory?> getMediaDirectory() async {
+  static Future<String> getMediaDirectory() async {
     Directory? directory = await getExternalStorageDirectory();
 
     if (directory == null) {
-      return null;
+      return "";
     }
 
-    return Directory("${directory.path}/Download/cached_media/messengers");
+    if (!Directory("${directory.path}/Download/cached_media/messengers")
+        .existsSync()) {
+      Directory("${directory.path}/Download/cached_media/messengers").create(
+        recursive: true,
+      );
+    }
+
+    return Directory("${directory.path}/Download/cached_media/messengers").path;
   }
 }

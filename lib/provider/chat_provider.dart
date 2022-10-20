@@ -15,7 +15,6 @@ import 'package:modak_flutter_app/data/repository/chat_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:web_socket_channel/io.dart';
@@ -23,6 +22,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../constant/strings.dart';
 import '../data/datasource/remote_datasource.dart';
+import '../utils/file_system_util.dart';
+import 'album_provider.dart';
 
 class ChatProvider extends ChangeNotifier {
   init() async {
@@ -71,15 +72,21 @@ class ChatProvider extends ChangeNotifier {
   final List<File> _mediaFiles = [];
   List<File> get mediaFiles => _mediaFiles;
 
+  late String _mediaDirectory;
+  String get mediaDirectory => _mediaDirectory;
+
   ///
   /// [함수]
   ///
+
   /// 채팅 페이지 빌드 시 초기화 로직들 모음
-  Future initial() async {
+  Future initial(BuildContext context) async {
     isBottom = true;
     _lastChatId = 0;
     _scrollController = ScrollController();
     _chatMode = ChatMode.textInput;
+    _chats = [];
+    _mediaDirectory = await FileSystemUtil.getMediaDirectory();
 
     _memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
     _familyId = (await RemoteDataSource.storage.read(key: Strings.familyId))!;
@@ -96,7 +103,7 @@ class ChatProvider extends ChangeNotifier {
 
         if (item.containsKey("message_data")) {
           Map<String, dynamic> message = item["message_data"];
-          _addChat(
+          addNewChat(
             Chat(
               userId: message['user_id'],
               content: message['content'],
@@ -104,6 +111,7 @@ class ChatProvider extends ChangeNotifier {
               metaData: message['metadata'],
               unReadCount: _disconnectCount,
             ),
+            context,
           );
         } else if (item.containsKey("connection_data")) {
           var connection = item["connection_data"];
@@ -113,19 +121,6 @@ class ChatProvider extends ChangeNotifier {
         }
       },
     );
-
-    /// 채팅 목록 불러오기
-    Map<String, dynamic> chatResponse = await _chatRepository.getChats(
-      ChatPagingDTO(
-        count: 30,
-        lastId: _lastChatId,
-      ),
-    );
-
-    if (chatResponse[Strings.message] == Strings.fail) {
-      Fluttertoast.showToast(msg: "채팅 목록 불러오기 실패");
-      return;
-    }
 
     /// 현재 connection 불러오기
     Map<String, dynamic> connectionResponse =
@@ -151,7 +146,25 @@ class ChatProvider extends ChangeNotifier {
       _connections[connection['memberId']] = connection;
     }
 
-    _chats = [];
+    await Future(() => updateChat(context));
+
+    updateUnreadCount();
+  }
+
+  void updateChat(BuildContext context) async {
+    /// 채팅 목록 불러오기
+    Map<String, dynamic> chatResponse = await _chatRepository.getChats(
+      ChatPagingDTO(
+        count: 30,
+        lastId: _lastChatId,
+      ),
+    );
+
+    if (chatResponse[Strings.message] == Strings.fail) {
+      Fluttertoast.showToast(msg: "채팅 목록 불러오기 실패");
+      return;
+    }
+
     List<dynamic> messages = chatResponse['response']['data'];
 
     if (messages.isEmpty) {
@@ -160,6 +173,20 @@ class ChatProvider extends ChangeNotifier {
 
     _lastChatId = chatResponse['response']['data'][0]['messageId'];
 
+    List<Map<String, String>> mediaKeyList = [];
+    for (Map<String, dynamic> message in messages) {
+      if (["image", "video"].contains(message['metaData']['type_code'])) {
+        for (String key in message['metaData']['key']) {
+          mediaKeyList.add({'key': key});
+        }
+      }
+    }
+
+    if (mediaKeyList.isNotEmpty) {
+      await Future(() => context.read<AlbumProvider>().loadMedia(mediaKeyList));
+    }
+
+    messages = messages.reversed.toList();
     for (Map<String, dynamic> message in messages) {
       _chats.add(
         Chat(
@@ -172,9 +199,6 @@ class ChatProvider extends ChangeNotifier {
         ),
       );
     }
-    _chats = _chats.reversed.toList();
-
-    updateUnreadCount();
   }
 
   void updateConnection(Map<String, dynamic> connection) {
@@ -216,7 +240,7 @@ class ChatProvider extends ChangeNotifier {
   void postPlainChat(BuildContext context, String chat) async {
     isBottom = true;
 
-    _addChat(
+    addNewChat(
       Chat(
         userId: context.read<UserProvider>().me!.memberId,
         content: chat,
@@ -224,6 +248,7 @@ class ChatProvider extends ChangeNotifier {
         metaData: {"type_code": "plain"},
         unReadCount: _disconnectCount,
       ),
+      context,
     );
 
     Map<String, dynamic> response = await _chatRepository.postChat(chat);
@@ -255,19 +280,31 @@ class ChatProvider extends ChangeNotifier {
 
     /// 압축 로직
     await VideoCompress.deleteAllCache();
-    Directory? directory = await getExternalStorageDirectory();
     List<File> compressedImageFiles = [];
     List<File> compressedVideoFiles = [];
 
     int index = 0;
     for (File file in _selectedMediaFiles) {
-      if ([".jpg", ".jpeg"].contains(extension(file.path))) {
+      String fileExt = extension(file.path);
+
+      if ([".jpg", ".jpeg", ".png"].contains(
+        extension(file.path),
+      )) {
+        CompressFormat compressFormat = CompressFormat.jpeg;
+
+        if (fileExt == '.png') {
+          compressFormat = CompressFormat.png;
+        }
+
         var imageResult = (await FlutterImageCompress.compressAndGetFile(
+          format: compressFormat,
           file.absolute.path,
-          "${directory?.path}/Download/cached_media/messengers/temp$index${extension(file.path)}",
+          "$_mediaDirectory/temp$index$fileExt",
           quality: 30,
-        ))!;
-        compressedImageFiles.add(imageResult);
+        ));
+        compressedImageFiles.add(imageResult!);
+
+        index++;
       } else if ([".mp4"].contains(extension(file.path))) {
         var videoResult = ((await VideoCompress.compressVideo(
           file.absolute.path,
@@ -278,8 +315,8 @@ class ChatProvider extends ChangeNotifier {
             .file!);
         compressedVideoFiles.add(videoResult);
       } else {
-        /// .png
         log("이 파일형식 반영 안됨. ${extension(file.path)}");
+        log(file.path);
       }
     }
 
@@ -287,7 +324,6 @@ class ChatProvider extends ChangeNotifier {
       MultipartFile zipFile = await mediaFilesToZip(
         compressedImageFiles,
       );
-
       Map<String, dynamic> response = await _chatRepository.uploadMedia(
         MediaUploadDTO(
           mediaUrlData: mediaUrlData,
@@ -298,7 +334,6 @@ class ChatProvider extends ChangeNotifier {
           familyId: _familyId,
         ),
       );
-
       if (response[Strings.message] == Strings.success) {
         Fluttertoast.showToast(msg: "미디어 전송 성공");
       } else {
@@ -335,17 +370,42 @@ class ChatProvider extends ChangeNotifier {
     clearSelectedMedia();
   }
 
-  /// 채팅리스트에 뒤에 추가합니다.
-  void _addChat(Chat chat) {
-    _chats.insert(0, chat);
+  /// 채팅리스트에 앞에 추가합니다.
+  void addNewChat(Chat chat, BuildContext context) async {
+    if (chat.metaData!['type_code'] == 'image' ||
+        chat.metaData!['type_code'] == 'video') {
+      List<Map<String, String>> mediaKeyList = [];
+      for (String key in chat.metaData!['key']) {
+        mediaKeyList.add({"key": key});
+      }
+      if (mediaKeyList.isNotEmpty) {
+        await context.read<AlbumProvider>().loadMedia(mediaKeyList);
+      }
+    }
 
+    _chats.insert(0, chat);
     notifyListeners();
   }
 
+  File getThumbnail(String key) {
+    return File("$_mediaDirectory/$key");
+  }
+
+  List<File> getMediaFiles(List<dynamic> keys) {
+    List<File> fileList = [];
+
+    for (dynamic key in keys) {
+      fileList.add(File("$_mediaDirectory/${key as String}"));
+    }
+
+    return fileList;
+  }
+
   /// 채팅뷰의 scrollController의 listener
-  void addScrollListener() {
+  void addScrollListener(BuildContext context) {
     scrollController.addListener(
       () async {
+        /// 채팅 아래 계속 붙어 있는 state 관리
         if (scrollController.offset ==
                 scrollController.position.minScrollExtent &&
             !scrollController.position.outOfRange) {
@@ -354,6 +414,7 @@ class ChatProvider extends ChangeNotifier {
           isBottom = false;
         }
 
+        /// infinity scroll
         if (scrollController.offset ==
                 scrollController.position.maxScrollExtent &&
             !scrollController.position.outOfRange) {
@@ -363,40 +424,10 @@ class ChatProvider extends ChangeNotifier {
 
           isInfinityScrollLoading = true;
 
-          Map<String, dynamic> chatResponse = await _chatRepository.getChats(
-            ChatPagingDTO(
-              count: 30,
-              lastId: _lastChatId,
-            ),
-          );
-
-          if (chatResponse[Strings.message] == Strings.fail) {
-            Fluttertoast.showToast(msg: "채팅 목록 불러오기 실패");
-            return;
-          }
-
-          if (chatResponse['response']['data'].length == 0) {
-            return;
-          }
-
-          _lastChatId = chatResponse['response']['data'][0]['messageId'];
-
-          for (Map<String, dynamic> message
-              in chatResponse['response']['data'].reversed.toList()) {
-            _chats.add(
-              Chat(
-                userId: message['memberId'],
-                content: message['content'],
-                sendAt:
-                    DateTime.parse(message['sendAt']).millisecondsSinceEpoch /
-                        1000,
-                metaData: message['metaData'],
-                unReadCount: _disconnectCount,
-              ),
-            );
-          }
+          await Future(() => updateChat(context));
 
           notifyListeners();
+
           isInfinityScrollLoading = false;
         }
       },
