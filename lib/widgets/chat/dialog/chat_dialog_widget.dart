@@ -13,6 +13,7 @@ import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/user_provider.dart';
+import 'dialog_video_widget.dart';
 
 class ChatDialogWidget extends StatefulWidget {
   const ChatDialogWidget({
@@ -113,7 +114,10 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                           );
                         } else if (widget.chat.metaData!['type_code'] ==
                             'video') {
-                          return SizedBox.shrink();
+                          return DialogVideoWidget(
+                            chat: widget.chat,
+                            isMine: isMine,
+                          );
                         } else {
                           return SizedBox.shrink();
                         }

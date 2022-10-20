@@ -7,6 +7,7 @@ import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../../../assets/icons/dark/DarkIcons_icons.dart';
@@ -68,9 +69,8 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
               ),
               Expanded(
                 child: ListView.builder(
-                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: provider.thumbnailMedias.length,
+                  itemCount: provider.mediaFiles.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Flex(
                       direction: Axis.vertical,
@@ -85,12 +85,26 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                             },
                             child: Stack(
                               children: [
-                                Image.file(
-                                  provider.thumbnailMedias[index],
-                                  width: 160,
-                                  height: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
+                                (() {
+                                  if (provider.mediaFiles[index].path
+                                      .endsWith('mp4')) {
+                                    return Image.file(
+                                      provider.albumThumbnailFiles[
+                                          path.basename(provider
+                                              .mediaFiles[index].path)]!,
+                                      width: 160,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
+                                    );
+                                  } else {
+                                    return Image.file(
+                                      provider.mediaFiles[index],
+                                      width: 160,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
+                                    );
+                                  }
+                                })(),
                                 Positioned(
                                   top: 9,
                                   right: 9,

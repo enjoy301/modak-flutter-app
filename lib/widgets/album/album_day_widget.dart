@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
+import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 class AlbumDayWidget extends StatefulWidget {
@@ -54,49 +57,56 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                               ),
                               itemBuilder:
                                   (BuildContext context, int mediaIndex) {
-                                return provider
-                                        .albumBuildFileList[dateIndex]
-                                            [mediaIndex]
-                                        .path
-                                        .endsWith(".mp4")
-                                    ? SizedBox.shrink()
-                                    : GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CommonMediasScreen(
-                                                files: [
-                                                  provider.albumBuildFileList[
-                                                      dateIndex][mediaIndex]
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            1,
-                                          ),
-                                          child: (() {
-                                            return Image.file(
-                                              provider.albumBuildFileList[
-                                                  dateIndex][mediaIndex],
-                                              fit: BoxFit.cover,
-                                              height: double.infinity,
-                                              width: double.infinity,
-                                            );
-                                          })(),
-                                          // child: Image.file(
-                                          //   provider.albumBuildFileList[
-                                          //       dateIndex][mediaIndex],
-                                          //   fit: BoxFit.cover,
-                                          //   height: double.infinity,
-                                          //   width: double.infinity,
-                                          // ),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CommonMediasScreen(
+                                          files: [
+                                            provider.albumBuildFileList[
+                                                dateIndex][mediaIndex]
+                                          ],
                                         ),
-                                      );
+                                      ),
+                                    );
+                                  },
+                                  onLongPress: () {
+                                    log("wwowowowoow");
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      1,
+                                    ),
+                                    child: (() {
+                                      if (provider
+                                          .albumBuildFileList[dateIndex]
+                                              [mediaIndex]
+                                          .path
+                                          .endsWith(".mp4")) {
+                                        return Image.file(
+                                          provider.thumbnailList[path.basename(
+                                              provider
+                                                  .albumBuildFileList[dateIndex]
+                                                      [mediaIndex]
+                                                  .path)],
+                                          fit: BoxFit.cover,
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                        );
+                                      } else {
+                                        return Image.file(
+                                          provider.albumBuildFileList[dateIndex]
+                                              [mediaIndex],
+                                          fit: BoxFit.cover,
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                        );
+                                      }
+                                    })(),
+                                  ),
+                                );
                               },
                             ),
                           ],

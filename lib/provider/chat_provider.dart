@@ -63,17 +63,21 @@ class ChatProvider extends ChangeNotifier {
   late ChatMode _chatMode;
   ChatMode get chatMode => _chatMode;
 
-  /// 모든 앨범 파일 썸네일 용
-  final List<File> _thumbnailMedias = [];
-  List<File> get thumbnailMedias => _thumbnailMedias;
-
   /// 선택된 미디어 파일명
   final List<File> _selectedMediaFiles = [];
   List<File> get selectedMediaFiles => _selectedMediaFiles;
 
   /// 모든 앨범 파일
-  final List<File> _mediaFiles = [];
+  late List<File> _mediaFiles;
   List<File> get mediaFiles => _mediaFiles;
+
+  /// 앨범의 동영상 썸네일
+  late Map<String, File> _albumThumbnailFiles;
+  Map<String, File> get albumThumbnailFiles => _albumThumbnailFiles;
+
+  /// 채팅의 동영상 썸네일
+  late Map<String, File> _chatThumbnailFiles;
+  Map<String, File> get chatThumbnailFiles => _chatThumbnailFiles;
 
   late String _mediaDirectory;
   String get mediaDirectory => _mediaDirectory;
@@ -89,6 +93,9 @@ class ChatProvider extends ChangeNotifier {
     _scrollController = ScrollController();
     _chatMode = ChatMode.textInput;
     _chats = [];
+    _mediaFiles = [];
+    _albumThumbnailFiles = {};
+    _chatThumbnailFiles = {};
     _mediaDirectory = await FileSystemUtil.getMediaDirectory();
 
     _memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
@@ -187,6 +194,14 @@ class ChatProvider extends ChangeNotifier {
 
     if (mediaKeyList.isNotEmpty) {
       await Future(() => context.read<AlbumProvider>().loadMedia(mediaKeyList));
+
+      for (Map mediaKey in mediaKeyList) {
+        if (mediaKey['key'].endsWith('mp4')) {
+          _chatThumbnailFiles[mediaKey['key']] = await getVideoThumbnailFile(
+            File("$_mediaDirectory/${mediaKey['key']}"),
+          );
+        }
+      }
     }
 
     messages = messages.reversed.toList();
@@ -262,7 +277,60 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  void postMediaFileFromCamera() async {}
+  void postMediaFileFromCamera(
+    File file,
+    String type,
+  ) async {
+    List<File> compressedFiles = [];
+    if (type == "jpg") {
+      var imageResult = (await FlutterImageCompress.compressAndGetFile(
+        file.path,
+        "$_mediaDirectory/temp0.jpg",
+        quality: 30,
+      ))!;
+      compressedFiles.add(imageResult);
+    } else if (type == "mp4") {
+      var videoResult = ((await VideoCompress.compressVideo(
+        file.path,
+        quality: VideoQuality.LowQuality,
+        deleteOrigin: false,
+        includeAudio: true,
+      ))!
+          .file!);
+      compressedFiles.add(videoResult);
+    }
+    MultipartFile zipFile = await mediaFilesToZip(
+      compressedFiles,
+    );
+
+    Map<String, dynamic> urlResponse =
+        await _chatRepository.getMediaUploadUrl();
+
+    if (urlResponse['message'] == Strings.fail) {
+      return;
+    }
+
+    Map<String, dynamic> mediaUrlData = jsonDecode(
+      urlResponse['response']['data'],
+    );
+
+    Map<String, dynamic> response = await _chatRepository.uploadMedia(
+      MediaUploadDTO(
+        mediaUrlData: mediaUrlData,
+        file: zipFile,
+        type: "zip",
+        imageCount: 1,
+        memberId: _memberId,
+        familyId: _familyId,
+      ),
+    );
+
+    if (response[Strings.message] == Strings.success) {
+      Fluttertoast.showToast(msg: "미디어 전송 성공");
+    } else {
+      Fluttertoast.showToast(msg: "미디어 전송 실패");
+    }
+  }
 
   void postMediaFilesFromAlbum() async {
     if (_selectedMediaFiles.isEmpty) {
@@ -443,11 +511,17 @@ class ChatProvider extends ChangeNotifier {
   }
 
   /// 앨범 리스트 뒤에 미디어와 썸네일 미디어를 추가합니다
-  Future<bool> addMedia(File? mediaFile) async {
-    if (mediaFile != null) {
-      _mediaFiles.add(mediaFile);
-      _thumbnailMedias.add(await getVideoThumbnailFile(mediaFile));
+  Future<bool> addMedia(List<File> mediaFile) async {
+    _mediaFiles = mediaFile;
+
+    for (File file in _mediaFiles) {
+      if (file.path.endsWith('mp4')) {
+        _albumThumbnailFiles[basename(file.path)] = await getVideoThumbnailFile(
+          file,
+        );
+      }
     }
+
     notifyListeners();
     return true;
   }

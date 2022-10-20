@@ -34,7 +34,9 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => getSizeAndPosition());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => getSizeAndPosition(),
+    );
   }
 
   getSizeAndPosition() {

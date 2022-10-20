@@ -10,50 +10,31 @@ import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-Future<MultipartFile?> getImageFromCamera() async {
+Future<File> getImageFromCamera() async {
   try {
-    XFile? file = await ImagePicker().pickImage(
+    File file = File((await ImagePicker().pickImage(
       source: ImageSource.camera,
-    );
+    ))!
+        .path);
 
-    if (file == null) {
-      log("failed to get image");
-      return null;
-    }
-
-    /// 갤러리에서 사진을 가져옵니다.
-    MultipartFile image = MultipartFile.fromFileSync(
-      file.path,
-      contentType: MediaType("image", "png"),
-    );
-
-    return image;
+    return file;
   } catch (e) {
     log("failed to get image, $e");
-    return null;
+    return File("");
   }
 }
 
-Future<MultipartFile?> getVideoFromCamera() async {
+Future<File> getVideoFromCamera() async {
   try {
-    XFile? file = await ImagePicker().pickVideo(
+    File file = File((await ImagePicker().pickVideo(
       source: ImageSource.camera,
-    );
-    if (file == null) {
-      log("failed to get image");
-      return null;
-    }
+    ))!
+        .path);
 
-    /// 갤러리에서 비디오 가져오기
-    MultipartFile video = MultipartFile.fromFileSync(
-      file.path,
-      contentType: MediaType("image", "mp4"),
-    );
-
-    return video;
+    return file;
   } catch (e) {
     log("failed to get image, $e");
-    return null;
+    return File("");
   }
 }
 

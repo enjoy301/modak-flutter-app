@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
@@ -64,13 +63,11 @@ class _FunctionListWidget extends State<FunctionListWidget> {
               ChatFunctionIconWidget(
                 data: functionIconWidgetValues[0],
                 onTap: () async {
-                  provider.chatMode = ChatMode.functionAlbum;
                   if (provider.mediaFiles.isEmpty) {
                     List<File> files = await getImageFromAlbum();
-                    for (File file in files) {
-                      await provider.addMedia(file);
-                    }
+                    await provider.addMedia(files);
                   }
+                  provider.chatMode = ChatMode.functionAlbum;
                 },
               ),
               ChatFunctionIconWidget(
@@ -80,22 +77,28 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                     context,
                     [
                       TextButton(
-                          onPressed: () async {
-                            Future(() => Navigator.pop(context));
+                        onPressed: () async {
+                          Future(() => Navigator.pop(context));
 
-                            dio.MultipartFile? image =
-                                await getImageFromCamera();
-                            // provider.postMediaFilesFromCamera(image, "png", 1);
-                          },
-                          child: Text("사진 찍기")),
+                          File image = await getImageFromCamera();
+                          provider.postMediaFileFromCamera(
+                            image,
+                            "jpg",
+                          );
+                        },
+                        child: Text("사진 찍기"),
+                      ),
                       TextButton(
-                          onPressed: () async {
-                            Future(() => Navigator.pop(context));
-                            dio.MultipartFile? video =
-                                await getVideoFromCamera();
-                            // provider.postMediaFilesFromCamera(video, "mp4", 0);
-                          },
-                          child: Text("동영상 촬영"))
+                        onPressed: () async {
+                          Future(() => Navigator.pop(context));
+                          File video = await getVideoFromCamera();
+                          provider.postMediaFileFromCamera(
+                            video,
+                            "mp4",
+                          );
+                        },
+                        child: Text("동영상 촬영"),
+                      ),
                     ],
                   );
                 },

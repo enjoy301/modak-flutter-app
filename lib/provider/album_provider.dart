@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/data/repository/album_repository.dart';
+import 'package:path/path.dart';
 
 import '../constant/strings.dart';
 import '../utils/file_system_util.dart';
+import '../utils/media_util.dart';
 
 class AlbumProvider extends ChangeNotifier {
   init() {
@@ -26,6 +28,9 @@ class AlbumProvider extends ChangeNotifier {
   late List<List<File>> _albumBuildFileList = [];
   get albumBuildFileList => _albumBuildFileList;
 
+  late Map<String, File> _thumbnailList;
+  get thumbnailList => _thumbnailList;
+
   late ScrollController _scrollController;
   ScrollController get scrollController => _scrollController;
 
@@ -34,6 +39,7 @@ class AlbumProvider extends ChangeNotifier {
   /// 앨범 UI build시 실행되는 initial 함수
   Future initialMediaLoading() async {
     _albumBuildFileList = [];
+    _thumbnailList = {};
     _scrollController = ScrollController();
     isInfinityScrollLoading = false;
     mediaLastId = 0;
@@ -60,7 +66,7 @@ class AlbumProvider extends ChangeNotifier {
       return;
     }
 
-    setAlbumBuildFileList(mediaFileListResponse['response']);
+    await setAlbumBuildFileList(mediaFileListResponse['response']);
 
     Fluttertoast.showToast(msg: "앨범 성공적으로 불러옴");
   }
@@ -130,7 +136,7 @@ class AlbumProvider extends ChangeNotifier {
         if (scrollController.offset ==
                 scrollController.position.maxScrollExtent &&
             !scrollController.position.outOfRange) {
-          if (isInfinityScrollLoading == true) {
+          if (isInfinityScrollLoading == true || mediaLastId == -1) {
             return;
           }
 
@@ -145,6 +151,8 @@ class AlbumProvider extends ChangeNotifier {
           if (mediaInfoResponse['result'] == Strings.fail) {
             return;
           }
+
+          log("$mediaInfoResponse");
 
           List<dynamic> mediaInfoList = jsonDecode(
             mediaInfoResponse['response']['data'],
@@ -164,7 +172,7 @@ class AlbumProvider extends ChangeNotifier {
             return;
           }
 
-          setAlbumBuildFileList(mediaFileListResponse['response']);
+          await setAlbumBuildFileList(mediaFileListResponse['response']);
 
           notifyListeners();
           isInfinityScrollLoading = false;
@@ -173,7 +181,7 @@ class AlbumProvider extends ChangeNotifier {
     );
   }
 
-  void setAlbumBuildFileList(List<File> fileList) {
+  Future setAlbumBuildFileList(List<File> fileList) async {
     String nowDate = "";
     for (File mediaFile in fileList) {
       nowDate = mediaFile.absolute.path.split('/').last.split('T')[0];
@@ -184,6 +192,12 @@ class AlbumProvider extends ChangeNotifier {
         lastDate = nowDate;
       } else {
         _albumBuildFileList[index].add(mediaFile);
+      }
+
+      if (extension(mediaFile.path) == ".mp4") {
+        _thumbnailList[basename(mediaFile.path)] = await getVideoThumbnailFile(
+          mediaFile,
+        );
       }
     }
 
