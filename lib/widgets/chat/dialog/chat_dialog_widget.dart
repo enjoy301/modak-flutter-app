@@ -8,7 +8,9 @@ import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_date_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_feelings_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_roulette_widget.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -99,27 +101,35 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                             )
                           : SizedBox.shrink(),
                       (() {
-                        if (widget.chat.metaData!['type_code'] == 'plain') {
-                          return DialogBubbleWidget(
-                            chat: widget.chat,
-                            isMine: isMine,
-                            isHead: widget.isHead,
-                            isTail: widget.isTail,
-                          );
-                        } else if (widget.chat.metaData!['type_code'] ==
-                            'image') {
-                          return DialogImageWidget(
-                            chat: widget.chat,
-                            isMine: isMine,
-                          );
-                        } else if (widget.chat.metaData!['type_code'] ==
-                            'video') {
-                          return DialogVideoWidget(
-                            chat: widget.chat,
-                            isMine: isMine,
-                          );
-                        } else {
-                          return SizedBox.shrink();
+                        switch (widget.chat.metaData!['type_code']) {
+                          case "plain":
+                            return DialogBubbleWidget(
+                              chat: widget.chat,
+                              isMine: isMine,
+                              isHead: widget.isHead,
+                              isTail: widget.isTail,
+                            );
+                          case "feelings":
+                            return DialogFeelingsWidget(chat: widget.chat);
+                          case "image":
+                            return DialogImageWidget(
+                              chat: widget.chat,
+                              isMine: isMine,
+                            );
+                          case "video":
+                            return DialogVideoWidget(
+                              chat: widget.chat,
+                              isMine: isMine,
+                            );
+                          case "roulette":
+                            return DialogRouletteWidget(
+                              chat: widget.chat,
+                              isMine: isMine,
+                              isHead: widget.isHead,
+                              isTail: widget.isTail,
+                            );
+                          default:
+                            return SizedBox.shrink();
                         }
                       })(),
                     ],
