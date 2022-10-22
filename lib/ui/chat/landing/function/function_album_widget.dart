@@ -70,7 +70,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
               Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: provider.mediaFiles.length,
+                  itemCount: provider.albumFiles.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Flex(
                       direction: Axis.vertical,
@@ -78,7 +78,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              File file = provider.mediaFiles[index];
+                              File file = provider.albumFiles[index];
                               provider.isExistFile(file)
                                   ? provider.removeSelectedMedia(file)
                                   : provider.addSelectedMedia(file);
@@ -86,19 +86,19 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                             child: Stack(
                               children: [
                                 (() {
-                                  if (provider.mediaFiles[index].path
+                                  if (provider.albumFiles[index].path
                                       .endsWith('mp4')) {
                                     return Image.file(
                                       provider.albumThumbnailFiles[
                                           path.basename(provider
-                                              .mediaFiles[index].path)]!,
+                                              .albumFiles[index].path)]!,
                                       width: 160,
                                       height: double.infinity,
                                       fit: BoxFit.cover,
                                     );
                                   } else {
                                     return Image.file(
-                                      provider.mediaFiles[index],
+                                      provider.albumFiles[index],
                                       width: 160,
                                       height: double.infinity,
                                       fit: BoxFit.cover,
@@ -123,7 +123,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                         activeColor: Color(0x00F6DFDF),
                                         value: provider.selectedMediaFiles
                                             .contains(
-                                          provider.mediaFiles[index],
+                                          provider.albumFiles[index],
                                         ),
                                         onChanged: (bool? value) {},
                                       ),
@@ -136,7 +136,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                   child: IconButton(
                                     onPressed: () {
                                       // ignore: unrelated_type_equality_checks
-                                      if (provider.mediaFiles[index]
+                                      if (provider.albumFiles[index]
                                               .toString()
                                               .mediaType() ==
                                           "mp4") {
@@ -146,7 +146,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                             builder: (context) =>
                                                 CommonMediasScreen(
                                               files: [
-                                                provider.mediaFiles[index]
+                                                provider.albumFiles[index]
                                               ],
                                             ),
                                           ),
@@ -158,7 +158,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                             builder: (context) =>
                                                 CommonMediasScreen(
                                               files: [
-                                                provider.mediaFiles[index]
+                                                provider.albumFiles[index]
                                               ],
                                             ),
                                           ),

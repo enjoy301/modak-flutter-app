@@ -515,7 +515,7 @@ class RemoteDataSource {
 
   /// 일반 채팅 보내는 함수
   Future<Map<String, dynamic>> postChat(String chat) {
-    return _tryRequest(
+    return _tryRequestLambda(
       () async {
         final Dio dio = Dio();
         return dio.post(
@@ -705,7 +705,7 @@ class RemoteDataSource {
       }
     } catch (e) {
       if (e is DioError) {
-        log(e.toString());
+        log("error ${e.response}");
         return {
           Strings.result: false,
           Strings.response: e,
@@ -738,5 +738,23 @@ class RemoteDataSource {
         );
       },
     );
+  }
+
+  /// lambda 함수 exception 처리를 도와주는 함수
+  Future<Map<String, dynamic>> _tryRequestLambda(
+    RequestFunction function,
+  ) async {
+    try {
+      await function.call();
+    } catch (e) {
+      if (e is DioError) {
+        return {
+          Strings.result: false,
+        };
+      }
+    }
+    return {
+      Strings.result: true,
+    };
   }
 }

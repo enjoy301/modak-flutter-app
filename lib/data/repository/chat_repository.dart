@@ -97,7 +97,11 @@ class ChatRepository {
   Future<Map<String, dynamic>> postChat(String chat) async {
     Map<String, dynamic> response = await remoteDataSource.postChat(chat);
 
-    return {Strings.message: Strings.success};
+    if (response[Strings.result]) {
+      return {Strings.message: Strings.success};
+    } else {
+      return {Strings.message: Strings.fail};
+    }
   }
 
   /// 미디어 업로드 url 발급

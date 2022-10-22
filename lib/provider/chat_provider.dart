@@ -68,8 +68,8 @@ class ChatProvider extends ChangeNotifier {
   List<File> get selectedMediaFiles => _selectedMediaFiles;
 
   /// 모든 앨범 파일
-  late List<File> _mediaFiles;
-  List<File> get mediaFiles => _mediaFiles;
+  late List<File> _albumFiles;
+  List<File> get albumFiles => _albumFiles;
 
   /// 앨범의 동영상 썸네일
   late Map<String, File> _albumThumbnailFiles;
@@ -93,7 +93,7 @@ class ChatProvider extends ChangeNotifier {
     _scrollController = ScrollController();
     _chatMode = ChatMode.textInput;
     _chats = [];
-    _mediaFiles = [];
+    _albumFiles = [];
     _albumThumbnailFiles = {};
     _chatThumbnailFiles = {};
     _mediaDirectory = await FileSystemUtil.getMediaDirectory();
@@ -126,8 +126,6 @@ class ChatProvider extends ChangeNotifier {
         } else if (item.containsKey("connection_data")) {
           var connection = item["connection_data"];
           updateConnection(connection);
-        } else {
-          log("what?");
         }
       },
     );
@@ -271,9 +269,11 @@ class ChatProvider extends ChangeNotifier {
 
     Map<String, dynamic> response = await _chatRepository.postChat(chat);
 
-    if (response['message'] == Strings.success) {
-    } else {
-      /// chat 삭제 로직
+    if (response['message'] == Strings.fail) {
+      _chats.removeAt(0);
+      notifyListeners();
+
+      Fluttertoast.showToast(msg: "채팅 보내기 실패");
     }
   }
 
@@ -451,6 +451,15 @@ class ChatProvider extends ChangeNotifier {
       }
       if (mediaKeyList.isNotEmpty) {
         await context.read<AlbumProvider>().loadMedia(mediaKeyList);
+
+        if ((mediaKeyList[0]["key"])!.endsWith('.mp4')) {
+          _chatThumbnailFiles[mediaKeyList[0]["key"]!] =
+              await getVideoThumbnailFile(
+            File(
+              "$_mediaDirectory/${mediaKeyList[0]["key"]!}",
+            ),
+          );
+        }
       }
     }
 
@@ -466,6 +475,7 @@ class ChatProvider extends ChangeNotifier {
     List<File> fileList = [];
 
     for (dynamic key in keys) {
+      log("$key");
       fileList.add(File("$_mediaDirectory/${key as String}"));
     }
 
@@ -511,10 +521,10 @@ class ChatProvider extends ChangeNotifier {
   }
 
   /// 앨범 리스트 뒤에 미디어와 썸네일 미디어를 추가합니다
-  Future<bool> addMedia(List<File> mediaFile) async {
-    _mediaFiles = mediaFile;
+  Future<bool> loadAlbum(List<File> mediaFile) async {
+    _albumFiles = mediaFile;
 
-    for (File file in _mediaFiles) {
+    for (File file in _albumFiles) {
       if (file.path.endsWith('mp4')) {
         _albumThumbnailFiles[basename(file.path)] = await getVideoThumbnailFile(
           file,
