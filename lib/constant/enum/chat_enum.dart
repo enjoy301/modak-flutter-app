@@ -1,5 +1,1 @@
-enum ChatMode {
-  textInput,
-  functionList,
-  functionAlbum,
-}
+enum ChatMode { textInput, functionList, functionAlbum, functionOnway }

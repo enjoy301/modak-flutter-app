@@ -66,6 +66,10 @@ class Strings {
   /// Chat
   static const String letter = "letter";
   static const String envelope = "envelope";
+  static const String none = "NONE";
+  static const String love = "LOVE";
+  static const String sorry = "SORRY";
+  static const String congrats = "CONGRATS";
 
   /// User
   static const String me = "me";

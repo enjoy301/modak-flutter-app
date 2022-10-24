@@ -514,7 +514,7 @@ class RemoteDataSource {
   }
 
   /// 일반 채팅 보내는 함수
-  Future<Map<String, dynamic>> postChat(String chat) {
+  Future<Map<String, dynamic>> postChat(String chat, {Map? metaData}) {
     return _tryRequestLambda(
       () async {
         final Dio dio = Dio();
@@ -528,7 +528,7 @@ class RemoteDataSource {
               (await storage.read(key: Strings.familyId))!,
             ),
             "content": chat,
-            "metadata": {"type_code": "plain"},
+            "metadata": metaData ?? {"type_code": "plain"},
           },
         );
       },

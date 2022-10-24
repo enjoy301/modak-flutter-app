@@ -1,19 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/enum/general_enum.dart';
+import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:provider/provider.dart';
 
-class ChatFeeling extends StatefulWidget {
+class ChatFeeling extends StatelessWidget {
   const ChatFeeling({Key? key}) : super(key: key);
-
-  @override
-  State<ChatFeeling> createState() => _ChatFeelingState();
-}
-
-class _ChatFeelingState extends State<ChatFeeling> {
-  int selected = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +30,15 @@ class _ChatFeelingState extends State<ChatFeeling> {
                   ),
                 ),
               ),
-              ...FeelingType.values
+              ...[Strings.love, Strings.congrats, Strings.sorry]
                   .mapIndexed(
-                    (int index, FeelingType feeling) => GestureDetector(
+                    (int index, String feeling) => GestureDetector(
                       onTap: () {
-                        setState(() {
-                          selected = index;
-                        });
+                        chatProvider.feel = feeling;
                       },
                       child: ChatFeelingItem(
                         feelingType: feeling,
-                        showFeeling: index == selected,
+                        showFeeling: feeling == chatProvider.feel,
                       ),
                     ),
                   )
@@ -66,22 +57,22 @@ class ChatFeelingItem extends StatelessWidget {
       : super(key: key);
 
   final bool showFeeling;
-  final FeelingType feelingType;
+  final String feelingType;
 
   final feelingsMap = {
-    FeelingType.love: {
+    Strings.love: {
       "title": "사랑해요",
       "color": Coloring.bg_red,
       "icon": "ic_love",
       "pat": "pat_love",
     },
-    FeelingType.congrats: {
+    Strings.congrats: {
       "title": "축하해요",
       "color": Coloring.bg_purple,
       "icon": "ic_congrats",
       "pat": "pat_congrats",
     },
-    FeelingType.sorry: {
+    Strings.sorry: {
       "title": "미안해요",
       "color": Coloring.bg_blue,
       "icon": "ic_sorry",

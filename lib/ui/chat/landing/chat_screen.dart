@@ -36,8 +36,10 @@ class _ChatScreen extends State<ChatScreen> {
                       child: ChatDialog(),
                     ),
                     if (provider.feelMode) ChatFeeling(),
-                    [ChatMode.textInput, ChatMode.functionList]
-                            .contains(provider.chatMode)
+                    [
+                      ChatMode.textInput,
+                      ChatMode.functionList,
+                    ].contains(provider.chatMode)
                         ? InputChatWidget()
                         : SizedBox.shrink(),
                     ChatFunction(),

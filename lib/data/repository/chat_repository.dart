@@ -94,8 +94,9 @@ class ChatRepository {
     return {Strings.message: Strings.fail};
   }
 
-  Future<Map<String, dynamic>> postChat(String chat) async {
-    Map<String, dynamic> response = await remoteDataSource.postChat(chat);
+  Future<Map<String, dynamic>> postChat(String chat, {Map? metaData}) async {
+    Map<String, dynamic> response =
+        await remoteDataSource.postChat(chat, metaData: metaData);
 
     if (response[Strings.result]) {
       return {Strings.message: Strings.success};

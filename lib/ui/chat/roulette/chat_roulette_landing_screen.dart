@@ -9,6 +9,7 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/todo.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
+import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/chat/roulette/chat_roulette_result_screen.dart';
@@ -56,8 +57,8 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, TodoProvider>(
-        builder: (context, userProvider, todoProvider, child) {
+    return Consumer3<UserProvider, TodoProvider, ChatProvider>(
+        builder: (context, userProvider, todoProvider, chatProvider, child) {
       return Scaffold(
           backgroundColor: Colors.white,
           appBar: headerDefaultWidget(
@@ -272,6 +273,21 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                       int random =
                           Fortune.randomInt(0, participatedUsers.length);
 
+                      chatProvider.postChat(context, "", metaData: {
+                        'type_code': "roulette",
+                        'title': title,
+                        'addTodo': addTodo,
+                        'participatedUsers': participatedUsers
+                            .map((User participatedMember) => {
+                                  'name': participatedMember.name,
+                                  'color': participatedMember.color,
+                                })
+                            .toList(),
+                        'selectedUser': {
+                          'name': participatedUsers[random].name,
+                          'color': participatedUsers[random].color,
+                        }
+                      });
                       bool isSuccess = true;
                       if (addTodo) {
                         isSuccess = await todoProvider.postTodo(Todo(

@@ -43,9 +43,10 @@ class _FunctionListWidget extends State<FunctionListWidget> {
     },
     {
       'name': "편지",
-      'icon': LightIcons.Calendar,
+      'icon': LightIcons.Message,
       'color': Coloring.point_pureorange
     },
+    {'name': "주제 던지기", 'icon': LightIcons.Chat, 'color': Coloring.bg_green}
   ];
   @override
   Widget build(BuildContext context) {
@@ -107,7 +108,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                 data: functionIconWidgetValues[2],
                 onTap: () {
                   log("오는 길에~");
-                  // provider.setFunctionState(FunctionState.onWay);
+                  provider.chatMode = ChatMode.functionOnway;
                 },
               ),
               ChatFunctionIconWidget(
@@ -123,6 +124,10 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                   Get.toNamed("/chat/letter/landing");
                 },
               ),
+              ChatFunctionIconWidget(
+                data: functionIconWidgetValues[5],
+                onTap: () {},
+              )
             ],
           ),
         );

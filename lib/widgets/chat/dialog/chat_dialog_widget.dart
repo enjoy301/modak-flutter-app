@@ -10,7 +10,9 @@ import 'package:modak_flutter_app/widgets/chat/chat_date_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_feelings_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_onway_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_roulette_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_topic_widget.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -109,8 +111,13 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                               isHead: widget.isHead,
                               isTail: widget.isTail,
                             );
-                          case "feelings":
-                            return DialogFeelingsWidget(chat: widget.chat);
+                          case "feeling":
+                            return DialogFeelingsWidget(
+                              chat: widget.chat,
+                              isMine: isMine,
+                              isHead: widget.isHead,
+                              isTail: widget.isTail,
+                            );
                           case "image":
                             return DialogImageWidget(
                               chat: widget.chat,
@@ -118,6 +125,16 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                             );
                           case "video":
                             return DialogVideoWidget(
+                              chat: widget.chat,
+                              isMine: isMine,
+                            );
+                          case "onway":
+                            return DialogOnwayWidget(
+                              chat: widget.chat,
+                              isMine: isMine,
+                            );
+                          case "topic":
+                            return DialogTopicWidget(
                               chat: widget.chat,
                               isMine: isMine,
                             );

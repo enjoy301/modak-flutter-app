@@ -113,9 +113,10 @@ class _ChatRouletteResultScreenState extends State<ChatRouletteResultScreen> {
                                 child: Text(
                                   user.name,
                                   style: TextStyle(
-                                      color: user == widget.selectedUser
-                                          ? user.color.toColor()
-                                          : Coloring.gray_10,
+                                      color:
+                                          user.name == widget.selectedUser.name
+                                              ? user.color.toColor()
+                                              : Coloring.gray_10,
                                       fontSize: Font.size_largeText,
                                       fontWeight: Font.weight_medium),
                                   textAlign: TextAlign.center,
@@ -123,7 +124,7 @@ class _ChatRouletteResultScreenState extends State<ChatRouletteResultScreen> {
                             Icon(
                               Icons.arrow_right_alt_sharp,
                               size: 30,
-                              color: user == widget.selectedUser
+                              color: user.name == widget.selectedUser.name
                                   ? user.color.toColor()
                                   : Coloring.gray_10,
                             ),
@@ -131,9 +132,11 @@ class _ChatRouletteResultScreenState extends State<ChatRouletteResultScreen> {
                               flex: 1,
                               fit: FlexFit.tight,
                               child: Text(
-                                user == widget.selectedUser ? "당첨" : "꽝",
+                                user.name == widget.selectedUser.name
+                                    ? "당첨"
+                                    : "꽝",
                                 style: TextStyle(
-                                    color: user == widget.selectedUser
+                                    color: user.name == widget.selectedUser.name
                                         ? user.color.toColor()
                                         : Coloring.gray_10,
                                     fontSize: Font.size_largeText,

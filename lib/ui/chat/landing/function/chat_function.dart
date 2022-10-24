@@ -3,6 +3,7 @@ import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/chat/landing/function/function_album_widget.dart';
 import 'package:modak_flutter_app/ui/chat/landing/function/function_list_widget.dart';
+import 'package:modak_flutter_app/ui/chat/landing/function/function_onway_widget.dart';
 import 'package:provider/provider.dart';
 
 class ChatFunction extends StatefulWidget {
@@ -17,6 +18,7 @@ class _ChatFunction extends State<ChatFunction> {
     ChatMode.textInput: SizedBox.shrink(),
     ChatMode.functionList: FunctionListWidget(),
     ChatMode.functionAlbum: FunctionAlbumWidget(),
+    ChatMode.functionOnway: FunctionOnWayWidget(),
   };
 
   @override

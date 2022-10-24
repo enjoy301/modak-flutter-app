@@ -10,6 +10,7 @@ import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
+import 'package:vibration/vibration.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
   const DialogBubbleWidget(
@@ -49,9 +50,8 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
-      onTapCancel: () {},
       onLongPress: () {
+        Vibration.vibrate(duration: 10, amplitude: 140);
         listModalWidget(context, {
           "클립보드 복사": () {
             Clipboard.setData(ClipboardData(text: widget.chat.content));

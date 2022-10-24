@@ -38,37 +38,14 @@ class _DialogRouletteWidgetState extends State<DialogRouletteWidget> {
         TextButton(
           onPressed: () {
             Get.to(ChatRouletteResultScreen(
-                title: "설거지 하기",
-                addTodo: true,
-                participatedUsers: [
-                  User(
-                      memberId: -1,
-                      name: "test",
-                      birthDay: "",
-                      isLunar: false,
-                      role: "DAD",
-                      fcmToken: "fcmToken",
-                      color: "#FffF0000",
-                      timeTags: []),
-                  User(
-                      memberId: -1,
-                      name: "test",
-                      birthDay: "",
-                      isLunar: false,
-                      role: "DAD",
-                      fcmToken: "fcmToken",
-                      color: "#FF0000FF",
-                      timeTags: []),
-                ],
-                selectedUser: User(
-                    memberId: -1,
-                    name: "test",
-                    birthDay: "",
-                    isLunar: false,
-                    role: "DAD",
-                    fcmToken: "fcmToken",
-                    color: "#FffF0000",
-                    timeTags: [])));
+                title: widget.chat.metaData!['title'],
+                addTodo: widget.chat.metaData!['addTodo'],
+                participatedUsers: List<User>.from(widget
+                    .chat.metaData!['participatedUsers']
+                    .map((entity) => jsonToUser(entity))
+                    .toList()),
+                selectedUser:
+                    jsonToUser(widget.chat.metaData!['selectedUser'])));
           },
           style: ButtonStyle(
               padding: MaterialStateProperty.all(EdgeInsets.zero),
@@ -88,7 +65,7 @@ class _DialogRouletteWidgetState extends State<DialogRouletteWidget> {
               child: Column(
                 children: [
                   ScalableTextWidget(
-                    widget.chat.content,
+                    widget.chat.metaData!['title'],
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: Font.size_subTitle,
@@ -122,7 +99,17 @@ class _DialogRouletteWidgetState extends State<DialogRouletteWidget> {
                   SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(ChatRouletteResultScreen(
+                            title: widget.chat.metaData!['title'],
+                            addTodo: widget.chat.metaData!['addTodo'],
+                            participatedUsers: List<User>.from(widget
+                                .chat.metaData!['participatedUsers']
+                                .map((entity) => jsonToUser(entity))
+                                .toList()),
+                            selectedUser: jsonToUser(
+                                widget.chat.metaData!['selectedUser'])));
+                      },
                       style: ButtonStyle(
                           overlayColor:
                               MaterialStateProperty.all(Coloring.gray_50),
@@ -153,4 +140,17 @@ class _DialogRouletteWidgetState extends State<DialogRouletteWidget> {
       ],
     );
   }
+}
+
+User jsonToUser(Map json) {
+  User user = User(
+      memberId: -1,
+      name: json['name'],
+      birthDay: "birthDay",
+      isLunar: false,
+      role: "role",
+      fcmToken: "fcmToken",
+      color: json['color'],
+      timeTags: []);
+  return user;
 }

@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/dark/DarkIcons_icons.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:provider/provider.dart';
@@ -87,9 +90,21 @@ class _InputChatWidgetState extends State<InputChatWidget> {
               provider.currentInput.trim() != ""
                   ? IconButton(
                       onPressed: () {
-                        provider.postPlainChat(
+                        Map? metaData;
+                        log(provider.feel);
+                        if (provider.feelMode &&
+                            provider.feel != Strings.none) {
+                          metaData = {
+                            "type_code": "feeling",
+                            "feeling": provider.feel,
+                          };
+                          provider.feelMode = false;
+                          provider.feel = Strings.none;
+                        }
+                        provider.postChat(
                           context,
                           textEditingController.value.text,
+                          metaData: metaData,
                         );
                         provider.setCurrentInput("");
 

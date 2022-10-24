@@ -56,6 +56,11 @@ class ChatProvider extends ChangeNotifier {
   String _currentInput = "";
   String get currentInput => _currentInput;
 
+  /// 선택된 감정
+  String _feel = Strings.none;
+  String get feel => _feel;
+
+  /// 감정 채팅 토글
   bool _feelMode = false;
   bool get feelMode => _feelMode;
 
@@ -253,7 +258,7 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void postPlainChat(BuildContext context, String chat) async {
+  void postChat(BuildContext context, String chat, {Map? metaData}) async {
     isBottom = true;
 
     addNewChat(
@@ -261,13 +266,14 @@ class ChatProvider extends ChangeNotifier {
         userId: context.read<UserProvider>().me!.memberId,
         content: chat,
         sendAt: DateTime.now().millisecondsSinceEpoch / 1000,
-        metaData: {"type_code": "plain"},
+        metaData: metaData ?? {"type_code": "plain"},
         unReadCount: _disconnectCount,
       ),
       context,
     );
 
-    Map<String, dynamic> response = await _chatRepository.postChat(chat);
+    Map<String, dynamic> response =
+        await _chatRepository.postChat(chat, metaData: metaData);
 
     if (response['message'] == Strings.fail) {
       _chats.removeAt(0);
@@ -557,6 +563,11 @@ class ChatProvider extends ChangeNotifier {
   void clearSelectedMedia() {
     _selectedMediaFiles.clear();
 
+    notifyListeners();
+  }
+
+  set feel(String feel) {
+    _feel = feel;
     notifyListeners();
   }
 
