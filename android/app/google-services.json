@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "937910743612",
-    "project_id": "modak-service",
-    "storage_bucket": "modak-service.appspot.com"
+    "project_number": "698609118012",
+    "project_id": "modak-last-last",
+    "storage_bucket": "modak-last-last.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:937910743612:android:de211b416b3f186d0fc939",
+        "mobilesdk_app_id": "1:698609118012:android:a124c9c475d1c8a1cf0c39",
         "android_client_info": {
           "package_name": "com.wowbros.modak"
         }
       },
       "oauth_client": [
         {
-          "client_id": "937910743612-249au7tcpls9eln2af1lsc1quikk8mle.apps.googleusercontent.com",
+          "client_id": "698609118012-amv96jr50jp9pesl87ps05h2db53t0qe.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBRQLtagAAYunt2dQj4DlbcD2Xe_KocIbg"
+          "current_key": "AIzaSyDFojoHcYwP2V55Kq2pRkxeBQZHJt7MmPQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "937910743612-249au7tcpls9eln2af1lsc1quikk8mle.apps.googleusercontent.com",
+              "client_id": "698609118012-amv96jr50jp9pesl87ps05h2db53t0qe.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "937910743612-8gi8nndbmc6158mn8mr9lhmjpsfgfpmd.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.modakFlutterApp"
-              }
             }
           ]
         }

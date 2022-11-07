@@ -41,6 +41,8 @@ import 'package:modak_flutter_app/ui/user/user_settings_screen.dart';
 import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   // main 에서 await 사용시 실행
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,7 +65,9 @@ void main() async {
 
   // dotenv 파일 로드
   await dotenv.load();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_KEY"));
 
@@ -135,9 +139,8 @@ class _MyAppState extends State<MyApp> {
             ),
         "/user/settings": (context) => UserSettingsScreen(),
         "/user/invitation/landing": (context) => UserInvitationLandingScreen(),
-        "/user/invitation/input": (context) => ChangeNotifierProvider(
-            create: (_) => UserInvitationInputVM(),
-            child: UserInvitationInputScreen()),
+        "/user/invitation/input": (context) =>
+            ChangeNotifierProvider(create: (_) => UserInvitationInputVM(), child: UserInvitationInputScreen()),
       },
     );
   }

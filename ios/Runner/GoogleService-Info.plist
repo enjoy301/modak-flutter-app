@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>698609118012-3u4g3heagqia9kve6ektgkdqf3h5llm9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.698609118012-3u4g3heagqia9kve6ektgkdqf3h5llm9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD_R6l4pAwOVXfhKArLGvnB73qwaIUemZU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>698609118012</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.wowbros.ios.modakapp</string>
+	<key>PROJECT_ID</key>
+	<string>modak-last-last</string>
+	<key>STORAGE_BUCKET</key>
+	<string>modak-last-last.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:698609118012:ios:a76a653532af9e6bcf0c39</string>
+</dict>
+</plist>

@@ -21,7 +21,7 @@
   <key>CFBundleVersion</key>
   <string>1.0</string>
   <key>MinimumOSVersion</key>
-  <string>9.0</string>
+  <string>11.0</string>
   <key>io.flutter.embedded_views_preview</key>
   <string>YES</string>
 
