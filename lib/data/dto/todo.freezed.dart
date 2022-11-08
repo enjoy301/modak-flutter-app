@@ -73,7 +73,8 @@ mixin _$Todo {
 /// @nodoc
 abstract class $TodoCopyWith<$Res> {
   factory $TodoCopyWith(Todo value, $Res Function(Todo) then) =
-      _$TodoCopyWithImpl<$Res>;
+      _$TodoCopyWithImpl<$Res, Todo>;
+  @useResult
   $Res call(
       {@HiveField(0) int todoId,
       @HiveField(1) int groupTodoId,
@@ -89,73 +90,76 @@ abstract class $TodoCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TodoCopyWithImpl<$Res> implements $TodoCopyWith<$Res> {
+class _$TodoCopyWithImpl<$Res, $Val extends Todo>
+    implements $TodoCopyWith<$Res> {
   _$TodoCopyWithImpl(this._value, this._then);
 
-  final Todo _value;
   // ignore: unused_field
-  final $Res Function(Todo) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? todoId = freezed,
-    Object? groupTodoId = freezed,
-    Object? memberId = freezed,
-    Object? title = freezed,
-    Object? color = freezed,
-    Object? isDone = freezed,
+    Object? todoId = null,
+    Object? groupTodoId = null,
+    Object? memberId = null,
+    Object? title = null,
+    Object? color = null,
+    Object? isDone = null,
     Object? timeTag = freezed,
     Object? repeatTag = freezed,
     Object? repeat = freezed,
     Object? memo = freezed,
-    Object? date = freezed,
+    Object? date = null,
   }) {
     return _then(_value.copyWith(
-      todoId: todoId == freezed
+      todoId: null == todoId
           ? _value.todoId
           : todoId // ignore: cast_nullable_to_non_nullable
               as int,
-      groupTodoId: groupTodoId == freezed
+      groupTodoId: null == groupTodoId
           ? _value.groupTodoId
           : groupTodoId // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: memberId == freezed
+      memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      title: title == freezed
+      title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      color: color == freezed
+      color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as String,
-      isDone: isDone == freezed
+      isDone: null == isDone
           ? _value.isDone
           : isDone // ignore: cast_nullable_to_non_nullable
               as bool,
-      timeTag: timeTag == freezed
+      timeTag: freezed == timeTag
           ? _value.timeTag
           : timeTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeatTag: repeatTag == freezed
+      repeatTag: freezed == repeatTag
           ? _value.repeatTag
           : repeatTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeat: repeat == freezed
+      repeat: freezed == repeat
           ? _value.repeat
           : repeat // ignore: cast_nullable_to_non_nullable
               as List<int>?,
-      memo: memo == freezed
+      memo: freezed == memo
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String?,
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -164,6 +168,7 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
   factory _$$_TodoCopyWith(_$_Todo value, $Res Function(_$_Todo) then) =
       __$$_TodoCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) int todoId,
       @HiveField(1) int groupTodoId,
@@ -179,70 +184,68 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res>
+class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
     implements _$$_TodoCopyWith<$Res> {
   __$$_TodoCopyWithImpl(_$_Todo _value, $Res Function(_$_Todo) _then)
-      : super(_value, (v) => _then(v as _$_Todo));
+      : super(_value, _then);
 
-  @override
-  _$_Todo get _value => super._value as _$_Todo;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? todoId = freezed,
-    Object? groupTodoId = freezed,
-    Object? memberId = freezed,
-    Object? title = freezed,
-    Object? color = freezed,
-    Object? isDone = freezed,
+    Object? todoId = null,
+    Object? groupTodoId = null,
+    Object? memberId = null,
+    Object? title = null,
+    Object? color = null,
+    Object? isDone = null,
     Object? timeTag = freezed,
     Object? repeatTag = freezed,
     Object? repeat = freezed,
     Object? memo = freezed,
-    Object? date = freezed,
+    Object? date = null,
   }) {
     return _then(_$_Todo(
-      todoId: todoId == freezed
+      todoId: null == todoId
           ? _value.todoId
           : todoId // ignore: cast_nullable_to_non_nullable
               as int,
-      groupTodoId: groupTodoId == freezed
+      groupTodoId: null == groupTodoId
           ? _value.groupTodoId
           : groupTodoId // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: memberId == freezed
+      memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      title: title == freezed
+      title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      color: color == freezed
+      color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as String,
-      isDone: isDone == freezed
+      isDone: null == isDone
           ? _value.isDone
           : isDone // ignore: cast_nullable_to_non_nullable
               as bool,
-      timeTag: timeTag == freezed
+      timeTag: freezed == timeTag
           ? _value.timeTag
           : timeTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeatTag: repeatTag == freezed
+      repeatTag: freezed == repeatTag
           ? _value.repeatTag
           : repeatTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeat: repeat == freezed
+      repeat: freezed == repeat
           ? _value.repeat
           : repeat // ignore: cast_nullable_to_non_nullable
               as List<int>?,
-      memo: memo == freezed
+      memo: freezed == memo
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String?,
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
@@ -310,6 +313,7 @@ class _$_Todo implements _Todo {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_TodoCopyWith<_$_Todo> get copyWith =>
       __$$_TodoCopyWithImpl<_$_Todo>(this, _$identity);
 

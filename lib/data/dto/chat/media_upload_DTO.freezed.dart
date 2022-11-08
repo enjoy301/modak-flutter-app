@@ -51,7 +51,8 @@ mixin _$MediaUploadDTO {
 abstract class $MediaUploadDTOCopyWith<$Res> {
   factory $MediaUploadDTOCopyWith(
           MediaUploadDTO value, $Res Function(MediaUploadDTO) then) =
-      _$MediaUploadDTOCopyWithImpl<$Res>;
+      _$MediaUploadDTOCopyWithImpl<$Res, MediaUploadDTO>;
+  @useResult
   $Res call(
       {@HiveField(0) Map<String, dynamic> mediaUrlData,
       @HiveField(1) MultipartFile file,
@@ -62,49 +63,51 @@ abstract class $MediaUploadDTOCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$MediaUploadDTOCopyWithImpl<$Res>
+class _$MediaUploadDTOCopyWithImpl<$Res, $Val extends MediaUploadDTO>
     implements $MediaUploadDTOCopyWith<$Res> {
   _$MediaUploadDTOCopyWithImpl(this._value, this._then);
 
-  final MediaUploadDTO _value;
   // ignore: unused_field
-  final $Res Function(MediaUploadDTO) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mediaUrlData = freezed,
-    Object? file = freezed,
-    Object? type = freezed,
-    Object? imageCount = freezed,
-    Object? memberId = freezed,
-    Object? familyId = freezed,
+    Object? mediaUrlData = null,
+    Object? file = null,
+    Object? type = null,
+    Object? imageCount = null,
+    Object? memberId = null,
+    Object? familyId = null,
   }) {
     return _then(_value.copyWith(
-      mediaUrlData: mediaUrlData == freezed
+      mediaUrlData: null == mediaUrlData
           ? _value.mediaUrlData
           : mediaUrlData // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as MultipartFile,
-      type: type == freezed
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      imageCount: imageCount == freezed
+      imageCount: null == imageCount
           ? _value.imageCount
           : imageCount // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: memberId == freezed
+      memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as String,
-      familyId: familyId == freezed
+      familyId: null == familyId
           ? _value.familyId
           : familyId // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -115,6 +118,7 @@ abstract class _$$_MediaUploadDTOCopyWith<$Res>
           _$_MediaUploadDTO value, $Res Function(_$_MediaUploadDTO) then) =
       __$$_MediaUploadDTOCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) Map<String, dynamic> mediaUrlData,
       @HiveField(1) MultipartFile file,
@@ -126,46 +130,44 @@ abstract class _$$_MediaUploadDTOCopyWith<$Res>
 
 /// @nodoc
 class __$$_MediaUploadDTOCopyWithImpl<$Res>
-    extends _$MediaUploadDTOCopyWithImpl<$Res>
+    extends _$MediaUploadDTOCopyWithImpl<$Res, _$_MediaUploadDTO>
     implements _$$_MediaUploadDTOCopyWith<$Res> {
   __$$_MediaUploadDTOCopyWithImpl(
       _$_MediaUploadDTO _value, $Res Function(_$_MediaUploadDTO) _then)
-      : super(_value, (v) => _then(v as _$_MediaUploadDTO));
+      : super(_value, _then);
 
-  @override
-  _$_MediaUploadDTO get _value => super._value as _$_MediaUploadDTO;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mediaUrlData = freezed,
-    Object? file = freezed,
-    Object? type = freezed,
-    Object? imageCount = freezed,
-    Object? memberId = freezed,
-    Object? familyId = freezed,
+    Object? mediaUrlData = null,
+    Object? file = null,
+    Object? type = null,
+    Object? imageCount = null,
+    Object? memberId = null,
+    Object? familyId = null,
   }) {
     return _then(_$_MediaUploadDTO(
-      mediaUrlData: mediaUrlData == freezed
+      mediaUrlData: null == mediaUrlData
           ? _value.mediaUrlData
           : mediaUrlData // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
-      file: file == freezed
+      file: null == file
           ? _value.file
           : file // ignore: cast_nullable_to_non_nullable
               as MultipartFile,
-      type: type == freezed
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      imageCount: imageCount == freezed
+      imageCount: null == imageCount
           ? _value.imageCount
           : imageCount // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: memberId == freezed
+      memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as String,
-      familyId: familyId == freezed
+      familyId: null == familyId
           ? _value.familyId
           : familyId // ignore: cast_nullable_to_non_nullable
               as String,
@@ -211,6 +213,7 @@ class _$_MediaUploadDTO implements _MediaUploadDTO {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_MediaUploadDTOCopyWith<_$_MediaUploadDTO> get copyWith =>
       __$$_MediaUploadDTOCopyWithImpl<_$_MediaUploadDTO>(this, _$identity);
 }

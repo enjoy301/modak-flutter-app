@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
+import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 
@@ -10,7 +13,7 @@ AppBar headerDefaultWidget({
   FunctionalIcon trailing = FunctionalIcon.none,
   Function()? onClickLeading,
   Function()? onClickTrailing,
-  Color? bgColor = Colors.white,
+  Color? bgColor = Coloring.gray_50,
   PreferredSizeWidget? bottom,
 }) {
   Map<FunctionalIcon, Image> iconData = {
@@ -46,21 +49,28 @@ AppBar headerDefaultWidget({
     ),
   };
   return AppBar(
-    leading: customLeading ?? TextButton(
-      onPressed: onClickLeading,
-      child: iconData[leading]!,
+    leading: IconButton(
+      onPressed: onClickLeading ??
+          () {
+            Get.back();
+          },
+      icon: Icon(
+        LightIcons.ArrowLeft2,
+        color: Colors.black,
+      ),
     ),
-    actions: [customTrailing ??
-      TextButton(
-        onPressed: onClickTrailing,
-        child: iconData[trailing]!,
-      )
+    actions: [
+      customTrailing ??
+          TextButton(
+            onPressed: onClickTrailing,
+            child: iconData[trailing]!,
+          )
     ],
     centerTitle: true,
     title: Text(title,
         style: TextStyle(
           color: Colors.black,
-          fontSize: Font.size_largeText,
+          fontSize: Font.size_h3,
           fontWeight: Font.weight_bold,
         )),
     backgroundColor: bgColor,

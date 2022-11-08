@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/data/dto/notification.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
-import 'package:restart_app/restart_app.dart';
 
 class UserProvider extends ChangeNotifier {
   init() async {
@@ -14,6 +14,8 @@ class UserProvider extends ChangeNotifier {
     _sizeSettings = _userRepository.getSizeSettings();
     _todoAlarmReceive = _userRepository.getTodoAlarmReceive();
     _chatAlarmReceive = _userRepository.getChatAlarmReceive();
+    notifications = _userRepository.getNotifications();
+    archiveNotifications = _userRepository.getArchiveNotifications();
     notifyListeners();
   }
 
@@ -29,6 +31,8 @@ class UserProvider extends ChangeNotifier {
   int _sizeSettings = 0;
   bool _todoAlarmReceive = true;
   bool _chatAlarmReceive = true;
+  List<Noti> notifications = <Noti>[];
+  List<Noti> archiveNotifications = <Noti>[];
 
   User? get me => _me;
 
@@ -80,7 +84,6 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   List<String> extractName(List<User> users) {
     List<String> familyNames = [];
     for (User user in users) {
@@ -122,8 +125,94 @@ class UserProvider extends ChangeNotifier {
   }
 
   logout(BuildContext context) async {
-   await  _userRepository.clearStorage();
-   Get.offAndToNamed("/auth/splash");
+    await _userRepository.clearStorage();
+    Get.offAndToNamed("/auth/splash");
+  }
+
+  withdraw(BuildContext context) async {
+    Map<String, dynamic> response = await _userRepository.deleteMe();
+    switch (response[Strings.message]) {
+      case Strings.success:
+        // ignore: use_build_context_synchronously
+        logout(context);
+        Fluttertoast.showToast(msg: "성공적으로 회원탈퇴");
+        break;
+      case Strings.fail:
+        Fluttertoast.showToast(msg: "회원탈퇴 실패");
+        break;
+    }
+  }
+
+  checkNotification() {
+    for (Noti noti in notifications) {
+      noti.isRead = true;
+    }
+    for (Noti noti in archiveNotifications) {
+      noti.isRead = true;
+    }
+    _userRepository.setNotifications(notifications);
+    _userRepository.setArchiveNotifications(archiveNotifications);
+    notifyListeners();
+  }
+
+  int getNewNotificationNumber() {
+    int count = 0;
+    for (Noti noti in notifications) {
+      if (!noti.isRead) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  addNotification(Noti noti) {
+    print("add noti");
+    notifications.insert(0, noti);
+    _userRepository.setNotifications(notifications);
+    notifyListeners();
+  }
+
+  addArchiveNotification(Noti noti) {
+    print("add archive");
+    archiveNotifications.insert(0, noti);
+    _userRepository.setArchiveNotifications(archiveNotifications);
+    notifyListeners();
+  }
+
+  removeNotification(int index) {
+    print("remove noti");
+    try {
+      notifications.removeAt(index);
+      _userRepository.setNotifications(notifications);
+    } catch (e) {
+      print("there is no item in notification at index $index");
+    }
+    notifyListeners();
+  }
+
+  removeArchiveNotification(int index) {
+    print("remove archive");
+    try {
+      archiveNotifications.removeAt(index);
+      _userRepository.setArchiveNotifications(archiveNotifications);
+    } catch (e) {
+      print("there's no item in archive notifications at index $index");
+    }
+    notifyListeners();
+  }
+
+  archive(int index) {
+    print("archive");
+    addArchiveNotification(notifications[index]);
+    removeNotification(index);
+    notifyListeners();
+  }
+
+  unArchive(int index) {
+    print("unarchive");
+    addNotification(archiveNotifications[index]);
+    removeArchiveNotification(index);
+    notifyListeners();
   }
 
   clear() {

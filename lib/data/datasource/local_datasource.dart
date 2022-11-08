@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:hive/hive.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/data/dto/notification.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 
 class LocalDataSource {
   LocalDataSource._privateConstructor();
-  static final LocalDataSource _instance =
-      LocalDataSource._privateConstructor();
+  static final LocalDataSource _instance = LocalDataSource._privateConstructor();
 
   factory LocalDataSource() {
     return _instance;
@@ -131,6 +131,18 @@ class LocalDataSource {
     return isChatAlarmReceive;
   }
 
+  List<Noti> getNotifications() {
+    List<dynamic> rawNotifications = userBox.get(Strings.notifications) ?? [];
+    List<Noti> notifications = List<Noti>.from(rawNotifications);
+    return notifications;
+  }
+
+  List<Noti> getArchiveNotifications() {
+    List<dynamic> rawArchiveNotifications = userBox.get(Strings.archiveNotifications) ?? [];
+    List<Noti> archiveNotifications = List<Noti>.from(rawArchiveNotifications);
+    return archiveNotifications;
+  }
+
   /// user
   /// └ setters
   Future<bool> updateMe(User user) async {
@@ -138,23 +150,27 @@ class LocalDataSource {
   }
 
   Future<bool> updateFamilyMember(List<User> familyMembers) async {
-    return tryFunction(
-        () async => await userBox.put(Strings.familyMembers, familyMembers));
+    return tryFunction(() async => await userBox.put(Strings.familyMembers, familyMembers));
   }
 
   Future<bool> updateSizeSettings(int sizeSettings) async {
-    return tryFunction(
-        () async => await userBox.put(Strings.sizeSettings, sizeSettings));
+    return tryFunction(() async => await userBox.put(Strings.sizeSettings, sizeSettings));
   }
 
   Future<bool> updateTodoAlarmReceive(bool isTodoAlarmReceive) async {
-    return tryFunction(() async =>
-        await userBox.put(Strings.isTodoAlarmReceive, isTodoAlarmReceive));
+    return tryFunction(() async => await userBox.put(Strings.isTodoAlarmReceive, isTodoAlarmReceive));
   }
 
   Future<bool> updateChatAlarmReceive(bool isChatAlarmReceive) async {
-    return tryFunction(() async =>
-        await userBox.put(Strings.isChatAlarmReceive, isChatAlarmReceive));
+    return tryFunction(() async => await userBox.put(Strings.isChatAlarmReceive, isChatAlarmReceive));
+  }
+
+  Future<bool> updateNotifications(List<Noti> notifications) async {
+    return tryFunction(() async => await userBox.put(Strings.notifications, notifications));
+  }
+
+  Future<bool> updateArchiveNotifications(List<Noti> archiveNotifications) async {
+    return tryFunction(() async => await userBox.put(Strings.archiveNotifications, archiveNotifications));
   }
 
   Future<bool> clearStorage() async {

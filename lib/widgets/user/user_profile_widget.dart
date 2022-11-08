@@ -7,9 +7,7 @@ import 'package:modak_flutter_app/widgets/button/button_main_small_widget.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class UserProfileWidget extends StatefulWidget {
-  const UserProfileWidget(
-      {Key? key, required this.user, required this.onPressed})
-      : super(key: key);
+  const UserProfileWidget({Key? key, required this.user, required this.onPressed}) : super(key: key);
 
   final User? user;
   final Function() onPressed;
@@ -65,7 +63,6 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                   Padding(
@@ -89,9 +86,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
               width: 10,
               height: 10,
               child: CircleAvatar(
-                backgroundColor: widget.user != null
-                    ? widget.user!.color.toColor()
-                    : Colors.white,
+                backgroundColor: widget.user != null ? widget.user!.color.toColor() : Colors.white,
               ),
             ),
           ),

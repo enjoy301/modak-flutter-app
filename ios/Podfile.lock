@@ -4,11 +4,18 @@ PODS:
   - Firebase/DynamicLinks (9.3.0):
     - Firebase/CoreOnly
     - FirebaseDynamicLinks (~> 9.3.0)
+  - Firebase/Messaging (9.3.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 9.3.0)
   - firebase_core (1.20.0):
     - Firebase/CoreOnly (= 9.3.0)
     - Flutter
   - firebase_dynamic_links (4.3.3):
     - Firebase/DynamicLinks (= 9.3.0)
+    - firebase_core
+    - Flutter
+  - firebase_messaging (13.1.0):
+    - Firebase/Messaging (= 9.3.0)
     - firebase_core
     - Flutter
   - FirebaseCore (9.3.0):
@@ -25,15 +32,29 @@ PODS:
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
   - FirebaseDynamicLinks (9.3.0):
     - FirebaseCore (~> 9.0)
+  - FirebaseInstallations (9.6.0):
+    - FirebaseCore (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (9.3.0):
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleDataTransport (< 10.0.0, >= 9.1.4)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Reachability (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
   - flutter_image_compress (1.0.0):
     - Flutter
     - Mantle
     - SDWebImage
     - SDWebImageWebPCoder
-  - flutter_secure_storage (3.3.1):
+  - flutter_local_notifications (0.0.1):
     - Flutter
-  - fluttercontactpicker (4.6.0):
+  - flutter_secure_storage (3.3.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
@@ -42,11 +63,23 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/AppDelegateSwizzler (7.8.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
   - GoogleUtilities/Environment (7.8.0):
     - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUtilities/Logger (7.8.0):
     - GoogleUtilities/Environment
+  - GoogleUtilities/Network (7.8.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.8.0)"
+  - GoogleUtilities/Reachability (7.8.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.8.0):
+    - GoogleUtilities/Logger
   - image_downloader (0.0.1):
     - Flutter
   - image_gallery_saver (1.5.0):
@@ -110,10 +143,11 @@ PODS:
 DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
-  - fluttercontactpicker (from `.symlinks/plugins/fluttercontactpicker/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_downloader (from `.symlinks/plugins/image_downloader/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
@@ -139,6 +173,8 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseCoreInternal
     - FirebaseDynamicLinks
+    - FirebaseInstallations
+    - FirebaseMessaging
     - GoogleDataTransport
     - GoogleUtilities
     - libwebp
@@ -154,14 +190,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_dynamic_links:
     :path: ".symlinks/plugins/firebase_dynamic_links/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
   flutter_image_compress:
     :path: ".symlinks/plugins/flutter_image_compress/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
-  fluttercontactpicker:
-    :path: ".symlinks/plugins/fluttercontactpicker/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_downloader:
@@ -201,14 +239,17 @@ SPEC CHECKSUMS:
   Firebase: ef75abb1cdbc746d5a38f4e26c422c807b189b8c
   firebase_core: 96214f90497b808a2cf2a24517084c5f6de37b53
   firebase_dynamic_links: 0cc25cd58aa0b24acfcf10e1aaf6f32323f1c361
+  firebase_messaging: faf30029105b2fcc74c29223eac1b7c3231a5e45
   FirebaseCore: c088995ece701a021a48a1348ea0174877de2a6a
   FirebaseCoreDiagnostics: 99a495094b10a57eeb3ae8efa1665700ad0bdaa6
   FirebaseCoreInternal: bca76517fe1ed381e989f5e7d8abb0da8d85bed3
   FirebaseDynamicLinks: af0acc2d1fa117a074e84a3c06a1d9f817443490
+  FirebaseInstallations: 0a115432c4e223c5ab20b0dbbe4cbefa793a0e8e
+  FirebaseMessaging: 2f6e38b6133059eb796ec224104f09379298a8c3
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
-  fluttercontactpicker: d582836dea6b5d489f3d259f35d7817ae82ee5e6
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: 1d20a6ad97ef46f67bbdec158ce00563a671ebb7

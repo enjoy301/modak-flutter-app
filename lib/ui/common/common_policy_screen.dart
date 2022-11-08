@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
+import 'package:modak_flutter_app/widgets/common/checkbox_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 
 class CommonPolicyScreen extends StatefulWidget {
-  const CommonPolicyScreen(
-      {Key? key, required this.policyType, this.isChecked = false, this.withCheck = true})
+  const CommonPolicyScreen({Key? key, required this.policyType, this.isChecked = false, this.withCheck = true})
       : super(key: key);
 
   final PolicyType policyType;
@@ -58,20 +58,32 @@ class _CommonPolicyScreenState extends State<CommonPolicyScreen> {
             child: Text(data[widget.policyType]['contents']),
           ),
         ),
-        bottomNavigationBar: widget.withCheck ? SizedBox(
-          height: 70,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Checkbox(
-                  value: isChecked,
-                  onChanged: (bool? value) => setState(() {
-                        isChecked = value!;
-                      })),
-              Text(data[widget.policyType]['agreementText']),
-            ],
-          ),
-        ) : null,
+        bottomNavigationBar: widget.withCheck
+            ? SizedBox(
+                height: 70,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isChecked = !isChecked;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: CheckboxWidget(
+                            value: isChecked,
+                            onChanged: (bool? value) => setState(() {
+                                  isChecked = value!;
+                                })),
+                      ),
+                      Text(data[widget.policyType]['agreementText']),
+                    ],
+                  ),
+                ),
+              )
+            : null,
       ),
     );
   }

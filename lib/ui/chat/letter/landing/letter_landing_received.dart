@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
 import 'package:modak_flutter_app/ui/chat/letter/landing/chat_letter_detail_screen.dart';
@@ -18,7 +19,7 @@ class LetterLandingReceived extends StatelessWidget {
             provider.getLetters();
           },
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Coloring.gray_50,
             body: ListView.builder(
               itemCount: provider.lettersReceived.length,
               itemBuilder: (context, index) {

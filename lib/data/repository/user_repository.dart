@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/datasource/local_datasource.dart';
 import 'package:modak_flutter_app/data/datasource/remote_datasource.dart';
+import 'package:modak_flutter_app/data/dto/notification.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 
 /// response: returns response which should be updated
@@ -50,7 +51,9 @@ class UserRepository {
         isSuccessful = await remoteDataSource.kakaoLogin();
         break;
       case "APPLE":
-        isSuccessful = await remoteDataSource.appleLogin();
+        Map response = await remoteDataSource.appleLogin();
+        isSuccessful = response[Strings.result];
+        localDataSource.updateName(response[Strings.name]);
         break;
     }
 
@@ -62,15 +65,14 @@ class UserRepository {
         User me = updateResult[0];
         List<User> familyMembers = updateResult[1];
         return {
-          Strings.response: {
-            Strings.me: me,
-            Strings.familyMembers: familyMembers
-          },
+          Strings.response: {Strings.me: me, Strings.familyMembers: familyMembers},
           Strings.message: Strings.success,
         };
       }
       if (response[Strings.message] == "NoSuchMemberException") {
-        return {Strings.message: Strings.noUser};
+        return {
+          Strings.message: Strings.noUser,
+        };
       }
     }
     return {Strings.message: Strings.fail};
@@ -85,8 +87,8 @@ class UserRepository {
     if ([name, birthDay, role].contains(null)) {
       return {Strings.message: Strings.noValue};
     }
-    Map<String, dynamic> response = await remoteDataSource.signUp(
-        name!, birthDay!, isLunar ? 1 : 0, role!, "fcmToken", -1);
+    Map<String, dynamic> response =
+        await remoteDataSource.signUp(name!, birthDay!, isLunar ? 1 : 0, role!, "fcmToken", -1);
     if (response[Strings.result]) {
       await localDataSource.updateIsRegisterProgress(false);
 
@@ -123,13 +125,15 @@ class UserRepository {
 
       return {
         Strings.message: Strings.success,
-        Strings.response: {
-          Strings.me: me,
-          Strings.familyMembers: newFamilyMembers
-        }
+        Strings.response: {Strings.me: me, Strings.familyMembers: newFamilyMembers}
       };
     }
     return {Strings.message: Strings.fail};
+  }
+
+  Future<Map<String, dynamic>> deleteMe() async {
+    Map<String, dynamic> response = await remoteDataSource.deleteMe();
+    return {Strings.message: response[Strings.result] ? Strings.success : Strings.fail};
   }
 
   Future<Map<String, dynamic>> updateMeTag(List<String> tags) async {
@@ -148,8 +152,7 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> updateFamilyId(String familyCode) async {
-    Map<String, dynamic> response =
-        await remoteDataSource.updateFamilyId(familyCode);
+    Map<String, dynamic> response = await remoteDataSource.updateFamilyId(familyCode);
     if (response[Strings.result]) {
       return {Strings.message: Strings.success};
     }
@@ -201,13 +204,20 @@ class UserRepository {
     return localDataSource.getIsChatAlarmReceive();
   }
 
+  List<Noti> getNotifications() {
+    return localDataSource.getNotifications();
+  }
+
+  List<Noti> getArchiveNotifications() {
+    return localDataSource.getArchiveNotifications();
+  }
+
   void setName(String name) async {
     await localDataSource.updateName(name);
   }
 
   void setBirthDay(DateTime birthDay) async {
-    await localDataSource
-        .updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
+    await localDataSource.updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
   }
 
   void setIsLunar(bool isLunar) async {
@@ -238,14 +248,21 @@ class UserRepository {
     await localDataSource.updateChatAlarmReceive(chatAlarmReceive);
   }
 
+  void setNotifications(List<Noti> notifications) async {
+    await localDataSource.updateNotifications(notifications);
+  }
+
+  void setArchiveNotifications(List<Noti> archiveNotifications) async {
+    await localDataSource.updateArchiveNotifications(archiveNotifications);
+  }
+
   clearStorage() async {
     await localDataSource.clearStorage();
     await remoteDataSource.clearStorage();
   }
 
   Future<List> updateMeAndFamilyInfo(Map<String, dynamic> response) async {
-    Map<String, dynamic> meRaw =
-        response['response'].data['data'][Strings.memberResult];
+    Map<String, dynamic> meRaw = response['response'].data['data'][Strings.memberResult];
     User me = User(
         memberId: meRaw[Strings.memberId],
         name: meRaw[Strings.name],
@@ -254,13 +271,10 @@ class UserRepository {
         role: meRaw[Strings.role],
         fcmToken: "",
         color: meRaw[Strings.color],
-        timeTags: meRaw['tags'] == null
-            ? List<String>.from([])
-            : List<String>.from(meRaw['tags']));
+        timeTags: meRaw['tags'] == null ? List<String>.from([]) : List<String>.from(meRaw['tags']));
 
     List<User> familyMembers = [me];
-    for (Map<String, dynamic> familyMemberRaw
-        in response['response'].data['data'][Strings.familyMembersResult]) {
+    for (Map<String, dynamic> familyMemberRaw in response['response'].data['data'][Strings.familyMembersResult]) {
       User familyMember = User(
           memberId: familyMemberRaw[Strings.memberId],
           name: familyMemberRaw[Strings.name],

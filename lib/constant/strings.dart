@@ -48,6 +48,9 @@ class Strings {
   static const String memberAndFamilyMembers = "memberAndFamilyMembers";
   static const String todayTalk = "todayTalk";
 
+  /// noti
+  static const String notiTodo = "notiTodo";
+
   /// todo
   static const String todoId = "todoId";
   static const String groupTodoId = "groupTodoId";
@@ -78,6 +81,9 @@ class Strings {
   static const String sizeSettings = "sizeSettings";
   static const String isTodoAlarmReceive = "isTodoAlarmReceive";
   static const String isChatAlarmReceive = "isChatAlarmReceive";
+  static const String notification = "notification";
+  static const String notifications = "notifications";
+  static const String archiveNotifications = "archiveNotifications";
 
   /// role
   static const String dad = "DAD";

@@ -1,16 +1,14 @@
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/todo.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_modify_screen.dart';
+import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
-import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
-import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/todo/todo_listitem_tag_widget.dart';
 import 'package:provider/provider.dart';
@@ -25,218 +23,134 @@ class TodoLandingList extends StatefulWidget {
 class _TodoLandingListState extends State<TodoLandingList> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<TodoProvider>(builder: (context, provider, _) {
-      List<Todo> todos = provider.todoMap[
-              DateFormat("yyyy-MM-dd").format(provider.selectedDateTime)] ??
-          [];
+    return Consumer2<TodoProvider, UserProvider>(builder: (context, todoProvider, userProvider, _) {
+      List<Todo> todos = todoProvider.todoMap[DateFormat("yyyy-MM-dd").format(todoProvider.selectedDateTime)] ?? [];
       return Expanded(
-        child: ListView.builder(
-          padding: EdgeInsets.only(bottom: 200),
-          shrinkWrap: true,
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            Todo todo = todos[index];
-            return ExpandableNotifier(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: 300,
-                        margin: EdgeInsets.only(left: 10, right: 12),
-                        child: GestureDetector(
-                          onTap: () {
-                            provider.doneTodo(todo, !todo.isDone);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: todo.isDone
-                                  ? Coloring.gray_50
-                                  : todos[index]
-                                      .color
-                                      .toColor()
-                                      ?.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: todos.length,
+              itemBuilder: (BuildContext context, int index) {
+                Todo todo = todos[index];
+                return GestureDetector(
+                  onTap: () {},
+                  onLongPress: () {
+                    listModalWidget(
+                      context,
+                      {
+                        "수정 하기": () {
+                          Get.back();
+                          if (todo.repeatTag != null) {
+                            listModalWidget(context, {
+                              "단일 변경": () {
+                                Get.back();
+                                Get.to(
+                                    TodoModifyScreen(
+                                      todo: todo,
+                                      isAfterUpdate: false,
+                                    ),
+                                    preventDuplicates: false);
+                              },
+                              "이후 변경": () {
+                                Get.back();
+                                Get.to(
+                                    TodoModifyScreen(
+                                      todo: todo,
+                                      isAfterUpdate: true,
+                                    ),
+                                    preventDuplicates: false);
+                              }
+                            });
+                          } else {
+                            Get.to(TodoModifyScreen(
+                              todo: todo,
+                              isAfterUpdate: false,
+                            ));
+                          }
+                        },
+                        "삭제 하기": () {
+                          Get.back();
+                          if (todo.repeatTag != null) {
+                            listModalWidget(context, {
+                              "단일 삭제": () {
+                                Get.back();
+                                todoProvider.deleteTodo(todo, false);
+                              },
+                              "이후 삭제": () {
+                                Get.back();
+                                todoProvider.deleteTodo(todo, true);
+                              }
+                            });
+                          } else {
+                            todoProvider.deleteTodo(todo, false);
+                          }
+                        },
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(15),
+                            color: Colors.white,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      width: 7,
-                                      height: 7,
-                                      margin: EdgeInsets.only(right: 16),
-                                      decoration: BoxDecoration(
-                                        color: todo.isDone
-                                            ? Coloring.gray_20
-                                            : todo.color.toColor(),
-                                        borderRadius:
-                                            BorderRadius.circular(1000),
-                                      ),
+                                    Text(
+                                      todo.title,
+                                      style:
+                                          EasyStyle.text(Coloring.gray_10, Font.size_largeText, Font.weight_semiBold),
                                     ),
-                                    ScalableTextWidget(todos[index].title,
-                                        style: TextStyle(
-                                            color: todo.isDone
-                                                ? Coloring.gray_20
-                                                : Coloring.gray_10,
-                                            fontSize: Font.size_mediumText,
-                                            fontWeight: Font.weight_semiBold,
-                                            decoration: todo.isDone
-                                                ? TextDecoration.lineThrough
-                                                : TextDecoration.none,
-                                            decorationStyle:
-                                                TextDecorationStyle.solid,
-                                            decorationThickness: 3,
-                                            decorationColor: Coloring.gray_20)),
-                                    Expanded(
-                                      child: Text(""),
-                                    ),
-                                    todo.memo != ""
-                                        ? ExpandableButton(
-                                            child: Expandable(
-                                              theme: ExpandableThemeData(
-                                                  animationDuration: Duration(
-                                                      microseconds: 0)),
-                                              collapsed: Container(
-                                                padding: EdgeInsets.all(6),
-                                                constraints: BoxConstraints(),
-                                                child: Icon(
-                                                  LightIcons.ArrowDown2,
-                                                  color: todo.isDone
-                                                      ? Coloring.gray_20
-                                                      : Coloring.gray_10,
-                                                  size: 20,
-                                                ),
-                                              ),
-                                              expanded: Container(
-                                                padding: EdgeInsets.all(6),
-                                                constraints: BoxConstraints(),
-                                                child: Icon(
-                                                  LightIcons.ArrowUp2,
-                                                  color: todo.isDone
-                                                      ? Coloring.gray_20
-                                                      : Coloring.gray_10,
-                                                  size: 20,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : Text(""),
+                                    TodoListItemTagWidget(
+                                      name: todo.timeTag ?? "언제든지",
+                                    )
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    todo.timeTag != null
-                                        ? TodoListItemTagWidget(
-                                            name: todo.timeTag!)
-                                        : SizedBox(
-                                            height: 0,
-                                          ),
-                                    todo.repeatTag != null
-                                        ? TodoListItemTagWidget(
-                                            name: todo.repeatTag!)
-                                        : SizedBox(
-                                            height: 0,
-                                          ),
-                                  ],
-                                ),
-                                Expandable(
-                                  theme: ExpandableThemeData(
-                                    animationDuration:
-                                        Duration(microseconds: 1),
-                                  ),
-                                  expanded: Text(todo.memo ?? "",
-                                      style: TextStyle(
-                                        color: todo.isDone
-                                            ? Coloring.gray_20
-                                            : Coloring.gray_10,
-                                        fontSize: Font.size_smallText,
-                                        fontWeight: Font.weight_medium,
-                                      ),
-                                      textAlign: TextAlign.left),
-                                  collapsed: SizedBox(
-                                    height: 0,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 6),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("@${userProvider.findUserById(todo.memberId)?.name ?? "익명"}",
+                                          style:
+                                              EasyStyle.text(Coloring.gray_10, Font.size_smallText, Font.weight_bold)),
+                                      Text(
+                                        todo.repeatTag ?? "",
+                                        style:
+                                            EasyStyle.text(Coloring.gray_10, Font.size_smallText, Font.weight_regular),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                          if (todo.memo != "" && todo.memo != null)
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(15),
+                              color: todo.color.toColor()!.withOpacity(0.2),
+                              child: Text(
+                                todo.memo!,
+                                style: EasyStyle.text(Coloring.gray_10, Font.size_smallText, Font.weight_medium),
+                              ),
+                            ),
+                          SizedBox.shrink()
+                        ],
                       ),
                     ),
-                    IconButton(
-                        onPressed: () {
-                          listModalWidget(
-                            context,
-                            {
-                              "수정 하기": () {
-                                Get.back();
-                                if (todo.repeatTag != null) {
-                                  listModalWidget(context, {
-                                    "단일 변경": () {
-                                      Get.back();
-                                      Get.to(
-                                          TodoModifyScreen(
-                                            todo: todo,
-                                            isAfterUpdate: false,
-                                          ),
-                                          preventDuplicates: false);
-                                    },
-                                    "이후 변경": () {
-                                      Get.back();
-                                      Get.to(
-                                          TodoModifyScreen(
-                                            todo: todo,
-                                            isAfterUpdate: true,
-                                          ),
-                                          preventDuplicates: false);
-                                    }
-                                  });
-                                } else {
-                                  Get.to(TodoModifyScreen(
-                                    todo: todo,
-                                    isAfterUpdate: false,
-                                  ));
-                                }
-                              },
-                              "삭제 하기": () {
-                                Get.back();
-                                if (todo.repeatTag != null) {
-                                  listModalWidget(context, {
-                                    "단일 삭제": () {
-                                      Get.back();
-                                      provider.deleteTodo(todo, false);
-                                    },
-                                    "이후 삭제": () {
-                                      Get.back();
-                                      provider.deleteTodo(todo, true);
-                                    }
-                                  });
-                                } else {
-                                  provider.deleteTodo(todo, false);
-                                }
-                              },
-                            },
-                          );
-                        },
-                        icon: Icon(
-                          Icons.more_vert,
-                          size: 14,
-                        ),
-                        padding: EdgeInsets.only(top: 12),
-                        constraints: BoxConstraints())
-                  ],
-                ),
-              ),
-            );
-          },
+                  ),
+                );
+              }),
         ),
       );
     });

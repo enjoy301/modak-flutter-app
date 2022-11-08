@@ -12,14 +12,12 @@ class AlbumRepository {
     return _instance;
   }
 
-  static final AlbumRepository _instance =
-      AlbumRepository._privateConstructor();
+  static final AlbumRepository _instance = AlbumRepository._privateConstructor();
   static late final LocalDataSource localDataSource;
   static late final RemoteDataSource remoteDataSource;
 
   Future<Map<String, dynamic>> getMediaInfoList(int lastId, int count) async {
-    Map<String, dynamic> response =
-        await remoteDataSource.getMediaInfoList(lastId, count);
+    Map<String, dynamic> response = await remoteDataSource.getMediaInfoList(lastId, count);
 
     if (response[Strings.result]) {
       return {
@@ -33,8 +31,7 @@ class AlbumRepository {
   }
 
   Future<Map<String, dynamic>> getMediaURL(List<dynamic> requestList) async {
-    Map<String, dynamic> response =
-        await remoteDataSource.getMediaDownloadURL(requestList);
+    Map<String, dynamic> response = await remoteDataSource.getMediaDownloadURL(requestList);
 
     if (response[Strings.result]) {
       return {

@@ -61,7 +61,8 @@ mixin _$User {
 /// @nodoc
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res>;
+      _$UserCopyWithImpl<$Res, User>;
+  @useResult
   $Res call(
       {@HiveField(0) int memberId,
       @HiveField(1) String name,
@@ -74,58 +75,61 @@ abstract class $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
+class _$UserCopyWithImpl<$Res, $Val extends User>
+    implements $UserCopyWith<$Res> {
   _$UserCopyWithImpl(this._value, this._then);
 
-  final User _value;
   // ignore: unused_field
-  final $Res Function(User) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? memberId = freezed,
-    Object? name = freezed,
-    Object? birthDay = freezed,
-    Object? isLunar = freezed,
-    Object? role = freezed,
-    Object? fcmToken = freezed,
-    Object? color = freezed,
-    Object? timeTags = freezed,
+    Object? memberId = null,
+    Object? name = null,
+    Object? birthDay = null,
+    Object? isLunar = null,
+    Object? role = null,
+    Object? fcmToken = null,
+    Object? color = null,
+    Object? timeTags = null,
   }) {
     return _then(_value.copyWith(
-      memberId: memberId == freezed
+      memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      birthDay: birthDay == freezed
+      birthDay: null == birthDay
           ? _value.birthDay
           : birthDay // ignore: cast_nullable_to_non_nullable
               as String,
-      isLunar: isLunar == freezed
+      isLunar: null == isLunar
           ? _value.isLunar
           : isLunar // ignore: cast_nullable_to_non_nullable
               as bool,
-      role: role == freezed
+      role: null == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String,
-      fcmToken: fcmToken == freezed
+      fcmToken: null == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
               as String,
-      color: color == freezed
+      color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as String,
-      timeTags: timeTags == freezed
+      timeTags: null == timeTags
           ? _value.timeTags
           : timeTags // ignore: cast_nullable_to_non_nullable
               as List<String>,
-    ));
+    ) as $Val);
   }
 }
 
@@ -134,6 +138,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$$_UserCopyWith(_$_User value, $Res Function(_$_User) then) =
       __$$_UserCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) int memberId,
       @HiveField(1) String name,
@@ -146,55 +151,53 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
+class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     implements _$$_UserCopyWith<$Res> {
   __$$_UserCopyWithImpl(_$_User _value, $Res Function(_$_User) _then)
-      : super(_value, (v) => _then(v as _$_User));
+      : super(_value, _then);
 
-  @override
-  _$_User get _value => super._value as _$_User;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? memberId = freezed,
-    Object? name = freezed,
-    Object? birthDay = freezed,
-    Object? isLunar = freezed,
-    Object? role = freezed,
-    Object? fcmToken = freezed,
-    Object? color = freezed,
-    Object? timeTags = freezed,
+    Object? memberId = null,
+    Object? name = null,
+    Object? birthDay = null,
+    Object? isLunar = null,
+    Object? role = null,
+    Object? fcmToken = null,
+    Object? color = null,
+    Object? timeTags = null,
   }) {
     return _then(_$_User(
-      memberId: memberId == freezed
+      memberId: null == memberId
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      birthDay: birthDay == freezed
+      birthDay: null == birthDay
           ? _value.birthDay
           : birthDay // ignore: cast_nullable_to_non_nullable
               as String,
-      isLunar: isLunar == freezed
+      isLunar: null == isLunar
           ? _value.isLunar
           : isLunar // ignore: cast_nullable_to_non_nullable
               as bool,
-      role: role == freezed
+      role: null == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String,
-      fcmToken: fcmToken == freezed
+      fcmToken: null == fcmToken
           ? _value.fcmToken
           : fcmToken // ignore: cast_nullable_to_non_nullable
               as String,
-      color: color == freezed
+      color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as String,
-      timeTags: timeTags == freezed
+      timeTags: null == timeTags
           ? _value.timeTags
           : timeTags // ignore: cast_nullable_to_non_nullable
               as List<String>,
@@ -250,6 +253,7 @@ class _$_User implements _User {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_UserCopyWith<_$_User> get copyWith =>
       __$$_UserCopyWithImpl<_$_User>(this, _$identity);
 

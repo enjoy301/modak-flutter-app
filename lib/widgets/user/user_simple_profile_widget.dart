@@ -9,8 +9,7 @@ class UserSimpleProfileWidget extends StatefulWidget {
   final FamilyType family;
 
   @override
-  State<UserSimpleProfileWidget> createState() =>
-      _UserSimpleProfileWidgetState();
+  State<UserSimpleProfileWidget> createState() => _UserSimpleProfileWidgetState();
 }
 
 class _UserSimpleProfileWidgetState extends State<UserSimpleProfileWidget> {
@@ -45,11 +44,14 @@ class _UserSimpleProfileWidgetState extends State<UserSimpleProfileWidget> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4),
-            child: Text("가족 1", style: TextStyle(
-              color: Coloring.gray_10,
-              fontSize: Font.size_smallText,
-              fontWeight: Font.weight_regular,
-            ),),
+            child: Text(
+              "가족 1",
+              style: TextStyle(
+                color: Coloring.gray_10,
+                fontSize: Font.size_smallText,
+                fontWeight: Font.weight_regular,
+              ),
+            ),
           ),
         ],
       ),

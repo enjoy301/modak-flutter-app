@@ -58,11 +58,8 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Container(
-                padding:
-                    EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20)),
+                padding: EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
+                decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -82,11 +79,8 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Container(
-                padding:
-                    EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20)),
+                padding: EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
+                decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -140,7 +134,10 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(CommonPolicyScreen(policyType: PolicyType.operating, withCheck: false,));
+                  Get.to(CommonPolicyScreen(
+                    policyType: PolicyType.operating,
+                    withCheck: false,
+                  ));
                 },
                 child: Container(
                   width: double.infinity,

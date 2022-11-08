@@ -41,11 +41,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
       'icon': LightIcons.TicketStar,
       'color': Coloring.bg_yellow,
     },
-    {
-      'name': "편지",
-      'icon': LightIcons.Message,
-      'color': Coloring.point_pureorange
-    },
+    {'name': "편지", 'icon': LightIcons.Message, 'color': Coloring.point_pureorange},
     {'name': "주제 던지기", 'icon': LightIcons.Chat, 'color': Coloring.bg_green}
   ];
   @override
@@ -61,49 +57,51 @@ class _FunctionListWidget extends State<FunctionListWidget> {
               crossAxisCount: 4,
             ),
             children: [
-              ChatFunctionIconWidget(
-                data: functionIconWidgetValues[0],
-                onTap: () async {
-                  if (provider.albumFiles.isEmpty) {
-                    List<File> files = await getImageFromAlbum();
-                    await provider.loadAlbum(files);
-                  }
-                  provider.chatMode = ChatMode.functionAlbum;
-                },
-              ),
-              ChatFunctionIconWidget(
-                data: functionIconWidgetValues[1],
-                onTap: () async {
-                  defaultModalWidget(
-                    context,
-                    [
-                      TextButton(
-                        onPressed: () async {
-                          Future(() => Navigator.pop(context));
+              if (Platform.isAndroid)
+                ChatFunctionIconWidget(
+                  data: functionIconWidgetValues[0],
+                  onTap: () async {
+                    if (provider.albumFiles.isEmpty) {
+                      List<File> files = await getImageFromAlbum();
+                      await provider.loadAlbum(files);
+                    }
+                    provider.chatMode = ChatMode.functionAlbum;
+                  },
+                ),
+              if (Platform.isAndroid)
+                ChatFunctionIconWidget(
+                  data: functionIconWidgetValues[1],
+                  onTap: () async {
+                    defaultModalWidget(
+                      context,
+                      [
+                        TextButton(
+                          onPressed: () async {
+                            Future(() => Navigator.pop(context));
 
-                          File image = await getImageFromCamera();
-                          provider.postMediaFileFromCamera(
-                            image,
-                            "jpg",
-                          );
-                        },
-                        child: Text("사진 찍기"),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          Future(() => Navigator.pop(context));
-                          File video = await getVideoFromCamera();
-                          provider.postMediaFileFromCamera(
-                            video,
-                            "mp4",
-                          );
-                        },
-                        child: Text("동영상 촬영"),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                            File image = await getImageFromCamera();
+                            provider.postMediaFileFromCamera(
+                              image,
+                              "jpg",
+                            );
+                          },
+                          child: Text("사진 찍기"),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Future(() => Navigator.pop(context));
+                            File video = await getVideoFromCamera();
+                            provider.postMediaFileFromCamera(
+                              video,
+                              "mp4",
+                            );
+                          },
+                          child: Text("동영상 촬영"),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ChatFunctionIconWidget(
                 data: functionIconWidgetValues[2],
                 onTap: () {
@@ -124,10 +122,10 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                   Get.toNamed("/chat/letter/landing");
                 },
               ),
-              ChatFunctionIconWidget(
-                data: functionIconWidgetValues[5],
-                onTap: () {},
-              )
+              // ChatFunctionIconWidget(
+              //   data: functionIconWidgetValues[5],
+              //   onTap: () {},
+              // )
             ],
           ),
         );

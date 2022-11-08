@@ -22,10 +22,10 @@ class ChatDateWidget extends StatelessWidget {
       child: ScalableTextWidget(
         DateFormat("yyyy-MM-dd")
             .format(
-          DateTime.fromMillisecondsSinceEpoch(
-            chat.sendAt.toInt() * 1000,
-          ),
-        )
+              DateTime.fromMillisecondsSinceEpoch(
+                chat.sendAt.toInt() * 1000,
+              ),
+            )
             .toString(),
         style: TextStyle(
           color: Coloring.gray_10,

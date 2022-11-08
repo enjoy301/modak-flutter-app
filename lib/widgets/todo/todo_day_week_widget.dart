@@ -4,7 +4,12 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 
 class TodoDayWeekWidget extends StatelessWidget {
-  const TodoDayWeekWidget({Key? key, required this.dayOfTheWeek, required this.onPressed, this.isEnabled = true,}) : super(key: key);
+  const TodoDayWeekWidget({
+    Key? key,
+    required this.dayOfTheWeek,
+    required this.onPressed,
+    this.isEnabled = true,
+  }) : super(key: key);
 
   final DayOfTheWeek dayOfTheWeek;
   final Function() onPressed;
@@ -12,7 +17,6 @@ class TodoDayWeekWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     Map<DayOfTheWeek, dynamic> data = {
       DayOfTheWeek.sun: {
         "title": "일",
@@ -29,7 +33,8 @@ class TodoDayWeekWidget extends StatelessWidget {
       DayOfTheWeek.wed: {
         "title": "수",
         "color": Coloring.bg_green,
-      },DayOfTheWeek.thu: {
+      },
+      DayOfTheWeek.thu: {
         "title": "목",
         "color": Coloring.bg_blue,
       },

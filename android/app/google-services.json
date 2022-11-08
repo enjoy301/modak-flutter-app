@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "698609118012",
-    "project_id": "modak-last-last",
-    "storage_bucket": "modak-last-last.appspot.com"
+    "project_number": "64558767437",
+    "project_id": "modak-9e12f",
+    "storage_bucket": "modak-9e12f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:698609118012:android:a124c9c475d1c8a1cf0c39",
+        "mobilesdk_app_id": "1:64558767437:android:a6bcdacb58e6474afd2b04",
         "android_client_info": {
-          "package_name": "com.wowbros.modak"
+          "package_name": "com.wowbros.android.modak"
         }
       },
       "oauth_client": [
         {
-          "client_id": "698609118012-amv96jr50jp9pesl87ps05h2db53t0qe.apps.googleusercontent.com",
+          "client_id": "64558767437-bs1ujfi51epnvs9kal14pm2qai8imah9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDFojoHcYwP2V55Kq2pRkxeBQZHJt7MmPQ"
+          "current_key": "AIzaSyBFe6azF2befsHik5CA2Dx-n5AbYsTXIo0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "698609118012-amv96jr50jp9pesl87ps05h2db53t0qe.apps.googleusercontent.com",
+              "client_id": "64558767437-bs1ujfi51epnvs9kal14pm2qai8imah9.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "64558767437-1fho70kn6qpigsu1op48dalf142rs92m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wowbros.ios.modak"
+              }
             }
           ]
         }

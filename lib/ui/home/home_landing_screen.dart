@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/widgets/home/home_family_fortune_widget.dart';
-import 'package:modak_flutter_app/widgets/home/home_family_info_widget.dart';
+import 'package:modak_flutter_app/ui/common/common_web_screen.dart';
+import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/widgets/home/home_family_talk_widget.dart';
-import 'package:modak_flutter_app/widgets/home/home_letter_widget.dart';
+import 'package:modak_flutter_app/widgets/home/home_item_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 class HomeLandingScreen extends StatefulWidget {
   const HomeLandingScreen({Key? key}) : super(key: key);
@@ -24,90 +23,172 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController? controller;
-    return Consumer2<UserProvider, HomeProvider>(
-        builder: (context, userProvider, homeProvider, child) {
+    return Consumer2<HomeProvider, UserProvider>(builder: (context, homeProvider, userProvider, child) {
       return Scaffold(
-        body: SafeArea(
-          child: ListView.builder(
-            itemCount: 2,
-            primary: controller == null,
-            controller: controller,
-            itemBuilder: (context, index) {
-              return StickyHeaderBuilder(
-                controller: controller, // Optional
-                builder: (BuildContext context, double stuckAmount) {
-                  stuckAmount = 1.0 - stuckAmount.clamp(0.0, 1.0);
-                  return GestureDetector(
-                    onTap: () {
-                      homeProvider.getHomeInfo();
-                    },
-                    child: Container(
-                      height: 60.0,
-                      color: Color.lerp(
-                          Coloring.gray_50, Colors.white, stuckAmount),
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              headerTitle[index],
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: Font.size_h1,
-                                  fontWeight: Font.weight_semiBold),
-                            ),
-                          ),
-                          Offstage(
-                            offstage: stuckAmount <= 0.0,
-                            child: Opacity(
-                              opacity: stuckAmount,
-                              child: IconButton(
-                                icon: const Icon(Icons.notifications_none,
-                                    color: Colors.black),
-                                onPressed: () {
-                                  Get.toNamed("/home/notification");
-                                },
+        backgroundColor: Coloring.gray_50,
+        appBar: AppBar(
+          backgroundColor: Coloring.gray_50,
+          elevation: 0,
+          title: Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: Text(
+              "모닥",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: Font.size_h1,
+                fontWeight: Font.weight_bold,
+              ),
+            ),
+          ),
+          centerTitle: false,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: IconButton(
+                  onPressed: () {
+                    Get.toNamed("/home/notification");
+                  },
+                  icon: Icon(
+                    LightIcons.Notification,
+                    color: Colors.black,
+                  )),
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                HomePictureWidget(),
+                HomeFamilyTalkWidget(
+                  dateTime: DateTime.now(),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 9),
+                  child: GridView(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.9,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                    ),
+                    children: [
+                      HomeItemWidget(
+                        title: "하루 한줄",
+                        des: "모닥이 알려주는\n오늘의 문장",
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "하루 한줄",
+                                    style: EasyStyle.text(Colors.black, Font.size_mediumText, Font.weight_regular),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Image.asset(
+                                        "lib/assets/functional_image/ic_close.png",
+                                        width: 32,
+                                        height: 32,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "모닥이 알려주는 오늘의 문장",
+                                    style: EasyStyle.text(Colors.black, Font.size_h4, Font.weight_medium),
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    decoration: BoxDecoration(
+                                      color: Coloring.gray_40,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      "붕어빵은 팥이 맛있어요",
+                                      style: EasyStyle.text(Colors.black, Font.size_mediumText, Font.weight_medium),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                        ],
+                          );
+                        },
+                        isPointGiven: true,
                       ),
-                    ),
-                  );
-                },
-                content: Container(
-                    color: Coloring.gray_50,
-                    child: Column(children: [
-                      if (index == 0)
-                        HomeFamilyTalkWidget(name: "name", content: "content"),
-                      if (index == 1) HomeFamilyFortuneWidget(),
-                      if (index == 1) HomeLetterWidget(),
-                      if (index == 1)
-                        HomeFamilyInfoWidget(
-                          type: HomePostType.cook,
-                          title: "백종원의 요리쇼",
-                          contents: "슈가 보이 백종원의 궁중 떡볶이 만드는 법!",
-                          link: "https://www.naver.com",
-                        ),
-                      if (index == 1)
-                        HomeFamilyInfoWidget(
-                          type: HomePostType.travel,
-                          title: "캠핑장 추천",
-                          contents: "몽산포에 있는 기가막힌 캠핑장",
-                          link: "https://www.naver.com",
-                        ),
-                      if (index == 1)
-                        SizedBox(
-                          height: 100,
-                        )
-                    ])),
-              );
-            },
+                      HomeItemWidget(
+                        title: "우편함",
+                        des: "편지를 작성하고\n보내보세요",
+                        onPressed: () {
+                          Get.toNamed("/chat/letter/landing");
+                        },
+                      ),
+                      HomeItemWidget(
+                        title: "요리",
+                        des: "백종원의 요리쇼\n-궁중떡볶이",
+                        onPressed: () {
+                          Get.to(CommonWebScreen(title: '요리', link: "https://www.naver.com"));
+                        },
+                      ),
+                      HomeItemWidget(
+                        title: "여행",
+                        des: "요즘 가기 좋은\n캠핑장은?",
+                        onPressed: () {
+                          Get.to(CommonWebScreen(title: '캠핑장', link: "https://www.naver.com"));
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       );
     });
+  }
+}
+
+class HomePictureWidget extends StatelessWidget {
+  const HomePictureWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 25),
+      margin: EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        color: Color(0XFFD9D9D9),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Icon(LightIcons.Plus),
+          SizedBox(
+            height: 12,
+          ),
+          Text("가족사진 등록하기"),
+        ],
+      ),
+    );
   }
 }

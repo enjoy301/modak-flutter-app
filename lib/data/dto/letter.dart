@@ -16,6 +16,5 @@ class Letter with _$Letter {
     @HiveField(4) required String date,
   }) = _Letter;
 
-  factory Letter.fromJson(Map<String, dynamic> json) =>
-      _$LetterFromJson(json);
+  factory Letter.fromJson(Map<String, dynamic> json) => _$LetterFromJson(json);
 }

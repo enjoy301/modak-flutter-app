@@ -8,10 +8,7 @@ import 'package:modak_flutter_app/data/dto/chat.dart';
 
 class ChatComponentInfoWidget extends StatelessWidget {
   const ChatComponentInfoWidget(
-      {Key? key,
-        required this.chat,
-        this.showTime = true,
-        this.crossAxisAlignment = CrossAxisAlignment.start})
+      {Key? key, required this.chat, this.showTime = true, this.crossAxisAlignment = CrossAxisAlignment.start})
       : super(key: key);
 
   final Chat chat;
@@ -36,19 +33,19 @@ class ChatComponentInfoWidget extends StatelessWidget {
           ),
           showTime
               ? Text(
-            DateFormat("h:mm a")
-                .format(
-              DateTime.fromMicrosecondsSinceEpoch(
-                (chat.sendAt * pow(10, 6).toInt()).round(),
-              ),
-            )
-                .toString(),
-            style: TextStyle(
-              color: Coloring.gray_20,
-              fontSize: Font.size_caption,
-              fontWeight: Font.weight_regular,
-            ),
-          )
+                  DateFormat("h:mm a")
+                      .format(
+                        DateTime.fromMicrosecondsSinceEpoch(
+                          (chat.sendAt * pow(10, 6).toInt()).round(),
+                        ),
+                      )
+                      .toString(),
+                  style: TextStyle(
+                    color: Coloring.gray_20,
+                    fontSize: Font.size_caption,
+                    fontWeight: Font.weight_regular,
+                  ),
+                )
               : SizedBox()
         ],
       ),

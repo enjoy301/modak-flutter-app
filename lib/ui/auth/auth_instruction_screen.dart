@@ -25,11 +25,14 @@ class AuthInstructionScreen extends StatelessWidget {
             Image.asset("lib/assets/images/others/invited_description.png"),
             Padding(
               padding: const EdgeInsets.only(top: 26.0),
-              child: Text("초대자가 보낸 링크를 SMS 혹은 카카오톡을 통해 확인하세요.", style: TextStyle(
-                color: Coloring.gray_10,
-                fontSize: Font.size_smallText,
-                fontWeight: Font.weight_regular,
-              ),),
+              child: Text(
+                "초대자가 보낸 링크를 SMS 혹은 카카오톡을 통해 확인하세요.",
+                style: TextStyle(
+                  color: Coloring.gray_10,
+                  fontSize: Font.size_smallText,
+                  fontWeight: Font.weight_regular,
+                ),
+              ),
             )
           ],
         ),

@@ -265,8 +265,7 @@ class ChatProvider extends ChangeNotifier {
       context,
     );
 
-    Map<String, dynamic> response =
-        await _chatRepository.postChat(chat, metaData: metaData);
+    Map<String, dynamic> response = await _chatRepository.postChat(chat, metaData: metaData);
 
     if (response['message'] == Strings.fail) {
       _chats.removeAt(0);
@@ -388,6 +387,7 @@ class ChatProvider extends ChangeNotifier {
         MultipartFile zipFile = await mediaFilesToZip(
           compressedImageFiles,
         );
+
         Map<String, dynamic> response = await _chatRepository.uploadMedia(
           MediaUploadDTO(
             mediaUrlData: mediaUrlData,
@@ -398,6 +398,7 @@ class ChatProvider extends ChangeNotifier {
             familyId: _familyId,
           ),
         );
+
         if (response[Strings.message] == Strings.success) {
           Fluttertoast.showToast(msg: "미디어 전송 성공");
         } else {

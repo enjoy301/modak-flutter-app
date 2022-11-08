@@ -34,8 +34,7 @@ class TodoWriteScreen extends StatelessWidget {
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
           },
-          child: Consumer2<UserProvider, TodoWriteVM>(
-              builder: (context, userProvider, provider, child) {
+          child: Consumer2<UserProvider, TodoWriteVM>(builder: (context, userProvider, provider, child) {
             return Scaffold(
               backgroundColor: Colors.white,
               appBar: headerDefaultWidget(
@@ -43,7 +42,8 @@ class TodoWriteScreen extends StatelessWidget {
                   leading: FunctionalIcon.back,
                   onClickLeading: () {
                     Navigator.pop(context);
-                  }),
+                  },
+                  bgColor: Colors.white),
               body: SingleChildScrollView(
                 child: ExpandableNotifier(
                   child: Padding(
@@ -79,25 +79,20 @@ class TodoWriteScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 13),
                           child: InputSelectWidget(
                               title: "담당",
-                              contents: provider.manager == null
-                                  ? userProvider.me!.name
-                                  : provider.manager!.name,
-                              buttons: userProvider.familyMembers
-                                  .mapIndexed((int index, User familyMember) {
+                              contents: provider.manager == null ? userProvider.me!.name : provider.manager!.name,
+                              buttons: userProvider.familyMembers.mapIndexed((int index, User familyMember) {
                                 return TextButton(
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.symmetric(vertical: 20),
-                                    foregroundColor: MaterialStateColor.resolveWith((states) => familyMember.color.toColor()!),
-                                    backgroundColor: familyMember.color
-                                        .toColor()!
-                                        .withOpacity(0.2),
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
+                                    foregroundColor:
+                                        MaterialStateColor.resolveWith((states) => familyMember.color.toColor()!),
+                                    backgroundColor: familyMember.color.toColor()!.withOpacity(0.2),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(
-                                                index == 0 ? 10 : 0),
-                                            bottom: Radius.circular(index == userProvider.familyMembers.length - 1 ? 10 : 0))),
+                                            top: Radius.circular(index == 0 ? 10 : 0),
+                                            bottom: Radius.circular(
+                                                index == userProvider.familyMembers.length - 1 ? 10 : 0))),
                                   ),
                                   onPressed: () {
                                     provider.manager = familyMember;
@@ -118,13 +113,11 @@ class TodoWriteScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 13),
                           child: InputDateWidget(
                               title: "날짜",
-                              contents: DateFormat("yyyy-MM-dd")
-                                  .format(provider.date),
+                              contents: DateFormat("yyyy-MM-dd").format(provider.date),
                               onChanged: (DateTime dateTime) {
                                 provider.date = dateTime;
                               },
-                              minTime:
-                                  DateTime.now().subtract(Duration(days: 400)),
+                              minTime: DateTime.now().subtract(Duration(days: 400)),
                               maxTime: DateTime.now().add(Duration(days: 400)),
                               currTime: DateTime.now()),
                         ),
@@ -133,10 +126,12 @@ class TodoWriteScreen extends StatelessWidget {
                           contents: provider.timeTag ?? "언제든지",
                           onTap: () async {
                             FocusScope.of(context).requestFocus(FocusNode());
-                            dynamic result = await Get.to(TodoWriteWhenScreen(
-                              previousTag: provider.timeTag,
-                              isTimeSelected: provider.isTimeSelected,
-                            ), preventDuplicates: false);
+                            dynamic result = await Get.to(
+                                TodoWriteWhenScreen(
+                                  previousTag: provider.timeTag,
+                                  isTimeSelected: provider.isTimeSelected,
+                                ),
+                                preventDuplicates: false);
                             if (result[1].runtimeType == String) {
                               provider.isTimeSelected = result[0];
                               provider.timeTag = result[1];
@@ -179,8 +174,7 @@ class TodoWriteScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 5, bottom: 8),
+                                padding: const EdgeInsets.only(top: 5, bottom: 8),
                                 child: Text(
                                   "반복",
                                   style: TextStyle(
@@ -247,8 +241,7 @@ class TodoWriteScreen extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 24, bottom: 8),
+                                padding: const EdgeInsets.only(top: 24, bottom: 8),
                                 child: Text("메모 (옵션)",
                                     style: TextStyle(
                                       color: Coloring.gray_10,

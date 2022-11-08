@@ -13,8 +13,16 @@ extension StringConverter on String? {
         return "딸";
       case Strings.son:
         return "아들";
-      default: return "Error";
+      default:
+        return "Error";
     }
+  }
+}
+
+extension StringToTypeCertain on String {
+  NotificationType toNotificationType() {
+    return NotificationType.values
+        .firstWhere((element) => this == element.toString().substring(0, element.toString().length));
   }
 }
 
@@ -54,8 +62,7 @@ extension StringToType on String? {
     if (this == null) return null;
     RegExp regExp = RegExp(r'png|mp4|jpg');
     String res = this!.toLowerCase().split(".").last;
-    List<String> extensions =
-        regExp.allMatches(res).map((m) => m.group(0).toString()).toList();
+    List<String> extensions = regExp.allMatches(res).map((m) => m.group(0).toString()).toList();
     if (extensions.contains("png")) {
       return "png";
     } else if (extensions.contains("mp4")) {
@@ -85,4 +92,3 @@ extension ColorToString on Color {
     return toString().substring(8, 16);
   }
 }
-

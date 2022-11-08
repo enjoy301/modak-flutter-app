@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDFojoHcYwP2V55Kq2pRkxeBQZHJt7MmPQ',
-    appId: '1:698609118012:android:a124c9c475d1c8a1cf0c39',
-    messagingSenderId: '698609118012',
-    projectId: 'modak-last-last',
-    storageBucket: 'modak-last-last.appspot.com',
+    apiKey: 'AIzaSyBFe6azF2befsHik5CA2Dx-n5AbYsTXIo0',
+    appId: '1:64558767437:android:a6bcdacb58e6474afd2b04',
+    messagingSenderId: '64558767437',
+    projectId: 'modak-9e12f',
+    storageBucket: 'modak-9e12f.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD_R6l4pAwOVXfhKArLGvnB73qwaIUemZU',
-    appId: '1:698609118012:ios:a76a653532af9e6bcf0c39',
-    messagingSenderId: '698609118012',
-    projectId: 'modak-last-last',
-    storageBucket: 'modak-last-last.appspot.com',
-    iosClientId: '698609118012-3u4g3heagqia9kve6ektgkdqf3h5llm9.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAPN8cRhA0aa0NyI52LtgXo5K_EwRTF1yE',
+    appId: '1:64558767437:ios:ace21d59edaf6adafd2b04',
+    messagingSenderId: '64558767437',
+    projectId: 'modak-9e12f',
+    storageBucket: 'modak-9e12f.appspot.com',
+    iosClientId: '64558767437-a0a6n3e49he17um5qlo8c3bhnutm35fm.apps.googleusercontent.com',
     iosBundleId: 'com.wowbros.ios.modakapp',
   );
 }

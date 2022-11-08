@@ -11,3 +11,5 @@ enum PolicyType { operating, private }
 enum DayOfTheWeek { mon, tue, wed, thu, fri, sat, sun }
 
 enum EnvelopeType { red, brown, cyan, green }
+
+enum NotificationType { todo }

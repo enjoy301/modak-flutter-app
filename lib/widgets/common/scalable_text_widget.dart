@@ -24,18 +24,20 @@ class _ScalableTextWidgetState extends State<ScalableTextWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(widget.text,
-        maxLines: widget.maxLines,
-        style: TextStyle(
-          color: widget.style.color,
-          fontSize:
-              widget.style.fontSize! * context.watch<UserProvider>().getFontScale(),
-          fontWeight: widget.style.fontWeight,
-          decoration: widget.style.decoration,
-          decorationStyle: widget.style.decorationStyle,
-          decorationThickness: 3,
-          decorationColor: widget.style.decorationColor,
-          overflow: widget.style.overflow,
-        ), textAlign: widget.textAlign,);
+    return Text(
+      widget.text,
+      maxLines: widget.maxLines,
+      style: TextStyle(
+        color: widget.style.color,
+        fontSize: widget.style.fontSize! * context.watch<UserProvider>().getFontScale(),
+        fontWeight: widget.style.fontWeight,
+        decoration: widget.style.decoration,
+        decorationStyle: widget.style.decorationStyle,
+        decorationThickness: 3,
+        decorationColor: widget.style.decorationColor,
+        overflow: widget.style.overflow,
+      ),
+      textAlign: widget.textAlign,
+    );
   }
 }

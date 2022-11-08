@@ -34,34 +34,37 @@ mixin _$ChatPagingDTO {
 abstract class $ChatPagingDTOCopyWith<$Res> {
   factory $ChatPagingDTOCopyWith(
           ChatPagingDTO value, $Res Function(ChatPagingDTO) then) =
-      _$ChatPagingDTOCopyWithImpl<$Res>;
+      _$ChatPagingDTOCopyWithImpl<$Res, ChatPagingDTO>;
+  @useResult
   $Res call({@HiveField(0) int count, @HiveField(1) int lastId});
 }
 
 /// @nodoc
-class _$ChatPagingDTOCopyWithImpl<$Res>
+class _$ChatPagingDTOCopyWithImpl<$Res, $Val extends ChatPagingDTO>
     implements $ChatPagingDTOCopyWith<$Res> {
   _$ChatPagingDTOCopyWithImpl(this._value, this._then);
 
-  final ChatPagingDTO _value;
   // ignore: unused_field
-  final $Res Function(ChatPagingDTO) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? count = freezed,
-    Object? lastId = freezed,
+    Object? count = null,
+    Object? lastId = null,
   }) {
     return _then(_value.copyWith(
-      count: count == freezed
+      count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as int,
-      lastId: lastId == freezed
+      lastId: null == lastId
           ? _value.lastId
           : lastId // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 }
 
@@ -72,31 +75,30 @@ abstract class _$$_ChatPagingDTOCopyWith<$Res>
           _$_ChatPagingDTO value, $Res Function(_$_ChatPagingDTO) then) =
       __$$_ChatPagingDTOCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({@HiveField(0) int count, @HiveField(1) int lastId});
 }
 
 /// @nodoc
 class __$$_ChatPagingDTOCopyWithImpl<$Res>
-    extends _$ChatPagingDTOCopyWithImpl<$Res>
+    extends _$ChatPagingDTOCopyWithImpl<$Res, _$_ChatPagingDTO>
     implements _$$_ChatPagingDTOCopyWith<$Res> {
   __$$_ChatPagingDTOCopyWithImpl(
       _$_ChatPagingDTO _value, $Res Function(_$_ChatPagingDTO) _then)
-      : super(_value, (v) => _then(v as _$_ChatPagingDTO));
+      : super(_value, _then);
 
-  @override
-  _$_ChatPagingDTO get _value => super._value as _$_ChatPagingDTO;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? count = freezed,
-    Object? lastId = freezed,
+    Object? count = null,
+    Object? lastId = null,
   }) {
     return _then(_$_ChatPagingDTO(
-      count: count == freezed
+      count: null == count
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as int,
-      lastId: lastId == freezed
+      lastId: null == lastId
           ? _value.lastId
           : lastId // ignore: cast_nullable_to_non_nullable
               as int,
@@ -125,6 +127,7 @@ class _$_ChatPagingDTO implements _ChatPagingDTO {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ChatPagingDTOCopyWith<_$_ChatPagingDTO> get copyWith =>
       __$$_ChatPagingDTOCopyWithImpl<_$_ChatPagingDTO>(this, _$identity);
 }

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
-import 'package:modak_flutter_app/main.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
@@ -64,13 +61,11 @@ class UserLandingScreen extends StatelessWidget {
                     ] +
                     userProvider.familyMembersWithoutMe
                         .map((familyMember) => Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 16, bottom: 16),
+                              padding: const EdgeInsets.only(top: 16, bottom: 16),
                               child: UserProfileWidget(
                                 user: familyMember,
                                 onPressed: () {
-                                  Get.to(UserFamilyModifyScreen(
-                                      familyMember: familyMember));
+                                  Get.to(UserFamilyModifyScreen(familyMember: familyMember));
                                 },
                               ),
                             ))
@@ -99,11 +94,24 @@ class UserLandingScreen extends StatelessWidget {
                         child: ButtonMainWidget(
                           title: "로그아웃",
                           onPressed: () {
-                            modalCheckwidget(context,
-                                title: "정말 로그아웃 하시겠습니까?",
-                                okText: "로그아웃",
-                                noText: "취소", onOkPressed: () {
+                            modalCheckWidget(context, title: "정말 로그아웃 하시겠습니까?", okText: "로그아웃", noText: "취소",
+                                onOkPressed: () {
                               userProvider.logout(context);
+                            }, onNoPressed: () {
+                              Get.back();
+                            });
+                          },
+                          // onPressed: provider.navigateToFamilyInfo(),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16, bottom: 48),
+                        child: ButtonMainWidget(
+                          title: "회원탈퇴",
+                          onPressed: () {
+                            modalCheckWidget(context, title: "정말 회원탈퇴 하시겠습니까?", okText: "회원탈퇴", noText: "취소",
+                                onOkPressed: () {
+                              userProvider.withdraw(context);
                             }, onNoPressed: () {
                               Get.back();
                             });

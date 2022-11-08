@@ -49,7 +49,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.wowbros.modak"
+        applicationId "com.wowbros.android.modak"
         minSdkVersion 19
         targetSdkVersion 32
         versionName '1.1.0'
@@ -83,4 +83,6 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.multidex:multidex:2.0.1"
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

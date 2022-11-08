@@ -32,8 +32,8 @@ class AuthRegisterVM extends ChangeNotifier {
   DateTime? _birthDay;
   bool _isLunar = false;
   String _role = "";
-  bool _isPrivateInformationAgreed = false;
-  bool _isOperatingPolicyAgreed = false;
+  bool _isPrivateInformationAgreed = true;
+  bool _isOperatingPolicyAgreed = true;
 
   int get page => _page;
 
@@ -105,10 +105,7 @@ class AuthRegisterVM extends ChangeNotifier {
 
   bool getIsPageDone() {
     if (_page == 0) {
-      return _name.length > 2 &&
-          _birthDay != null &&
-          _isPrivateInformationAgreed &&
-          _isOperatingPolicyAgreed;
+      return _name.length > 2 && _birthDay != null && _isPrivateInformationAgreed && _isOperatingPolicyAgreed;
     } else if (_page == 1) {
       return _role != "";
     }
@@ -140,10 +137,9 @@ class AuthRegisterVM extends ChangeNotifier {
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "회원가입 성공");
-        await Future(() => context.read<UserProvider>().me =
-            response[Strings.response][Strings.me]);
-        await Future(() => context.read<UserProvider>().familyMembers =
-            response[Strings.response][Strings.familyMembers]);
+        await Future(() => context.read<UserProvider>().me = response[Strings.response][Strings.me]);
+        await Future(
+            () => context.read<UserProvider>().familyMembers = response[Strings.response][Strings.familyMembers]);
         Get.offAllNamed("/main");
         break;
       case Strings.valueAlreadyExist:

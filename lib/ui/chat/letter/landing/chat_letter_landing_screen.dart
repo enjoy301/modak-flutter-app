@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
+import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
 import 'package:modak_flutter_app/ui/chat/letter/landing/letter_landing_received.dart';
@@ -13,8 +14,7 @@ class ChatLetterLandingScreen extends StatefulWidget {
   const ChatLetterLandingScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatLetterLandingScreen> createState() =>
-      _ChatLetterLandingScreenState();
+  State<ChatLetterLandingScreen> createState() => _ChatLetterLandingScreenState();
 }
 
 class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
@@ -34,23 +34,26 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
                   title: "우편함",
                   leading: FunctionalIcon.back,
                   onClickLeading: () {
-                    Get.offAllNamed("/main");
+                    Get.back();
                   },
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: TabBar(
-                        tabs: [Tab(child: Text("보낸")), Tab(child: Text("받은"))],
-                        isScrollable: true,
-                        indicator: UnderlineTabIndicator(
-                          insets: EdgeInsets.only(bottom: 10),
-                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TabBar(
+                          tabs: [Tab(child: Text("보낸")), Tab(child: Text("받은"))],
+                          isScrollable: true,
+                          labelPadding: EdgeInsets.only(left: 10, right: 10),
+                          labelStyle:
+                              TextStyle(color: Colors.black, fontSize: Font.size_h3, fontWeight: Font.weight_bold),
+                          labelColor: Colors.black,
+                          unselectedLabelColor: Coloring.gray_20,
+                          indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide.none,
+                          ),
                         ),
-                        labelPadding: EdgeInsets.symmetric(horizontal: 20),
-                        labelColor: Colors.blueAccent,
-                        unselectedLabelColor: Colors.black,
-                        indicatorPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
                     ),
                   ),
@@ -60,7 +63,7 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
                 ),
                 floatingActionButton: GestureDetector(
                   onTap: () {
-                    Get.toNamed("/letter/write/content");
+                    Get.toNamed("/letter/write");
                   },
                   child: Container(
                     width: 60,
@@ -89,7 +92,6 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
   @override
   void initState() {
     super.initState();
-
     initial = context.read<ChatLetterVM>().getLetters();
   }
 }

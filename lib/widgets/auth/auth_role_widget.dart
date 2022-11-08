@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 
 class AuthRoleWidget extends StatefulWidget {

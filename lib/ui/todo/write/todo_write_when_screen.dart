@@ -41,7 +41,8 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
 
   String? selectedTag;
   bool isTimeSelected = false;
-  String timeSelectTag = "시간 선택" ;
+  String timeSelectTag = "시간 선택";
+
   @override
   void initState() {
     selectedTag = widget.previousTag;
@@ -49,6 +50,7 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
     timeSelectTag = isTimeSelected ? selectedTag ?? "시간 선택" : "시간 선택";
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(builder: (context, userProvider, child) {
@@ -81,13 +83,13 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
 
                         setState(() {
                           isTimeSelected = true;
-                           timeSelectTag = text;
-                           selectedTag = text;
-                         });
-                      },locale: LocaleType.ko);
+                          timeSelectTag = text;
+                          selectedTag = text;
+                        });
+                      }, locale: LocaleType.ko);
                     }),
-                    Wrap(children:
-                      defaultTimeTag.map((timeTag) {
+                    Wrap(
+                      children: defaultTimeTag.map((timeTag) {
                             return TimeTagWidget(
                               timeTag,
                               provider: userProvider,
@@ -104,18 +106,15 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                               .map((timeTag) => TimeTagWidget(timeTag,
                                       provider: userProvider,
                                       isCustom: true,
-                                      isSelected: selectedTag ==
-                                          timeTag, onPressed: () {
+                                      isSelected: selectedTag == timeTag, onPressed: () {
                                     setState(() {
                                       selectedTag = timeTag;
                                     });
                                   }))
                               .toList() +
-
                           [
                             TimeTagWriteWidget(provider: userProvider),
-
-                    ],
+                          ],
                     ),
                   ],
                 ),
@@ -129,8 +128,7 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
 }
 
 class TimeTagWriteWidget extends StatefulWidget {
-  const TimeTagWriteWidget({required this.provider, Key? key})
-      : super(key: key);
+  const TimeTagWriteWidget({required this.provider, Key? key}) : super(key: key);
 
   final UserProvider provider;
 
@@ -180,8 +178,7 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
               controller: textEditingController,
               decoration: InputDecoration(
                 isDense: true,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                 hintText: "+ 추가",
                 hintStyle: TextStyle(
                   color: Coloring.gray_10,
@@ -203,11 +200,7 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
 
 class TimeTagWidget extends StatelessWidget {
   const TimeTagWidget(this.title,
-      {Key? key,
-      required this.provider,
-      required this.isSelected,
-      required this.onPressed,
-      this.isCustom = false})
+      {Key? key, required this.provider, required this.isSelected, required this.onPressed, this.isCustom = false})
       : super(key: key);
   final UserProvider provider;
   final String title;
@@ -235,9 +228,7 @@ class TimeTagWidget extends StatelessWidget {
                   style: TextStyle(
                       color: isSelected ? Colors.white : Coloring.gray_10,
                       fontSize: Font.size_smallText,
-                      fontWeight: isSelected
-                          ? Font.weight_semiBold
-                          : Font.weight_regular,
+                      fontWeight: isSelected ? Font.weight_semiBold : Font.weight_regular,
                       height: 1)),
               isCustom == true
                   ? IconButton(

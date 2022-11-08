@@ -40,7 +40,8 @@ mixin _$Chat {
 /// @nodoc
 abstract class $ChatCopyWith<$Res> {
   factory $ChatCopyWith(Chat value, $Res Function(Chat) then) =
-      _$ChatCopyWithImpl<$Res>;
+      _$ChatCopyWithImpl<$Res, Chat>;
+  @useResult
   $Res call(
       {int userId,
       String content,
@@ -50,43 +51,46 @@ abstract class $ChatCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ChatCopyWithImpl<$Res> implements $ChatCopyWith<$Res> {
+class _$ChatCopyWithImpl<$Res, $Val extends Chat>
+    implements $ChatCopyWith<$Res> {
   _$ChatCopyWithImpl(this._value, this._then);
 
-  final Chat _value;
   // ignore: unused_field
-  final $Res Function(Chat) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = freezed,
-    Object? content = freezed,
-    Object? sendAt = freezed,
+    Object? userId = null,
+    Object? content = null,
+    Object? sendAt = null,
     Object? metaData = freezed,
-    Object? unReadCount = freezed,
+    Object? unReadCount = null,
   }) {
     return _then(_value.copyWith(
-      userId: userId == freezed
+      userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as int,
-      content: content == freezed
+      content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      sendAt: sendAt == freezed
+      sendAt: null == sendAt
           ? _value.sendAt
           : sendAt // ignore: cast_nullable_to_non_nullable
               as double,
-      metaData: metaData == freezed
+      metaData: freezed == metaData
           ? _value.metaData
           : metaData // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
-      unReadCount: unReadCount == freezed
+      unReadCount: null == unReadCount
           ? _value.unReadCount
           : unReadCount // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 }
 
@@ -95,6 +99,7 @@ abstract class _$$_ChatCopyWith<$Res> implements $ChatCopyWith<$Res> {
   factory _$$_ChatCopyWith(_$_Chat value, $Res Function(_$_Chat) then) =
       __$$_ChatCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {int userId,
       String content,
@@ -104,40 +109,38 @@ abstract class _$$_ChatCopyWith<$Res> implements $ChatCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ChatCopyWithImpl<$Res> extends _$ChatCopyWithImpl<$Res>
+class __$$_ChatCopyWithImpl<$Res> extends _$ChatCopyWithImpl<$Res, _$_Chat>
     implements _$$_ChatCopyWith<$Res> {
   __$$_ChatCopyWithImpl(_$_Chat _value, $Res Function(_$_Chat) _then)
-      : super(_value, (v) => _then(v as _$_Chat));
+      : super(_value, _then);
 
-  @override
-  _$_Chat get _value => super._value as _$_Chat;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = freezed,
-    Object? content = freezed,
-    Object? sendAt = freezed,
+    Object? userId = null,
+    Object? content = null,
+    Object? sendAt = null,
     Object? metaData = freezed,
-    Object? unReadCount = freezed,
+    Object? unReadCount = null,
   }) {
     return _then(_$_Chat(
-      userId: userId == freezed
+      userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as int,
-      content: content == freezed
+      content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      sendAt: sendAt == freezed
+      sendAt: null == sendAt
           ? _value.sendAt
           : sendAt // ignore: cast_nullable_to_non_nullable
               as double,
-      metaData: metaData == freezed
+      metaData: freezed == metaData
           ? _value.metaData
           : metaData // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
-      unReadCount: unReadCount == freezed
+      unReadCount: null == unReadCount
           ? _value.unReadCount
           : unReadCount // ignore: cast_nullable_to_non_nullable
               as int,
@@ -175,6 +178,7 @@ class _$_Chat implements _Chat {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ChatCopyWith<_$_Chat> get copyWith =>
       __$$_ChatCopyWithImpl<_$_Chat>(this, _$identity);
 

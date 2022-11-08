@@ -9,7 +9,9 @@ class ButtonMainWidget extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.onPressed,
-      this.isValid = true, this.width = double.infinity, this.height = 60})
+      this.isValid = true,
+      this.width = double.infinity,
+      this.height = 60})
       : super(key: key);
   final String title;
   final Function()? onPressed;
@@ -23,15 +25,15 @@ class ButtonMainWidget extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          gradient: isValid ? Coloring.main : null,
+          gradient: isValid ? Coloring.sub_purple : null,
           color: isValid ? null : Coloring.gray_50,
           borderRadius: BorderRadius.circular(99),
-          boxShadow: isValid ? [Shadowing.yellow] : [Shadowing.grey],
+          boxShadow: isValid ? [Shadowing.purple] : [Shadowing.grey],
         ),
         child: TextButton(
-          style: ButtonStyle(
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-          ),
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+            ),
             onPressed: isValid ? onPressed : null,
             child: ScalableTextWidget(
               title,

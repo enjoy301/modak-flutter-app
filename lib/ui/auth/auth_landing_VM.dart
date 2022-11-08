@@ -13,8 +13,7 @@ class AuthLandingVM extends ChangeNotifier {
     _init();
   }
 
-  _init() async {
-  }
+  _init() async {}
 
   final UserRepository? userRepository = UserRepository();
 
@@ -22,10 +21,9 @@ class AuthLandingVM extends ChangeNotifier {
     Map<String, dynamic> response = await userRepository!.socialLogin(type);
     switch (response[Strings.message]) {
       case Strings.success:
-        await Future(() => context.read<UserProvider>().familyMembers =
-            response[Strings.response][Strings.familyMembers]);
-        await Future(() => context.read<UserProvider>().me =
-          response[Strings.response][Strings.me]);
+        await Future(
+            () => context.read<UserProvider>().familyMembers = response[Strings.response][Strings.familyMembers]);
+        await Future(() => context.read<UserProvider>().me = response[Strings.response][Strings.me]);
 
         log(response.toString());
         Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");

@@ -6,7 +6,9 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/user_colors.dart';
 
 class InputColorWidget extends StatefulWidget {
-  const InputColorWidget({Key? key, required this.color, required this.onColorChanged, this.tailIconShow = true, this.isBlocked = false}) : super(key: key);
+  const InputColorWidget(
+      {Key? key, required this.color, required this.onColorChanged, this.tailIconShow = true, this.isBlocked = false})
+      : super(key: key);
 
   final Color color;
   final Function(Color color) onColorChanged;
@@ -74,11 +76,11 @@ class _InputColorWidgetState extends State<InputColorWidget> {
                   ),
                 ),
               ),
-              if(widget.tailIconShow)
-              Icon(
-                LightIcons.ArrowRight2,
-                color: Coloring.gray_20,
-              )
+              if (widget.tailIconShow)
+                Icon(
+                  LightIcons.ArrowRight2,
+                  color: Coloring.gray_20,
+                )
             ],
           ),
         ),

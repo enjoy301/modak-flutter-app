@@ -10,12 +10,12 @@ import 'package:modak_flutter_app/utils/date.dart';
 import 'package:provider/provider.dart';
 
 class HomeFamilyTalkWidget extends StatefulWidget {
-  const HomeFamilyTalkWidget(
-      {Key? key, required this.name, required this.content})
+  const HomeFamilyTalkWidget({Key? key, required this.dateTime, this.isNone = false, this.isPast = false})
       : super(key: key);
 
-  final String name;
-  final String content;
+  final DateTime dateTime;
+  final bool isNone;
+  final bool isPast;
 
   @override
   State<HomeFamilyTalkWidget> createState() => _HomeFamilyTalkWidgetState();
@@ -24,78 +24,71 @@ class HomeFamilyTalkWidget extends StatefulWidget {
 class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, HomeProvider>(
-        builder: (context, userProvider, homeProvider, child) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 20, right: 18, bottom: 5, left: 18),
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.white),
-            padding: MaterialStateProperty.all(
-              EdgeInsets.zero,
-            ),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20))),
+    return Consumer2<HomeProvider, UserProvider>(builder: (context, homeProvider, userProvider, child) {
+      bool isWritten = homeProvider.todayTalkMap[Date.getFormattedDate(dateTime: widget.dateTime)]
+              ?[userProvider.me!.memberId] !=
+          null;
+      return GestureDetector(
+        onTap: () {
+          if (!isWritten) {
+            Get.to(HomeTalkWriteScreen());
+          } else {
+            Get.to(HomeTalkViewScreen());
+          }
+        },
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(15),
+          margin: EdgeInsets.symmetric(vertical: 9),
+          decoration: BoxDecoration(
+            gradient: Coloring.notice,
+            borderRadius: BorderRadius.circular(15),
           ),
-          onPressed: () {
-            if (homeProvider.todayTalkMap[Date.getFormattedDate()]
-                    ?[userProvider.me!.memberId] ==
-                null) {
-              Get.to(HomeTalkWriteScreen());
-            } else {
-              Get.to(HomeTalkViewScreen());
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "오늘의 한마디",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: Font.size_h3,
+                  fontWeight: Font.weight_bold,
+                ),
+              ),
+              if (isWritten || widget.isPast)
+                Column(
+                  children: homeProvider.todayTalkMap[Date.getFormattedDate(dateTime: widget.dateTime)]?.entries
+                          .map(
+                            (MapEntry<int, String> item) => HomeFamilyTalkItemWidget(
+                              name: userProvider.findUserById(item.key)?.name ?? "익명",
+                              talk: item.value,
+                            ),
+                          )
+                          .toList() ??
+                      [],
+                ),
+              if (!isWritten && !widget.isPast)
                 Text(
-                  "가족 대화",
+                  "한마디를 작성하고 확인해보세요",
                   style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontSize: Font.size_smallText,
-                      fontWeight: Font.weight_bold),
+                    color: Coloring.gray_10,
+                    fontSize: Font.size_smallText,
+                    fontWeight: Font.weight_medium,
+                    height: 2.5,
+                  ),
                 ),
+              if ((homeProvider.todayTalkMap[Date.getFormattedDate(dateTime: widget.dateTime)] ?? {}).isEmpty &&
+                  widget.isPast)
                 Text(
-                  "우리 가족 오늘의 한 마디",
+                  "작성된 한마디가 없습니다",
                   style: TextStyle(
-                      color: Coloring.gray_0,
-                      fontSize: Font.size_largeText,
-                      fontWeight: Font.weight_bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                FamilyTalkNotWritten(
-                  homeProvider: homeProvider,
-                  userProvider: userProvider,
-                ),
-                if (homeProvider.todayTalkMap[Date.getFormattedDate()]
-                        ?[userProvider.me!.memberId] !=
-                    null)
-                  FamilyTalkWritten(
-                    homeProvider: homeProvider,
-                    userProvider: userProvider,
+                    color: Coloring.gray_10,
+                    fontSize: Font.size_smallText,
+                    fontWeight: Font.weight_medium,
+                    height: 2.5,
                   ),
-                if (homeProvider.todayTalkMap[Date.getFormattedDate()]
-                        ?[userProvider.me!.memberId] !=
-                    null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        "모아보기 >",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                            color: Colors.grey[900]!.withOpacity(0.5)),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       );
@@ -103,102 +96,42 @@ class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
   }
 }
 
-class FamilyTalkWritten extends StatelessWidget {
-  const FamilyTalkWritten(
-      {Key? key, required this.homeProvider, required this.userProvider})
-      : super(key: key);
+class HomeFamilyTalkItemWidget extends StatelessWidget {
+  const HomeFamilyTalkItemWidget({Key? key, required this.name, required this.talk}) : super(key: key);
 
-  final HomeProvider homeProvider;
-  final UserProvider userProvider;
+  final String name;
+  final String talk;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: homeProvider.todayTalkMap[Date.getFormattedDate()]?.keys
-                .map((int member) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.asset(
-                          "lib/assets/images/family/profile/${userProvider.findUserById(member)!.role.toLowerCase()}_profile.png",
-                          width: 56,
-                          height: 56,
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              userProvider.findUserById(member)?.name ?? "익명",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: Font.size_mediumText,
-                                  fontWeight: Font.weight_bold,
-                                  height: 2),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "${homeProvider.todayTalkMap[Date.getFormattedDate()]![member]!}\n",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: Font.size_largeText,
-                                  fontWeight: Font.weight_regular),
-                              maxLines: 2,
-                            ),
-                          ]),
-                    ),
-                  ],
-                ),
-              );
-            }).toList() ??
-            []);
-  }
-}
-
-class FamilyTalkNotWritten extends StatelessWidget {
-  const FamilyTalkNotWritten(
-      {Key? key, required this.homeProvider, required this.userProvider})
-      : super(key: key);
-
-  final HomeProvider homeProvider;
-  final UserProvider userProvider;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Text(
-            homeProvider.todayTalkMap[Date.getFormattedDate()]
-                        ?[userProvider.me!.memberId] ==
-                    null
-                ? "오늘의 한 마디를\n 작성해 주세요"
-                : "오늘도 가족 모두\n 화이팅 입니다",
-            style: TextStyle(
-              color: Coloring.gray_0,
-              fontSize: Font.size_largeText,
-              fontWeight: Font.weight_bold,
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "$name   ",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: Font.size_mediumText,
+                fontWeight: Font.weight_medium,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
+            Expanded(
+                child: Text(
+              talk,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: Font.size_mediumText,
+                fontWeight: Font.weight_regular,
+              ),
+            ))
+          ],
         ),
-        Flexible(
-          child: Image.asset(
-            "lib/assets/images/others/il_family_talk.png",
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

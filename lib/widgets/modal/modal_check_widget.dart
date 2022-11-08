@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void modalCheckwidget(BuildContext context,
+void modalCheckWidget(BuildContext context,
     {String title = "제목",
     String okText = "확인",
     String noText = "닫기",

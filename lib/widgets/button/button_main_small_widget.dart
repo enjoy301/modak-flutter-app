@@ -18,16 +18,20 @@ class _ButtonMainSmallWidgetState extends State<ButtonMainSmallWidget> {
     return GestureDetector(
       onTap: widget.onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 9,),
+        padding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 9,
+        ),
         decoration: BoxDecoration(
           gradient: Coloring.main,
           borderRadius: BorderRadius.circular(99),
         ),
-        child: ScalableTextWidget(widget.title, style: TextStyle(
-          color: Colors.white,
-          fontSize: Font.size_smallText,
-          fontWeight: Font.weight_semiBold,
-        )),
+        child: ScalableTextWidget(widget.title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Font.size_smallText,
+              fontWeight: Font.weight_semiBold,
+            )),
       ),
     );
   }

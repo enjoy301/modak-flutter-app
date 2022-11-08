@@ -4,8 +4,7 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/shadowing.dart';
 
 class AuthIntroductionWidget extends StatefulWidget {
-  const AuthIntroductionWidget({Key? key, required this.name})
-      : super(key: key);
+  const AuthIntroductionWidget({Key? key, required this.name}) : super(key: key);
 
   final String name;
 
@@ -23,7 +22,7 @@ class _AuthIntroductionWidgetState extends State<AuthIntroductionWidget> {
       "shadow": Shadowing.yellow,
     },
     "album": {
-      "title": "가족 앨범",
+      "title": "앨범",
       "des": "가족들과의 추억을 저장하세요",
       "imagePath": "lib/assets/images/others/img_graphic_album.png",
       "gradient": Coloring.sub_purple,
@@ -42,43 +41,40 @@ class _AuthIntroductionWidgetState extends State<AuthIntroductionWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 7.5),
-      decoration: BoxDecoration(
-          gradient: data[widget.name]!["gradient"] as LinearGradient,
-          borderRadius: BorderRadius.circular(22)),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22)),
       child: Padding(
-        padding:
-            const EdgeInsets.only(top: 28, right: 16, bottom: 24, left: 16),
+        padding: const EdgeInsets.only(top: 50, right: 0, bottom: 72, left: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                "${data[widget.name]!["title"] as String}\n",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: Font.size_h1,
+                  fontWeight: Font.weight_bold,
+                ),
+                maxLines: 2,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                "${data[widget.name]!["des"] as String}\n",
+                style: TextStyle(
+                  color: Coloring.gray_10,
+                  fontSize: Font.size_largeText,
+                  fontWeight: Font.weight_medium,
+                ),
+                maxLines: 2,
+              ),
+            ),
+            Expanded(child: SizedBox.shrink()),
             Image.asset(
-              width: 168,
-              height: 122,
               data[widget.name]!["imagePath"] as String,
             ),
-            SizedBox(
-                width: 168,
-                height: 22,
-                child: Text(
-                  data[widget.name]!["title"] as String,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Font.size_mediumText,
-                    fontWeight: Font.weight_semiBold,
-                  ),
-                )),
-            SizedBox(
-                width: 168,
-                height: 30,
-                child: Text(
-                  "${data[widget.name]!["des"] as String}\n",
-                  style: TextStyle(
-                    color: Coloring.gray_10,
-                    fontSize: Font.size_smallText,
-                    fontWeight: Font.weight_medium,
-                  ),
-                  maxLines: 2,
-                )),
           ],
         ),
       ),

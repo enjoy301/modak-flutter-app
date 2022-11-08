@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 
 class TodoDateWidget extends StatelessWidget {
   const TodoDateWidget(
-      {Key? key,
-        required this.colors,
-      required this.selectedDay,
-      required this.isSelected,
-      this.isToday = false})
+      {Key? key, required this.colors, required this.selectedDay, required this.isSelected, this.isToday = false})
       : super(key: key);
 
   final List<String> colors;
@@ -30,7 +25,7 @@ class TodoDateWidget extends StatelessWidget {
       height: double.infinity,
       decoration: isSelected
           ? BoxDecoration(
-              color: Coloring.bg_orange,
+              color: Colors.white.withOpacity(0.7),
               borderRadius: BorderRadius.circular(100),
             )
           : null,

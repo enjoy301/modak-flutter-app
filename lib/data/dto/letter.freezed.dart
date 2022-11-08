@@ -49,7 +49,8 @@ mixin _$Letter {
 /// @nodoc
 abstract class $LetterCopyWith<$Res> {
   factory $LetterCopyWith(Letter value, $Res Function(Letter) then) =
-      _$LetterCopyWithImpl<$Res>;
+      _$LetterCopyWithImpl<$Res, Letter>;
+  @useResult
   $Res call(
       {@HiveField(0) int fromMemberId,
       @HiveField(1) int toMemberId,
@@ -59,43 +60,46 @@ abstract class $LetterCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LetterCopyWithImpl<$Res> implements $LetterCopyWith<$Res> {
+class _$LetterCopyWithImpl<$Res, $Val extends Letter>
+    implements $LetterCopyWith<$Res> {
   _$LetterCopyWithImpl(this._value, this._then);
 
-  final Letter _value;
   // ignore: unused_field
-  final $Res Function(Letter) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fromMemberId = freezed,
-    Object? toMemberId = freezed,
-    Object? content = freezed,
-    Object? envelope = freezed,
-    Object? date = freezed,
+    Object? fromMemberId = null,
+    Object? toMemberId = null,
+    Object? content = null,
+    Object? envelope = null,
+    Object? date = null,
   }) {
     return _then(_value.copyWith(
-      fromMemberId: fromMemberId == freezed
+      fromMemberId: null == fromMemberId
           ? _value.fromMemberId
           : fromMemberId // ignore: cast_nullable_to_non_nullable
               as int,
-      toMemberId: toMemberId == freezed
+      toMemberId: null == toMemberId
           ? _value.toMemberId
           : toMemberId // ignore: cast_nullable_to_non_nullable
               as int,
-      content: content == freezed
+      content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      envelope: envelope == freezed
+      envelope: null == envelope
           ? _value.envelope
           : envelope // ignore: cast_nullable_to_non_nullable
               as EnvelopeType,
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -104,6 +108,7 @@ abstract class _$$_LetterCopyWith<$Res> implements $LetterCopyWith<$Res> {
   factory _$$_LetterCopyWith(_$_Letter value, $Res Function(_$_Letter) then) =
       __$$_LetterCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@HiveField(0) int fromMemberId,
       @HiveField(1) int toMemberId,
@@ -113,40 +118,39 @@ abstract class _$$_LetterCopyWith<$Res> implements $LetterCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_LetterCopyWithImpl<$Res> extends _$LetterCopyWithImpl<$Res>
+class __$$_LetterCopyWithImpl<$Res>
+    extends _$LetterCopyWithImpl<$Res, _$_Letter>
     implements _$$_LetterCopyWith<$Res> {
   __$$_LetterCopyWithImpl(_$_Letter _value, $Res Function(_$_Letter) _then)
-      : super(_value, (v) => _then(v as _$_Letter));
+      : super(_value, _then);
 
-  @override
-  _$_Letter get _value => super._value as _$_Letter;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fromMemberId = freezed,
-    Object? toMemberId = freezed,
-    Object? content = freezed,
-    Object? envelope = freezed,
-    Object? date = freezed,
+    Object? fromMemberId = null,
+    Object? toMemberId = null,
+    Object? content = null,
+    Object? envelope = null,
+    Object? date = null,
   }) {
     return _then(_$_Letter(
-      fromMemberId: fromMemberId == freezed
+      fromMemberId: null == fromMemberId
           ? _value.fromMemberId
           : fromMemberId // ignore: cast_nullable_to_non_nullable
               as int,
-      toMemberId: toMemberId == freezed
+      toMemberId: null == toMemberId
           ? _value.toMemberId
           : toMemberId // ignore: cast_nullable_to_non_nullable
               as int,
-      content: content == freezed
+      content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      envelope: envelope == freezed
+      envelope: null == envelope
           ? _value.envelope
           : envelope // ignore: cast_nullable_to_non_nullable
               as EnvelopeType,
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
@@ -191,6 +195,7 @@ class _$_Letter implements _Letter {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_LetterCopyWith<_$_Letter> get copyWith =>
       __$$_LetterCopyWithImpl<_$_Letter>(this, _$identity);
 

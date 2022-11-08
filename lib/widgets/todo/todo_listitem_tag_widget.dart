@@ -20,12 +20,9 @@ class TodoListItemTagWidget extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 2),
-          child: Text(name, style: TextStyle(
-            color: Coloring.gray_10,
-            fontSize: Font.size_caption,
-            fontWeight: Font.weight_regular,
-            height: 1
-          )),
+          child: Text(name,
+              style: TextStyle(
+                  color: Coloring.gray_10, fontSize: Font.size_caption, fontWeight: Font.weight_regular, height: 1)),
         ),
       ),
     );
