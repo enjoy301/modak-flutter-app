@@ -3,21 +3,23 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/dto/todo.dart';
 import 'package:modak_flutter_app/data/repository/todo_repository.dart';
 
 class TodoProvider extends ChangeNotifier {
-  final List<String> todoColor = [
-    "FFE0D4FF",
-    "FFFFD600",
-    "FFFFFACA",
-    "FFC9E6FF",
-    "FFFFF4B8",
-    "FFFFDFD0",
-    "FF59A36E",
-    "FFFFBE99"
-  ];
+  final List<String> todoColor = List<String>.from([
+    Coloring.todo_red,
+    Coloring.todo_orange,
+    Coloring.todo_yellow,
+    Coloring.todo_lightgreen,
+    Coloring.todo_green,
+    Coloring.todo_blue,
+    Coloring.todo_pink,
+    Coloring.todo_purple
+  ].map((Color color) => color.toString().substring(10, 16)).toList());
+
   DateFormat formatter = DateFormat("yyyy-MM-dd");
 
   init() async {
@@ -66,21 +68,28 @@ class TodoProvider extends ChangeNotifier {
   Future<bool> getTodosByScroll(DateTime date) async {
     DateTime fromDate = DateUtils.dateOnly(date);
     DateTime toDate = DateUtils.dateOnly(date).add(Duration(days: 6));
-    if (!fromDate.isBefore(todoSavedFromDate) && !toDate.isAfter(todoSavedToDate)) {
+    if (!fromDate.isBefore(todoSavedFromDate) &&
+        !toDate.isAfter(todoSavedToDate)) {
       return true;
     }
 
-    Map<String, dynamic> response =
-        await _todoRepository.getTodos(formatter.format(fromDate), formatter.format(toDate));
+    Map<String, dynamic> response = await _todoRepository.getTodos(
+        formatter.format(fromDate), formatter.format(toDate));
 
     switch (response[Strings.message]) {
       case Strings.success:
-        syncTodos(Map<String, List<dynamic>>.from(response[Strings.response]["color"]),
-            Map<String, List<dynamic>>.from(response[Strings.response]["items"]), response[Strings.response]["gauge"]);
+        syncTodos(
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["color"]),
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
 
         Fluttertoast.showToast(msg: "할 일 성공적으로 가져옴");
-        todoSavedFromDate = fromDate.isBefore(todoSavedFromDate) ? fromDate : todoSavedFromDate;
-        todoSavedToDate = toDate.isAfter(todoSavedToDate) ? toDate : todoSavedToDate;
+        todoSavedFromDate =
+            fromDate.isBefore(todoSavedFromDate) ? fromDate : todoSavedFromDate;
+        todoSavedToDate =
+            toDate.isAfter(todoSavedToDate) ? toDate : todoSavedToDate;
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "할 일 가져오기 실패");
@@ -96,12 +105,19 @@ class TodoProvider extends ChangeNotifier {
       fromDate = formatter.format(todoSavedFromDate);
       toDate = formatter.format(todoSavedToDate);
     }
-    Map<String, dynamic> response = await _todoRepository.postTodo(todo, fromDate, toDate);
+    todo.memoColor = todoColor[Random().nextInt(8)];
+    Map<String, dynamic> response =
+        await _todoRepository.postTodo(todo, fromDate, toDate);
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "성공적으로 추가");
-        syncTodos(Map<String, List<dynamic>>.from(response[Strings.response]["color"]),
-            Map<String, List<dynamic>>.from(response[Strings.response]["items"]), response[Strings.response]["gauge"]);
+        print(response[Strings.response]);
+        syncTodos(
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["color"]),
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "할 일 등록 실패");
@@ -114,14 +130,16 @@ class TodoProvider extends ChangeNotifier {
   }
 
   Future<bool> doneTodo(Todo todo, bool isDone) async {
-    Map<String, dynamic> response = await _todoRepository.doneTodo(
-        todo, isDone, formatter.format(todoSavedFromDate), formatter.format(todoSavedToDate));
+    Map<String, dynamic> response = await _todoRepository.doneTodo(todo, isDone,
+        formatter.format(todoSavedFromDate), formatter.format(todoSavedToDate));
     switch (response[Strings.message]) {
       case Strings.success:
         try {
           syncTodos(
-              Map<String, List<dynamic>>.from(response[Strings.response]["color"]),
-              Map<String, List<dynamic>>.from(response[Strings.response]["items"]),
+              Map<String, List<dynamic>>.from(
+                  response[Strings.response]["color"]),
+              Map<String, List<dynamic>>.from(
+                  response[Strings.response]["items"]),
               response[Strings.response]["gauge"]);
         } catch (e) {
           print(e.toString());
@@ -132,6 +150,7 @@ class TodoProvider extends ChangeNotifier {
         Fluttertoast.showToast(msg: "할 일 등록 실패");
         return false;
     }
+    notifyListeners();
     return false;
   }
 
@@ -139,12 +158,19 @@ class TodoProvider extends ChangeNotifier {
     todo.title = todo.title.trim();
     todo.memo = todo.memo?.trim();
     Map<String, dynamic> response = await _todoRepository.updateTodo(
-        todo, isAfterUpdate, formatter.format(todoSavedFromDate), formatter.format(todoSavedToDate));
+        todo,
+        isAfterUpdate,
+        formatter.format(todoSavedFromDate),
+        formatter.format(todoSavedToDate));
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "성공적으로 추가");
-        syncTodos(Map<String, List<dynamic>>.from(response[Strings.response]["color"]),
-            Map<String, List<dynamic>>.from(response[Strings.response]["items"]), response[Strings.response]["gauge"]);
+        syncTodos(
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["color"]),
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "할 일 등록 실패");
@@ -155,13 +181,20 @@ class TodoProvider extends ChangeNotifier {
 
   Future<bool> deleteTodo(Todo todo, bool isAfterUpdate) async {
     Map<String, dynamic> response = await _todoRepository.deleteTodo(
-        todo, isAfterUpdate, formatter.format(todoSavedFromDate), formatter.format(todoSavedToDate));
+        todo,
+        isAfterUpdate,
+        formatter.format(todoSavedFromDate),
+        formatter.format(todoSavedToDate));
 
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "삭제 성공");
-        syncTodos(Map<String, List<dynamic>>.from(response[Strings.response]["color"]),
-            Map<String, List<dynamic>>.from(response[Strings.response]["items"]), response[Strings.response]["gauge"]);
+        syncTodos(
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["color"]),
+            Map<String, List<dynamic>>.from(
+                response[Strings.response]["items"]),
+            response[Strings.response]["gauge"]);
         return true;
       case Strings.fail:
         Fluttertoast.showToast(msg: "삭제 실패");
@@ -170,25 +203,29 @@ class TodoProvider extends ChangeNotifier {
     return false;
   }
 
-  syncTodos(Map<String, List<dynamic>> colorResponse, Map<String, List<dynamic>> itemsResponse, int todoCount) {
+  syncTodos(Map<String, List<dynamic>> colorResponse,
+      Map<String, List<dynamic>> itemsResponse, int todoCount) {
     for (String key in colorResponse.keys) {
       _colorMap[key] = List<String>.from(colorResponse[key]!);
     }
     for (String key in itemsResponse.keys) {
       List<Todo> todos = [];
       for (Map<String, dynamic> item in itemsResponse[key]!) {
+        print(item);
         todos.add(
           Todo(
               todoId: item[Strings.todoId],
               groupTodoId: item[Strings.groupTodoId],
               memberId: item[Strings.memberId],
               title: item[Strings.title],
-              color: todoColor[Random().nextInt(todoColor.length)],
+              color: item[Strings.color] ??
+                  Coloring.gray_50.toString().substring(10, 16),
               isDone: item[Strings.isDone] == 1 ? true : false,
               timeTag: item[Strings.timeTag],
               repeatTag: item[Strings.repeatTag],
               repeat: null,
               memo: item[Strings.memo],
+              memoColor: item[Strings.memoColor],
               date: key),
         );
       }

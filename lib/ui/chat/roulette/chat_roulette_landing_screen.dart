@@ -22,7 +22,10 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatRouletteLandingScreen extends StatefulWidget {
-  const ChatRouletteLandingScreen({Key? key}) : super(key: key);
+  const ChatRouletteLandingScreen({Key? key, this.title = ""})
+      : super(key: key);
+
+  final String title;
 
   @override
   State<ChatRouletteLandingScreen> createState() =>
@@ -45,6 +48,8 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
 
   @override
   void initState() {
+    title = widget.title;
+    _editingController.text = title;
     state = PENDING;
     super.initState();
   }
@@ -296,6 +301,7 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                             memberId: participatedUsers[random].memberId,
                             title: title,
                             color: "color",
+                            memoColor: "color",
                             isDone: false,
                             timeTag: null,
                             repeatTag: null,

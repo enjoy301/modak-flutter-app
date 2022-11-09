@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
+import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
+import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
+import 'package:modak_flutter_app/widgets/common/checkbox_widget.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
@@ -41,13 +44,17 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                         provider.chatMode = ChatMode.functionList;
                         provider.clearSelectedMedia();
                       },
-                      icon: Icon(Icons.cancel_sharp),
+                      icon: Icon(LightIcons.CloseSquare),
                     ),
 
                     /// row 2번 앨범 소개 텍스트
                     Expanded(
                       child: Center(
-                        child: Text("보내고 싶은 사진 혹은 영상을 선택하세요"),
+                        child: Text(
+                          "보내고 싶은 사진 혹은 영상을 선택하세요",
+                          style: EasyStyle.text(Coloring.gray_0,
+                              Font.size_largeText, Font.weight_medium),
+                        ),
                       ),
                     ),
 
@@ -68,9 +75,14 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                 ),
               ),
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: provider.albumFiles.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      width: 10,
+                    );
+                  },
                   itemBuilder: (BuildContext context, int index) {
                     return Flex(
                       direction: Axis.vertical,
@@ -88,46 +100,53 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                 (() {
                                   if (provider.albumFiles[index].path
                                       .endsWith('mp4')) {
-                                    return Image.file(
-                                      provider.albumThumbnailFiles[
-                                          path.basename(provider
-                                              .albumFiles[index].path)]!,
-                                      width: 160,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.file(
+                                        provider.albumThumbnailFiles[
+                                            path.basename(provider
+                                                .albumFiles[index].path)]!,
+                                        width: 160,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
                                     );
                                   } else {
-                                    return Image.file(
-                                      provider.albumFiles[index],
-                                      width: 160,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.file(
+                                        provider.albumFiles[index],
+                                        width: 160,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
                                     );
                                   }
                                 })(),
+                                Container(
+                                  width: 160,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    border: Border.all(
+                                        color: provider.selectedMediaFiles
+                                                .contains(
+                                          provider.albumFiles[index],
+                                        )
+                                            ? Coloring.todo_purple
+                                            : Colors.transparent,
+                                        width: 4),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
                                 Positioned(
                                   top: 9,
                                   right: 9,
-                                  child: Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                      gradient: Coloring.sub_purple,
+                                  child: CheckboxWidget(
+                                    color: "purple",
+                                    value: provider.selectedMediaFiles.contains(
+                                      provider.albumFiles[index],
                                     ),
-                                    child: Theme(
-                                      data: ThemeData(
-                                        unselectedWidgetColor:
-                                            Color(0x00F6DFDF),
-                                      ),
-                                      child: Checkbox(
-                                        activeColor: Color(0x00F6DFDF),
-                                        value: provider.selectedMediaFiles
-                                            .contains(
-                                          provider.albumFiles[index],
-                                        ),
-                                        onChanged: (bool? value) {},
-                                      ),
-                                    ),
+                                    onChanged: (bool? value) {},
                                   ),
                                 ),
                                 Positioned(
@@ -135,6 +154,7 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                   left: 9,
                                   child: IconButton(
                                     onPressed: () {
+                                      print("is it pressed");
                                       // ignore: unrelated_type_equality_checks
                                       if (provider.albumFiles[index]
                                               .toString()
@@ -165,8 +185,11 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                         );
                                       }
                                     },
-                                    icon: IconGradientWidget(LightIcons.Search,
-                                        25, Coloring.sub_blue),
+                                    icon: Icon(
+                                      LightIcons.Search,
+                                      size: 25,
+                                      color: Colors.blue[400],
+                                    ),
                                   ),
                                 ),
                               ],

@@ -35,10 +35,7 @@ class _DialogImageWidgetState extends State<DialogImageWidget> {
               constraints: BoxConstraints(
                 minWidth: MediaQuery.of(context).size.width * 1 / 3,
                 maxWidth: MediaQuery.of(context).size.width * 4 / 7,
-                maxHeight: MediaQuery.of(context).size.width * 2 / 3,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                maxHeight: MediaQuery.of(context).size.width * 5 / 6,
               ),
               child: Stack(
                 children: [
@@ -52,38 +49,42 @@ class _DialogImageWidgetState extends State<DialogImageWidget> {
                         ),
                       );
                     },
-                    child: Image.file(
-                      provider.getThumbnail(
-                        widget.chat.metaData!['key'][0],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image.file(
+                        provider.getThumbnail(
+                          widget.chat.metaData!['key'][0],
+                        ),
+                        fit: BoxFit.cover,
+                        height: double.infinity,
+                        width: double.infinity,
+                        gaplessPlayback: true,
                       ),
-                      fit: BoxFit.cover,
-                      height: double.infinity,
-                      width: double.infinity,
-                      gaplessPlayback: true,
                     ),
                   ),
-                  Positioned(
-                    right: 7,
-                    bottom: 5,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        widget.chat.metaData!['count'],
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: Font.size_smallText,
-                          fontWeight: Font.weight_semiBold,
+                  if (int.parse(widget.chat.metaData!['count']) > 1)
+                    Positioned(
+                      right: 12,
+                      bottom: 12,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          widget.chat.metaData!['count'],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Font.size_mediumText,
+                            fontWeight: Font.weight_semiBold,
+                          ),
                         ),
                       ),
                     ),
-                  )
                 ],
               ),
             ),

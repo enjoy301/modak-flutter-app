@@ -59,6 +59,7 @@ class Strings {
   static const String repeatTag = "repeatTag";
   static const String timeTag = "timeTag";
   static const String memo = "memo";
+  static const String memoColor = "memoColor";
   static const String fromDate = "fromDate";
   static const String toDate = "toDate";
   static const String date = "date";

@@ -3,8 +3,11 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 
 class TodoListItemTagWidget extends StatelessWidget {
-  const TodoListItemTagWidget({Key? key, required this.name}) : super(key: key);
+  const TodoListItemTagWidget(
+      {Key? key, required this.name, required this.color})
+      : super(key: key);
   final String name;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,7 +25,10 @@ class TodoListItemTagWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 2),
           child: Text(name,
               style: TextStyle(
-                  color: Coloring.gray_10, fontSize: Font.size_caption, fontWeight: Font.weight_regular, height: 1)),
+                  color: color,
+                  fontSize: Font.size_caption,
+                  fontWeight: Font.weight_regular,
+                  height: 1)),
         ),
       ),
     );

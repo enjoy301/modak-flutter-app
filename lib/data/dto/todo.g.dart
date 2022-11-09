@@ -27,14 +27,15 @@ class TodoAdapter extends TypeAdapter<_$_Todo> {
       repeatTag: fields[7] as String?,
       repeat: (fields[8] as List?)?.cast<int>(),
       memo: fields[9] as String?,
-      date: fields[10] as String,
+      memoColor: fields[10] as String,
+      date: fields[11] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$_Todo obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.todoId)
       ..writeByte(1)
@@ -56,6 +57,8 @@ class TodoAdapter extends TypeAdapter<_$_Todo> {
       ..writeByte(9)
       ..write(obj.memo)
       ..writeByte(10)
+      ..write(obj.memoColor)
+      ..writeByte(11)
       ..write(obj.date);
   }
 
@@ -85,6 +88,7 @@ _$_Todo _$$_TodoFromJson(Map<String, dynamic> json) => _$_Todo(
       repeatTag: json['repeatTag'] as String?,
       repeat: (json['repeat'] as List<dynamic>?)?.map((e) => e as int).toList(),
       memo: json['memo'] as String?,
+      memoColor: json['memoColor'] as String,
       date: json['date'] as String,
     );
 
@@ -99,5 +103,6 @@ Map<String, dynamic> _$$_TodoToJson(_$_Todo instance) => <String, dynamic>{
       'repeatTag': instance.repeatTag,
       'repeat': instance.repeat,
       'memo': instance.memo,
+      'memoColor': instance.memoColor,
       'date': instance.date,
     };

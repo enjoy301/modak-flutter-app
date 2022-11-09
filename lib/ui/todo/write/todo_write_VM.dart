@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modak_flutter_app/data/dto/todo.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class TodoWriteVM extends ChangeNotifier {
@@ -70,12 +73,15 @@ class TodoWriteVM extends ChangeNotifier {
   bool isTimeSelected = false;
 
   Future<bool> postTodo(BuildContext context) async {
+    print(
+        "HELP: ${context.read<TodoProvider>().todoColor[Random().nextInt(8)]}");
     return await Future(() => context.read<TodoProvider>().postTodo(Todo(
         todoId: -1,
         groupTodoId: -1,
         memberId: _manager == null ? -1 : _manager!.memberId,
         title: title.trim(),
-        color: "null",
+        color: context.read<UserProvider>().me!.color,
+        memoColor: context.read<TodoProvider>().todoColor[Random().nextInt(8)],
         isDone: false,
         timeTag: timeTag,
         repeatTag: "null",

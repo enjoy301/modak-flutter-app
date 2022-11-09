@@ -16,10 +16,10 @@ class InputChatWidget extends StatefulWidget {
   const InputChatWidget({Key? key}) : super(key: key);
 
   @override
-  State<InputChatWidget> createState() => _InputChatWidgetState();
+  State<InputChatWidget> createState() => _InputChatWidget();
 }
 
-class _InputChatWidgetState extends State<InputChatWidget> {
+class _InputChatWidget extends State<InputChatWidget> {
   TextEditingController textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   @override
@@ -55,7 +55,7 @@ class _InputChatWidgetState extends State<InputChatWidget> {
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 6),
                   constraints: BoxConstraints(maxHeight: 100),
-                  child: TextField(
+                  child: TextFormField(
                     focusNode: _focusNode,
                     style: TextStyle(
                       fontSize: Font.size_largeText,
@@ -70,18 +70,27 @@ class _InputChatWidgetState extends State<InputChatWidget> {
                     onChanged: (String input) {
                       provider.setCurrentInput(input);
                     },
+                    cursorColor: Coloring.gray_10,
                     decoration: InputDecoration(
-                      hintText: "메시지를 입력하세요",
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 6, horizontal: 14),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(17),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Coloring.gray_10),
-                        borderRadius: BorderRadius.circular(17),
-                      ),
-                    ),
+                        hintText: "메시지를 입력하세요",
+                        hintStyle: TextStyle(color: Coloring.gray_20),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 6, horizontal: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Coloring.gray_30, width: 2),
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Coloring.gray_20, width: 2),
+                          borderRadius: BorderRadius.circular(17),
+                        ),
+                        filled: true,
+                        fillColor: Coloring.gray_50),
                   ),
                 ),
               ),

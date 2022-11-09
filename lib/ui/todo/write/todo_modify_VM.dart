@@ -14,6 +14,7 @@ class TodoModifyVM extends ChangeNotifier {
       memberId: -1,
       title: "",
       color: "",
+      memoColor: "",
       isDone: false,
       timeTag: null,
       repeatTag: null,

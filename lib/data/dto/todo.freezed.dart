@@ -61,8 +61,12 @@ mixin _$Todo {
   @HiveField(9)
   set memo(String? value) => throw _privateConstructorUsedError;
   @HiveField(10)
-  String get date => throw _privateConstructorUsedError;
+  String get memoColor => throw _privateConstructorUsedError;
   @HiveField(10)
+  set memoColor(String value) => throw _privateConstructorUsedError;
+  @HiveField(11)
+  String get date => throw _privateConstructorUsedError;
+  @HiveField(11)
   set date(String value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -73,8 +77,7 @@ mixin _$Todo {
 /// @nodoc
 abstract class $TodoCopyWith<$Res> {
   factory $TodoCopyWith(Todo value, $Res Function(Todo) then) =
-      _$TodoCopyWithImpl<$Res, Todo>;
-  @useResult
+      _$TodoCopyWithImpl<$Res>;
   $Res call(
       {@HiveField(0) int todoId,
       @HiveField(1) int groupTodoId,
@@ -86,80 +89,83 @@ abstract class $TodoCopyWith<$Res> {
       @HiveField(7) String? repeatTag,
       @HiveField(8) List<int>? repeat,
       @HiveField(9) String? memo,
-      @HiveField(10) String date});
+      @HiveField(10) String memoColor,
+      @HiveField(11) String date});
 }
 
 /// @nodoc
-class _$TodoCopyWithImpl<$Res, $Val extends Todo>
-    implements $TodoCopyWith<$Res> {
+class _$TodoCopyWithImpl<$Res> implements $TodoCopyWith<$Res> {
   _$TodoCopyWithImpl(this._value, this._then);
 
+  final Todo _value;
   // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final $Res Function(Todo) _then;
 
-  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? todoId = null,
-    Object? groupTodoId = null,
-    Object? memberId = null,
-    Object? title = null,
-    Object? color = null,
-    Object? isDone = null,
+    Object? todoId = freezed,
+    Object? groupTodoId = freezed,
+    Object? memberId = freezed,
+    Object? title = freezed,
+    Object? color = freezed,
+    Object? isDone = freezed,
     Object? timeTag = freezed,
     Object? repeatTag = freezed,
     Object? repeat = freezed,
     Object? memo = freezed,
-    Object? date = null,
+    Object? memoColor = freezed,
+    Object? date = freezed,
   }) {
     return _then(_value.copyWith(
-      todoId: null == todoId
+      todoId: todoId == freezed
           ? _value.todoId
           : todoId // ignore: cast_nullable_to_non_nullable
               as int,
-      groupTodoId: null == groupTodoId
+      groupTodoId: groupTodoId == freezed
           ? _value.groupTodoId
           : groupTodoId // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: null == memberId
+      memberId: memberId == freezed
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      title: null == title
+      title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      color: null == color
+      color: color == freezed
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as String,
-      isDone: null == isDone
+      isDone: isDone == freezed
           ? _value.isDone
           : isDone // ignore: cast_nullable_to_non_nullable
               as bool,
-      timeTag: freezed == timeTag
+      timeTag: timeTag == freezed
           ? _value.timeTag
           : timeTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeatTag: freezed == repeatTag
+      repeatTag: repeatTag == freezed
           ? _value.repeatTag
           : repeatTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeat: freezed == repeat
+      repeat: repeat == freezed
           ? _value.repeat
           : repeat // ignore: cast_nullable_to_non_nullable
               as List<int>?,
-      memo: freezed == memo
+      memo: memo == freezed
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String?,
-      date: null == date
+      memoColor: memoColor == freezed
+          ? _value.memoColor
+          : memoColor // ignore: cast_nullable_to_non_nullable
+              as String,
+      date: date == freezed
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-    ) as $Val);
+    ));
   }
 }
 
@@ -168,7 +174,6 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
   factory _$$_TodoCopyWith(_$_Todo value, $Res Function(_$_Todo) then) =
       __$$_TodoCopyWithImpl<$Res>;
   @override
-  @useResult
   $Res call(
       {@HiveField(0) int todoId,
       @HiveField(1) int groupTodoId,
@@ -180,72 +185,80 @@ abstract class _$$_TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
       @HiveField(7) String? repeatTag,
       @HiveField(8) List<int>? repeat,
       @HiveField(9) String? memo,
-      @HiveField(10) String date});
+      @HiveField(10) String memoColor,
+      @HiveField(11) String date});
 }
 
 /// @nodoc
-class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res, _$_Todo>
+class __$$_TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res>
     implements _$$_TodoCopyWith<$Res> {
   __$$_TodoCopyWithImpl(_$_Todo _value, $Res Function(_$_Todo) _then)
-      : super(_value, _then);
+      : super(_value, (v) => _then(v as _$_Todo));
 
-  @pragma('vm:prefer-inline')
+  @override
+  _$_Todo get _value => super._value as _$_Todo;
+
   @override
   $Res call({
-    Object? todoId = null,
-    Object? groupTodoId = null,
-    Object? memberId = null,
-    Object? title = null,
-    Object? color = null,
-    Object? isDone = null,
+    Object? todoId = freezed,
+    Object? groupTodoId = freezed,
+    Object? memberId = freezed,
+    Object? title = freezed,
+    Object? color = freezed,
+    Object? isDone = freezed,
     Object? timeTag = freezed,
     Object? repeatTag = freezed,
     Object? repeat = freezed,
     Object? memo = freezed,
-    Object? date = null,
+    Object? memoColor = freezed,
+    Object? date = freezed,
   }) {
     return _then(_$_Todo(
-      todoId: null == todoId
+      todoId: todoId == freezed
           ? _value.todoId
           : todoId // ignore: cast_nullable_to_non_nullable
               as int,
-      groupTodoId: null == groupTodoId
+      groupTodoId: groupTodoId == freezed
           ? _value.groupTodoId
           : groupTodoId // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: null == memberId
+      memberId: memberId == freezed
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      title: null == title
+      title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      color: null == color
+      color: color == freezed
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
               as String,
-      isDone: null == isDone
+      isDone: isDone == freezed
           ? _value.isDone
           : isDone // ignore: cast_nullable_to_non_nullable
               as bool,
-      timeTag: freezed == timeTag
+      timeTag: timeTag == freezed
           ? _value.timeTag
           : timeTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeatTag: freezed == repeatTag
+      repeatTag: repeatTag == freezed
           ? _value.repeatTag
           : repeatTag // ignore: cast_nullable_to_non_nullable
               as String?,
-      repeat: freezed == repeat
+      repeat: repeat == freezed
           ? _value.repeat
           : repeat // ignore: cast_nullable_to_non_nullable
               as List<int>?,
-      memo: freezed == memo
+      memo: memo == freezed
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String?,
-      date: null == date
+      memoColor: memoColor == freezed
+          ? _value.memoColor
+          : memoColor // ignore: cast_nullable_to_non_nullable
+              as String,
+      date: date == freezed
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
@@ -268,7 +281,8 @@ class _$_Todo implements _Todo {
       @HiveField(7) required this.repeatTag,
       @HiveField(8) required this.repeat,
       @HiveField(9) required this.memo,
-      @HiveField(10) required this.date});
+      @HiveField(10) required this.memoColor,
+      @HiveField(11) required this.date});
 
   factory _$_Todo.fromJson(Map<String, dynamic> json) => _$$_TodoFromJson(json);
 
@@ -304,16 +318,18 @@ class _$_Todo implements _Todo {
   String? memo;
   @override
   @HiveField(10)
+  String memoColor;
+  @override
+  @HiveField(11)
   String date;
 
   @override
   String toString() {
-    return 'Todo(todoId: $todoId, groupTodoId: $groupTodoId, memberId: $memberId, title: $title, color: $color, isDone: $isDone, timeTag: $timeTag, repeatTag: $repeatTag, repeat: $repeat, memo: $memo, date: $date)';
+    return 'Todo(todoId: $todoId, groupTodoId: $groupTodoId, memberId: $memberId, title: $title, color: $color, isDone: $isDone, timeTag: $timeTag, repeatTag: $repeatTag, repeat: $repeat, memo: $memo, memoColor: $memoColor, date: $date)';
   }
 
   @JsonKey(ignore: true)
   @override
-  @pragma('vm:prefer-inline')
   _$$_TodoCopyWith<_$_Todo> get copyWith =>
       __$$_TodoCopyWithImpl<_$_Todo>(this, _$identity);
 
@@ -337,7 +353,8 @@ abstract class _Todo implements Todo {
       @HiveField(7) required String? repeatTag,
       @HiveField(8) required List<int>? repeat,
       @HiveField(9) required String? memo,
-      @HiveField(10) required String date}) = _$_Todo;
+      @HiveField(10) required String memoColor,
+      @HiveField(11) required String date}) = _$_Todo;
 
   factory _Todo.fromJson(Map<String, dynamic> json) = _$_Todo.fromJson;
 
@@ -393,8 +410,13 @@ abstract class _Todo implements Todo {
   set memo(String? value);
   @override
   @HiveField(10)
-  String get date;
+  String get memoColor;
   @HiveField(10)
+  set memoColor(String value);
+  @override
+  @HiveField(11)
+  String get date;
+  @HiveField(11)
   set date(String value);
   @override
   @JsonKey(ignore: true)

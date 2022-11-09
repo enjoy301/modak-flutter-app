@@ -32,13 +32,14 @@ class ChatDialogWidget extends StatefulWidget {
   final bool isTail;
   final bool isDateChanged;
   @override
-  State<ChatDialogWidget> createState() => _ChatDialogWidgetState();
+  State<ChatDialogWidget> createState() => _ChatDialogwidgettate();
 }
 
-class _ChatDialogWidgetState extends State<ChatDialogWidget> {
+class _ChatDialogwidgettate extends State<ChatDialogWidget> {
   @override
   Widget build(BuildContext context) {
-    final bool isMine = widget.chat.userId == context.read<UserProvider>().me!.memberId;
+    final bool isMine =
+        widget.chat.userId == context.read<UserProvider>().me!.memberId;
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
         return Column(
@@ -48,10 +49,15 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
 
             /// column children 2번 채팅 한 bubble 전체
             Container(
-              margin: EdgeInsets.only(top: !widget.isHead ? 2 : 9, right: 10, bottom: !widget.isTail ? 2 : 8, left: 10),
+              margin: EdgeInsets.only(
+                  top: !widget.isHead ? 2 : 9,
+                  right: 10,
+                  bottom: !widget.isTail ? 2 : 8,
+                  left: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                textDirection: isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                textDirection:
+                    isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                 children: [
                   /// row children 1번 프로필
                   !isMine && widget.isHead
@@ -61,12 +67,13 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                             onTap: () {
                               Get.to(
                                 UserFamilyModifyScreen(
-                                  familyMember: userProvider.findUserById(widget.chat.userId)!,
+                                  familyMember: userProvider
+                                      .findUserById(widget.chat.userId)!,
                                 ),
                               );
                             },
                             child: Image.asset(
-                              "lib/assets/images/family/profile/${context.read<UserProvider>().findUserById(widget.chat.userId)?.role.toLowerCase()}_profile.png",
+                              "lib/assets/images/family/profile/${context.read<UserProvider>().findUserById(widget.chat.userId)?.role.toLowerCase() ?? 'dad'}_profile.png",
                               width: 40,
                               height: 40,
                             ),
@@ -89,7 +96,9 @@ class _ChatDialogWidgetState extends State<ChatDialogWidget> {
                               child: ScalableTextWidget(
                                 "${context.read<UserProvider>().findUserById(widget.chat.userId)?.name}",
                                 textAlign: TextAlign.left,
-                                style: TextStyle(color: Coloring.gray_10, fontSize: Font.size_caption),
+                                style: TextStyle(
+                                    color: Coloring.gray_10,
+                                    fontSize: Font.size_caption),
                               ),
                             )
                           : SizedBox.shrink(),

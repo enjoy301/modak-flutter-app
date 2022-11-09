@@ -16,7 +16,9 @@ class Coloring {
       colors: [Color(0xFFEEA4CE), Color(0xFFC58BF2)]);
 
   static const Gradient sub_blue = LinearGradient(
-      begin: FractionalOffset(0, 0.7), end: FractionalOffset(1, 0.1), colors: [Color(0xFF6BCAFF), Color(0xFF85BDFF)]);
+      begin: FractionalOffset(0, 0.7),
+      end: FractionalOffset(1, 0.1),
+      colors: [Color(0xFF6BCAFF), Color(0xFF85BDFF)]);
 
   /// notice 색깔
   static const Gradient notice = LinearGradient(
@@ -54,12 +56,12 @@ class Coloring {
   static const Color bg_pink = Color(0XFFFFD8F6);
 
   /// todo memo 색깔
-  static const Color todo_purple = Color(0XFFE0D4FF);
-  static const Color todo_yellow = Color(0XFFFFD600);
-  static const Color todo_cream = Color(0XFFFFFACA);
+  static const Color todo_red = Color(0XFFFFCACA);
+  static const Color todo_orange = Color(0XFFFFE4D0);
+  static const Color todo_yellow = Color(0XFFFFF4B8);
+  static const Color todo_lightgreen = Color(0XFFD3ECBB);
+  static const Color todo_green = Color(0XFFAFE0D4);
   static const Color todo_blue = Color(0XFFC9E6FF);
-  static const Color todo_yellow2 = Color(0XFFFFF4B8);
-  static const Color todo_orange = Color(0XFFFFDFD0);
-  static const Color todo_green = Color(0XFF59A36E);
-  static const Color todo_pure_orange = Color(0XFFFFBE99);
+  static const Color todo_pink = Color(0XFFFFE7F7);
+  static const Color todo_purple = Color(0XFFDFD5FF);
 }

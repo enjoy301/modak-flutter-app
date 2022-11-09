@@ -50,8 +50,7 @@ mixin _$Noti {
 /// @nodoc
 abstract class $NotiCopyWith<$Res> {
   factory $NotiCopyWith(Noti value, $Res Function(Noti) then) =
-      _$NotiCopyWithImpl<$Res, Noti>;
-  @useResult
+      _$NotiCopyWithImpl<$Res>;
   $Res call(
       {@HiveField(0) String notiType,
       @HiveField(1) String title,
@@ -61,46 +60,43 @@ abstract class $NotiCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$NotiCopyWithImpl<$Res, $Val extends Noti>
-    implements $NotiCopyWith<$Res> {
+class _$NotiCopyWithImpl<$Res> implements $NotiCopyWith<$Res> {
   _$NotiCopyWithImpl(this._value, this._then);
 
+  final Noti _value;
   // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final $Res Function(Noti) _then;
 
-  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? notiType = null,
-    Object? title = null,
-    Object? des = null,
-    Object? isRead = null,
-    Object? metaData = null,
+    Object? notiType = freezed,
+    Object? title = freezed,
+    Object? des = freezed,
+    Object? isRead = freezed,
+    Object? metaData = freezed,
   }) {
     return _then(_value.copyWith(
-      notiType: null == notiType
+      notiType: notiType == freezed
           ? _value.notiType
           : notiType // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      des: null == des
+      des: des == freezed
           ? _value.des
           : des // ignore: cast_nullable_to_non_nullable
               as String,
-      isRead: null == isRead
+      isRead: isRead == freezed
           ? _value.isRead
           : isRead // ignore: cast_nullable_to_non_nullable
               as bool,
-      metaData: null == metaData
+      metaData: metaData == freezed
           ? _value.metaData
           : metaData // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>,
-    ) as $Val);
+    ));
   }
 }
 
@@ -109,7 +105,6 @@ abstract class _$$_NotiCopyWith<$Res> implements $NotiCopyWith<$Res> {
   factory _$$_NotiCopyWith(_$_Noti value, $Res Function(_$_Noti) then) =
       __$$_NotiCopyWithImpl<$Res>;
   @override
-  @useResult
   $Res call(
       {@HiveField(0) String notiType,
       @HiveField(1) String title,
@@ -119,38 +114,40 @@ abstract class _$$_NotiCopyWith<$Res> implements $NotiCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_NotiCopyWithImpl<$Res> extends _$NotiCopyWithImpl<$Res, _$_Noti>
+class __$$_NotiCopyWithImpl<$Res> extends _$NotiCopyWithImpl<$Res>
     implements _$$_NotiCopyWith<$Res> {
   __$$_NotiCopyWithImpl(_$_Noti _value, $Res Function(_$_Noti) _then)
-      : super(_value, _then);
+      : super(_value, (v) => _then(v as _$_Noti));
 
-  @pragma('vm:prefer-inline')
+  @override
+  _$_Noti get _value => super._value as _$_Noti;
+
   @override
   $Res call({
-    Object? notiType = null,
-    Object? title = null,
-    Object? des = null,
-    Object? isRead = null,
-    Object? metaData = null,
+    Object? notiType = freezed,
+    Object? title = freezed,
+    Object? des = freezed,
+    Object? isRead = freezed,
+    Object? metaData = freezed,
   }) {
     return _then(_$_Noti(
-      notiType: null == notiType
+      notiType: notiType == freezed
           ? _value.notiType
           : notiType // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      des: null == des
+      des: des == freezed
           ? _value.des
           : des // ignore: cast_nullable_to_non_nullable
               as String,
-      isRead: null == isRead
+      isRead: isRead == freezed
           ? _value.isRead
           : isRead // ignore: cast_nullable_to_non_nullable
               as bool,
-      metaData: null == metaData
+      metaData: metaData == freezed
           ? _value.metaData
           : metaData // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>,
@@ -194,7 +191,6 @@ class _$_Noti implements _Noti {
 
   @JsonKey(ignore: true)
   @override
-  @pragma('vm:prefer-inline')
   _$$_NotiCopyWith<_$_Noti> get copyWith =>
       __$$_NotiCopyWithImpl<_$_Noti>(this, _$identity);
 

@@ -33,37 +33,33 @@ mixin _$Fortune {
 /// @nodoc
 abstract class $FortuneCopyWith<$Res> {
   factory $FortuneCopyWith(Fortune value, $Res Function(Fortune) then) =
-      _$FortuneCopyWithImpl<$Res, Fortune>;
-  @useResult
+      _$FortuneCopyWithImpl<$Res>;
   $Res call({String type, String content});
 }
 
 /// @nodoc
-class _$FortuneCopyWithImpl<$Res, $Val extends Fortune>
-    implements $FortuneCopyWith<$Res> {
+class _$FortuneCopyWithImpl<$Res> implements $FortuneCopyWith<$Res> {
   _$FortuneCopyWithImpl(this._value, this._then);
 
+  final Fortune _value;
   // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final $Res Function(Fortune) _then;
 
-  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? type = null,
-    Object? content = null,
+    Object? type = freezed,
+    Object? content = freezed,
   }) {
     return _then(_value.copyWith(
-      type: null == type
+      type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      content: null == content
+      content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-    ) as $Val);
+    ));
   }
 }
 
@@ -73,29 +69,29 @@ abstract class _$$_FortuneCopyWith<$Res> implements $FortuneCopyWith<$Res> {
           _$_Fortune value, $Res Function(_$_Fortune) then) =
       __$$_FortuneCopyWithImpl<$Res>;
   @override
-  @useResult
   $Res call({String type, String content});
 }
 
 /// @nodoc
-class __$$_FortuneCopyWithImpl<$Res>
-    extends _$FortuneCopyWithImpl<$Res, _$_Fortune>
+class __$$_FortuneCopyWithImpl<$Res> extends _$FortuneCopyWithImpl<$Res>
     implements _$$_FortuneCopyWith<$Res> {
   __$$_FortuneCopyWithImpl(_$_Fortune _value, $Res Function(_$_Fortune) _then)
-      : super(_value, _then);
+      : super(_value, (v) => _then(v as _$_Fortune));
 
-  @pragma('vm:prefer-inline')
+  @override
+  _$_Fortune get _value => super._value as _$_Fortune;
+
   @override
   $Res call({
-    Object? type = null,
-    Object? content = null,
+    Object? type = freezed,
+    Object? content = freezed,
   }) {
     return _then(_$_Fortune(
-      type: null == type
+      type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
-      content: null == content
+      content: content == freezed
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
@@ -123,7 +119,6 @@ class _$_Fortune implements _Fortune {
 
   @JsonKey(ignore: true)
   @override
-  @pragma('vm:prefer-inline')
   _$$_FortuneCopyWith<_$_Fortune> get copyWith =>
       __$$_FortuneCopyWithImpl<_$_Fortune>(this, _$identity);
 
