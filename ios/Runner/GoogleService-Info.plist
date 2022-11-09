@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>64558767437-1fho70kn6qpigsu1op48dalf142rs92m.apps.googleusercontent.com</string>
+	<string>64558767437-a0a6n3e49he17um5qlo8c3bhnutm35fm.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.64558767437-1fho70kn6qpigsu1op48dalf142rs92m</string>
+	<string>com.googleusercontent.apps.64558767437-a0a6n3e49he17um5qlo8c3bhnutm35fm</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAPN8cRhA0aa0NyI52LtgXo5K_EwRTF1yE</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.wowbros.ios.modak</string>
+	<string>com.wowbros.ios.modakapp</string>
 	<key>PROJECT_ID</key>
 	<string>modak-9e12f</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:64558767437:ios:f2918238c9ff853bfd2b04</string>
+	<string>1:64558767437:ios:ace21d59edaf6adafd2b04</string>
 </dict>
 </plist>

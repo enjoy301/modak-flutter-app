@@ -22,8 +22,7 @@ typedef RequestFunction = Future<Response<dynamic>> Function();
 
 class RemoteDataSource {
   RemoteDataSource._privateConstructor();
-  static final RemoteDataSource _instance =
-      RemoteDataSource._privateConstructor();
+  static final RemoteDataSource _instance = RemoteDataSource._privateConstructor();
 
   factory RemoteDataSource() {
     return _instance;
@@ -46,39 +45,45 @@ class RemoteDataSource {
     String fcmToken,
     int familyId,
   ) async {
-    return _tryRequest(() async {
-      return await Dio(
-        BaseOptions(
-          headers: {
-            Strings.headerHost: "www.never.com",
-          },
-        ),
-      ).post(
-        "${dotenv.get(Strings.apiEndPoint)}/api/v2/auth",
-        data: {
-          Strings.providerName: await storage.read(key: Strings.providerName),
-          Strings.providerId: await storage.read(key: Strings.providerId),
-          Strings.name: name,
-          Strings.birthDay: birthDay,
-          Strings.isLunar: isLunar,
-          Strings.role: role,
-          Strings.fcmToken: "fcmToken",
-          Strings.familyId: -1,
-        },
-      );
-    }, isUpdatingAccessToken: true, isUpdatingRefreshToken: true);
-  }
-
-  /// 토큰 로그인을 시도하는 함수
-  Future<Map<String, dynamic>> tokenLogin() async {
     return _tryRequest(
       () async {
         return await Dio(
           BaseOptions(
             headers: {
               Strings.headerHost: "www.never.com",
-              Strings.headerRefreshToken:
-                  await storage.read(key: Strings.refreshToken),
+            },
+          ),
+        ).post(
+          "${dotenv.get(Strings.apiEndPoint)}/api/v2/auth",
+          data: {
+            Strings.providerName: await storage.read(key: Strings.providerName),
+            Strings.providerId: await storage.read(key: Strings.providerId),
+            Strings.name: name,
+            Strings.birthDay: birthDay,
+            Strings.isLunar: isLunar,
+            Strings.role: role,
+            Strings.fcmToken: "fcmToken",
+            Strings.familyId: -1,
+          },
+        );
+      },
+      isUpdatingAccessToken: true,
+      isUpdatingRefreshToken: true,
+      isUpdatingMemberId: true,
+      isUpdatingFamilyId: true,
+    );
+  }
+
+  /// 토큰 로그인을 시도하는 함수
+  Future<Map<String, dynamic>> tokenLogin() async {
+    log("tokenLogin");
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            headers: {
+              Strings.headerHost: "www.never.com",
+              Strings.headerRefreshToken: await storage.read(key: Strings.refreshToken),
             },
           ),
         ).get(
@@ -94,15 +99,14 @@ class RemoteDataSource {
 
   /// 소셜 로그인을 시도하는 함수
   Future<Map<String, dynamic>> socialLogin() async {
+    log("socialLogin");
     return _tryRequest(
       () async {
         return await Dio(
           BaseOptions(
             headers: {
-              Strings.headerProviderName:
-                  await storage.read(key: Strings.providerName),
-              Strings.headerProviderId:
-                  await storage.read(key: Strings.providerId),
+              Strings.headerProviderName: await storage.read(key: Strings.providerName),
+              Strings.headerProviderId: await storage.read(key: Strings.providerId),
             },
           ),
         ).get(
@@ -371,9 +375,7 @@ class RemoteDataSource {
         return auth.post(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo",
           data: {
-            Strings.memberId: todo.memberId == -1
-                ? await storage.read(key: Strings.memberId)
-                : todo.memberId,
+            Strings.memberId: todo.memberId == -1 ? await storage.read(key: Strings.memberId) : todo.memberId,
             Strings.title: todo.title,
             Strings.timeTag: todo.timeTag,
             Strings.repeat: todo.repeat,
@@ -401,9 +403,7 @@ class RemoteDataSource {
         return auth.put(
           "${dotenv.get(Strings.apiEndPoint)}/api/v2/todo/${todo.todoId}",
           data: {
-            Strings.memberId: todo.memberId == -1
-                ? await storage.read(key: Strings.memberId)
-                : todo.memberId,
+            Strings.memberId: todo.memberId == -1 ? await storage.read(key: Strings.memberId) : todo.memberId,
             Strings.title: todo.title,
             Strings.timeTag: todo.timeTag,
             Strings.repeat: todo.repeat,
@@ -569,11 +569,7 @@ class RemoteDataSource {
       () async {
         return await Dio(
           BaseOptions(
-            headers: {
-              "Content-Type": "multipart/form-data",
-              'Connection': 'keep-alive',
-              "Accept": "*/*"
-            },
+            headers: {"Content-Type": "multipart/form-data", 'Connection': 'keep-alive', "Accept": "*/*"},
           ),
         ).post(dotenv.get("S3_ENDPOINT"), data: formData);
       },
@@ -593,8 +589,7 @@ class RemoteDataSource {
         return await Dio(
           BaseOptions(
             queryParameters: {
-              'familyId':
-                  await RemoteDataSource.storage.read(key: Strings.familyId),
+              'familyId': await RemoteDataSource.storage.read(key: Strings.familyId),
               'count': count,
               'lastId': lastId,
             },
@@ -607,8 +602,7 @@ class RemoteDataSource {
   }
 
   /// 미디어 다운로드 url 발급 함수
-  Future<Map<String, dynamic>> getMediaDownloadURL(
-      List<dynamic> requestList) async {
+  Future<Map<String, dynamic>> getMediaDownloadURL(List<dynamic> requestList) async {
     return _tryRequest(
       () async {
         return await Dio().post(
@@ -653,16 +647,14 @@ class RemoteDataSource {
             if (response[Strings.result]) {
               await storage.write(
                 key: Strings.accessToken,
-                value: response[Strings.response]
-                    .headers[Strings.headerAccessToken]![0],
+                value: response[Strings.response].headers[Strings.headerAccessToken]![0],
               );
               final clonedRequest = await Dio().request(
                 error.requestOptions.path,
                 options: Options(
                   method: error.requestOptions.method,
                   headers: {
-                    Strings.headerAccessToken:
-                        await storage.read(key: Strings.accessToken),
+                    Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
                   },
                 ),
                 data: error.requestOptions.data,
@@ -709,15 +701,13 @@ class RemoteDataSource {
       if (isUpdatingMemberId) {
         await storage.write(
           key: Strings.memberId,
-          value: response.data['data']['memberResult'][Strings.memberId]
-              .toString(),
+          value: response.data['data']['memberResult'][Strings.memberId].toString(),
         );
       }
       if (isUpdatingFamilyId) {
         await storage.write(
           key: Strings.familyId,
-          value: response.data['data'][Strings.memberResult][Strings.familyId]
-              .toString(),
+          value: response.data['data'][Strings.memberResult][Strings.familyId].toString(),
         );
       }
     } catch (e) {
@@ -744,10 +734,8 @@ class RemoteDataSource {
           BaseOptions(
             headers: {
               Strings.headerHost: "www.never.com",
-              Strings.headerAccessToken:
-                  await storage.read(key: Strings.accessToken),
-              Strings.headerRefreshToken:
-                  await storage.read(key: Strings.refreshToken),
+              Strings.headerAccessToken: await storage.read(key: Strings.accessToken),
+              Strings.headerRefreshToken: await storage.read(key: Strings.refreshToken),
             },
           ),
         ).get(

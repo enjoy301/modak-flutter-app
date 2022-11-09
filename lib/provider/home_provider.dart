@@ -68,12 +68,10 @@ class HomeProvider extends ChangeNotifier {
     String firstDateString = Date.getFormattedDate(dateTime: firstDate);
     String lastDateString = Date.getFormattedDate(dateTime: lastDate);
 
-    Map<String, dynamic> response =
-        await _homeRepository.getTodayTalk(firstDateString, lastDateString);
+    Map<String, dynamic> response = await _homeRepository.getTodayTalk(firstDateString, lastDateString);
     switch (response[Strings.message]) {
       case Strings.success:
-        Map<String, Map<int, String>> todayTalkWeekMap =
-            response[Strings.response][Strings.todayTalk];
+        Map<String, Map<int, String>> todayTalkWeekMap = response[Strings.response][Strings.todayTalk];
         for (String date in todayTalkWeekMap.keys) {
           todayTalkMap[date] = todayTalkWeekMap[date]!;
         }
@@ -90,13 +88,11 @@ class HomeProvider extends ChangeNotifier {
 
   Future<bool> postTodayTalk(BuildContext context, String content) async {
     String date = Date.getFormattedDate();
-    Map<String, dynamic> response =
-        await _homeRepository.postTodayTalk(content);
+    Map<String, dynamic> response = await _homeRepository.postTodayTalk(content);
     switch (response[Strings.message]) {
       case Strings.success:
         if (todayTalkMap[date] == null) todayTalkMap[date] = <int, String>{};
-        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] =
-            content;
+        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] = content;
         Fluttertoast.showToast(msg: "오늘의 한 마디를 등록하였습니다");
         notifyListeners();
         return true;

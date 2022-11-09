@@ -33,10 +33,11 @@ class _AuthRegisterScreenState extends State<AuthRegisterScreen> {
                   provider.goPreviousPage();
                 }),
             body: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: provider.getPage(provider, controller)),
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: provider.getPage(provider, controller),
+            ),
             bottomSheet: Container(
                 color: Colors.white,
                 width: double.infinity,

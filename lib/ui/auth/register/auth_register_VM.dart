@@ -118,14 +118,11 @@ class AuthRegisterVM extends ChangeNotifier {
         provider: provider,
         controller: controller,
       );
-    } else if (_page == 1) {
+    } else {
       return RegisterRoleScreen(
         provider: provider,
       );
     }
-    return RegisterRoleScreen(
-      provider: provider,
-    );
   }
 
   String getButtonText() {

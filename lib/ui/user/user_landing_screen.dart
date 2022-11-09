@@ -109,12 +109,18 @@ class UserLandingScreen extends StatelessWidget {
                         child: ButtonMainWidget(
                           title: "회원탈퇴",
                           onPressed: () {
-                            modalCheckWidget(context, title: "정말 회원탈퇴 하시겠습니까?", okText: "회원탈퇴", noText: "취소",
-                                onOkPressed: () {
-                              userProvider.withdraw(context);
-                            }, onNoPressed: () {
-                              Get.back();
-                            });
+                            modalCheckWidget(
+                              context,
+                              title: "정말 회원탈퇴 하시겠습니까?",
+                              okText: "회원탈퇴",
+                              noText: "취소",
+                              onOkPressed: () {
+                                userProvider.withdraw(context);
+                              },
+                              onNoPressed: () {
+                                Get.back();
+                              },
+                            );
                           },
                           // onPressed: provider.navigateToFamilyInfo(),
                         ),
