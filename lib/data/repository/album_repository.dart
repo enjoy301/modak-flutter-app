@@ -30,6 +30,34 @@ class AlbumRepository {
     return {Strings.message: Strings.fail};
   }
 
+  Future<Map<String, dynamic>> getFaceList() async {
+    Map<String, dynamic> response = await remoteDataSource.getFaceList();
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "data": response["response"].data,
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
+  Future<Map<String, dynamic>> getLabelList() async {
+    Map<String, dynamic> response = await remoteDataSource.getLabelList();
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "data": response["response"].data,
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
   Future<Map<String, dynamic>> getMediaURL(List<dynamic> requestList) async {
     Map<String, dynamic> response = await remoteDataSource.getMediaDownloadURL(requestList);
 

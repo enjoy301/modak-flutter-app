@@ -18,15 +18,52 @@ class _AlbumFaceWidgetState extends State<AlbumFaceWidget> {
           margin: EdgeInsets.all(5),
           child: GridView.builder(
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: provider.faceDataList.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 1,
               mainAxisSpacing: 5,
               crossAxisSpacing: 5,
             ),
-            itemBuilder: (BuildContext context, int mediaIndex) {
-              return Text("wow");
+            itemBuilder: (BuildContext context, int faceIndex) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  1,
+                ),
+                child: Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        print("wow");
+                      },
+                      child: Image.file(
+                        provider.faceFileList[faceIndex],
+                        fit: BoxFit.cover,
+                        height: double.infinity,
+                        width: double.infinity,
+                        gaplessPlayback: true,
+                      ),
+                    ),
+                    Positioned(
+                      right: 12,
+                      bottom: 12,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          "${provider.faceDataList[faceIndex]['count']}",
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         );

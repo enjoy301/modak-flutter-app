@@ -16,12 +16,7 @@ import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/theme_position_list_widget.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
-  const DialogBubbleWidget(
-      {Key? key,
-      required this.chat,
-      required this.isMine,
-      this.isHead = true,
-      this.isTail = true})
+  const DialogBubbleWidget({Key? key, required this.chat, required this.isMine, this.isHead = true, this.isTail = true})
       : super(key: key);
   final Chat chat;
   final bool isMine;
@@ -119,8 +114,7 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
                 alignment: Alignment.center,
                 transform: Matrix4.rotationX(pi),
                 child: CustomPaint(
-                  painter: CustomShape(
-                      widget.isMine ? "send" : "receive", isPressed),
+                  painter: CustomShape(widget.isMine ? "send" : "receive", isPressed),
                 ),
               ),
             ),
@@ -158,9 +152,7 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
           /// row children 3번 시간과 읽은 수 표시
           ChatComponentInfoWidget(
             chat: widget.chat,
-            crossAxisAlignment: widget.isMine
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
+            crossAxisAlignment: widget.isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             showTime: widget.isTail,
           ),
         ],

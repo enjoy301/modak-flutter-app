@@ -614,6 +614,38 @@ class RemoteDataSource {
     );
   }
 
+  Future<Map<String, dynamic>> getFaceList() async {
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            queryParameters: {
+              'familyId': await RemoteDataSource.storage.read(key: Strings.familyId),
+            },
+          ),
+        ).get(
+          "${dotenv.get("CHAT_HTTP")}/media/face/list",
+        );
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> getLabelList() async {
+    return _tryRequest(
+      () async {
+        return await Dio(
+          BaseOptions(
+            queryParameters: {
+              'familyId': await RemoteDataSource.storage.read(key: Strings.familyId),
+            },
+          ),
+        ).get(
+          "${dotenv.get("CHAT_HTTP")}/media/label/list",
+        );
+      },
+    );
+  }
+
   /// 미디어 다운로드 url 발급 함수
   Future<Map<String, dynamic>> getMediaDownloadURL(
       List<dynamic> requestList) async {
