@@ -15,7 +15,7 @@ class AlbumLandingScreen extends StatefulWidget {
 }
 
 class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
-  late Future initial;
+  late Future init;
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +45,17 @@ class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
         ),
         body: SafeArea(
           child: FutureBuilder(
-              future: initial,
-              builder: (context, snapshot) {
-                return TabBarView(
-                  children: [
-                    AlbumDayWidget(),
-                    AlbumFaceWidget(),
-                    AlbumThemeWidget(),
-                  ],
-                );
-              }),
+            future: init,
+            builder: (context, snapshot) {
+              return TabBarView(
+                children: [
+                  AlbumDayWidget(),
+                  AlbumFaceWidget(),
+                  AlbumThemeWidget(),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -64,6 +65,6 @@ class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
   void initState() {
     super.initState();
 
-    initial = context.read<AlbumProvider>().initialMediaLoading();
+    init = context.read<AlbumProvider>().initTotalData();
   }
 }

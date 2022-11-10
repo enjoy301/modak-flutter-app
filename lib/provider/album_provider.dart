@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -28,6 +27,18 @@ class AlbumProvider extends ChangeNotifier {
   late List<List<File>> _albumBuildFileList = [];
   get albumBuildFileList => _albumBuildFileList;
 
+  late List<dynamic> _faceDataList = [];
+  get faceDataList => _faceDataList;
+
+  late List<File> _faceFileList = [];
+  get faceFileList => _faceFileList;
+
+  late List<dynamic> _labelDataList = [];
+  get labelDataList => _labelDataList;
+
+  late List<File> _labelFileList = [];
+  get labelFileList => _labelFileList;
+
   late Map<String, File> _thumbnailList;
   get thumbnailList => _thumbnailList;
 
@@ -36,9 +47,12 @@ class AlbumProvider extends ChangeNotifier {
 
   late bool isInfinityScrollLoading;
 
-  /// 앨범 UI build시 실행되는 initial 함수
-  Future initialMediaLoading() async {
+  Future initTotalData() async {
     _albumBuildFileList = [];
+    _faceDataList = [];
+    _faceFileList = [];
+    _labelDataList = [];
+    _labelFileList = [];
     _thumbnailList = {};
     _scrollController = ScrollController();
     isInfinityScrollLoading = false;
@@ -46,14 +60,12 @@ class AlbumProvider extends ChangeNotifier {
     index = -1;
     lastDate = "2001-03-01";
 
-    Map<String, dynamic> mediaInfoResponse =
-        await _albumRepository.getMediaInfoList(mediaLastId, 20);
+    Map<String, dynamic> mediaInfoResponse = await _albumRepository.getMediaInfoList(mediaLastId, 20);
     if (mediaInfoResponse['result'] == Strings.fail) {
       return;
     }
 
-    List<dynamic> mediaInfoList =
-        jsonDecode(mediaInfoResponse['response']['data'])['album'];
+    List<dynamic> mediaInfoList = jsonDecode(mediaInfoResponse['response']['data'])['album'];
     mediaLastId = jsonDecode(
       mediaInfoResponse['response']['data'],
     )['last_id'];
@@ -68,13 +80,61 @@ class AlbumProvider extends ChangeNotifier {
 
     await setAlbumBuildFileList(mediaFileListResponse['response']);
 
+    Map<String, dynamic> faceResponse = await _albumRepository.getFaceList();
+
+    if (faceResponse['result'] == Strings.fail) {
+      return;
+    }
+
+    _faceDataList = jsonDecode(faceResponse['response']['data']);
+
+    List<dynamic> faceDataMap = [];
+    for (Map<dynamic, dynamic> faceData in _faceDataList) {
+      faceDataMap.add({'key': faceData['key']});
+    }
+
+    if (faceDataMap.isNotEmpty) {
+      Map<String, dynamic> mediaFileListResponse = await loadMedia(faceDataMap);
+      if (mediaFileListResponse['result'] == Strings.fail) {
+        return;
+      }
+
+      for (File file in mediaFileListResponse['response']) {
+        _faceFileList.add(file);
+      }
+    }
+
+    Map<String, dynamic> labelResponse = await _albumRepository.getLabelList();
+
+    if (labelResponse['result'] == Strings.fail) {
+      return;
+    }
+
+    _labelDataList = jsonDecode(labelResponse['response']['data']);
+
+    List<dynamic> labelDataMap = [];
+    for (Map<dynamic, dynamic> labelData in _labelDataList) {
+      labelDataMap.add({'key': labelData['key']});
+    }
+
+    if (labelDataMap.isNotEmpty) {
+      Map<String, dynamic> mediaFileListResponse = await loadMedia(labelDataMap);
+      if (mediaFileListResponse['result'] == Strings.fail) {
+        return;
+      }
+
+      for (File file in mediaFileListResponse['response']) {
+        _labelFileList.add(file);
+      }
+    }
+
     Fluttertoast.showToast(msg: "앨범 성공적으로 불러옴");
   }
 
+  Future initFaceView() async {}
+
   /// 미디어 info를 넘기면, 디렉토리에서 찾던 다운하던 로드하고 로드된 파일을 리턴함.
-  Future<Map<String, dynamic>> loadMedia(
-    List<dynamic> mediaInfoList,
-  ) async {
+  Future<Map<String, dynamic>> loadMedia(List<dynamic> mediaInfoList) async {
     String mediaDirectoryPath = await FileSystemUtil.getMediaDirectory();
 
     if (mediaDirectoryPath == "") {
@@ -85,12 +145,14 @@ class AlbumProvider extends ChangeNotifier {
     List<String> downloadKeyList = [];
     for (Map<String, dynamic> mediaInfo in mediaInfoList) {
       if (!File("$mediaDirectoryPath/${mediaInfo['key']}").existsSync()) {
+        print(mediaInfo['key']);
         downloadKeyList.add(mediaInfo['key']);
       }
     }
 
     /// 없는 미디어 다운로드
     if (downloadKeyList.isNotEmpty) {
+      print(downloadKeyList);
       Map<String, dynamic> urlResponse = await _albumRepository.getMediaURL(
         downloadKeyList,
       );
@@ -100,7 +162,6 @@ class AlbumProvider extends ChangeNotifier {
       )['url_list'];
 
       for (String url in urlList) {
-        log("url $url");
         RegExp regExp = RegExp(r'.com\/(\w|\W)+\?');
         String temp = (regExp.stringMatch(url).toString());
         String fileName = temp.substring(5, temp.length - 1);
@@ -133,8 +194,7 @@ class AlbumProvider extends ChangeNotifier {
   void addScrollListener() {
     scrollController.addListener(
       () async {
-        if (scrollController.offset ==
-                scrollController.position.maxScrollExtent &&
+        if (scrollController.offset == scrollController.position.maxScrollExtent &&
             !scrollController.position.outOfRange) {
           if (isInfinityScrollLoading == true || mediaLastId == -1) {
             return;
@@ -142,8 +202,7 @@ class AlbumProvider extends ChangeNotifier {
 
           isInfinityScrollLoading = true;
 
-          Map<String, dynamic> mediaInfoResponse =
-              await _albumRepository.getMediaInfoList(
+          Map<String, dynamic> mediaInfoResponse = await _albumRepository.getMediaInfoList(
             mediaLastId,
             20,
           );
@@ -151,8 +210,6 @@ class AlbumProvider extends ChangeNotifier {
           if (mediaInfoResponse['result'] == Strings.fail) {
             return;
           }
-
-          log("$mediaInfoResponse");
 
           List<dynamic> mediaInfoList = jsonDecode(
             mediaInfoResponse['response']['data'],
@@ -166,8 +223,7 @@ class AlbumProvider extends ChangeNotifier {
             return;
           }
 
-          Map<String, dynamic> mediaFileListResponse =
-              await loadMedia(mediaInfoList);
+          Map<String, dynamic> mediaFileListResponse = await loadMedia(mediaInfoList);
           if (mediaFileListResponse['result'] == Strings.fail) {
             return;
           }
