@@ -5,6 +5,11 @@ import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/dto/notification.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
+import 'package:modak_flutter_app/provider/album_provider.dart';
+import 'package:modak_flutter_app/provider/chat_provider.dart';
+import 'package:modak_flutter_app/provider/home_provider.dart';
+import 'package:modak_flutter_app/provider/todo_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserProvider extends ChangeNotifier {
   init() async {
@@ -125,7 +130,16 @@ class UserProvider extends ChangeNotifier {
   }
 
   logout(BuildContext context) async {
+    /// 메모리 데이터 전부 삭제
+    context.read<HomeProvider>().clear();
+    context.read<TodoProvider>().clear();
+    context.read<ChatProvider>().clear();
+    context.read<AlbumProvider>().clear();
+    clear();
+
+    /// 스토리지 데이터 전부 삭제
     await _userRepository.clearStorage();
+
     Get.offAndToNamed("/auth/splash");
   }
 
@@ -133,8 +147,7 @@ class UserProvider extends ChangeNotifier {
     Map<String, dynamic> response = await _userRepository.deleteMe();
     switch (response[Strings.message]) {
       case Strings.success:
-        // ignore: use_build_context_synchronously
-        logout(context);
+        await Future(() async => await logout(context));
         Fluttertoast.showToast(msg: "성공적으로 회원탈퇴");
         break;
       case Strings.fail:
@@ -218,5 +231,7 @@ class UserProvider extends ChangeNotifier {
   clear() {
     _me = null;
     _familyMembers = [];
+    notifications = [];
+    archiveNotifications = [];
   }
 }

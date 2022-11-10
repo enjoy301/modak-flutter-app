@@ -127,6 +127,7 @@ class HomeProvider extends ChangeNotifier {
   clear() {
     familyCode = null;
     todayFortune = null;
+    todayContents = [];
     todayTalkMap = {};
     _selectedDatetime = DateTime.now();
     _focusedDateTime = DateTime.now();

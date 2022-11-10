@@ -9,7 +9,6 @@ import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_web_screen.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
-import 'package:modak_flutter_app/utils/notification_controller.dart';
 import 'package:modak_flutter_app/widgets/home/home_family_talk_widget.dart';
 import 'package:modak_flutter_app/widgets/home/home_item_widget.dart';
 import 'package:provider/provider.dart';
@@ -64,11 +63,11 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                GestureDetector(
-                    onTap: () {
-                      NotificationController.sendNotification("title", "body");
-                    },
-                    child: Text("FCM 보내보기")),
+                // GestureDetector(
+                //     onTap: () {
+                //       NotificationController.sendNotification("title", "body");
+                //     },
+                //     child: Text("FCM 보내보기")),
                 HomePictureWidget(),
                 HomeFamilyTalkWidget(
                   dateTime: DateTime.now(),

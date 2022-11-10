@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
-import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_calendar.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_list.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_screen.dart';
@@ -14,7 +13,7 @@ class TodoLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<TodoProvider, TodoLandingVM>(builder: (context, todoProvider, provider, child) {
+    return Consumer<TodoProvider>(builder: (context, todoProvider, child) {
       return Scaffold(
         body: Column(
           children: [

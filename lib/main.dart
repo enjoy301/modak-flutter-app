@@ -31,7 +31,6 @@ import 'package:modak_flutter_app/ui/chat/letter/write/letter_write_envelop_scre
 import 'package:modak_flutter_app/ui/chat/roulette/chat_roulette_landing_screen.dart';
 import 'package:modak_flutter_app/ui/home/home_notification_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
-import 'package:modak_flutter_app/ui/todo/landing/todo_landing_VM.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_screen.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_VM.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_screen.dart';
@@ -77,18 +76,26 @@ void main() async {
 
   // 한글 지원
   // 상태관리 provider 정의
-  initializeDateFormatting().then((_) => runApp(MultiProvider(providers: [
-        /// share provider
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => TodoProvider()),
-        ChangeNotifierProvider(create: (_) => AlbumProvider()),
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
+  initializeDateFormatting().then(
+    (_) => runApp(
+      MultiProvider(
+        providers: [
+          /// share provider
+          ChangeNotifierProvider(create: (_) => HomeProvider()),
+          ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(create: (_) => TodoProvider()),
+          ChangeNotifierProvider(create: (_) => AlbumProvider()),
+          ChangeNotifierProvider(create: (_) => ChatProvider()),
 
-        /// main page provider
-        ChangeNotifierProvider(create: (_) => TodoLandingVM()),
-        ChangeNotifierProvider(create: (_) => ChatLetterVM()),
-      ], child: Phoenix(child: const MyApp()))));
+          /// main page provider
+          ChangeNotifierProvider(create: (_) => ChatLetterVM()),
+        ],
+        child: Phoenix(
+          child: const MyApp(),
+        ),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -122,10 +129,7 @@ class MyApp extends StatelessWidget {
               create: (_) => AuthRegisterVM(),
               child: AuthRegisterScreen(),
             ),
-        "/todo/landing": (context) => ChangeNotifierProvider(
-              create: (_) => TodoLandingVM(),
-              child: TodoLandingScreen(),
-            ),
+        "/todo/landing": (context) => TodoLandingScreen(),
         "/todo/write": (context) => ChangeNotifierProvider(
               create: (_) => TodoWriteVM(),
               child: TodoWriteScreen(),

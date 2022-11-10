@@ -6,6 +6,7 @@ import 'package:modak_flutter_app/data/repository/user_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/auth/register/register_name_agreement_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/register_role_screen.dart';
+import 'package:modak_flutter_app/utils/provider_controller.dart';
 import 'package:modak_flutter_app/widgets/modal/theme_modal_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -102,7 +103,7 @@ class AuthRegisterVM extends ChangeNotifier {
         context,
         title: "회원가입을 종료하시겠습니까?",
         okText: "회원가입 종료",
-        onOkPress: () {
+        onOkPress: () async {
           Get.offAllNamed("/auth/landing");
         },
       );
@@ -148,6 +149,8 @@ class AuthRegisterVM extends ChangeNotifier {
             response[Strings.response][Strings.me]);
         await Future(() => context.read<UserProvider>().familyMembers =
             response[Strings.response][Strings.familyMembers]);
+        await Future(() => ProviderController.startProviders(context));
+
         Get.offAllNamed("/main");
         break;
       case Strings.valueAlreadyExist:

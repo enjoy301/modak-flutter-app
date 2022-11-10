@@ -43,25 +43,26 @@ class _AuthRegisterScreenState extends State<AuthRegisterScreen> {
                 child: provider.getPage(provider, controller),
               ),
               bottomSheet: Container(
-                  color: Colors.white,
-                  width: double.infinity,
-                  height: 100,
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ButtonTextWidget(
-                        text: "이전",
-                        onPressed: () => provider.goPreviousPage(context),
-                        isColorStatic: true,
-                      ),
-                      ButtonTextWidget(
-                        text: provider.getButtonText(),
-                        isValid: provider.getIsPageDone(),
-                        onPressed: () => provider.goNextPage(context),
-                      ),
-                    ],
-                  )),
+                color: Colors.white,
+                width: double.infinity,
+                height: 100,
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ButtonTextWidget(
+                      text: "이전",
+                      onPressed: () => provider.goPreviousPage(context),
+                      isColorStatic: true,
+                    ),
+                    ButtonTextWidget(
+                      text: provider.getButtonText(),
+                      isValid: provider.getIsPageDone(),
+                      onPressed: () => provider.goNextPage(context),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         );
