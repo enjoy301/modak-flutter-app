@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
-import 'package:modak_flutter_app/utils/notification_controller.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/notification/notification_widget.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +37,6 @@ class _HomeNotificationScreenState extends State<HomeNotificationScreen> {
                 },
                 customTrailing: IconButton(
                   onPressed: () {
-                    NotificationController.sendNotification("title", "body");
                     setState(() {
                       isArchiveMode = !isArchiveMode;
                     });
@@ -59,7 +57,8 @@ class _HomeNotificationScreenState extends State<HomeNotificationScreen> {
                       itemCount: userProvider.archiveNotifications.length,
                       itemBuilder: (context, index) {
                         return NotificationWidget(
-                          notification: userProvider.archiveNotifications[index],
+                          notification:
+                              userProvider.archiveNotifications[index],
                           onDismiss: () {
                             userProvider.removeArchiveNotification(index);
                           },

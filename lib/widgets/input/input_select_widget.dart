@@ -9,6 +9,7 @@ class InputSelectWidget extends StatefulWidget {
     Key? key,
     required this.title,
     required this.contents,
+    required this.isFilled,
     this.buttons = const [],
     this.leftIconData,
     this.onTap,
@@ -18,6 +19,7 @@ class InputSelectWidget extends StatefulWidget {
 
   final String title;
   final String contents;
+  final bool isFilled;
   final List<TextButton> buttons;
   final IconData? leftIconData;
   final Function()? onTap;
@@ -59,7 +61,7 @@ class _InputSelectWidgetState extends State<InputSelectWidget> {
               Text(
                 widget.title,
                 style: TextStyle(
-                  color: widget.isBlocked ? Coloring.gray_20 : Coloring.gray_10,
+                  color: Coloring.titleText,
                   fontSize: Font.size_mediumText,
                   fontWeight: Font.weight_regular,
                 ),
@@ -72,7 +74,11 @@ class _InputSelectWidgetState extends State<InputSelectWidget> {
                 child: Text(
                   widget.contents,
                   style: TextStyle(
-                    color: widget.isBlocked ? Coloring.gray_20 : Coloring.gray_10,
+                    color: widget.isBlocked
+                        ? Coloring.blockedText
+                        : widget.isFilled
+                            ? Coloring.filledText
+                            : Coloring.notFilledText,
                     fontSize: Font.size_mediumText,
                     fontWeight: Font.weight_regular,
                   ),

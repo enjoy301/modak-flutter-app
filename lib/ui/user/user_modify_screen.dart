@@ -28,7 +28,8 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
 
-    return Consumer2<UserProvider, UserModifyVM>(builder: (context, userProvider, provider, child) {
+    return Consumer2<UserProvider, UserModifyVM>(
+        builder: (context, userProvider, provider, child) {
       return FutureBuilder(future: Future<void>(() async {
         await provider.init();
         controller.text = provider.me!.name;
@@ -86,7 +87,9 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                             provider.setName(name);
                           },
                           textEditingController: controller,
-                          isSuffix: provider.isLoaded ? provider.me!.name.isNotEmpty : false,
+                          isSuffix: provider.isLoaded
+                              ? provider.me!.name.isNotEmpty
+                              : false,
                           onClickSuffix: () {
                             provider.setName("");
                           }),
@@ -95,7 +98,10 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                       padding: const EdgeInsets.only(bottom: 13),
                       child: InputSelectWidget(
                           title: "가족 역할",
-                          contents: provider.isLoaded ? provider.me!.role.toDisplayString() : "",
+                          contents: provider.isLoaded
+                              ? provider.me!.role.toDisplayString()
+                              : "",
+                          isFilled: true,
                           buttons: [
                             TextButton(
                                 onPressed: () {
@@ -121,7 +127,9 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                           leftIconData: LightIcons.Profile),
                     ),
                     InputColorWidget(
-                      color: provider.isLoaded ? provider.me!.color.toColor()! : Colors.white,
+                      color: provider.isLoaded
+                          ? provider.me!.color.toColor()!
+                          : Colors.white,
                       onColorChanged: (Color color) {
                         provider.setColor(color);
                       },
@@ -145,7 +153,9 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                           Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: CheckboxWidget(
-                                value: provider.isLoaded ? provider.me!.isLunar : false,
+                                value: provider.isLoaded
+                                    ? provider.me!.isLunar
+                                    : false,
                                 onChanged: (bool? value) {
                                   provider.setLunar(value!);
                                 }),
@@ -164,8 +174,11 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                     ),
                     InputDateWidget(
                         title: "생일",
-                        contents: provider.isLoaded ? provider.me!.birthDay : "",
-                        currTime: provider.isLoaded ? DateTime.parse(provider.me!.birthDay) : DateTime.now(),
+                        contents:
+                            provider.isLoaded ? provider.me!.birthDay : "",
+                        currTime: provider.isLoaded
+                            ? DateTime.parse(provider.me!.birthDay)
+                            : DateTime.now(),
                         onChanged: (DateTime dateTime) {
                           provider.setBirthDay(dateTime);
                         }),

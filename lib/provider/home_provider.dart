@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/dto/fortune.dart';
+import 'package:modak_flutter_app/data/dto/today_content.dart';
 import 'package:modak_flutter_app/data/repository/home_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/date.dart';
@@ -13,12 +14,15 @@ class HomeProvider extends ChangeNotifier {
     clear();
     await getHomeInfo();
     await getTodayTalk(DateTime.now());
+    await getTodayFortune();
     notifyListeners();
   }
 
   final HomeRepository _homeRepository = HomeRepository();
   String? familyCode;
   Fortune? todayFortune;
+  List<TodayContent> todayContents = [];
+
   Map<String, Map<int, String>> todayTalkMap = {};
   DateTime _selectedDatetime = DateTime.now();
   DateTime _focusedDateTime = DateTime.now();
@@ -41,6 +45,19 @@ class HomeProvider extends ChangeNotifier {
     if (response[Strings.message] == Strings.success) {
       familyCode = response[Strings.response][Strings.familyCode];
       todayFortune = response[Strings.response][Strings.todayFortune];
+      List<TodayContent> replacer = [];
+      for (Map item in response[Strings.response][Strings.todayContents]) {
+        replacer.add(
+          TodayContent(
+            id: item['id'],
+            type: item['type'],
+            title: item['title'],
+            desc: item['description'],
+            url: item['url'],
+          ),
+        );
+      }
+      todayContents = replacer;
       notifyListeners();
       return true;
     }
@@ -68,10 +85,12 @@ class HomeProvider extends ChangeNotifier {
     String firstDateString = Date.getFormattedDate(dateTime: firstDate);
     String lastDateString = Date.getFormattedDate(dateTime: lastDate);
 
-    Map<String, dynamic> response = await _homeRepository.getTodayTalk(firstDateString, lastDateString);
+    Map<String, dynamic> response =
+        await _homeRepository.getTodayTalk(firstDateString, lastDateString);
     switch (response[Strings.message]) {
       case Strings.success:
-        Map<String, Map<int, String>> todayTalkWeekMap = response[Strings.response][Strings.todayTalk];
+        Map<String, Map<int, String>> todayTalkWeekMap =
+            response[Strings.response][Strings.todayTalk];
         for (String date in todayTalkWeekMap.keys) {
           todayTalkMap[date] = todayTalkWeekMap[date]!;
         }
@@ -88,11 +107,13 @@ class HomeProvider extends ChangeNotifier {
 
   Future<bool> postTodayTalk(BuildContext context, String content) async {
     String date = Date.getFormattedDate();
-    Map<String, dynamic> response = await _homeRepository.postTodayTalk(content);
+    Map<String, dynamic> response =
+        await _homeRepository.postTodayTalk(content);
     switch (response[Strings.message]) {
       case Strings.success:
         if (todayTalkMap[date] == null) todayTalkMap[date] = <int, String>{};
-        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] = content;
+        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] =
+            content;
         Fluttertoast.showToast(msg: "오늘의 한 마디를 등록하였습니다");
         notifyListeners();
         return true;

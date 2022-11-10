@@ -56,7 +56,7 @@ class TodoDayWeekWidget extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: isEnabled ? data[dayOfTheWeek]['color'] : Coloring.gray_50,
+            color: isEnabled ? Coloring.todo_orange : Coloring.gray_50,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(

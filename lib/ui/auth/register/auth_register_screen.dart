@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/ui/auth/register/auth_register_VM.dart';
 import 'package:modak_flutter_app/widgets/button/button_text_widget.dart';
+import 'package:modak_flutter_app/widgets/common/colored_safe_area.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -22,42 +23,46 @@ class _AuthRegisterScreenState extends State<AuthRegisterScreen> {
       }), builder: (context, snapshot) {
         return WillPopScope(
           onWillPop: () {
-            provider.goPreviousPage();
+            provider.goPreviousPage(context);
             return Future(() => false);
           },
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: headerDefaultWidget(
-                title: "회원가입",
-                onClickLeading: () {
-                  provider.goPreviousPage();
-                }),
-            body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: provider.getPage(provider, controller),
+          child: ColoredSafeArea(
+            color: Colors.white,
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: headerDefaultWidget(
+                  title: "회원가입",
+                  bgColor: Colors.white,
+                  onClickLeading: () {
+                    provider.goPreviousPage(context);
+                  }),
+              body: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: provider.getPage(provider, controller),
+              ),
+              bottomSheet: Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: 100,
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonTextWidget(
+                        text: "이전",
+                        onPressed: () => provider.goPreviousPage(context),
+                        isColorStatic: true,
+                      ),
+                      ButtonTextWidget(
+                        text: provider.getButtonText(),
+                        isValid: provider.getIsPageDone(),
+                        onPressed: () => provider.goNextPage(context),
+                      ),
+                    ],
+                  )),
             ),
-            bottomSheet: Container(
-                color: Colors.white,
-                width: double.infinity,
-                height: 100,
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ButtonTextWidget(
-                      text: "이전",
-                      onPressed: provider.goPreviousPage,
-                      isColorStatic: true,
-                    ),
-                    ButtonTextWidget(
-                      text: provider.getButtonText(),
-                      isValid: provider.getIsPageDone(),
-                      onPressed: () => provider.goNextPage(context),
-                    ),
-                  ],
-                )),
           ),
         );
       });

@@ -82,6 +82,7 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
                     isBlocked: true,
                     title: "가족 역할",
                     contents: widget.familyMember.role,
+                    isFilled: true,
                     leftIconData: LightIcons.Profile,
                     tailIconShow: false,
                   ),

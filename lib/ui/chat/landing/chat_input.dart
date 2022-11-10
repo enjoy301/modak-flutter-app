@@ -70,10 +70,10 @@ class _InputChatWidget extends State<InputChatWidget> {
                     onChanged: (String input) {
                       provider.setCurrentInput(input);
                     },
-                    cursorColor: Coloring.gray_10,
+                    cursorColor: Coloring.gray_0,
                     decoration: InputDecoration(
                         hintText: "메시지를 입력하세요",
-                        hintStyle: TextStyle(color: Coloring.gray_20),
+                        hintStyle: TextStyle(color: Coloring.gray_30),
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 6, horizontal: 14),
                         border: OutlineInputBorder(

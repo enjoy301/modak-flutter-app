@@ -21,7 +21,9 @@ import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class TodoModifyScreen extends StatefulWidget {
-  const TodoModifyScreen({Key? key, required this.todo, required this.isAfterUpdate}) : super(key: key);
+  const TodoModifyScreen(
+      {Key? key, required this.todo, required this.isAfterUpdate})
+      : super(key: key);
 
   final Todo todo;
   final bool isAfterUpdate;
@@ -43,16 +45,19 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Consumer2<UserProvider, TodoModifyVM>(builder: (context, userProvider, provider, child) {
+        child: Consumer2<UserProvider, TodoModifyVM>(
+            builder: (context, userProvider, provider, child) {
           return FutureBuilder(future: Future<void>(() async {
             if (!loaded) {
               loaded = true;
               provider.todo = widget.todo;
-              provider.manager = userProvider.findUserById(provider.todo.memberId);
+              provider.manager =
+                  userProvider.findUserById(provider.todo.memberId);
               provider.isAfterUpdate = widget.isAfterUpdate;
               titleController.text = provider.todo.title;
               memoController.text = provider.todo.memo ?? "";
-              titleController.selection = TextSelection.fromPosition(TextPosition(offset: titleController.text.length));
+              titleController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: titleController.text.length));
               provider.notify();
             }
           }), builder: (context, snapshot) {
@@ -100,20 +105,34 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                           padding: const EdgeInsets.only(bottom: 13),
                           child: InputSelectWidget(
                               title: "담당",
-                              contents: provider.manager == null ? userProvider.me!.name : provider.manager!.name,
-                              buttons: userProvider.familyMembers.mapIndexed((int index, User familyMember) {
+                              contents: provider.manager == null
+                                  ? userProvider.me!.name
+                                  : provider.manager!.name,
+                              isFilled: true,
+                              buttons: userProvider.familyMembers
+                                  .mapIndexed((int index, User familyMember) {
                                 return TextButton(
                                   style: TextButton.styleFrom(
                                     padding: EdgeInsets.symmetric(vertical: 20),
                                     foregroundColor:
-                                        MaterialStateColor.resolveWith((states) => familyMember.color.toColor()!),
-                                    backgroundColor: familyMember.color.toColor()!.withOpacity(0.2),
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        MaterialStateColor.resolveWith(
+                                            (states) =>
+                                                familyMember.color.toColor()!),
+                                    backgroundColor: familyMember.color
+                                        .toColor()!
+                                        .withOpacity(0.2),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(index == 0 ? 10 : 0),
-                                            bottom: Radius.circular(
-                                                index == userProvider.familyMembers.length - 1 ? 10 : 0))),
+                                            top: Radius.circular(
+                                                index == 0 ? 10 : 0),
+                                            bottom: Radius.circular(index ==
+                                                    userProvider.familyMembers
+                                                            .length -
+                                                        1
+                                                ? 10
+                                                : 0))),
                                   ),
                                   onPressed: () {
                                     provider.manager = familyMember;
@@ -137,12 +156,17 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                                     title: "날짜",
                                     contents: provider.todo.date,
                                     onChanged: (DateTime dateTime) {
-                                      provider.todo.date = DateFormat("yyyy-MM-dd").format(dateTime);
+                                      provider.todo.date =
+                                          DateFormat("yyyy-MM-dd")
+                                              .format(dateTime);
                                       provider.notify();
                                     },
-                                    minTime: DateTime.now().subtract(Duration(days: 400)),
-                                    maxTime: DateTime.now().add(Duration(days: 400)),
-                                    currTime: DateTime.parse(provider.todo.date)),
+                                    minTime: DateTime.now()
+                                        .subtract(Duration(days: 400)),
+                                    maxTime:
+                                        DateTime.now().add(Duration(days: 400)),
+                                    currTime:
+                                        DateTime.parse(provider.todo.date)),
                               )
                             : SizedBox(
                                 height: 0,
@@ -151,6 +175,7 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                         InputSelectWidget(
                           title: "언제",
                           contents: provider.todo.timeTag ?? "언제든지",
+                          isFilled: provider.todo.timeTag != null,
                           onTap: () async {
                             FocusScope.of(context).requestFocus(FocusNode());
                             dynamic result = await Get.to(
@@ -171,7 +196,8 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 24, bottom: 8),
+                              padding:
+                                  const EdgeInsets.only(top: 24, bottom: 8),
                               child: Text("메모 (옵션)",
                                   style: TextStyle(
                                     color: Coloring.gray_10,

@@ -64,4 +64,11 @@ class Coloring {
   static const Color todo_blue = Color(0XFFC9E6FF);
   static const Color todo_pink = Color(0XFFFFE7F7);
   static const Color todo_purple = Color(0XFFDFD5FF);
+
+  /// input 색깔
+  static const Color titleText = gray_10;
+  static const Color blockedText = gray_10;
+  static const Color notFilledText = gray_20;
+  static const Color filledText = gray_0;
+  static const Color hintText = gray_20;
 }

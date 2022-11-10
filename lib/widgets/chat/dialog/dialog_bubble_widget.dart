@@ -1,16 +1,19 @@
 import 'dart:math';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
+import 'package:modak_flutter_app/ui/chat/roulette/chat_roulette_landing_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
+import 'package:modak_flutter_app/widgets/common/pressed_timer_widget.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
-import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
-import 'package:vibration/vibration.dart';
+import 'package:modak_flutter_app/widgets/modal/theme_position_list_widget.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
   const DialogBubbleWidget(
@@ -24,7 +27,6 @@ class DialogBubbleWidget extends StatefulWidget {
   final bool isMine;
   final bool isHead;
   final bool isTail;
-
   @override
   State<DialogBubbleWidget> createState() => _DialogBubbleWidgetState();
 }
@@ -32,6 +34,7 @@ class DialogBubbleWidget extends StatefulWidget {
 class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
   final GlobalKey _key = GlobalKey();
   double height = 10;
+
   @override
   void initState() {
     super.initState();
@@ -47,23 +50,61 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
     setState(() {});
   }
 
+  bool isPressed = false;
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () {
-        Vibration.vibrate(duration: 10, amplitude: 140);
-        listModalWidget(context, {
-          "클립보드 복사": () {
-            Clipboard.setData(ClipboardData(text: widget.chat.content));
-            Fluttertoast.showToast(msg: "클립보드에 복사되었습니다");
-            Get.back();
+    return PressedTimerWidget(
+      duration: Duration(milliseconds: 400),
+      onTimePressed: (TapDownDetails details) {
+        HapticFeedback.lightImpact();
+        FocusScope.of(context).unfocus();
+        themePositionListWidget(context, details: details, itemList: [
+          {
+            'name': '클립보드 복사',
+            'icon': Icon(
+              LightIcons.Document,
+              color: Coloring.gray_0,
+            ),
+            'onTap': () {
+              Clipboard.setData(ClipboardData(text: widget.chat.content));
+              Fluttertoast.showToast(msg: "클립보드에 복사되었습니다");
+              Get.back();
+            }
           },
-          "집안일 등록": () {
-            Get.back();
+          {
+            'name': '집안일 등록',
+            'icon': Icon(
+              LightIcons.Plus,
+              color: Coloring.gray_0,
+            ),
+            'onTap': () {
+              Clipboard.setData(ClipboardData(text: widget.chat.content));
+              Fluttertoast.showToast(msg: "클립보드에 복사되었습니다");
+              Get.back();
+            }
           },
-          "룰렛 돌리기": () {
-            Get.back();
+          {
+            'name': '룰렛 돌리기',
+            'icon': Icon(
+              LightIcons.Game,
+              color: Coloring.gray_0,
+            ),
+            'onTap': () {
+              Get.back();
+              Get.to(ChatRouletteLandingScreen(
+                title: widget.chat.content,
+              ));
+            }
           },
+        ]);
+        setState(() {
+          isPressed = false;
+        });
+      },
+      onStateChanged: (bool state) {
+        setState(() {
+          isPressed = state;
         });
       },
       child: Row(
@@ -78,7 +119,8 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
                 alignment: Alignment.center,
                 transform: Matrix4.rotationX(pi),
                 child: CustomPaint(
-                  painter: CustomShape(widget.isMine ? "send" : "receive"),
+                  painter: CustomShape(
+                      widget.isMine ? "send" : "receive", isPressed),
                 ),
               ),
             ),
@@ -92,8 +134,12 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
             ),
             decoration: BoxDecoration(
               color: widget.isMine
-                  ? Coloring.point_pureorange
-                  : Coloring.bg_orange,
+                  ? isPressed
+                      ? Coloring.point_pureorange.withOpacity(0.7)
+                      : Coloring.bg_orange
+                  : isPressed
+                      ? Coloring.gray_40
+                      : Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
@@ -125,12 +171,19 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
 
 class CustomShape extends CustomPainter {
   final String type;
-  CustomShape(this.type);
+  final bool isPressed;
+  CustomShape(this.type, this.isPressed);
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = type == "send" ? Coloring.point_pureorange : Coloring.bg_orange;
+      ..color = type == "send"
+          ? isPressed
+              ? Coloring.point_pureorange
+              : Coloring.bg_orange
+          : isPressed
+              ? Coloring.gray_40
+              : Colors.white;
 
     var path = Path();
     path.lineTo(5, 0);

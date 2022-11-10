@@ -9,16 +9,20 @@ import 'package:modak_flutter_app/widgets/input/input_date_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 
 class RegisterNameAgreementScreen extends StatefulWidget {
-  const RegisterNameAgreementScreen({Key? key, required this.provider, required this.controller}) : super(key: key);
+  const RegisterNameAgreementScreen(
+      {Key? key, required this.provider, required this.controller})
+      : super(key: key);
 
   final AuthRegisterVM provider;
   final TextEditingController controller;
 
   @override
-  State<RegisterNameAgreementScreen> createState() => _RegisterNameAgreementScreenState();
+  State<RegisterNameAgreementScreen> createState() =>
+      _RegisterNameAgreementScreenState();
 }
 
-class _RegisterNameAgreementScreenState extends State<RegisterNameAgreementScreen> {
+class _RegisterNameAgreementScreenState
+    extends State<RegisterNameAgreementScreen> {
   @override
   void initState() {
     widget.controller.text = widget.provider.name;
@@ -54,6 +58,8 @@ class _RegisterNameAgreementScreenState extends State<RegisterNameAgreementScree
               onClickSuffix: () {
                 widget.provider.name = "";
               },
+              isSatisfied: widget.provider.name.trim().length > 2,
+              maxLength: 8,
             ),
           ),
           Padding(
@@ -97,14 +103,17 @@ class _RegisterNameAgreementScreenState extends State<RegisterNameAgreementScree
           Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: InputDateWidget(
-                title: "생일",
-                contents: widget.provider.birthDay != null
-                    ? "${widget.provider.birthDay!.year}년 ${widget.provider.birthDay!.month}월 ${widget.provider.birthDay!.day}일"
-                    : "날짜를 입력해주세요",
-                onChanged: (DateTime dateTime) {
-                  widget.provider.birthDay = dateTime;
-                },
-                currTime: widget.provider.birthDay ?? DateTime.now()),
+              title: "생일",
+              contents: widget.provider.birthDay != null
+                  ? "${widget.provider.birthDay!.year}년 ${widget.provider.birthDay!.month}월 ${widget.provider.birthDay!.day}일"
+                  : "날짜를 입력해주세요",
+              onChanged: (DateTime dateTime) {
+                widget.provider.birthDay = dateTime;
+              },
+              currTime: widget.provider.birthDay ?? DateTime.now(),
+              isFilled: widget.provider.birthDay != null,
+              isNecessary: true,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24.0),
@@ -150,7 +159,8 @@ class _RegisterNameAgreementScreenState extends State<RegisterNameAgreementScree
                       context,
                       MaterialPageRoute(
                           builder: (context) => CommonPolicyScreen(
-                                isChecked: widget.provider.isPrivateInformationAgreed,
+                                isChecked:
+                                    widget.provider.isPrivateInformationAgreed,
                                 policyType: PolicyType.private,
                               )));
                   widget.provider.isPrivateInformationAgreed = result;
@@ -162,11 +172,14 @@ class _RegisterNameAgreementScreenState extends State<RegisterNameAgreementScree
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 2),
                       child: Text(
                         "상세 보기 >",
                         style: TextStyle(
-                            color: Coloring.gray_10, fontSize: Font.size_smallText, fontWeight: Font.weight_regular),
+                            color: Coloring.gray_10,
+                            fontSize: Font.size_smallText,
+                            fontWeight: Font.weight_regular),
                       ),
                     ))),
           ),
@@ -205,34 +218,40 @@ class _RegisterNameAgreementScreenState extends State<RegisterNameAgreementScree
           Container(
             margin: EdgeInsets.only(left: 34),
             child: TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.all(0),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.all(0),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              onPressed: () async {
+                bool result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CommonPolicyScreen(
+                              isChecked:
+                                  widget.provider.isOperatingPolicyAgreed,
+                              policyType: PolicyType.operating,
+                            )));
+                widget.provider.isOperatingPolicyAgreed = result;
+                print(result);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Coloring.gray_50,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: () async {
-                  bool result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CommonPolicyScreen(
-                                isChecked: widget.provider.isOperatingPolicyAgreed,
-                                policyType: PolicyType.operating,
-                              )));
-                  widget.provider.isOperatingPolicyAgreed = result;
-                  print(result);
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Coloring.gray_50,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                      child: Text(
-                        "상세 보기 >",
-                        style: TextStyle(
-                            color: Coloring.gray_10, fontSize: Font.size_smallText, fontWeight: Font.weight_regular),
-                      ),
-                    ))),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  child: Text(
+                    "상세 보기 >",
+                    style: TextStyle(
+                        color: Coloring.gray_10,
+                        fontSize: Font.size_smallText,
+                        fontWeight: Font.weight_regular),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

@@ -6,7 +6,12 @@ import 'package:modak_flutter_app/widgets/button/button_cancel_widget.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 
 void themeModalWidget(BuildContext context,
-    {title = "제목", des = "설명", Function? onOkPress, Function? onCancelPress}) {
+    {title = "제목",
+    String? des,
+    Function? onOkPress,
+    Function? onCancelPress,
+    String? okText,
+    String? cancelText}) {
   showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -21,20 +26,21 @@ void themeModalWidget(BuildContext context,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  des,
-                  style: EasyStyle.text(
-                      Colors.black, Font.size_smallText, Font.weight_regular),
-                ),
+                if (des != null)
+                  Text(
+                    des ?? "",
+                    style: EasyStyle.text(
+                        Colors.black, Font.size_smallText, Font.weight_regular),
+                  ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 24),
+                  padding: EdgeInsets.only(top: des != null ? 24 : 8),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
                           flex: 10,
                           child: ButtonCancelWidget(
-                              title: "취소",
+                              title: cancelText ?? "취소",
                               height: 40,
                               onPressed: () {
                                 if (onCancelPress != null) {
@@ -49,7 +55,7 @@ void themeModalWidget(BuildContext context,
                       Expanded(
                         flex: 20,
                         child: ButtonMainWidget(
-                            title: "완료",
+                            title: okText ?? "완료",
                             height: 40,
                             onPressed: () {
                               if (onOkPress != null) {

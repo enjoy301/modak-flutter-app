@@ -6,7 +6,10 @@ import 'package:get/get.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
+import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_function_icon_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
@@ -46,12 +49,74 @@ class _FunctionListWidget extends State<FunctionListWidget> {
       'icon': LightIcons.Message,
       'color': Coloring.point_pureorange
     },
-    {'name': "주제 던지기", 'icon': LightIcons.Chat, 'color': Coloring.bg_green}
+    {
+      'name': "주제 던지기",
+      'icon': LightIcons.Chat,
+      'color': Coloring.todo_lightgreen
+    }
   ];
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatProvider>(
-      builder: (context, provider, build) {
+    return Consumer2<UserProvider, ChatProvider>(
+      builder: (context, userProvider, chatProvider, build) {
+        /// 가족이 없을 때
+        if (userProvider.familyMembers.length == 1) {
+          return Container(
+            width: double.infinity,
+            height: 300,
+            color: Coloring.gray_50,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 48,
+                    bottom: 32,
+                  ),
+                  child: Text(
+                    "가족들과 함께 모닥의 기능들을 이용해보세요",
+                    style: EasyStyle.text(Coloring.gray_10,
+                        Font.size_mediumText, Font.weight_medium),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed("/user/invitation/landing");
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    margin: EdgeInsets.symmetric(horizontal: 30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          "lib/assets/images/others/il_letter.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: Text(
+                            "가족을 초대하세요",
+                            style: EasyStyle.text(Colors.black,
+                                Font.size_mediumText, Font.weight_medium),
+                          ),
+                        ),
+                        Expanded(child: SizedBox.shrink()),
+                        Icon(Icons.keyboard_arrow_right),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        /// 가족이 있을 때
         return SizedBox(
           height: 300,
           child: GridView(
@@ -64,11 +129,11 @@ class _FunctionListWidget extends State<FunctionListWidget> {
               ChatFunctionIconWidget(
                 data: functionIconWidgetValues[0],
                 onTap: () async {
-                  if (provider.albumFiles.isEmpty) {
+                  if (chatProvider.albumFiles.isEmpty) {
                     List<File> files = await getImageFromAlbum();
-                    await provider.loadAlbum(files);
+                    await chatProvider.loadAlbum(files);
                   }
-                  provider.chatMode = ChatMode.functionAlbum;
+                  chatProvider.chatMode = ChatMode.functionAlbum;
                 },
               ),
               ChatFunctionIconWidget(
@@ -82,7 +147,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                           Future(() => Navigator.pop(context));
 
                           File image = await getImageFromCamera();
-                          provider.postMediaFileFromCamera(
+                          chatProvider.postMediaFileFromCamera(
                             image,
                             "jpg",
                           );
@@ -93,7 +158,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                         onPressed: () async {
                           Future(() => Navigator.pop(context));
                           File video = await getVideoFromCamera();
-                          provider.postMediaFileFromCamera(
+                          chatProvider.postMediaFileFromCamera(
                             video,
                             "mp4",
                           );
@@ -108,7 +173,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                 data: functionIconWidgetValues[2],
                 onTap: () {
                   log("오는 길에~");
-                  provider.chatMode = ChatMode.functionOnway;
+                  chatProvider.chatMode = ChatMode.functionOnway;
                 },
               ),
               ChatFunctionIconWidget(
@@ -124,10 +189,10 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                   Get.toNamed("/chat/letter/landing");
                 },
               ),
-              // ChatFunctionIconWidget(
-              //   data: functionIconWidgetValues[5],
-              //   onTap: () {},
-              // )
+              ChatFunctionIconWidget(
+                data: functionIconWidgetValues[5],
+                onTap: () {},
+              )
             ],
           ),
         );

@@ -6,6 +6,7 @@ import 'package:modak_flutter_app/data/repository/user_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/auth/register/register_name_agreement_screen.dart';
 import 'package:modak_flutter_app/ui/auth/register/register_role_screen.dart';
+import 'package:modak_flutter_app/widgets/modal/theme_modal_widget.dart';
 import 'package:provider/provider.dart';
 
 class AuthRegisterVM extends ChangeNotifier {
@@ -92,20 +93,29 @@ class AuthRegisterVM extends ChangeNotifier {
     notifyListeners();
   }
 
-  void goPreviousPage() {
+  void goPreviousPage(BuildContext context) {
     if (page > 0) {
       _page -= 1;
     } else {
       _userRepository.setIsRegisterProgress(false);
-      Fluttertoast.showToast(msg: "회원가입 취소");
-      Get.offAllNamed("/auth/landing");
+      themeModalWidget(
+        context,
+        title: "회원가입을 종료하시겠습니까?",
+        okText: "회원가입 종료",
+        onOkPress: () {
+          Get.offAllNamed("/auth/landing");
+        },
+      );
     }
     notifyListeners();
   }
 
   bool getIsPageDone() {
     if (_page == 0) {
-      return _name.length > 2 && _birthDay != null && _isPrivateInformationAgreed && _isOperatingPolicyAgreed;
+      return _name.trim().length > 2 &&
+          _birthDay != null &&
+          _isPrivateInformationAgreed &&
+          _isOperatingPolicyAgreed;
     } else if (_page == 1) {
       return _role != "";
     }
@@ -134,9 +144,10 @@ class AuthRegisterVM extends ChangeNotifier {
     switch (response[Strings.message]) {
       case Strings.success:
         Fluttertoast.showToast(msg: "회원가입 성공");
-        await Future(() => context.read<UserProvider>().me = response[Strings.response][Strings.me]);
-        await Future(
-            () => context.read<UserProvider>().familyMembers = response[Strings.response][Strings.familyMembers]);
+        await Future(() => context.read<UserProvider>().me =
+            response[Strings.response][Strings.me]);
+        await Future(() => context.read<UserProvider>().familyMembers =
+            response[Strings.response][Strings.familyMembers]);
         Get.offAllNamed("/main");
         break;
       case Strings.valueAlreadyExist:

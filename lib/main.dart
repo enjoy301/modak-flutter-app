@@ -43,7 +43,6 @@ import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_screen.dart';
 import 'package:modak_flutter_app/ui/user/user_settings_screen.dart';
 import 'package:modak_flutter_app/utils/notification_controller.dart';
-import 'package:modak_flutter_app/utils/prefs_util.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -65,9 +64,6 @@ void main() async {
   await Hive.openBox('todo');
   await Hive.openBox('chat');
   await Hive.openBox('album');
-
-  // sharedPreference singleton 객체 생성
-  await PrefsUtil.init();
 
   // dotenv 파일 로드
   await dotenv.load();
@@ -102,7 +98,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialBinding: BindingsBuilder.put(() => NotificationController(context), permanent: true),
+      initialBinding: BindingsBuilder.put(() => NotificationController(context),
+          permanent: true),
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Font_Poppins',
@@ -145,8 +142,9 @@ class MyApp extends StatelessWidget {
             ),
         "/user/settings": (context) => UserSettingsScreen(),
         "/user/invitation/landing": (context) => UserInvitationLandingScreen(),
-        "/user/invitation/input": (context) =>
-            ChangeNotifierProvider(create: (_) => UserInvitationInputVM(), child: UserInvitationInputScreen()),
+        "/user/invitation/input": (context) => ChangeNotifierProvider(
+            create: (_) => UserInvitationInputVM(),
+            child: UserInvitationInputScreen()),
       },
     );
   }

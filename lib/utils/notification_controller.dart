@@ -34,7 +34,7 @@ class NotificationController extends GetxController {
   void _getToken() async {
     print("??");
     final authStatus = await messaging.requestPermission();
-    print(await messaging.getToken());
+    print("fcm token ${await messaging.getToken()}");
   }
 
   Future<void> setupFlutterNotifications() async {
@@ -55,12 +55,14 @@ class NotificationController extends GetxController {
     /// We use this channel in the `AndroidManifest.xml` file to override the
     /// default FCM channel to enable heads up notifications.
     await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     /// Update the iOS foreground notification presentation options to allow
     /// heads up notifications.
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
@@ -88,13 +90,15 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingForegroundHandler(
+      RemoteMessage message) async {
     await setupFlutterNotifications();
     _addNotification(message);
     showFlutterNotification(message);
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
     await Firebase.initializeApp();
     print("data values:${message.data.values}");
 
@@ -106,7 +110,7 @@ class NotificationController extends GetxController {
   }
 
   subscribe(String topic) {
-    messaging.subscribeToTopic("test");
+    messaging.subscribeToTopic(topic);
   }
 
   unsubscribe(String topic) {
@@ -128,13 +132,16 @@ class NotificationController extends GetxController {
 
   static void sendNotification(String title, String body) {
     Dio(BaseOptions(
-      headers: {"Content-Type": "application/json", "Authorization": "key=${dotenv.get("FCM_KEY")}"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "key=${dotenv.get("FCM_KEY")}"
+      },
     )).post(
       "https://fcm.googleapis.com/fcm/send",
       data: {
         "to": "/topics/FAM$_familyId",
         "notification": {
-          "title": title,
+          "title": "title",
           "body": body,
         },
         "data": {

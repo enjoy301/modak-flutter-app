@@ -4,7 +4,11 @@ import 'package:modak_flutter_app/constant/font.dart';
 
 class ButtonTextWidget extends StatelessWidget {
   const ButtonTextWidget(
-      {Key? key, required this.text, required this.onPressed, this.isValid = true, this.isColorStatic = false})
+      {Key? key,
+      required this.text,
+      required this.onPressed,
+      this.isValid = true,
+      this.isColorStatic = false})
       : super(key: key);
 
   final String text;
@@ -18,7 +22,9 @@ class ButtonTextWidget extends StatelessWidget {
       ignoring: !isValid,
       child: TextButton(
           onPressed: onPressed,
-          style: ButtonStyle(overlayColor: MaterialStateColor.resolveWith((states) => Coloring.gray_50)),
+          style: ButtonStyle(
+              overlayColor:
+                  MaterialStateColor.resolveWith((states) => Coloring.gray_50)),
           child: Text(
             text,
             style: TextStyle(
