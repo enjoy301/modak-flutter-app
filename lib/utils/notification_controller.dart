@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,20 +21,24 @@ class NotificationController extends GetxController {
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   static late String _familyId;
+  static late String _memberId;
 
   @override
   void onInit() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
     _familyId = (await RemoteDataSource.storage.read(key: Strings.familyId))!;
+    _memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
     _getToken();
-    subscribe("FAM$_familyId");
+    setSubscription();
+
     super.onInit();
   }
 
   void _getToken() async {
     print("??");
     final authStatus = await messaging.requestPermission();
+    print(authStatus.authorizationStatus);
     print("fcm token ${await messaging.getToken()}");
   }
 
@@ -72,12 +77,12 @@ class NotificationController extends GetxController {
   }
 
   void showFlutterNotification(RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    if (notification != null) {
+    Map<String, dynamic> data = message.data;
+    if (Platform.isAndroid) {
       flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
+        1,
+        data['title'],
+        data['body'],
         NotificationDetails(
           android: AndroidNotificationDetails(
             channel.id,
@@ -92,17 +97,23 @@ class NotificationController extends GetxController {
 
   Future<void> _firebaseMessagingForegroundHandler(
       RemoteMessage message) async {
+    /// setting and verifying
     await setupFlutterNotifications();
+
+    /// load and display
     _addNotification(message);
     showFlutterNotification(message);
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
-    await Firebase.initializeApp();
+    // await Firebase.initializeApp();
     print("data values:${message.data.values}");
 
+    /// setting and verifying
     await setupFlutterNotifications();
+
+    /// load and display
     _addNotification(message);
     showFlutterNotification(message);
 
@@ -130,7 +141,8 @@ class NotificationController extends GetxController {
     );
   }
 
-  static void sendNotification(String title, String body) {
+  static void sendNotification(String title, String body, String type,
+      {List<String> memberIds = const [], String develop = ""}) {
     Dio(BaseOptions(
       headers: {
         "Content-Type": "application/json",
@@ -139,17 +151,59 @@ class NotificationController extends GetxController {
     )).post(
       "https://fcm.googleapis.com/fcm/send",
       data: {
-        "to": "/topics/FAM$_familyId",
+        "to": "/topics/FAM$_familyId$type",
         "notification": {
-          "title": "title",
+          "title": title,
           "body": body,
         },
         "data": {
-          "type": 0,
           "title": title,
-          "des": body,
+          "body": body,
+          'develop': develop,
+          "type": type,
+          "memberIds": memberIds,
         }
       },
     );
   }
+
+  void setSubscription() {
+    bool todoAlarmReceive = context.read<UserProvider>().todoAlarmReceive;
+    bool chatAlarmReceive = context.read<UserProvider>().chatAlarmReceive;
+    subscribe("FAM$_familyId");
+    todoAlarmReceive
+        ? subscribe("FAM${_familyId}todo")
+        : unsubscribe("FAM${_familyId}todo");
+    chatAlarmReceive
+        ? subscribe("FAM${_familyId}chat")
+        : unsubscribe("FAM${_familyId}chat");
+  }
+
+  // bool _checkNotification(RemoteMessage message) {
+  //   bool memberCheck = false;
+  //   bool typeCheck = false;
+  //   bool todoAlarmReceive = context.read<UserProvider>().todoAlarmReceive;
+  //   bool chatAlarmReceive = context.read<UserProvider>().chatAlarmReceive;
+  //
+  //   List<String> memberIds =
+  //       json.decode(message.data['memberIds']).cast<String>().toList();
+  //
+  //   String type = message.data['type'];
+  //
+  //   if (message.data['develop'] == 'force') {
+  //     return true;
+  //   }
+  //   if (memberIds.isEmpty || memberIds.contains(_memberId)) {
+  //     memberCheck = true;
+  //   }
+  //   if (type == 'all' ||
+  //       (type == 'todo' && todoAlarmReceive) ||
+  //       (type == 'chat' && chatAlarmReceive)) {
+  //     typeCheck = true;
+  //   }
+  //
+  //   print(memberCheck);
+  //   print(typeCheck);
+  //   return memberCheck && typeCheck;
+  // }
 }

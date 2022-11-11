@@ -63,11 +63,6 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                // GestureDetector(
-                //     onTap: () {
-                //       NotificationController.sendNotification("title", "body");
-                //     },
-                //     child: Text("FCM 보내보기")),
                 HomePictureWidget(),
                 HomeFamilyTalkWidget(
                   dateTime: DateTime.now(),

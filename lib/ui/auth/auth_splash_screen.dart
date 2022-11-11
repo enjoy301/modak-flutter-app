@@ -6,6 +6,7 @@ import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/auth/auth_splash_VM.dart';
+import 'package:modak_flutter_app/utils/provider_controller.dart';
 import 'package:provider/provider.dart';
 
 class AuthSplashScreen extends StatefulWidget {
@@ -18,8 +19,10 @@ class AuthSplashScreen extends StatefulWidget {
 class _AuthSplashScreenState extends State<AuthSplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer6<UserProvider, HomeProvider, TodoProvider, ChatProvider, AlbumProvider, AuthSplashVM>(
-      builder: (context, userProvider, homeProvider, todoProvider, chatProvider, albumProvider, provider, child) {
+    return Consumer6<UserProvider, HomeProvider, TodoProvider, ChatProvider,
+        AlbumProvider, AuthSplashVM>(
+      builder: (context, userProvider, homeProvider, todoProvider, chatProvider,
+          albumProvider, provider, child) {
         return FutureBuilder(
           future: Future<void>(
             () async {
@@ -28,12 +31,8 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
               String redirectionPath = await provider.init();
 
               if (redirectionPath == "/main") {
-                /// 로컬 DB 데이터 메모리에 올림
-                await homeProvider.init();
-                await userProvider.init();
-                await todoProvider.init();
-                await chatProvider.init();
-                await albumProvider.init();
+                await Future(() async =>
+                    await ProviderController.startProviders(context));
               }
 
               /// redirection

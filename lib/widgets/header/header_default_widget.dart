@@ -9,8 +9,8 @@ AppBar headerDefaultWidget({
   String title = "",
   IconButton? customLeading,
   IconButton? customTrailing,
-  FunctionalIcon leading = FunctionalIcon.none,
-  FunctionalIcon trailing = FunctionalIcon.none,
+  FunctionalIcon? leading,
+  FunctionalIcon? trailing,
   Function()? onClickLeading,
   Function()? onClickTrailing,
   Color? bgColor = Coloring.gray_50,
@@ -49,23 +49,20 @@ AppBar headerDefaultWidget({
     ),
   };
   return AppBar(
-    leading: IconButton(
-      onPressed: onClickLeading ??
-          () {
-            Get.back();
-          },
-      icon: Icon(
-        LightIcons.ArrowLeft2,
-        color: Colors.black,
-      ),
-    ),
-    actions: [
-      customTrailing ??
-          TextButton(
-            onPressed: onClickTrailing,
-            child: iconData[trailing]!,
-          )
-    ],
+    leading: customLeading ??
+        IconButton(
+          onPressed: onClickLeading ??
+              () {
+                Get.back();
+              },
+          icon: leading == null
+              ? Icon(
+                  LightIcons.ArrowLeft2,
+                  color: Colors.black,
+                )
+              : iconData[leading]!,
+        ),
+    actions: [],
     centerTitle: true,
     title: Text(title,
         style: TextStyle(

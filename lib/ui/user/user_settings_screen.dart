@@ -7,6 +7,7 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_policy_screen.dart';
+import 'package:modak_flutter_app/utils/notification_controller.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -58,8 +59,11 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Container(
-                padding: EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
-                decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(20)),
+                padding:
+                    EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -68,6 +72,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                       value: userProvider.todoAlarmReceive,
                       onToggle: (bool value) {
                         userProvider.todoAlarmReceive = value;
+                        NotificationController(context).setSubscription();
                       },
                       activeColor: Colors.blueAccent,
                       inactiveColor: Colors.grey[400]!,
@@ -79,8 +84,11 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Container(
-                padding: EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
-                decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(20)),
+                padding:
+                    EdgeInsets.only(top: 10, right: 20, bottom: 10, left: 30),
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -89,6 +97,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                       value: userProvider.chatAlarmReceive,
                       onToggle: (bool value) {
                         userProvider.chatAlarmReceive = value;
+                        NotificationController(context).setSubscription();
                       },
                       activeColor: Colors.blueAccent,
                       inactiveColor: Colors.grey[400]!,
@@ -109,7 +118,8 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(CommonPolicyScreen(policyType: PolicyType.private, withCheck: false));
+                  Get.to(CommonPolicyScreen(
+                      policyType: PolicyType.private, withCheck: false));
                 },
                 child: Container(
                   width: double.infinity,

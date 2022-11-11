@@ -13,6 +13,7 @@ import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_modify_screen.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
+import 'package:modak_flutter_app/utils/notification_controller.dart';
 import 'package:modak_flutter_app/widgets/common/pressed_timer_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/theme_modal_widget.dart';
@@ -138,6 +139,11 @@ class _TodoLandingListState extends State<TodoLandingList> {
                               color: Colors.black,
                             ),
                             'onTap': () {
+                              NotificationController.sendNotification(
+                                "감사 표현",
+                                "${userProvider.me!.name}님이 ${userProvider.findUserById(todo.memberId)?.name ?? "당신"}에게 감사를 표 합니다",
+                                'todo',
+                              );
                               Get.back();
                             }
                           }

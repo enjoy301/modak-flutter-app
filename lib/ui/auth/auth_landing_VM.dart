@@ -6,6 +6,7 @@ import 'package:get/route_manager.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/utils/provider_controller.dart';
 import 'package:provider/provider.dart';
 
 class AuthLandingVM extends ChangeNotifier {
@@ -21,10 +22,12 @@ class AuthLandingVM extends ChangeNotifier {
     Map<String, dynamic> response = await userRepository!.socialLogin(type);
     switch (response[Strings.message]) {
       case Strings.success:
+        await Future(() => context.read<UserProvider>().familyMembers =
+            response[Strings.response][Strings.familyMembers]);
+        await Future(() => context.read<UserProvider>().me =
+            response[Strings.response][Strings.me]);
         await Future(
-            () => context.read<UserProvider>().familyMembers = response[Strings.response][Strings.familyMembers]);
-        await Future(() => context.read<UserProvider>().me = response[Strings.response][Strings.me]);
-
+            () async => await ProviderController.startProviders(context));
         log(response.toString());
         Fluttertoast.showToast(msg: "로그인에 성공하셨습니다");
         Get.offAllNamed("/auth/splash");

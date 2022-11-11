@@ -6,6 +6,7 @@ import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
+import 'package:modak_flutter_app/widgets/common/colored_safe_area.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/modal_check_widget.dart';
 import 'package:modak_flutter_app/widgets/user/user_profile_widget.dart';
@@ -21,57 +22,39 @@ class UserLandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(builder: (context, userProvider, child) {
-      return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: headerDefaultWidget(
+      return ColoredSafeArea(
+        color: Colors.white,
+        child: Scaffold(
+            backgroundColor: Coloring.gray_50,
+            appBar: headerDefaultWidget(
               title: "유저",
               customLeading: IconButton(
-                  onPressed: () {
-                    Get.toNamed("/user/settings");
-                  },
-                  icon: Icon(
-                    Icons.settings,
-                    color: Coloring.gray_0,
-                  ))),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                right: 30,
-                left: 30,
+                onPressed: () {
+                  Get.toNamed("/user/settings");
+                },
+                icon: Icon(
+                  Icons.settings,
+                  color: Coloring.gray_0,
+                ),
               ),
-              child: Column(
-                children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 32, bottom: 16),
-                        child: UserProfileWidget(
-                          user: userProvider.me,
-                          onPressed: () {
-                            Get.toNamed("/user/modify");
-                          },
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  right: 30,
+                  left: 30,
+                ),
+                child: Column(
+                  children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 32, bottom: 16),
+                          child: UserProfileWidget(
+                            user: userProvider.me,
+                            onPressed: () {
+                              Get.toNamed("/user/modify");
+                            },
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 1,
-                          color: Coloring.gray_40,
-                        ),
-                      )
-                    ] +
-                    userProvider.familyMembersWithoutMe
-                        .map((familyMember) => Padding(
-                              padding: const EdgeInsets.only(top: 16, bottom: 16),
-                              child: UserProfileWidget(
-                                user: familyMember,
-                                onPressed: () {
-                                  Get.to(UserFamilyModifyScreen(familyMember: familyMember));
-                                },
-                              ),
-                            ))
-                        .toList() +
-                    <Widget>[
-                      if (userProvider.familyMembersWithoutMe.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: Container(
@@ -79,56 +62,83 @@ class UserLandingScreen extends StatelessWidget {
                             height: 1,
                             color: Coloring.gray_40,
                           ),
+                        )
+                      ] +
+                      userProvider.familyMembersWithoutMe
+                          .map((familyMember) => Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 16, bottom: 16),
+                                child: UserProfileWidget(
+                                  user: familyMember,
+                                  onPressed: () {
+                                    Get.to(UserFamilyModifyScreen(
+                                        familyMember: familyMember));
+                                  },
+                                ),
+                              ))
+                          .toList() +
+                      <Widget>[
+                        if (userProvider.familyMembersWithoutMe.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Container(
+                              width: double.infinity,
+                              height: 1,
+                              color: Coloring.gray_40,
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: ButtonMainWidget(
+                            title: "초대 코드",
+                            onPressed: () {
+                              Get.toNamed("/user/invitation/landing");
+                            },
+                          ),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: ButtonMainWidget(
-                          title: "초대 코드",
-                          onPressed: () {
-                            Get.toNamed("/user/invitation/landing");
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 48),
-                        child: ButtonMainWidget(
-                          title: "로그아웃",
-                          onPressed: () {
-                            modalCheckWidget(context, title: "정말 로그아웃 하시겠습니까?", okText: "로그아웃", noText: "취소",
-                                onOkPressed: () {
-                              userProvider.logout(context);
-                            }, onNoPressed: () {
-                              Get.back();
-                            });
-                          },
-                          // onPressed: provider.navigateToFamilyInfo(),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 48),
-                        child: ButtonMainWidget(
-                          title: "회원탈퇴",
-                          onPressed: () {
-                            modalCheckWidget(
-                              context,
-                              title: "정말 회원탈퇴 하시겠습니까?",
-                              okText: "회원탈퇴",
-                              noText: "취소",
-                              onOkPressed: () {
-                                userProvider.withdraw(context);
-                              },
-                              onNoPressed: () {
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 48),
+                          child: ButtonMainWidget(
+                            title: "로그아웃",
+                            onPressed: () {
+                              modalCheckWidget(context,
+                                  title: "정말 로그아웃 하시겠습니까?",
+                                  okText: "로그아웃",
+                                  noText: "취소", onOkPressed: () {
+                                userProvider.logout(context);
+                              }, onNoPressed: () {
                                 Get.back();
-                              },
-                            );
-                          },
-                          // onPressed: provider.navigateToFamilyInfo(),
+                              });
+                            },
+                            // onPressed: provider.navigateToFamilyInfo(),
+                          ),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 48),
+                          child: ButtonMainWidget(
+                            title: "회원탈퇴",
+                            onPressed: () {
+                              modalCheckWidget(
+                                context,
+                                title: "정말 회원탈퇴 하시겠습니까?",
+                                okText: "회원탈퇴",
+                                noText: "취소",
+                                onOkPressed: () {
+                                  userProvider.withdraw(context);
+                                },
+                                onNoPressed: () {
+                                  Get.back();
+                                },
+                              );
+                            },
+                            // onPressed: provider.navigateToFamilyInfo(),
+                          ),
+                        ),
+                      ],
+                ),
               ),
-            ),
-          ));
+            )),
+      );
     });
   }
 }

@@ -65,7 +65,10 @@ class UserRepository {
         User me = updateResult[0];
         List<User> familyMembers = updateResult[1];
         return {
-          Strings.response: {Strings.me: me, Strings.familyMembers: familyMembers},
+          Strings.response: {
+            Strings.me: me,
+            Strings.familyMembers: familyMembers
+          },
           Strings.message: Strings.success,
         };
       }
@@ -87,8 +90,8 @@ class UserRepository {
     if ([name, birthDay, role].contains(null)) {
       return {Strings.message: Strings.noValue};
     }
-    Map<String, dynamic> response =
-        await remoteDataSource.signUp(name!, birthDay!, isLunar ? 1 : 0, role!, "fcmToken", -1);
+    Map<String, dynamic> response = await remoteDataSource.signUp(
+        name!, birthDay!, isLunar ? 1 : 0, role!, "fcmToken", -1);
     if (response[Strings.result]) {
       await localDataSource.updateIsRegisterProgress(false);
 
@@ -125,7 +128,10 @@ class UserRepository {
 
       return {
         Strings.message: Strings.success,
-        Strings.response: {Strings.me: me, Strings.familyMembers: newFamilyMembers}
+        Strings.response: {
+          Strings.me: me,
+          Strings.familyMembers: newFamilyMembers
+        }
       };
     }
     return {Strings.message: Strings.fail};
@@ -133,7 +139,9 @@ class UserRepository {
 
   Future<Map<String, dynamic>> deleteMe() async {
     Map<String, dynamic> response = await remoteDataSource.deleteMe();
-    return {Strings.message: response[Strings.result] ? Strings.success : Strings.fail};
+    return {
+      Strings.message: response[Strings.result] ? Strings.success : Strings.fail
+    };
   }
 
   Future<Map<String, dynamic>> updateMeTag(List<String> tags) async {
@@ -152,7 +160,9 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> updateFamilyId(String familyCode) async {
-    Map<String, dynamic> response = await remoteDataSource.updateFamilyId(familyCode);
+    familyCode = familyCode.trim();
+    Map<String, dynamic> response =
+        await remoteDataSource.updateFamilyId(familyCode);
     if (response[Strings.result]) {
       return {Strings.message: Strings.success};
     }
@@ -217,7 +227,8 @@ class UserRepository {
   }
 
   void setBirthDay(DateTime birthDay) async {
-    await localDataSource.updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
+    await localDataSource
+        .updateBirthDay(DateFormat("yyyy-MM-dd").format(birthDay));
   }
 
   void setIsLunar(bool isLunar) async {
@@ -262,7 +273,8 @@ class UserRepository {
   }
 
   Future<List> updateMeAndFamilyInfo(Map<String, dynamic> response) async {
-    Map<String, dynamic> meRaw = response['response'].data['data'][Strings.memberResult];
+    Map<String, dynamic> meRaw =
+        response['response'].data['data'][Strings.memberResult];
     User me = User(
         memberId: meRaw[Strings.memberId],
         name: meRaw[Strings.name],
@@ -271,10 +283,13 @@ class UserRepository {
         role: meRaw[Strings.role],
         fcmToken: "",
         color: meRaw[Strings.color],
-        timeTags: meRaw['tags'] == null ? List<String>.from([]) : List<String>.from(meRaw['tags']));
+        timeTags: meRaw['tags'] == null
+            ? List<String>.from([])
+            : List<String>.from(meRaw['tags']));
 
     List<User> familyMembers = [me];
-    for (Map<String, dynamic> familyMemberRaw in response['response'].data['data'][Strings.familyMembersResult]) {
+    for (Map<String, dynamic> familyMemberRaw
+        in response['response'].data['data'][Strings.familyMembersResult]) {
       User familyMember = User(
           memberId: familyMemberRaw[Strings.memberId],
           name: familyMemberRaw[Strings.name],

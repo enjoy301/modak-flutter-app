@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/dark/DarkIcons_icons.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
+import 'package:modak_flutter_app/widgets/chat/chat_input_widget.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -46,54 +46,21 @@ class _InputChatWidget extends State<InputChatWidget> {
                 },
                 icon: Icon(
                   LightIcons.Plus,
-                  size: 20,
                 ),
               ),
 
               /// row 2번 채팅 입력 부분
               Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 6),
-                  constraints: BoxConstraints(maxHeight: 100),
-                  child: TextFormField(
-                    focusNode: _focusNode,
-                    style: TextStyle(
-                      fontSize: Font.size_largeText,
-                      fontWeight: Font.weight_regular,
-                    ),
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    controller: textEditingController,
-                    onTap: () {
-                      provider.chatMode = ChatMode.textInput;
-                    },
-                    onChanged: (String input) {
-                      provider.setCurrentInput(input);
-                    },
-                    cursorColor: Coloring.gray_0,
-                    decoration: InputDecoration(
-                        hintText: "메시지를 입력하세요",
-                        hintStyle: TextStyle(color: Coloring.gray_30),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 6, horizontal: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(17),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Coloring.gray_30, width: 2),
-                          borderRadius: BorderRadius.circular(17),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Coloring.gray_20, width: 2),
-                          borderRadius: BorderRadius.circular(17),
-                        ),
-                        filled: true,
-                        fillColor: Coloring.gray_50),
-                  ),
-                ),
-              ),
+                  child: ChatInputWidget(
+                textEditingController: textEditingController,
+                focusNode: _focusNode,
+                onTap: () {
+                  provider.chatMode = ChatMode.textInput;
+                },
+                onChanged: (String input) {
+                  provider.setCurrentInput(input);
+                },
+              )),
 
               /// row 3번 전송 or 하트 버튼
               provider.currentInput.trim() != ""
