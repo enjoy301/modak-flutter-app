@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/repository/user_repository.dart';
+import 'package:modak_flutter_app/utils/notification_controller.dart';
 
 class UserInvitationInputVM extends ChangeNotifier {
   UserInvitationInputVM() {
@@ -23,10 +24,11 @@ class UserInvitationInputVM extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> updateFamilyCode() async {
+  Future<bool> updateFamilyCode(BuildContext context) async {
     Map<String, dynamic> response =
         await _userRepository.updateFamilyId(familyCode);
     if (response[Strings.message] == Strings.success) {
+      await Future(() => NotificationController(context).unSubscribeAll());
       Fluttertoast.showToast(msg: "성공적으로 가족을 바꾸었습니다.");
       return true;
     }

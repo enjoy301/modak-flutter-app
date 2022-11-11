@@ -9,6 +9,7 @@ import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
+import 'package:modak_flutter_app/utils/notification_controller.dart';
 import 'package:provider/provider.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -137,6 +138,9 @@ class UserProvider extends ChangeNotifier {
     context.read<AlbumProvider>().clear();
     clear();
 
+    /// 가족 구독 모두 취소
+    NotificationController(context).unSubscribeAll();
+
     /// 스토리지 데이터 전부 삭제
     await _userRepository.clearStorage();
 
@@ -148,6 +152,7 @@ class UserProvider extends ChangeNotifier {
     switch (response[Strings.message]) {
       case Strings.success:
         await Future(() async => await logout(context));
+
         Fluttertoast.showToast(msg: "성공적으로 회원탈퇴");
         break;
       case Strings.fail:

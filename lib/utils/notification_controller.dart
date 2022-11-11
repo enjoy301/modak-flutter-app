@@ -179,6 +179,12 @@ class NotificationController extends GetxController {
         : unsubscribe("FAM${_familyId}chat");
   }
 
+  void unSubscribeAll() {
+    unsubscribe("FAM$_familyId");
+    unsubscribe("FAM${_familyId}todo");
+    unsubscribe("FAM${_familyId}chat");
+  }
+
   // bool _checkNotification(RemoteMessage message) {
   //   bool memberCheck = false;
   //   bool typeCheck = false;

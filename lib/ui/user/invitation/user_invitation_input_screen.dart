@@ -11,7 +11,8 @@ class UserInvitationInputScreen extends StatefulWidget {
   const UserInvitationInputScreen({Key? key}) : super(key: key);
 
   @override
-  State<UserInvitationInputScreen> createState() => _UserInvitationInputScreenState();
+  State<UserInvitationInputScreen> createState() =>
+      _UserInvitationInputScreenState();
 }
 
 class _UserInvitationInputScreenState extends State<UserInvitationInputScreen> {
@@ -34,7 +35,10 @@ class _UserInvitationInputScreenState extends State<UserInvitationInputScreen> {
                 Expanded(flex: 1, child: SizedBox()),
                 Text("가족 코드를 입력해주세요",
                     style: TextStyle(
-                        color: Colors.grey[700], fontSize: Font.size_h4, fontWeight: Font.weight_regular, height: 3)),
+                        color: Colors.grey[700],
+                        fontSize: Font.size_h4,
+                        fontWeight: Font.weight_regular,
+                        height: 3)),
                 ConstrainedBox(
                   constraints: BoxConstraints(minWidth: 36),
                   child: IntrinsicWidth(
@@ -61,11 +65,12 @@ class _UserInvitationInputScreenState extends State<UserInvitationInputScreen> {
         ),
         bottomSheet: Container(
           color: Colors.white,
-          padding: const EdgeInsets.only(top: 16, bottom: 48, right: 30, left: 30),
+          padding:
+              const EdgeInsets.only(top: 16, bottom: 48, right: 30, left: 30),
           child: ButtonMainWidget(
             title: "가족 연결하기",
             onPressed: () async {
-              bool isSuccessful = await provider.updateFamilyCode();
+              bool isSuccessful = await provider.updateFamilyCode(context);
               if (isSuccessful) {
                 Get.offAllNamed("/auth/splash");
               }
