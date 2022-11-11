@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:modak_flutter_app/widgets/album/album_label_detail_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/album_provider.dart';
@@ -35,7 +37,7 @@ class _AlbumThemeWidgetState extends State<AlbumThemeWidget> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print("wow");
+                        Get.to(() => AlbumLabelDetailWidget(), arguments: provider.labelDataList[faceIndex]['label']);
                       },
                       child: Image.file(
                         provider.labelFileList[faceIndex],

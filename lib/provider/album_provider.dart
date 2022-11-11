@@ -47,6 +47,22 @@ class AlbumProvider extends ChangeNotifier {
 
   late bool isInfinityScrollLoading;
 
+  late int faceLastId;
+
+  late List<File> _faceDetailFileList = [];
+  get faceDetailFileList => _faceDetailFileList;
+
+  late ScrollController _faceScrollController;
+  ScrollController get faceScrollController => _faceScrollController;
+
+  late int labelLastId;
+
+  late List<File> _labelDetailFileList;
+  get labelDetailFileList => _labelDetailFileList;
+
+  late ScrollController _labelScrollController;
+  ScrollController get labelScrollController => _labelScrollController;
+
   Future initTotalData() async {
     _albumBuildFileList = [];
     _faceDataList = [];
@@ -131,7 +147,77 @@ class AlbumProvider extends ChangeNotifier {
     Fluttertoast.showToast(msg: "앨범 성공적으로 불러옴");
   }
 
-  Future initFaceView() async {}
+  Future initFaceView(int clusterId) async {
+    faceLastId = 0;
+    _faceDetailFileList = [];
+    _faceScrollController = ScrollController();
+
+    Map<String, dynamic> faceResponse = await _albumRepository.getFaceDetail(faceLastId, 10, clusterId);
+
+    if (faceResponse['result'] == Strings.fail) {
+      return;
+    }
+
+    List<dynamic> faceData = jsonDecode(faceResponse['response']['data']);
+
+    if (faceData.isNotEmpty) {
+      faceLastId = faceData.last[0];
+    }
+
+    List<dynamic> requestList = [];
+    for (List<dynamic> f in faceData) {
+      requestList.add({'key': f[1]});
+    }
+
+    if (requestList.isNotEmpty) {
+      Map<String, dynamic> mediaFileListResponse = await loadMedia(requestList);
+      if (mediaFileListResponse['result'] == Strings.fail) {
+        return;
+      }
+
+      for (File file in mediaFileListResponse['response']) {
+        _faceDetailFileList.add(file);
+      }
+    }
+
+    return;
+  }
+
+  Future initLabelView(String labelName) async {
+    labelLastId = 0;
+    _labelDetailFileList = [];
+    _labelScrollController = ScrollController();
+
+    Map<String, dynamic> labelResponse = await _albumRepository.getLabelDetail(labelLastId, 10, labelName);
+
+    if (labelResponse['result'] == Strings.fail) {
+      return;
+    }
+
+    List<dynamic> labelData = jsonDecode(labelResponse['response']['data']);
+
+    if (labelData.isNotEmpty) {
+      labelLastId = labelData.last[0];
+    }
+
+    List<dynamic> requestList = [];
+    for (List<dynamic> f in labelData) {
+      requestList.add({'key': f[1]});
+    }
+
+    if (requestList.isNotEmpty) {
+      Map<String, dynamic> mediaFileListResponse = await loadMedia(requestList);
+      if (mediaFileListResponse['result'] == Strings.fail) {
+        return;
+      }
+
+      for (File file in mediaFileListResponse['response']) {
+        _labelDetailFileList.add(file);
+      }
+    }
+
+    return;
+  }
 
   /// 미디어 info를 넘기면, 디렉토리에서 찾던 다운하던 로드하고 로드된 파일을 리턴함.
   Future<Map<String, dynamic>> loadMedia(List<dynamic> mediaInfoList) async {

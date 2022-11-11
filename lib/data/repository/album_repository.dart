@@ -58,6 +58,34 @@ class AlbumRepository {
     return {Strings.message: Strings.fail};
   }
 
+  Future<Map<String, dynamic>> getFaceDetail(int lastId, int count, int clusterId) async {
+    Map<String, dynamic> response = await remoteDataSource.getFaceDetail(lastId, count, clusterId);
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "data": response["response"].data,
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
+  Future<Map<String, dynamic>> getLabelDetail(int lastId, int count, String labelName) async {
+    Map<String, dynamic> response = await remoteDataSource.getLabelDetail(lastId, count, labelName);
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "data": response["response"].data,
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
   Future<Map<String, dynamic>> getMediaURL(List<dynamic> requestList) async {
     Map<String, dynamic> response = await remoteDataSource.getMediaDownloadURL(requestList);
 

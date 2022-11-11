@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'album_face_detail_widget.dart';
 
 class AlbumFaceWidget extends StatefulWidget {
   const AlbumFaceWidget({Key? key}) : super(key: key);
@@ -34,7 +37,7 @@ class _AlbumFaceWidgetState extends State<AlbumFaceWidget> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print("wow");
+                        Get.to(() => AlbumFaceDetailWidget(), arguments: provider.faceDataList[faceIndex]['cid']);
                       },
                       child: Image.file(
                         provider.faceFileList[faceIndex],
