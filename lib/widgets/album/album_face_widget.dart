@@ -37,7 +37,10 @@ class _AlbumFaceWidgetState extends State<AlbumFaceWidget> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => AlbumFaceDetailWidget(), arguments: provider.faceDataList[faceIndex]['cid']);
+                        Get.to(
+                          AlbumFaceDetailWidget(),
+                          arguments: provider.faceDataList[faceIndex]['cid'],
+                        );
                       },
                       child: Image.file(
                         provider.faceFileList[faceIndex],

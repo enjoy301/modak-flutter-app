@@ -41,7 +41,7 @@ class ChatProvider extends ChangeNotifier {
 
   late List<Chat> _chats = [];
   List<Chat> get chats => _chats;
-  final Map<int, Map<String, dynamic>> _connections = {};
+  late Map<String, Map<dynamic, dynamic>> _connections;
   int _disconnectCount = 0;
   late int _lastChatId;
 
@@ -90,13 +90,20 @@ class ChatProvider extends ChangeNotifier {
   late String _mediaDirectory;
   String get mediaDirectory => _mediaDirectory;
 
+  late bool _isDownButtonShow;
+  bool get isDownButtonShow => _isDownButtonShow;
+
+  late double _screenHeight;
+
   ///
   /// [함수]
   ///
 
   /// 채팅 페이지 빌드 시 초기화 로직들 모음
   Future initial(BuildContext context) async {
+    _connections = {};
     isBottom = true;
+    _isDownButtonShow = false;
     _lastChatId = 0;
     _scrollController = ScrollController();
     _chatMode = ChatMode.textInput;
@@ -105,6 +112,7 @@ class ChatProvider extends ChangeNotifier {
     _albumThumbnailFiles = {};
     _chatThumbnailFiles = {};
     _mediaDirectory = await FileSystemUtil.getMediaDirectory();
+    _screenHeight = MediaQuery.of(context).size.height;
 
     _memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
     _familyId = (await RemoteDataSource.storage.read(key: Strings.familyId))!;
@@ -139,8 +147,7 @@ class ChatProvider extends ChangeNotifier {
     );
 
     /// 현재 connection 불러오기
-    Map<String, dynamic> connectionResponse =
-        await _chatRepository.getConnections();
+    Map<String, dynamic> connectionResponse = await _chatRepository.getConnections();
 
     if (connectionResponse[Strings.message] == Strings.fail) {
       Fluttertoast.showToast(msg: "커넥션 불러오기 실패");
@@ -148,18 +155,18 @@ class ChatProvider extends ChangeNotifier {
     }
 
     _disconnectCount = 0;
-    for (Map<String, dynamic> connection in connectionResponse['response']
-        ['data']) {
-      if (connection['memberId'] == _memberId) {
+    for (String uid in connectionResponse['response']['data'].keys) {
+      final Map<dynamic, dynamic> connection = connectionResponse['response']['data'][uid];
+
+      if (uid == _memberId) {
         connection['joining'] = true;
+      } else {
+        if (connection['joining'] == false) {
+          _disconnectCount++;
+        }
       }
-      if (connection['joining'] == false) {
-        _disconnectCount++;
-      }
-      connection['lastJoined'] =
-          DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch /
-              1000;
-      _connections[connection['memberId']] = connection;
+      connection['lastJoined'] = DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch / 1000 + 32400;
+      _connections[uid] = connection;
     }
 
     await Future(() => updateChat(context));
@@ -216,8 +223,7 @@ class ChatProvider extends ChangeNotifier {
         Chat(
           userId: message['memberId'],
           content: message['content'],
-          sendAt:
-              DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000,
+          sendAt: DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000,
           metaData: message['metaData'],
           unReadCount: _disconnectCount,
         ),
@@ -232,12 +238,10 @@ class ChatProvider extends ChangeNotifier {
     if (isJoining) {
       _disconnectCount--;
     } else {
-      connection['lastJoined'] =
-          DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch /
-              1000;
+      connection['lastJoined'] = DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch / 1000 + 32400;
       _disconnectCount++;
     }
-    _connections[id] = connection;
+    _connections[id.toString()] = connection;
 
     updateUnreadCount();
   }
@@ -250,7 +254,6 @@ class ChatProvider extends ChangeNotifier {
           continue;
         }
 
-        /// 현재 접속 중이 아니면서 && chat 보낸 시점보다 lastJoined가 더 작을 때 (더 옛날)
         if (chat.sendAt > connection['lastJoined']) {
           unReadCount++;
         }
@@ -275,8 +278,7 @@ class ChatProvider extends ChangeNotifier {
       context,
     );
 
-    Map<String, dynamic> response =
-        await _chatRepository.postChat(chat, metaData: metaData);
+    Map<String, dynamic> response = await _chatRepository.postChat(chat, metaData: metaData);
 
     if (response['message'] == Strings.fail) {
       _chats.removeAt(0);
@@ -312,8 +314,7 @@ class ChatProvider extends ChangeNotifier {
       compressedFiles,
     );
 
-    Map<String, dynamic> urlResponse =
-        await _chatRepository.getMediaUploadUrl();
+    Map<String, dynamic> urlResponse = await _chatRepository.getMediaUploadUrl();
 
     if (urlResponse['message'] == Strings.fail) {
       return;
@@ -352,11 +353,9 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
 
     /// 로직 작업
-    Map<String, dynamic> urlResponse =
-        await _chatRepository.getMediaUploadUrl();
+    Map<String, dynamic> urlResponse = await _chatRepository.getMediaUploadUrl();
     if (urlResponse['message'] == Strings.success) {
-      Map<String, dynamic> mediaUrlData =
-          jsonDecode(urlResponse['response']['data']);
+      Map<String, dynamic> mediaUrlData = jsonDecode(urlResponse['response']['data']);
 
       /// 압축 로직
       List<File> compressedImageFiles = [];
@@ -453,8 +452,7 @@ class ChatProvider extends ChangeNotifier {
 
   /// 채팅리스트에 앞에 추가합니다.
   void addNewChat(Chat chat, BuildContext context) async {
-    if (chat.metaData!['type_code'] == 'image' ||
-        chat.metaData!['type_code'] == 'video') {
+    if (chat.metaData!['type_code'] == 'image' || chat.metaData!['type_code'] == 'video') {
       List<Map<String, String>> mediaKeyList = [];
       for (String key in chat.metaData!['key']) {
         mediaKeyList.add({"key": key});
@@ -463,8 +461,7 @@ class ChatProvider extends ChangeNotifier {
         await context.read<AlbumProvider>().loadMedia(mediaKeyList);
 
         if ((mediaKeyList[0]["key"])!.endsWith('.mp4')) {
-          _chatThumbnailFiles[mediaKeyList[0]["key"]!] =
-              await getVideoThumbnailFile(
+          _chatThumbnailFiles[mediaKeyList[0]["key"]!] = await getVideoThumbnailFile(
             File(
               "$_mediaDirectory/${mediaKeyList[0]["key"]!}",
             ),
@@ -485,7 +482,6 @@ class ChatProvider extends ChangeNotifier {
     List<File> fileList = [];
 
     for (dynamic key in keys) {
-      log("$key");
       fileList.add(File("$_mediaDirectory/${key as String}"));
     }
 
@@ -497,8 +493,7 @@ class ChatProvider extends ChangeNotifier {
     scrollController.addListener(
       () async {
         /// 채팅 아래 계속 붙어 있는 state 관리
-        if (scrollController.offset ==
-                scrollController.position.minScrollExtent &&
+        if (scrollController.offset == scrollController.position.minScrollExtent &&
             !scrollController.position.outOfRange) {
           isBottom = true;
         } else {
@@ -506,8 +501,7 @@ class ChatProvider extends ChangeNotifier {
         }
 
         /// infinity scroll
-        if (scrollController.offset ==
-                scrollController.position.maxScrollExtent &&
+        if (scrollController.offset == scrollController.position.maxScrollExtent &&
             !scrollController.position.outOfRange) {
           if (isInfinityScrollLoading == true) {
             return;
@@ -520,6 +514,18 @@ class ChatProvider extends ChangeNotifier {
           notifyListeners();
 
           isInfinityScrollLoading = false;
+        }
+
+        if (_isDownButtonShow) {
+          if (scrollController.offset <= 0) {
+            _isDownButtonShow = false;
+            notifyListeners();
+          }
+        } else {
+          if (scrollController.offset > (_screenHeight / 2)) {
+            _isDownButtonShow = true;
+            notifyListeners();
+          }
         }
       },
     );
@@ -535,7 +541,7 @@ class ChatProvider extends ChangeNotifier {
     _albumFiles = mediaFile;
 
     for (File file in _albumFiles) {
-      if (file.path.endsWith('mp4')) {
+      if (file.path.endsWith('mp4') || file.path.endsWith('MOV')) {
         _albumThumbnailFiles[basename(file.path)] = await getVideoThumbnailFile(
           file,
         );

@@ -38,8 +38,7 @@ class ChatDialogWidget extends StatefulWidget {
 class _ChatDialogwidgettate extends State<ChatDialogWidget> {
   @override
   Widget build(BuildContext context) {
-    final bool isMine =
-        widget.chat.userId == context.read<UserProvider>().me!.memberId;
+    final bool isMine = widget.chat.userId == context.read<UserProvider>().me!.memberId;
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
         return Column(
@@ -49,15 +48,10 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
 
             /// column children 2번 채팅 한 bubble 전체
             Container(
-              margin: EdgeInsets.only(
-                  top: !widget.isHead ? 2 : 9,
-                  right: 10,
-                  bottom: !widget.isTail ? 2 : 8,
-                  left: 10),
+              margin: EdgeInsets.only(top: !widget.isHead ? 2 : 9, right: 10, bottom: !widget.isTail ? 2 : 8, left: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                textDirection:
-                    isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                textDirection: isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                 children: [
                   /// row children 1번 프로필
                   !isMine && widget.isHead
@@ -65,12 +59,13 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                           padding: const EdgeInsets.only(right: 10),
                           child: GestureDetector(
                             onTap: () {
-                              Get.to(
-                                UserFamilyModifyScreen(
-                                  familyMember: userProvider
-                                      .findUserById(widget.chat.userId)!,
-                                ),
-                              );
+                              if (context.read<UserProvider>().findUserById(widget.chat.userId)?.name != null) {
+                                Get.to(
+                                  UserFamilyModifyScreen(
+                                    familyMember: userProvider.findUserById(widget.chat.userId)!,
+                                  ),
+                                );
+                              }
                             },
                             child: Image.asset(
                               "lib/assets/images/family/profile/${context.read<UserProvider>().findUserById(widget.chat.userId)?.role.toLowerCase() ?? 'dad'}_profile.png",
@@ -94,11 +89,12 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: 5),
                               child: ScalableTextWidget(
-                                "${context.read<UserProvider>().findUserById(widget.chat.userId)?.name}",
+                                context.read<UserProvider>().findUserById(widget.chat.userId)?.name ?? '(알수없음)',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    color: Coloring.gray_10,
-                                    fontSize: Font.size_caption),
+                                  color: Coloring.gray_10,
+                                  fontSize: Font.size_caption,
+                                ),
                               ),
                             )
                           : SizedBox.shrink(),

@@ -59,7 +59,7 @@ Future<List<File>> getImageFromAlbum() async {
 
 Future<File> getVideoThumbnailFile(File file) async {
   String? type = file.toString().mediaType();
-  if (type != "mp4") {
+  if (type != "mp4" || type != "MOV") {
     return file;
   }
 
@@ -84,8 +84,7 @@ Future<MultipartFile> mediaFilesToZip(List<File> files) async {
 
   int counter = 1;
   for (File file in files) {
-    File copy = await file.copy(
-        "${directory.path}/sendImage/$counter.${file.toString().mediaType()}");
+    File copy = await file.copy("${directory.path}/sendImage/$counter.${file.toString().mediaType()}");
     encoder.addFile(copy);
     counter += 1;
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
@@ -82,7 +84,7 @@ class ChatRepository {
     if (response[Strings.result]) {
       return {
         Strings.response: {
-          "data": response["response"].data['data']['result'],
+          "data": jsonDecode(response['response'].data)['data'],
         },
         Strings.message: Strings.success,
       };

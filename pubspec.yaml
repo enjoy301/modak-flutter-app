@@ -103,6 +103,7 @@ dependencies:
   firebase_messaging: ^13.1.0
   flutter_layout_grid: ^2.0.1
   flutter_localization: ^0.1.8
+  liquid_pull_to_refresh: ^3.0.1
 
 dev_dependencies:
   flutter_test:

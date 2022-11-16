@@ -37,7 +37,10 @@ class _AlbumThemeWidgetState extends State<AlbumThemeWidget> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => AlbumLabelDetailWidget(), arguments: provider.labelDataList[faceIndex]['label']);
+                        Get.to(
+                          AlbumLabelDetailWidget(),
+                          arguments: provider.labelDataList[faceIndex]['label'],
+                        );
                       },
                       child: Image.file(
                         provider.labelFileList[faceIndex],

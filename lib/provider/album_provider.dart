@@ -63,7 +63,7 @@ class AlbumProvider extends ChangeNotifier {
   late ScrollController _labelScrollController;
   ScrollController get labelScrollController => _labelScrollController;
 
-  Future initTotalData() async {
+  Future<void> initTotalData() async {
     _albumBuildFileList = [];
     _faceDataList = [];
     _faceFileList = [];

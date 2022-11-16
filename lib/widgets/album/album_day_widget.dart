@@ -22,76 +22,79 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
       builder: (context, provider, child) {
         return Container(
           margin: EdgeInsets.all(5),
-          child: ListView.builder(
-            controller: provider.scrollController,
-            itemCount: provider.albumBuildFileList.length,
-            itemBuilder: (BuildContext context, int dateIndex) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(12),
-                    child: Text(
-                      "${provider.albumBuildFileList[dateIndex][0].absolute.path.split('/').last.split('T')[0]}",
-                      textAlign: TextAlign.left,
+          child: RefreshIndicator(
+            onRefresh: provider.initTotalData,
+            child: ListView.builder(
+              controller: provider.scrollController,
+              itemCount: provider.albumBuildFileList.length,
+              itemBuilder: (BuildContext context, int dateIndex) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(12),
+                      child: Text(
+                        "${provider.albumBuildFileList[dateIndex][0].absolute.path.split('/').last.split('T')[0]}",
+                        textAlign: TextAlign.left,
+                      ),
                     ),
-                  ),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    controller: scrollController,
-                    itemCount: provider.albumBuildFileList[dateIndex].length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1,
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5,
-                    ),
-                    itemBuilder: (BuildContext context, int mediaIndex) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CommonMediasScreen(
-                                files: [provider.albumBuildFileList[dateIndex][mediaIndex]],
+                    GridView.builder(
+                      shrinkWrap: true,
+                      controller: scrollController,
+                      itemCount: provider.albumBuildFileList[dateIndex].length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1,
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                      ),
+                      itemBuilder: (BuildContext context, int mediaIndex) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CommonMediasScreen(
+                                  files: [provider.albumBuildFileList[dateIndex][mediaIndex]],
+                                ),
                               ),
+                            );
+                          },
+                          onLongPress: () {
+                            log("wwowowowoow");
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              1,
                             ),
-                          );
-                        },
-                        onLongPress: () {
-                          log("wwowowowoow");
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            1,
+                            child: (() {
+                              if (provider.albumBuildFileList[dateIndex][mediaIndex].path.endsWith(".mp4")) {
+                                return Image.file(
+                                  provider.thumbnailList[
+                                      path.basename(provider.albumBuildFileList[dateIndex][mediaIndex].path)],
+                                  fit: BoxFit.cover,
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  gaplessPlayback: true,
+                                );
+                              } else {
+                                return Image.file(
+                                  provider.albumBuildFileList[dateIndex][mediaIndex],
+                                  fit: BoxFit.cover,
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  gaplessPlayback: true,
+                                );
+                              }
+                            })(),
                           ),
-                          child: (() {
-                            if (provider.albumBuildFileList[dateIndex][mediaIndex].path.endsWith(".mp4")) {
-                              return Image.file(
-                                provider.thumbnailList[
-                                    path.basename(provider.albumBuildFileList[dateIndex][mediaIndex].path)],
-                                fit: BoxFit.cover,
-                                height: double.infinity,
-                                width: double.infinity,
-                                gaplessPlayback: true,
-                              );
-                            } else {
-                              return Image.file(
-                                provider.albumBuildFileList[dateIndex][mediaIndex],
-                                fit: BoxFit.cover,
-                                height: double.infinity,
-                                width: double.infinity,
-                                gaplessPlayback: true,
-                              );
-                            }
-                          })(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              );
-            },
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         );
       },

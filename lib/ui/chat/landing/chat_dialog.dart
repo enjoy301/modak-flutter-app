@@ -19,54 +19,66 @@ class _ChatDialog extends State<ChatDialog> {
     WidgetsBinding.instance.addPostFrameCallback((_) => scrollToEnd(context));
     return Consumer<ChatProvider>(
       builder: (context, provider, child) {
-        return GestureDetector(
-          onTap: () {
-            /// for 키보드 dispose
-            FocusScope.of(context).unfocus();
-            provider.feelMode = false;
-            provider.chatMode = ChatMode.textInput;
-          },
-          child: ListView.builder(
-            controller: provider.scrollController,
-            itemCount: provider.chats.length,
-            reverse: true,
-            itemBuilder: (BuildContext context, int index) {
-              Chat chat = provider.chats[index];
-
-              /// 마지막 인덱스임 || 먼저 보내진거랑 비교했을 때 다른거(index+1)
-              bool isHead = index == provider.chats.length - 1
-                  ? true
-                  : isSameChat(
-                        provider.chats[index],
-                        provider.chats[index + 1],
-                      ) ==
-                      false;
-
-              /// 첫 인덱스임 || 나중에 보내진거랑 다른거(index-1)
-              bool isTail = index == 0
-                  ? true
-                  : isSameChat(
-                        provider.chats[index - 1],
-                        provider.chats[index],
-                      ) ==
-                      false;
-
-              /// 마지막 인덱스임 || 먼저 보내진거랑 다른거(index+1
-              bool isDateChanged = index == provider.chats.length - 1
-                  ? true
-                  : isSameDay(
-                        provider.chats[index],
-                        provider.chats[index + 1],
-                      ) ==
-                      false;
-
-              return ChatDialogWidget(
-                chat: chat,
-                isHead: isHead,
-                isTail: isTail,
-                isDateChanged: isDateChanged,
-              );
+        return Scaffold(
+          body: GestureDetector(
+            onTap: () {
+              /// for 키보드 dispose
+              FocusScope.of(context).unfocus();
+              provider.feelMode = false;
+              provider.chatMode = ChatMode.textInput;
             },
+            child: ListView.builder(
+              controller: provider.scrollController,
+              itemCount: provider.chats.length,
+              reverse: true,
+              itemBuilder: (BuildContext context, int index) {
+                Chat chat = provider.chats[index];
+
+                /// 마지막 인덱스임 || 먼저 보내진거랑 비교했을 때 다른거(index+1)
+                bool isHead = index == provider.chats.length - 1
+                    ? true
+                    : isSameChat(
+                          provider.chats[index],
+                          provider.chats[index + 1],
+                        ) ==
+                        false;
+
+                /// 첫 인덱스임 || 나중에 보내진거랑 다른거(index-1)
+                bool isTail = index == 0
+                    ? true
+                    : isSameChat(
+                          provider.chats[index - 1],
+                          provider.chats[index],
+                        ) ==
+                        false;
+
+                /// 마지막 인덱스임 || 먼저 보내진거랑 다른거(index+1
+                bool isDateChanged = index == provider.chats.length - 1
+                    ? true
+                    : isSameDay(
+                          provider.chats[index],
+                          provider.chats[index + 1],
+                        ) ==
+                        false;
+
+                return ChatDialogWidget(
+                  chat: chat,
+                  isHead: isHead,
+                  isTail: isTail,
+                  isDateChanged: isDateChanged,
+                );
+              },
+            ),
+          ),
+          floatingActionButton: Visibility(
+            visible: provider.isDownButtonShow,
+            child: GestureDetector(
+              onTap: () {
+                provider.isBottom = true;
+                scrollToEnd(context);
+              },
+              child: Text("wow"),
+            ),
           ),
         );
       },
@@ -86,8 +98,7 @@ void scrollToEnd(BuildContext context) async {
     Duration(milliseconds: 100),
     () {
       if (context.read<ChatProvider>().isBottom == true) {
-        ScrollController scrollController =
-            context.read<ChatProvider>().scrollController;
+        ScrollController scrollController = context.read<ChatProvider>().scrollController;
 
         scrollController.animateTo(
           0,
@@ -117,8 +128,7 @@ bool isSameDay(Chat chat, Chat chat2) {
 }
 
 bool isSameMinute(Chat chat, Chat chat2) {
-  return timestampToString(chat.sendAt.toInt()) ==
-      timestampToString(chat2.sendAt.toInt());
+  return timestampToString(chat.sendAt.toInt()) == timestampToString(chat2.sendAt.toInt());
 }
 
 bool isSameUser(Chat chat, Chat chat2) {
