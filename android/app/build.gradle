@@ -52,8 +52,8 @@ android {
         applicationId "com.wowbros.android.modak"
         minSdkVersion 19
         targetSdkVersion 32
-        versionName '1.1.1'
-        versionCode 21
+        versionName '1.1.2'
+        versionCode 22
         multiDexEnabled true
     }
     signingConfigs {

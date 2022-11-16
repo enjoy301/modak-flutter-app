@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
-import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
+import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 
 class InputSelectWidget extends StatefulWidget {
   const InputSelectWidget({
@@ -10,7 +10,7 @@ class InputSelectWidget extends StatefulWidget {
     required this.title,
     required this.contents,
     required this.isFilled,
-    this.buttons = const [],
+    this.buttons = const {},
     this.leftIconData,
     this.onTap,
     this.tailIconShow = true,
@@ -20,7 +20,7 @@ class InputSelectWidget extends StatefulWidget {
   final String title;
   final String contents;
   final bool isFilled;
-  final List<TextButton> buttons;
+  final Map<String, Function()> buttons;
   final IconData? leftIconData;
   final Function()? onTap;
   final bool tailIconShow;
@@ -39,7 +39,10 @@ class _InputSelectWidgetState extends State<InputSelectWidget> {
         onTap: widget.onTap ??
             () {
               FocusScope.of(context).requestFocus(FocusNode());
-              defaultModalWidget(context, widget.buttons);
+              listModalWidget(
+                context,
+                widget.buttons,
+              );
             },
         child: Container(
           padding: EdgeInsets.only(top: 15, right: 15, bottom: 11, left: 15),

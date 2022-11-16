@@ -63,7 +63,8 @@ class _ChatScreen extends State<ChatScreen> {
                             if (provider.chatMode == ChatMode.functionList) {
                               provider.chatMode = ChatMode.textInput;
                               return Future(() => false);
-                            } else if (provider.chatMode == ChatMode.functionAlbum) {
+                            } else if (provider.chatMode ==
+                                ChatMode.functionAlbum) {
                               provider.chatMode = ChatMode.functionList;
                               return Future(() => false);
                             }

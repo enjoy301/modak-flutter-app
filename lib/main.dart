@@ -32,8 +32,6 @@ import 'package:modak_flutter_app/ui/chat/roulette/chat_roulette_landing_screen.
 import 'package:modak_flutter_app/ui/home/home_notification_screen.dart';
 import 'package:modak_flutter_app/ui/landing_bottomtab_navigator.dart';
 import 'package:modak_flutter_app/ui/todo/landing/todo_landing_screen.dart';
-import 'package:modak_flutter_app/ui/todo/write/todo_write_VM.dart';
-import 'package:modak_flutter_app/ui/todo/write/todo_write_screen.dart';
 import 'package:modak_flutter_app/ui/user/invitation/user_invitation_input_VM.dart';
 import 'package:modak_flutter_app/ui/user/invitation/user_invitation_input_screen.dart';
 import 'package:modak_flutter_app/ui/user/invitation/user_invitation_landing_screen.dart';
@@ -130,10 +128,6 @@ class MyApp extends StatelessWidget {
               child: AuthRegisterScreen(),
             ),
         "/todo/landing": (context) => TodoLandingScreen(),
-        "/todo/write": (context) => ChangeNotifierProvider(
-              create: (_) => TodoWriteVM(),
-              child: TodoWriteScreen(),
-            ),
         "/chat/letter/landing": (context) => ChatLetterLandingScreen(),
         "/letter/write": (context) => LetterWriteScreen(),
         "/letter/write/content": (context) => LetterWriteContentScreen(),

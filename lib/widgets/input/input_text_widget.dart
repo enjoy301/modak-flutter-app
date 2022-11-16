@@ -17,6 +17,7 @@ class InputTextWidget extends StatefulWidget {
     this.isBlocked = false,
     this.isSatisfied = true,
     this.autofocus = false,
+    this.initText = "",
   }) : super(key: key);
   final TextEditingController textEditingController;
   final String hint;
@@ -29,6 +30,7 @@ class InputTextWidget extends StatefulWidget {
   final bool isBlocked;
   final bool isSatisfied;
   final bool autofocus;
+  final String initText;
 
   @override
   State<InputTextWidget> createState() => _InputTextWidgetState();
@@ -37,6 +39,7 @@ class InputTextWidget extends StatefulWidget {
 class _InputTextWidgetState extends State<InputTextWidget> {
   @override
   void initState() {
+    widget.textEditingController.text = widget.initText;
     super.initState();
   }
 

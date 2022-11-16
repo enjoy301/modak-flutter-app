@@ -64,7 +64,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
           return Container(
             width: double.infinity,
             height: 300,
-            color: Coloring.gray_50,
+            color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -117,8 +117,9 @@ class _FunctionListWidget extends State<FunctionListWidget> {
         }
 
         /// 가족이 있을 때
-        return SizedBox(
+        return Container(
           height: 300,
+          color: Colors.white,
           child: GridView(
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

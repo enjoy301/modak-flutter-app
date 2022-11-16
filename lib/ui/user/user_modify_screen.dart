@@ -102,28 +102,20 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                               ? provider.me!.role.toDisplayString()
                               : "",
                           isFilled: true,
-                          buttons: [
-                            TextButton(
-                                onPressed: () {
-                                  provider.setRole(Strings.dad);
-                                },
-                                child: Text("아빠")),
-                            TextButton(
-                                onPressed: () {
-                                  provider.setRole(Strings.mom);
-                                },
-                                child: Text("엄마")),
-                            TextButton(
-                                onPressed: () {
-                                  provider.setRole(Strings.son);
-                                },
-                                child: Text("아들")),
-                            TextButton(
-                                onPressed: () {
-                                  provider.setRole(Strings.dau);
-                                },
-                                child: Text("딸")),
-                          ],
+                          buttons: {
+                            "아빠": () {
+                              provider.setRole(Strings.dad);
+                            },
+                            "엄마": () {
+                              provider.setRole(Strings.mom);
+                            },
+                            "아들": () {
+                              provider.setRole(Strings.son);
+                            },
+                            "딸": () {
+                              provider.setRole(Strings.dau);
+                            },
+                          },
                           leftIconData: LightIcons.Profile),
                     ),
                     InputColorWidget(

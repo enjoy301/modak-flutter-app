@@ -6,7 +6,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
-import 'package:modak_flutter_app/widgets/chat/chat_date_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/chat_info_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_feelings_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
@@ -45,7 +45,7 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
         return Column(
           children: [
             /// column children 1번 날짜 변경선
-            if (widget.isDateChanged) ChatDateWidget(chat: widget.chat),
+            if (widget.isDateChanged) ChatInfoWidget(chat: widget.chat),
 
             /// column children 2번 채팅 한 bubble 전체
             Container(

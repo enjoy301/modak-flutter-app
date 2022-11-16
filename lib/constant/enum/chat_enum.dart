@@ -1,1 +1,7 @@
-enum ChatMode { textInput, functionList, functionAlbum, functionOnway }
+enum ChatMode {
+  textInput,
+  functionTodo,
+  functionList,
+  functionAlbum,
+  functionOnway,
+}

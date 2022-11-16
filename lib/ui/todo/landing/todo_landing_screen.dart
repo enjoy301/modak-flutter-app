@@ -1,5 +1,5 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/provider/todo_provider.dart';
@@ -15,32 +15,34 @@ class TodoLandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TodoProvider>(builder: (context, todoProvider, child) {
       return Scaffold(
-        body: Column(
-          children: [
-            TodoLandingCalendar(),
-            TodoLandingList(),
-          ],
-        ),
-        floatingActionButton: OpenContainer(
-          closedBuilder: (_, openedContainer) => Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              gradient: Coloring.sub_purple,
-              boxShadow: [
-                Shadowing.purple,
-              ],
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
+          body: Column(
+            children: [
+              TodoLandingCalendar(),
+              TodoLandingList(),
+            ],
           ),
-          openBuilder: (_, openedContainer) => TodoWriteScreen(),
-          closedElevation: 0,
-        ),
-      );
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              Get.to(
+                () => TodoWriteScreen(),
+              );
+            },
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                gradient: Coloring.sub_purple,
+                boxShadow: [
+                  Shadowing.purple,
+                ],
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            ),
+          ));
     });
   }
 }

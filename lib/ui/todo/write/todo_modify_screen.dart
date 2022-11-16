@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +11,6 @@ import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_modify_VM.dart';
 import 'package:modak_flutter_app/ui/todo/write/todo_write_when_screen.dart';
-import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_date_widget.dart';
@@ -109,44 +107,13 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                                   ? userProvider.me!.name
                                   : provider.manager!.name,
                               isFilled: true,
-                              buttons: userProvider.familyMembers
-                                  .mapIndexed((int index, User familyMember) {
-                                return TextButton(
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(vertical: 20),
-                                    foregroundColor:
-                                        MaterialStateColor.resolveWith(
-                                            (states) =>
-                                                familyMember.color.toColor()!),
-                                    backgroundColor: familyMember.color
-                                        .toColor()!
-                                        .withOpacity(0.2),
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(
-                                                index == 0 ? 10 : 0),
-                                            bottom: Radius.circular(index ==
-                                                    userProvider.familyMembers
-                                                            .length -
-                                                        1
-                                                ? 10
-                                                : 0))),
-                                  ),
-                                  onPressed: () {
-                                    provider.manager = familyMember;
+                              buttons: {
+                                for (User family in userProvider.familyMembers)
+                                  family.name: () {
+                                    provider.manager = family;
                                     Get.back();
-                                  },
-                                  child: Text(
-                                    familyMember.name,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: Font.size_mediumText,
-                                        fontWeight: Font.weight_medium),
-                                  ),
-                                );
-                              }).toList(),
+                                  }
+                              },
                               leftIconData: LightIcons.Profile),
                         ),
                         provider.todo.repeatTag == null
