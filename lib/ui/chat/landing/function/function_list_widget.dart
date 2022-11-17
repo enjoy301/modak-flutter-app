@@ -12,7 +12,7 @@ import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_function_icon_widget.dart';
-import 'package:modak_flutter_app/widgets/modal/default_modal_widget.dart';
+import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 import 'package:provider/provider.dart';
 
 class FunctionListWidget extends StatefulWidget {
@@ -140,33 +140,26 @@ class _FunctionListWidget extends State<FunctionListWidget> {
               ChatFunctionIconWidget(
                 data: functionIconWidgetValues[1],
                 onTap: () async {
-                  defaultModalWidget(
+                  listModalWidget(
                     context,
-                    [
-                      TextButton(
-                        onPressed: () async {
-                          Future(() => Navigator.pop(context));
-
-                          File image = await getImageFromCamera();
-                          chatProvider.postMediaFileFromCamera(
-                            image,
-                            "jpg",
-                          );
-                        },
-                        child: Text("사진 찍기"),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          Future(() => Navigator.pop(context));
-                          File video = await getVideoFromCamera();
-                          chatProvider.postMediaFileFromCamera(
-                            video,
-                            "mp4",
-                          );
-                        },
-                        child: Text("동영상 촬영"),
-                      ),
-                    ],
+                    {
+                      "사진 찍기": () async {
+                        Future(() => Navigator.pop(context));
+                        File image = await getImageFromCamera();
+                        chatProvider.postMediaFileFromCamera(
+                          image,
+                          "jpg",
+                        );
+                      },
+                      "동영상 촬영": () async {
+                        Future(() => Navigator.pop(context));
+                        File video = await getVideoFromCamera();
+                        chatProvider.postMediaFileFromCamera(
+                          video,
+                          "mp4",
+                        );
+                      },
+                    },
                   );
                 },
               ),

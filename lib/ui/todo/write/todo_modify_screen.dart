@@ -62,6 +62,7 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
             return Scaffold(
               backgroundColor: Colors.white,
               appBar: headerDefaultWidget(
+                bgColor: Colors.white,
                   title: "할 일 수정하기",
                   leading: FunctionalIcon.back,
                   onClickLeading: () {

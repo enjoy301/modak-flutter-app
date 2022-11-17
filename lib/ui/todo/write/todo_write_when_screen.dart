@@ -43,6 +43,8 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
   bool isTimeSelected = false;
   String timeSelectTag = "시간 선택";
 
+  final TextEditingController _textEditingController = TextEditingController();
+
   @override
   void initState() {
     selectedTag = widget.previousTag;
@@ -62,10 +64,15 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
+            if (_textEditingController.text.isNotEmpty) {
+              userProvider.addMeTag(_textEditingController.text);
+              _textEditingController.clear();
+            }
           },
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: headerDefaultWidget(
+                bgColor: Colors.white,
                 title: "언제 할래요?",
                 leading: FunctionalIcon.back,
                 onClickLeading: () {
@@ -77,9 +84,13 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TimeTagWidget(timeSelectTag, provider: userProvider, isSelected: isTimeSelected, onPressed: () {
-                      DatePicker.showTime12hPicker(context, onConfirm: (DateTime dateTime) {
-                        String text = Date.getFormattedDate(format: "hh:mm a", dateTime: dateTime);
+                    TimeTagWidget(timeSelectTag,
+                        provider: userProvider,
+                        isSelected: isTimeSelected, onPressed: () {
+                      DatePicker.showTime12hPicker(context,
+                          onConfirm: (DateTime dateTime) {
+                        String text = Date.getFormattedDate(
+                            format: "hh:mm a", dateTime: dateTime);
 
                         setState(() {
                           isTimeSelected = true;
@@ -106,14 +117,18 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                               .map((timeTag) => TimeTagWidget(timeTag,
                                       provider: userProvider,
                                       isCustom: true,
-                                      isSelected: selectedTag == timeTag, onPressed: () {
+                                      isSelected: selectedTag == timeTag,
+                                      onPressed: () {
                                     setState(() {
                                       selectedTag = timeTag;
                                     });
                                   }))
                               .toList() +
                           [
-                            TimeTagWriteWidget(provider: userProvider),
+                            TimeTagWriteWidget(
+                              provider: userProvider,
+                              textEditingController: _textEditingController,
+                            ),
                           ],
                     ),
                   ],
@@ -128,17 +143,18 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
 }
 
 class TimeTagWriteWidget extends StatefulWidget {
-  const TimeTagWriteWidget({required this.provider, Key? key}) : super(key: key);
+  const TimeTagWriteWidget(
+      {required this.provider, required this.textEditingController, Key? key})
+      : super(key: key);
 
   final UserProvider provider;
+  final TextEditingController textEditingController;
 
   @override
   State<TimeTagWriteWidget> createState() => _TimeTagWriteWidgetState();
 }
 
 class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
-  TextEditingController textEditingController = TextEditingController();
-
   String text = "";
 
   @override
@@ -165,7 +181,7 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
                   Fluttertoast.showToast(msg: "글자를 입력해주세요");
                 } else {
                   widget.provider.addMeTag(text);
-                  textEditingController.clear();
+                  widget.textEditingController.clear();
                   FocusScope.of(context).unfocus();
                 }
               },
@@ -175,10 +191,11 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
                 fontWeight: Font.weight_regular,
                 height: 1,
               ),
-              controller: textEditingController,
+              controller: widget.textEditingController,
               decoration: InputDecoration(
                 isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                 hintText: "+ 추가",
                 hintStyle: TextStyle(
                   color: Coloring.gray_10,
@@ -189,7 +206,7 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
                 counterText: "",
                 border: InputBorder.none,
               ),
-              maxLength: 20,
+              maxLength: 12,
             ),
           ),
         ),
@@ -200,7 +217,11 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
 
 class TimeTagWidget extends StatelessWidget {
   const TimeTagWidget(this.title,
-      {Key? key, required this.provider, required this.isSelected, required this.onPressed, this.isCustom = false})
+      {Key? key,
+      required this.provider,
+      required this.isSelected,
+      required this.onPressed,
+      this.isCustom = false})
       : super(key: key);
   final UserProvider provider;
   final String title;
@@ -228,7 +249,9 @@ class TimeTagWidget extends StatelessWidget {
                   style: TextStyle(
                       color: isSelected ? Colors.white : Coloring.gray_10,
                       fontSize: Font.size_smallText,
-                      fontWeight: isSelected ? Font.weight_semiBold : Font.weight_regular,
+                      fontWeight: isSelected
+                          ? Font.weight_semiBold
+                          : Font.weight_regular,
                       height: 1)),
               isCustom == true
                   ? IconButton(

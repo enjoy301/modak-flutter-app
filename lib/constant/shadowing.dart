@@ -25,4 +25,6 @@ class Shadowing {
       color: Color.fromRGBO(29, 22, 23, 0.1),
       blurRadius: 22,
       offset: Offset(0, 10));
+
+  static const BoxShadow none = BoxShadow(color: Colors.transparent);
 }

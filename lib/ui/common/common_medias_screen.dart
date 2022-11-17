@@ -9,9 +9,12 @@ import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:video_player/video_player.dart';
 
 class CommonMediasScreen extends StatefulWidget {
-  const CommonMediasScreen({Key? key, required this.files}) : super(key: key);
+  const CommonMediasScreen(
+      {Key? key, required this.files, this.initialIndex = 0})
+      : super(key: key);
 
   final List<File> files;
+  final int initialIndex;
 
   @override
   State<CommonMediasScreen> createState() => _CommonMediasScreenState();
@@ -22,12 +25,14 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
   int imageIndex = 0;
   final List<File> filesWithThumbnail = [];
   final ScrollController _scrollController = ScrollController();
-  final PageController _pageController = PageController();
+  late PageController pageController =
+      PageController(initialPage: widget.initialIndex);
 
   @override
   void initState() {
     super.initState();
     if (widget.files.length > 1) addFiles();
+    imageIndex = widget.initialIndex;
   }
 
   addFiles() async {
@@ -72,7 +77,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
           child: Stack(
             children: [
               PageView(
-                controller: _pageController,
+                controller: pageController,
                 onPageChanged: (index) => setState(
                   () {
                     imageIndex = index;
@@ -110,7 +115,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
                                   .mapIndexed(
                                     (index, file) => GestureDetector(
                                       onTap: () {
-                                        _pageController.jumpToPage(index);
+                                        pageController.jumpToPage(index);
                                         setState(
                                           () {
                                             imageIndex = index;

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:modak_flutter_app/constant/coloring.dart';
+import 'package:modak_flutter_app/constant/enum/general_enum.dart';
+import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/widgets/album/album_day_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
@@ -22,23 +25,31 @@ class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: Coloring.gray_50,
         appBar: headerDefaultWidget(
           title: "앨범",
+          leading: FunctionalIcon.none,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(40),
             child: Align(
               alignment: Alignment.centerLeft,
               child: TabBar(
-                tabs: [Tab(child: Text("전체")), Tab(child: Text("인물")), Tab(child: Text("테마"))],
+                tabs: [
+                  Tab(child: Text("전체 사진 보기")),
+                  Tab(child: Text("인물별 모아보기")),
+                  Tab(child: Text("테마별 모아보기"))
+                ],
                 isScrollable: true,
+                labelPadding: EdgeInsets.only(left: 10, right: 10),
+                labelStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: Font.size_h3,
+                    fontWeight: Font.weight_bold),
+                labelColor: Colors.black,
+                unselectedLabelColor: Coloring.gray_20,
                 indicator: UnderlineTabIndicator(
-                  insets: EdgeInsets.only(bottom: 10),
-                  borderSide: BorderSide(color: Colors.blue, width: 2),
+                  borderSide: BorderSide.none,
                 ),
-                labelPadding: EdgeInsets.symmetric(horizontal: 20),
-                labelColor: Colors.blueAccent,
-                unselectedLabelColor: Colors.black,
-                indicatorPadding: EdgeInsets.symmetric(horizontal: 10),
               ),
             ),
           ),

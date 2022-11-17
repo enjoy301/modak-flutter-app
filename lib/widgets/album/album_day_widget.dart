@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:path/path.dart' as path;
@@ -21,6 +22,7 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
     return Consumer<AlbumProvider>(
       builder: (context, provider, child) {
         return Container(
+          color: Coloring.gray_50,
           margin: EdgeInsets.all(5),
           child: RefreshIndicator(
             onRefresh: provider.initTotalData,
@@ -55,7 +57,10 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CommonMediasScreen(
-                                  files: [provider.albumBuildFileList[dateIndex][mediaIndex]],
+                                  files: [
+                                    provider.albumBuildFileList[dateIndex]
+                                        [mediaIndex]
+                                  ],
                                 ),
                               ),
                             );
@@ -68,10 +73,14 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                               1,
                             ),
                             child: (() {
-                              if (provider.albumBuildFileList[dateIndex][mediaIndex].path.endsWith(".mp4")) {
+                              if (provider
+                                  .albumBuildFileList[dateIndex][mediaIndex]
+                                  .path
+                                  .endsWith(".mp4")) {
                                 return Image.file(
-                                  provider.thumbnailList[
-                                      path.basename(provider.albumBuildFileList[dateIndex][mediaIndex].path)],
+                                  provider.thumbnailList[path.basename(provider
+                                      .albumBuildFileList[dateIndex][mediaIndex]
+                                      .path)],
                                   fit: BoxFit.cover,
                                   height: double.infinity,
                                   width: double.infinity,
@@ -79,7 +88,8 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                 );
                               } else {
                                 return Image.file(
-                                  provider.albumBuildFileList[dateIndex][mediaIndex],
+                                  provider.albumBuildFileList[dateIndex]
+                                      [mediaIndex],
                                   fit: BoxFit.cover,
                                   height: double.infinity,
                                   width: double.infinity,

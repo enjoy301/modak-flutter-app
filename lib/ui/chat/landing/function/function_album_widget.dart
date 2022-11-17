@@ -23,7 +23,8 @@ class FunctionAlbumWidget extends StatefulWidget {
   State<FunctionAlbumWidget> createState() => _FunctionAlbumWidget();
 }
 
-class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeepAliveClientMixin {
+class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -49,9 +50,28 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeep
                     /// row 2번 앨범 소개 텍스트
                     Expanded(
                       child: Center(
-                        child: Text(
-                          "보내고 싶은 사진 혹은 영상을 선택하세요",
-                          style: EasyStyle.text(Coloring.gray_0, Font.size_largeText, Font.weight_medium),
+                        child: RichText(
+                          text: TextSpan(
+                            style: EasyStyle.text(Coloring.gray_0,
+                                Font.size_largeText, Font.weight_medium),
+                            children: <TextSpan>[
+                              if (provider.selectedMediaFiles.isEmpty)
+                                TextSpan(text: "보내고 싶은 사진 혹은 영상을 선택하세요"),
+                              if (provider.selectedMediaFiles.isNotEmpty)
+                                TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(text: "현재 "),
+                                    TextSpan(
+                                        text: provider.selectedMediaFiles.length
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontWeight: Font.weight_bold,
+                                            color: Colors.purpleAccent[700])),
+                                    TextSpan(text: "개가 선택 되었습니다."),
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -59,10 +79,12 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeep
                     /// row 3번 전송 버튼
                     IconButton(
                       onPressed: () async {
-                        provider.postMediaFilesFromAlbum();
+                        provider.postMediaFilesFromAlbum(context);
                       },
                       icon: IconGradientWidget(
-                        provider.selectedMediaFiles.isEmpty ? LightIcons.Send : DarkIcons.Send,
+                        provider.selectedMediaFiles.isEmpty
+                            ? LightIcons.Send
+                            : DarkIcons.Send,
                         25,
                         Coloring.sub_purple,
                       ),
@@ -94,12 +116,16 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeep
                             child: Stack(
                               children: [
                                 (() {
-                                  if (provider.albumFiles[index].path.endsWith('mp4') ||
-                                      provider.albumFiles[index].path.endsWith('MOV')) {
+                                  if (provider.albumFiles[index].path
+                                          .endsWith('mp4') ||
+                                      provider.albumFiles[index].path
+                                          .endsWith('MOV')) {
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: Image.file(
-                                        provider.albumThumbnailFiles[path.basename(provider.albumFiles[index].path)]!,
+                                        provider.albumThumbnailFiles[
+                                            path.basename(provider
+                                                .albumFiles[index].path)]!,
                                         width: 160,
                                         height: double.infinity,
                                         fit: BoxFit.cover,
@@ -122,7 +148,8 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeep
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
                                     border: Border.all(
-                                        color: provider.selectedMediaFiles.contains(
+                                        color: provider.selectedMediaFiles
+                                                .contains(
                                           provider.albumFiles[index],
                                         )
                                             ? Coloring.todo_purple
@@ -148,12 +175,18 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeep
                                   child: IconButton(
                                     onPressed: () {
                                       // ignore: unrelated_type_equality_checks
-                                      if (provider.albumFiles[index].toString().mediaType() == "mp4") {
+                                      if (provider.albumFiles[index]
+                                              .toString()
+                                              .mediaType() ==
+                                          "mp4") {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => CommonMediasScreen(
-                                              files: [provider.albumFiles[index]],
+                                            builder: (context) =>
+                                                CommonMediasScreen(
+                                              files: [
+                                                provider.albumFiles[index]
+                                              ],
                                             ),
                                           ),
                                         );
@@ -161,8 +194,11 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeep
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => CommonMediasScreen(
-                                              files: [provider.albumFiles[index]],
+                                            builder: (context) =>
+                                                CommonMediasScreen(
+                                              files: [
+                                                provider.albumFiles[index]
+                                              ],
                                             ),
                                           ),
                                         );

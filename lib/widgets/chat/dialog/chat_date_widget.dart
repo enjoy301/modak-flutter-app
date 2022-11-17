@@ -5,8 +5,8 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
-class ChatInfoWidget extends StatelessWidget {
-  const ChatInfoWidget({Key? key, required this.chat}) : super(key: key);
+class ChatDateWidget extends StatelessWidget {
+  const ChatDateWidget({Key? key, required this.chat}) : super(key: key);
 
   final Chat chat;
 

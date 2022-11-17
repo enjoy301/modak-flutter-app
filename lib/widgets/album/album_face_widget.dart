@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modak_flutter_app/constant/coloring.dart';
+import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
+import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:provider/provider.dart';
 
 import 'album_face_detail_widget.dart';
@@ -18,30 +21,29 @@ class _AlbumFaceWidgetState extends State<AlbumFaceWidget> {
     return Consumer<AlbumProvider>(
       builder: (context, provider, child) {
         return Container(
-          margin: EdgeInsets.all(5),
+          margin: EdgeInsets.only(top: 12, right: 30, left: 30),
           child: GridView.builder(
             shrinkWrap: true,
             itemCount: provider.faceDataList.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 1,
-              mainAxisSpacing: 5,
-              crossAxisSpacing: 5,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
             ),
             itemBuilder: (BuildContext context, int faceIndex) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  1,
-                ),
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(
-                          AlbumFaceDetailWidget(),
-                          arguments: provider.faceDataList[faceIndex]['cid'],
-                        );
-                      },
+              return Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(
+                        AlbumFaceDetailWidget(
+                            indexImage: provider.faceFileList[faceIndex]),
+                        arguments: provider.faceDataList[faceIndex]['cid'],
+                      );
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(1000),
                       child: Image.file(
                         provider.faceFileList[faceIndex],
                         fit: BoxFit.cover,
@@ -50,25 +52,27 @@ class _AlbumFaceWidgetState extends State<AlbumFaceWidget> {
                         gaplessPlayback: true,
                       ),
                     ),
-                    Positioned(
-                      right: 12,
-                      bottom: 12,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 6,
-                          horizontal: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          "${provider.faceDataList[faceIndex]['count']}",
-                        ),
+                  ),
+                  Positioned(
+                    right: 2,
+                    bottom: 2,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 6,
+                        horizontal: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        "${provider.faceDataList[faceIndex]['count']}",
+                        style: EasyStyle.text(Coloring.gray_0,
+                            Font.size_smallText, Font.weight_bold),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
             },
           ),

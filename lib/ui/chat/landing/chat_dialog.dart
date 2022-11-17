@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
@@ -77,7 +78,18 @@ class _ChatDialog extends State<ChatDialog> {
                 provider.isBottom = true;
                 scrollToEnd(context);
               },
-              child: Text("wow"),
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Icon(
+                  LightIcons.ArrowDown,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
         );
@@ -98,7 +110,8 @@ void scrollToEnd(BuildContext context) async {
     Duration(milliseconds: 100),
     () {
       if (context.read<ChatProvider>().isBottom == true) {
-        ScrollController scrollController = context.read<ChatProvider>().scrollController;
+        ScrollController scrollController =
+            context.read<ChatProvider>().scrollController;
 
         scrollController.animateTo(
           0,
@@ -128,7 +141,8 @@ bool isSameDay(Chat chat, Chat chat2) {
 }
 
 bool isSameMinute(Chat chat, Chat chat2) {
-  return timestampToString(chat.sendAt.toInt()) == timestampToString(chat2.sendAt.toInt());
+  return timestampToString(chat.sendAt.toInt()) ==
+      timestampToString(chat2.sendAt.toInt());
 }
 
 bool isSameUser(Chat chat, Chat chat2) {
