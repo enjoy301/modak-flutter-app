@@ -37,9 +37,18 @@ class _ChatScreen extends State<ChatScreen> {
                 return SafeArea(
                   child: Column(
                     children: [
-                      Flexible(
-                        child: ChatDialog(),
-                      ),
+                      if (snapshot.connectionState == ConnectionState.done) ...[
+                        Flexible(
+                          child: ChatDialog(),
+                        ),
+                      ] else ...[
+                        Flexible(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ],
+
                       if (provider.feelMode) ChatFeeling(),
                       [
                         ChatMode.textInput,
@@ -76,6 +85,9 @@ class _ChatScreen extends State<ChatScreen> {
                     ],
                   ),
                 );
+                // else {
+                //
+                // }
               },
             );
           },

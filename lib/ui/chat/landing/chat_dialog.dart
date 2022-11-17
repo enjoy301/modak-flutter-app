@@ -17,7 +17,7 @@ class ChatDialog extends StatefulWidget {
 class _ChatDialog extends State<ChatDialog> {
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => scrollToEnd(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => scrollToEnd(context, false));
     return Consumer<ChatProvider>(
       builder: (context, provider, child) {
         return Scaffold(
@@ -75,8 +75,8 @@ class _ChatDialog extends State<ChatDialog> {
             visible: provider.isDownButtonShow,
             child: GestureDetector(
               onTap: () {
-                provider.isBottom = true;
-                scrollToEnd(context);
+                provider.setIsBottom(true);
+                scrollToEnd(context, true);
               },
               child: Container(
                 width: 56,
@@ -105,20 +105,18 @@ class _ChatDialog extends State<ChatDialog> {
   }
 }
 
-void scrollToEnd(BuildContext context) async {
+void scrollToEnd(BuildContext context, bool isBottom) async {
   await Future.delayed(
     Duration(milliseconds: 100),
     () {
-      if (context.read<ChatProvider>().isBottom == true) {
-        ScrollController scrollController =
-            context.read<ChatProvider>().scrollController;
+      if (context.read<ChatProvider>().isBottom == true || isBottom) {
+        ScrollController scrollController = context.read<ChatProvider>().scrollController;
 
         scrollController.animateTo(
           0,
           duration: Duration(milliseconds: 200),
           curve: Curves.ease,
         );
-        //
       }
     },
   );
@@ -141,8 +139,7 @@ bool isSameDay(Chat chat, Chat chat2) {
 }
 
 bool isSameMinute(Chat chat, Chat chat2) {
-  return timestampToString(chat.sendAt.toInt()) ==
-      timestampToString(chat2.sendAt.toInt());
+  return timestampToString(chat.sendAt.toInt()) == timestampToString(chat2.sendAt.toInt());
 }
 
 bool isSameUser(Chat chat, Chat chat2) {

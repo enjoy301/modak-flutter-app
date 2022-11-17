@@ -34,17 +34,10 @@ class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: TabBar(
-                tabs: [
-                  Tab(child: Text("전체 사진 보기")),
-                  Tab(child: Text("인물별 모아보기")),
-                  Tab(child: Text("테마별 모아보기"))
-                ],
+                tabs: [Tab(child: Text("전체 사진 보기")), Tab(child: Text("인물별 모아보기")), Tab(child: Text("테마별 모아보기"))],
                 isScrollable: true,
                 labelPadding: EdgeInsets.only(left: 10, right: 10),
-                labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: Font.size_h3,
-                    fontWeight: Font.weight_bold),
+                labelStyle: TextStyle(color: Colors.black, fontSize: Font.size_h3, fontWeight: Font.weight_bold),
                 labelColor: Colors.black,
                 unselectedLabelColor: Coloring.gray_20,
                 indicator: UnderlineTabIndicator(
@@ -58,13 +51,19 @@ class _AlbumLandingScreenState extends State<AlbumLandingScreen> {
           child: FutureBuilder(
             future: init,
             builder: (context, snapshot) {
-              return TabBarView(
-                children: [
-                  AlbumDayWidget(),
-                  AlbumFaceWidget(),
-                  AlbumThemeWidget(),
-                ],
-              );
+              if (snapshot.connectionState == ConnectionState.done) {
+                return TabBarView(
+                  children: [
+                    AlbumDayWidget(),
+                    AlbumFaceWidget(),
+                    AlbumThemeWidget(),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
             },
           ),
         ),

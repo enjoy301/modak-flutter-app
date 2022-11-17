@@ -42,8 +42,8 @@ class AlbumProvider extends ChangeNotifier {
   late Map<String, File> _thumbnailList;
   get thumbnailList => _thumbnailList;
 
-  late ScrollController _scrollController;
-  ScrollController get scrollController => _scrollController;
+  ScrollController? _scrollController;
+  ScrollController? get scrollController => _scrollController;
 
   late bool isInfinityScrollLoading;
 
@@ -70,7 +70,7 @@ class AlbumProvider extends ChangeNotifier {
     _labelDataList = [];
     _labelFileList = [];
     _thumbnailList = {};
-    _scrollController = ScrollController();
+    _scrollController ??= ScrollController();
     isInfinityScrollLoading = false;
     mediaLastId = 0;
     index = -1;
@@ -278,10 +278,10 @@ class AlbumProvider extends ChangeNotifier {
   }
 
   void addScrollListener() {
-    scrollController.addListener(
+    scrollController!.addListener(
       () async {
-        if (scrollController.offset == scrollController.position.maxScrollExtent &&
-            !scrollController.position.outOfRange) {
+        if (scrollController!.offset == scrollController!.position.maxScrollExtent &&
+            !scrollController!.position.outOfRange) {
           if (isInfinityScrollLoading == true || mediaLastId == -1) {
             return;
           }
