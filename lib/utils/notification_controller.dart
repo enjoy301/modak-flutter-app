@@ -48,7 +48,9 @@ class NotificationController extends GetxController {
       'high_importance_channel',
       'High Importance Notifications',
       description: 'This channel is used for important notifications.',
-      importance: Importance.high,
+      importance: Importance.low,
+      playSound: false,
+      showBadge: false,
     );
 
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -66,9 +68,9 @@ class NotificationController extends GetxController {
     /// heads up notifications.
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
+      alert: false,
+      badge: false,
+      sound: false,
     );
 
     isFlutterLocalNotificationsInitialized = true;
@@ -76,21 +78,22 @@ class NotificationController extends GetxController {
 
   void showFlutterNotification(RemoteMessage message) {
     Map<String, dynamic> data = message.data;
-    // if (Platform.isAndroid) {
-    flutterLocalNotificationsPlugin.show(
-      1,
-      data['title'],
-      data['body'],
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: '@mipmap/launcher_icon',
+
+    if (data['type'] == 'todo') {
+      flutterLocalNotificationsPlugin.show(
+        2,
+        data['title'],
+        data['body'],
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: '@mipmap/launcher_icon',
+          ),
         ),
-      ),
-    );
-    // }
+      );
+    }
   }
 
   Future<void> _firebaseMessagingForegroundHandler(

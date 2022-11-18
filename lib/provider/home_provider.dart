@@ -20,7 +20,7 @@ class HomeProvider extends ChangeNotifier {
   init() async {
     clear();
     await getHomeInfo();
-    await getHomeImage();
+    // await getHomeImage();
     await getTodayTalk(DateTime.now());
     await getTodayFortune();
     notifyListeners();
@@ -107,27 +107,30 @@ class HomeProvider extends ChangeNotifier {
             "media/${(await RemoteDataSource.storage.read(key: Strings.familyId))!}/$imageKey"
           ],
         );
+        print(urlResponse);
 
         List<dynamic> urlList = jsonDecode(
           urlResponse['response']['data'],
         )['url_list'];
+        print(urlList);
 
         String url = urlList[0];
+        print(url);
 
         RegExp regExp = RegExp(r'.com\/(\w|\W)+\?');
         String temp = (regExp.stringMatch(url).toString());
         String fileName = temp.substring(5, temp.length - 1);
-
+        print(fileName);
         final ByteData imageData = await NetworkAssetBundle(
           Uri.parse(url),
         ).load("");
         final Uint8List bytes = imageData.buffer.asUint8List();
-
+        print(fileName);
         File file = await File(
           '$mediaDirectoryPath/$fileName',
         ).create(recursive: true);
         file.writeAsBytesSync(bytes);
-
+        print(file);
         familyImage = file;
       }
 
