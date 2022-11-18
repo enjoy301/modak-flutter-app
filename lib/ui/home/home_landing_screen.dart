@@ -13,6 +13,8 @@ import 'package:modak_flutter_app/widgets/home/home_family_talk_widget.dart';
 import 'package:modak_flutter_app/widgets/home/home_item_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../landing_bottomtab_navigator.dart';
+
 class HomeLandingScreen extends StatefulWidget {
   const HomeLandingScreen({Key? key}) : super(key: key);
 
@@ -25,8 +27,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<HomeProvider, UserProvider>(
-        builder: (context, homeProvider, userProvider, child) {
+    return Consumer2<HomeProvider, UserProvider>(builder: (context, homeProvider, userProvider, child) {
       return Scaffold(
         backgroundColor: Coloring.gray_50,
         appBar: AppBar(
@@ -83,13 +84,11 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "하루 한줄",
-                                    style: EasyStyle.text(Colors.black,
-                                        Font.size_h3, Font.weight_bold),
+                                    style: EasyStyle.text(Colors.black, Font.size_h3, Font.weight_bold),
                                   ),
                                   GestureDetector(
                                     onTap: () {
@@ -112,10 +111,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                 children: [
                                   Text(
                                     "모닥이 알려주는 오늘의 문장",
-                                    style: EasyStyle.text(
-                                        Colors.black,
-                                        Font.size_smallText,
-                                        Font.weight_medium),
+                                    style: EasyStyle.text(Colors.black, Font.size_smallText, Font.weight_medium),
                                   ),
                                   Container(
                                     width: double.infinity,
@@ -126,12 +122,8 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
-                                      homeProvider.todayFortune?.content ??
-                                          "운세 없음",
-                                      style: EasyStyle.text(
-                                          Colors.black,
-                                          Font.size_largeText,
-                                          Font.weight_medium),
+                                      homeProvider.todayFortune?.content ?? "운세 없음",
+                                      style: EasyStyle.text(Colors.black, Font.size_largeText, Font.weight_medium),
                                       textAlign: TextAlign.center,
                                     ),
                                   )
@@ -156,8 +148,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                               title: content.title,
                               des: content.desc,
                               onPressed: () {
-                                Get.to(CommonWebScreen(
-                                    title: content.title, link: content.url));
+                                Get.to(CommonWebScreen(title: content.title, link: content.url));
                               },
                             ),
                           )
@@ -179,23 +170,29 @@ class HomePictureWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 25),
-      margin: EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: Color(0XFFD9D9D9),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Icon(LightIcons.Plus),
-          SizedBox(
-            height: 12,
-          ),
-          Text("가족사진 등록하기"),
-        ],
+    return GestureDetector(
+      onTap: () {
+        /// ??
+        Get.to(LandingBottomNavigator());
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 25),
+        margin: EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: Color(0XFFD9D9D9),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(LightIcons.Plus),
+            SizedBox(
+              height: 12,
+            ),
+            Text("앨범에서 가족사진 등록하기"),
+          ],
+        ),
       ),
     );
   }

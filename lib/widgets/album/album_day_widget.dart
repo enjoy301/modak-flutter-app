@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
@@ -9,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../constant/font.dart';
 import '../../utils/easy_style.dart';
+import '../modal/theme_modal_widget.dart';
 
 class AlbumDayWidget extends StatefulWidget {
   const AlbumDayWidget({Key? key}) : super(key: key);
@@ -82,7 +81,28 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                   );
                                 },
                                 onLongPress: () {
-                                  log("wwowowowoow");
+                                  if (!(provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                          .toString()
+                                          .toLowerCase()
+                                          .endsWith("mp4") ||
+                                      provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                          .toString()
+                                          .toLowerCase()
+                                          .endsWith("mov"))) {
+                                    themeModalWidget(
+                                      context,
+                                      title: "가족 대표 사진으로 등록하기",
+                                      onOkPress: () {
+                                        provider.setFamilyImage(
+                                          provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                              .toString()
+                                              .split("/")
+                                              .last,
+                                        );
+                                      },
+                                      okText: "확인",
+                                    );
+                                  }
                                 },
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(
