@@ -31,6 +31,7 @@ class Strings {
   static const String memberId = "memberId";
   static const String familyId = "familyId";
   static const String isRegisterProgress = "isRegisterProgress";
+  static const String isIntroductionNeeded = "isIntroductionNeeded";
 
   static const String name = "name";
   static const String familyMembers = "familyMembers";
