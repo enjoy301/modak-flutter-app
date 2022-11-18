@@ -69,9 +69,13 @@ class _TodoLandingListState extends State<TodoLandingList> {
                           if (!todo.isDone) {
                             themeModalWidget(context,
                                 title: "할 일을 완료하셨나요?",
-                                des: "확인을 누르면 채팅방에 알림이 보내집니다.\n다시 취소 할 수 없어요.",
+                                des: "확인을 누르면 알림이 보내집니다.\n다시 취소 할 수 없어요.",
                                 onOkPress: () {
                               todoProvider.doneTodo(todo, !todo.isDone);
+                              NotificationController.sendNotification(
+                                  "${todo.title}가 완료되었습니다\n",
+                                  '${todo.title}를 ${userProvider.findUserById(todo.memberId)?.name ?? "(알수없음)"}님이 완료하셨습니다! \n감사를 표하는 것은 어떨까요?',
+                                  'todo');
                             });
                           } else {
                             Fluttertoast.cancel();
@@ -154,8 +158,8 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                   ),
                                   'onTap': () {
                                     NotificationController.sendNotification(
-                                      "감사 표현",
-                                      "${userProvider.me!.name}님이 ${userProvider.findUserById(todo.memberId)?.name ?? "당신"}에게 감사를 표 합니다",
+                                      "할 일에 대한 감사 표현",
+                                      "${userProvider.me!.name}님이 ${userProvider.findUserById(todo.memberId)?.name ?? "당신"}에게 감사를 표현 하였습니다",
                                       'todo',
                                     );
                                     Get.back();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
+import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/widgets/common/media_widget_for_album.dart';
 import 'package:path/path.dart' as path;
@@ -61,32 +62,42 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                           GridView.builder(
                             shrinkWrap: true,
                             controller: scrollController,
-                            itemCount: provider.albumBuildFileList[dateIndex].length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            itemCount:
+                                provider.albumBuildFileList[dateIndex].length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               childAspectRatio: 1,
                               mainAxisSpacing: 5,
                               crossAxisSpacing: 5,
                             ),
-                            itemBuilder: (BuildContext context, int mediaIndex) {
+                            itemBuilder:
+                                (BuildContext context, int mediaIndex) {
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CommonMediasScreen(
-                                        files: provider.albumBuildFileList[dateIndex],
+                                        files: provider
+                                            .albumBuildFileList[dateIndex],
                                         initialIndex: mediaIndex,
                                       ),
                                     ),
                                   );
                                 },
                                 onLongPress: () {
-                                  if (!(provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                  if (!(provider
+                                          .albumBuildFileList[dateIndex]
+                                              [mediaIndex]
+                                          .path
                                           .toString()
                                           .toLowerCase()
                                           .endsWith("mp4") ||
-                                      provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                      provider
+                                          .albumBuildFileList[dateIndex]
+                                              [mediaIndex]
+                                          .path
                                           .toString()
                                           .toLowerCase()
                                           .endsWith("mov"))) {
@@ -95,22 +106,36 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                       title: "가족 대표 사진으로 등록하기",
                                       onOkPress: () {
                                         provider.setFamilyImage(
-                                          provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                          provider
+                                              .albumBuildFileList[dateIndex]
+                                                  [mediaIndex]
+                                              .path
                                               .toString()
                                               .split("/")
                                               .last,
                                         );
+                                        context
+                                            .read<HomeProvider>()
+                                            .familyImage = provider
+                                                .albumBuildFileList[dateIndex]
+                                            [mediaIndex];
                                       },
                                       okText: "확인",
                                     );
                                   }
                                 },
                                 child: (() {
-                                  if (provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                  if (provider
+                                          .albumBuildFileList[dateIndex]
+                                              [mediaIndex]
+                                          .path
                                           .toString()
                                           .toLowerCase()
                                           .endsWith("mp4") ||
-                                      provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                      provider
+                                          .albumBuildFileList[dateIndex]
+                                              [mediaIndex]
+                                          .path
                                           .toString()
                                           .toLowerCase()
                                           .endsWith("mov")) {
@@ -119,7 +144,10 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                       height: double.infinity,
                                       radius: 5,
                                       file: provider.thumbnailList[
-                                          path.basename(provider.albumBuildFileList[dateIndex][mediaIndex].path)],
+                                          path.basename(provider
+                                              .albumBuildFileList[dateIndex]
+                                                  [mediaIndex]
+                                              .path)],
                                       isIconShown: true,
                                     );
                                   } else {
@@ -127,7 +155,9 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                       width: double.infinity,
                                       height: double.infinity,
                                       radius: 5,
-                                      file: provider.albumBuildFileList[dateIndex][mediaIndex],
+                                      file:
+                                          provider.albumBuildFileList[dateIndex]
+                                              [mediaIndex],
                                     );
                                   }
                                 })(),

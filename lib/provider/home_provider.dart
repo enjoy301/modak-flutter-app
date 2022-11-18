@@ -20,7 +20,6 @@ class HomeProvider extends ChangeNotifier {
   init() async {
     clear();
     await getHomeInfo();
-    print("woiw");
     await getHomeImage();
     await getTodayTalk(DateTime.now());
     await getTodayFortune();
@@ -29,9 +28,10 @@ class HomeProvider extends ChangeNotifier {
 
   final HomeRepository _homeRepository = HomeRepository();
   String? familyCode;
-  File? familyImage;
+  File? _familyImage;
   Fortune? todayFortune;
   List<TodayContent> todayContents = [];
+  int _bottomTabIndex = 0;
 
   Map<String, Map<int, String>> todayTalkMap = {};
   DateTime _selectedDatetime = DateTime.now();
@@ -39,6 +39,13 @@ class HomeProvider extends ChangeNotifier {
 
   DateTime get selectedDateTime => _selectedDatetime;
   DateTime get focusedDateTime => _focusedDateTime;
+  File? get familyImage => _familyImage;
+  int get bottomTabIndex => _bottomTabIndex;
+
+  set familyImage(File? familyImage) {
+    if (familyImage != null) _familyImage = familyImage;
+    notifyListeners();
+  }
 
   set selectedDateTime(DateTime selectedDateTime) {
     _selectedDatetime = selectedDateTime;
@@ -47,6 +54,11 @@ class HomeProvider extends ChangeNotifier {
 
   set focusedDateTime(DateTime focusedDateTime) {
     _focusedDateTime = focusedDateTime;
+    notifyListeners();
+  }
+
+  set bottomTabIndex(int index) {
+    _bottomTabIndex = index;
     notifyListeners();
   }
 
@@ -91,7 +103,9 @@ class HomeProvider extends ChangeNotifier {
 
       if (!File("$mediaDirectoryPath/$imageKey").existsSync()) {
         Map<String, dynamic> urlResponse = await _homeRepository.getMediaURL(
-          ["media/${(await RemoteDataSource.storage.read(key: Strings.familyId))!}/$imageKey"],
+          [
+            "media/${(await RemoteDataSource.storage.read(key: Strings.familyId))!}/$imageKey"
+          ],
         );
 
         List<dynamic> urlList = jsonDecode(
@@ -143,10 +157,12 @@ class HomeProvider extends ChangeNotifier {
     String firstDateString = Date.getFormattedDate(dateTime: firstDate);
     String lastDateString = Date.getFormattedDate(dateTime: lastDate);
 
-    Map<String, dynamic> response = await _homeRepository.getTodayTalk(firstDateString, lastDateString);
+    Map<String, dynamic> response =
+        await _homeRepository.getTodayTalk(firstDateString, lastDateString);
     switch (response[Strings.message]) {
       case Strings.success:
-        Map<String, Map<int, String>> todayTalkWeekMap = response[Strings.response][Strings.todayTalk];
+        Map<String, Map<int, String>> todayTalkWeekMap =
+            response[Strings.response][Strings.todayTalk];
         for (String date in todayTalkWeekMap.keys) {
           todayTalkMap[date] = todayTalkWeekMap[date]!;
         }
@@ -161,11 +177,13 @@ class HomeProvider extends ChangeNotifier {
 
   Future<bool> postTodayTalk(BuildContext context, String content) async {
     String date = Date.getFormattedDate();
-    Map<String, dynamic> response = await _homeRepository.postTodayTalk(content);
+    Map<String, dynamic> response =
+        await _homeRepository.postTodayTalk(content);
     switch (response[Strings.message]) {
       case Strings.success:
         if (todayTalkMap[date] == null) todayTalkMap[date] = <int, String>{};
-        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] = content;
+        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] =
+            content;
         Fluttertoast.showToast(msg: "오늘의 한 마디를 등록하였습니다");
         notifyListeners();
         return true;
