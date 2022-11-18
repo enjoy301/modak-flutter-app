@@ -31,12 +31,37 @@ class HomeRepository {
         Strings.response: {
           Strings.todayFortune: todayFortuneData == null
               ? null
-              : Fortune(
-                  type: todayFortuneData['type'],
-                  content: todayFortuneData[Strings.content]),
-          Strings.familyCode: data[Strings.memberAndFamilyMembers]
-              [Strings.familyCode],
+              : Fortune(type: todayFortuneData['type'], content: todayFortuneData[Strings.content]),
+          Strings.familyCode: data[Strings.memberAndFamilyMembers][Strings.familyCode],
           Strings.todayContents: data[Strings.todayContents],
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
+  Future<Map<String, dynamic>> getHomeImage() async {
+    Map<String, dynamic> response = await remoteDataSource.getHomeImage();
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          'imageKey': response['response'],
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
+  Future<Map<String, dynamic>> getMediaURL(List<dynamic> requestList) async {
+    Map<String, dynamic> response = await remoteDataSource.getMediaDownloadURL(requestList);
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "data": response["response"].data,
         }
       };
     }
@@ -50,9 +75,7 @@ class HomeRepository {
       return {
         Strings.message: Strings.success,
         Strings.response: {
-          Strings.todayFortune: data == null
-              ? null
-              : Fortune(type: data['type'], content: data[Strings.content])
+          Strings.todayFortune: data == null ? null : Fortune(type: data['type'], content: data[Strings.content])
         }
       };
     }
@@ -63,11 +86,9 @@ class HomeRepository {
     String fromDate,
     String toDate,
   ) async {
-    Map<String, dynamic> response =
-        await remoteDataSource.getTodayTalk(fromDate, toDate);
+    Map<String, dynamic> response = await remoteDataSource.getTodayTalk(fromDate, toDate);
     if (response[Strings.result]) {
-      Map<String, dynamic> data =
-          response[Strings.response].data["data"][Strings.result];
+      Map<String, dynamic> data = response[Strings.response].data["data"][Strings.result];
       Map<String, Map<int, String>> result = {};
       for (String key in data.keys) {
         result[key] = <int, String>{};
@@ -89,8 +110,7 @@ class HomeRepository {
   }
 
   Future<Map<String, dynamic>> postTodayTalk(String content) async {
-    Map<String, dynamic> response =
-        await remoteDataSource.postTodayTalk(content);
+    Map<String, dynamic> response = await remoteDataSource.postTodayTalk(content);
     if (response[Strings.result]) {
       return {Strings.message: Strings.success};
     }

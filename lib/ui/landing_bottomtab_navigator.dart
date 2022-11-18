@@ -14,14 +14,25 @@ import 'package:modak_flutter_app/widgets/common/colored_safe_area.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 
 class LandingBottomNavigator extends StatefulWidget {
-  const LandingBottomNavigator({Key? key}) : super(key: key);
+  const LandingBottomNavigator({
+    Key? key,
+    this.currentIndex = 0,
+  }) : super(key: key);
+
+  final int currentIndex;
 
   @override
   State<LandingBottomNavigator> createState() => _LandingBottomNavigatorState();
 }
 
 class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
-  int currentIndex = 0;
+  int currentIndex = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.currentIndex;
+  }
 
   final pages = [
     HomeLandingScreen(),

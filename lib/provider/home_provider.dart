@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/data/dto/fortune.dart';
@@ -9,10 +13,15 @@ import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/date.dart';
 import 'package:provider/provider.dart';
 
+import '../data/datasource/remote_datasource.dart';
+import '../utils/file_system_util.dart';
+
 class HomeProvider extends ChangeNotifier {
   init() async {
     clear();
     await getHomeInfo();
+    print("woiw");
+    await getHomeImage();
     await getTodayTalk(DateTime.now());
     await getTodayFortune();
     notifyListeners();
@@ -20,6 +29,7 @@ class HomeProvider extends ChangeNotifier {
 
   final HomeRepository _homeRepository = HomeRepository();
   String? familyCode;
+  File? familyImage;
   Fortune? todayFortune;
   List<TodayContent> todayContents = [];
 
@@ -64,11 +74,59 @@ class HomeProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> getHomeImage() async {
+    Map<String, dynamic> response = await _homeRepository.getHomeImage();
+    if (response[Strings.message] == Strings.success) {
+      String imageKey = response['response']['imageKey'].toString();
+
+      if (imageKey == "") {
+        return true;
+      }
+
+      String mediaDirectoryPath = await FileSystemUtil.getMediaDirectory();
+
+      if (mediaDirectoryPath == "") {
+        return false;
+      }
+
+      if (!File("$mediaDirectoryPath/$imageKey").existsSync()) {
+        Map<String, dynamic> urlResponse = await _homeRepository.getMediaURL(
+          ["media/${(await RemoteDataSource.storage.read(key: Strings.familyId))!}/$imageKey"],
+        );
+
+        List<dynamic> urlList = jsonDecode(
+          urlResponse['response']['data'],
+        )['url_list'];
+
+        String url = urlList[0];
+
+        RegExp regExp = RegExp(r'.com\/(\w|\W)+\?');
+        String temp = (regExp.stringMatch(url).toString());
+        String fileName = temp.substring(5, temp.length - 1);
+
+        final ByteData imageData = await NetworkAssetBundle(
+          Uri.parse(url),
+        ).load("");
+        final Uint8List bytes = imageData.buffer.asUint8List();
+
+        File file = await File(
+          '$mediaDirectoryPath/$fileName',
+        ).create(recursive: true);
+        file.writeAsBytesSync(bytes);
+
+        familyImage = file;
+      }
+
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
   Future<bool> getTodayFortune() async {
     Map<String, dynamic> response = await _homeRepository.getTodayFortune();
     if (response[Strings.message] == Strings.success) {
       todayFortune = response[Strings.response][Strings.todayFortune];
-      print(response[Strings.response]);
       notifyListeners();
       return true;
     }

@@ -86,6 +86,20 @@ class AlbumRepository {
     return {Strings.message: Strings.fail};
   }
 
+  Future<Map<String, dynamic>> setFamilyImage(String key) async {
+    Map<String, dynamic> response = await remoteDataSource.setFamilyImage(key);
+
+    if (response[Strings.result]) {
+      return {
+        Strings.message: Strings.success,
+        Strings.response: {
+          "data": response["response"].data,
+        }
+      };
+    }
+    return {Strings.message: Strings.fail};
+  }
+
   Future<Map<String, dynamic>> getMediaURL(List<dynamic> requestList) async {
     Map<String, dynamic> response = await remoteDataSource.getMediaDownloadURL(requestList);
 

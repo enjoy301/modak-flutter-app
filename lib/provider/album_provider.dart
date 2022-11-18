@@ -287,6 +287,23 @@ class AlbumProvider extends ChangeNotifier {
     };
   }
 
+  /// 미디어 info를 넘기면, 디렉토리에서 찾던 다운하던 로드하고 로드된 파일을 리턴함.
+  Future<Map<String, dynamic>> setFamilyImage(String key) async {
+    Map<String, dynamic> response = await _albumRepository.setFamilyImage(
+      key,
+    );
+
+    if (response['message'] == "SUCCESS") {
+      Fluttertoast.showToast(msg: "가족 대표사진 등록!");
+    } else {
+      Fluttertoast.showToast(msg: "대표사진 등록 실패");
+    }
+
+    return {
+      "result": "SUCCESS",
+    };
+  }
+
   void addScrollListener() {
     scrollController!.addListener(
       () async {
@@ -407,8 +424,6 @@ class AlbumProvider extends ChangeNotifier {
           } else {
             faceLastId = -1;
           }
-
-          print(faceData);
 
           List<dynamic> requestList = [];
           for (List<dynamic> f in faceData) {
