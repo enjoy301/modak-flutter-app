@@ -9,8 +9,8 @@ import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/common/checkbox_widget.dart';
+import 'package:modak_flutter_app/widgets/common/media_widget.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
-import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
 import '../../../../assets/icons/dark/DarkIcons_icons.dart';
@@ -115,34 +115,13 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                             },
                             child: Stack(
                               children: [
-                                (() {
-                                  if (provider.albumFiles[index].path
-                                          .endsWith('mp4') ||
-                                      provider.albumFiles[index].path
-                                          .endsWith('MOV')) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Image.file(
-                                        provider.albumThumbnailFiles[
-                                            path.basename(provider
-                                                .albumFiles[index].path)]!,
-                                        width: 160,
-                                        height: double.infinity,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  } else {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Image.file(
-                                        provider.albumFiles[index],
-                                        width: 160,
-                                        height: double.infinity,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  }
-                                })(),
+                                MediaWidget(
+                                  file: provider.albumFiles[index],
+                                  boxFit: BoxFit.cover,
+                                  width: 160,
+                                  radius: 12,
+                                  height: double.infinity,
+                                ),
                                 Container(
                                   width: 160,
                                   decoration: BoxDecoration(

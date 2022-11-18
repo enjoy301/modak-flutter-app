@@ -9,17 +9,17 @@ import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/chat_date_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_feelings_widget.dart';
-import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_loading_widget.dart';
-import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_info_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_loading_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_media_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_onway_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_roulette_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_topic_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_video_widget.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/user_provider.dart';
-import 'dialog_video_widget.dart';
 
 class ChatDialogWidget extends StatefulWidget {
   const ChatDialogWidget({
@@ -135,7 +135,7 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                               isTail: widget.isTail,
                             );
                           case "image":
-                            return DialogImageWidget(
+                            return DialogMediaWidget(
                               chat: widget.chat,
                               isMine: isMine,
                             );
@@ -162,8 +162,8 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                               isHead: widget.isHead,
                               isTail: widget.isTail,
                             );
-                          case "imageLoading":
-                            return DialogImageLoadingWidget(chat: widget.chat);
+                          case "loading":
+                            return DialogLoadingWidget(chat: widget.chat);
                           default:
                             return SizedBox.shrink();
                         }

@@ -3,24 +3,26 @@ import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
+import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
+import 'package:modak_flutter_app/widgets/common/media_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/chat_provider.dart';
 import '../../../utils/media_util.dart';
 
-class DialogImageWidget extends StatefulWidget {
-  const DialogImageWidget({Key? key, required this.chat, required this.isMine})
+class DialogMediaWidget extends StatefulWidget {
+  const DialogMediaWidget({Key? key, required this.chat, required this.isMine})
       : super(key: key);
 
   final Chat chat;
   final bool isMine;
 
   @override
-  State<DialogImageWidget> createState() => _DialogImageWidgetState();
+  State<DialogMediaWidget> createState() => _DialogMediaWidgetState();
 }
 
-class _DialogImageWidgetState extends State<DialogImageWidget> {
+class _DialogMediaWidgetState extends State<DialogMediaWidget> {
   late Future initial;
 
   @override
@@ -49,20 +51,19 @@ class _DialogImageWidgetState extends State<DialogImageWidget> {
                         ),
                       );
                     },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.file(
-                        provider.getThumbnail(
-                          widget.chat.metaData!['key'][0],
-                        ),
-                        fit: BoxFit.cover,
-                        height: double.infinity,
-                        width: double.infinity,
-                        gaplessPlayback: true,
-                      ),
+                    child: MediaWidget(
+                      height: double.infinity,
+                      width: double.infinity,
+                      radius: 15,
+                      file: provider
+                          .getThumbnail(widget.chat.metaData!['key'][0]),
+                      boxFit: BoxFit.cover,
                     ),
                   ),
-                  if (int.parse(widget.chat.metaData!['count']) > 1)
+                  if ((provider
+                          .getMediaFiles(widget.chat.metaData!['key'])[0]
+                          .isImage()) &&
+                      int.parse(widget.chat.metaData!['count']) > 1)
                     Positioned(
                       right: 12,
                       bottom: 12,
@@ -76,7 +77,7 @@ class _DialogImageWidgetState extends State<DialogImageWidget> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          widget.chat.metaData!['count'],
+                          widget.chat.metaData!['count'].toString(),
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: Font.size_mediumText,
@@ -98,6 +99,7 @@ class _DialogImageWidgetState extends State<DialogImageWidget> {
   @override
   void initState() {
     super.initState();
+    print(3);
     initial = getVideoThumbnailFile(
       context.read<ChatProvider>().getThumbnail(
             widget.chat.metaData!['key'][0],

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
@@ -214,10 +215,26 @@ class CommonVideoScreen extends StatefulWidget {
 }
 
 class _CommonVideoScreenState extends State<CommonVideoScreen> {
-  late final VideoPlayerController _controller =
-      VideoPlayerController.file(widget.file);
+  Timer? _timer;
+  bool isIconVisible = true;
+  late final VideoPlayerController _controller = VideoPlayerController.file(
+    widget.file,
+  );
   late final Future<void> _initializeVideoPlayerFuture =
-      _controller.initialize();
+      _controller.initialize().then((value) => {
+            _controller.addListener(() {
+              setState(() {
+                if (!_controller.value.isPlaying &&
+                    _controller.value.isInitialized &&
+                    (_controller.value.duration ==
+                        _controller.value.position)) {
+                  setState(() {
+                    _controller.pause();
+                  });
+                }
+              });
+            })
+          });
 
   @override
   void initState() {
@@ -236,48 +253,71 @@ class _CommonVideoScreenState extends State<CommonVideoScreen> {
       backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            children: [
-              FutureBuilder(
-                future: _initializeVideoPlayerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
-              Positioned.fill(
-                child: Transform.scale(
-                  scale: 5,
+          GestureDetector(
+            onTap: () {
+              _timer?.cancel();
+              isIconVisible = true;
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                FutureBuilder(
+                  future: _initializeVideoPlayerFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return Container(
+                        constraints: BoxConstraints(
+                          maxHeight:
+                              MediaQuery.of(context).size.height * 8 / 10,
+                          maxWidth: MediaQuery.of(context).size.width,
+                        ),
+                        child: VideoPlayer(_controller),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+                Transform.scale(
+                  scale: 3,
                   child: IconButton(
                     onPressed: () {
                       setState(() {
+                        isIconVisible = true;
+                        _timer?.cancel();
                         if (_controller.value.isPlaying) {
                           _controller.pause();
                         } else {
                           _controller.play();
+                          _timer = Timer(Duration(seconds: 3), () {
+                            setState(() {
+                              isIconVisible = false;
+                            });
+                          });
                         }
                       });
                     },
-                    icon: Icon(
-                      _controller.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow,
+                    icon: Visibility(
+                      visible: isIconVisible,
+                      child: Icon(
+                        _controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(
               width: double.infinity,
-              child: VideoProgressIndicator(_controller, allowScrubbing: true)),
+              child: VideoProgressIndicator(
+                _controller,
+                allowScrubbing: true,
+              )),
         ],
       ),
     );

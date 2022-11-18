@@ -59,6 +59,7 @@ Future<List<File>> getImageFromAlbum() async {
 
 Future<File> getVideoThumbnailFile(File file) async {
   String? type = file.toString().mediaType();
+  print(file);
   if (type != "mp4") {
     return file;
   }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
+import 'package:modak_flutter_app/widgets/common/media_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/chat_provider.dart';
@@ -33,9 +34,6 @@ class _DialogVideoWidget extends State<DialogVideoWidget> {
                 maxWidth: MediaQuery.of(context).size.width * 4 / 7,
                 maxHeight: MediaQuery.of(context).size.width * 2 / 3,
               ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
               child: GestureDetector(
                 onTap: () {
                   Get.to(
@@ -46,8 +44,13 @@ class _DialogVideoWidget extends State<DialogVideoWidget> {
                     ),
                   );
                 },
-                child: Image.file(
-                  provider.chatThumbnailFiles[widget.chat.metaData!['key'][0]]!,
+                child: MediaWidget(
+                  width: 300,
+                  height: 300,
+                  file: provider.getMediaFiles(
+                    widget.chat.metaData!['key'],
+                  )[0],
+                  radius: 15,
                 ),
               ),
             ),

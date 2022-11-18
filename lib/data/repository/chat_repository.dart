@@ -29,7 +29,8 @@ class ChatRepository {
   Future<Map<String, dynamic>> getLetters() async {
     Map<String, dynamic> response = await remoteDataSource.getLetters();
     if (response[Strings.result]) {
-      List<dynamic> data = response[Strings.response].data['data']['letterList'];
+      List<dynamic> data =
+          response[Strings.response].data['data']['letterList'];
       List<Letter> letterList = [];
       for (dynamic rawLetter in data) {
         letterList.add(
@@ -37,7 +38,8 @@ class ChatRepository {
             fromMemberId: rawLetter[Strings.fromMemberId],
             toMemberId: rawLetter[Strings.toMemberId],
             content: rawLetter[Strings.content],
-            envelope: rawLetter[Strings.envelope].toString().toEnvelopeType() ?? EnvelopeType.red,
+            envelope: rawLetter[Strings.envelope].toString().toEnvelopeType() ??
+                EnvelopeType.red,
             date: rawLetter[Strings.date],
           ),
         );
@@ -53,7 +55,8 @@ class ChatRepository {
   }
 
   Future<Map<String, dynamic>> getChats(ChatPagingDTO chatPagingDTO) async {
-    Map<String, dynamic> response = await remoteDataSource.getChats(chatPagingDTO);
+    Map<String, dynamic> response =
+        await remoteDataSource.getChats(chatPagingDTO);
 
     if (response[Strings.result]) {
       return {
@@ -94,7 +97,8 @@ class ChatRepository {
   }
 
   Future<Map<String, dynamic>> postChat(String chat, {Map? metaData}) async {
-    Map<String, dynamic> response = await remoteDataSource.postChat(chat, metaData: metaData);
+    Map<String, dynamic> response =
+        await remoteDataSource.postChat(chat, metaData: metaData);
 
     if (response[Strings.result]) {
       return {Strings.message: Strings.success};
@@ -122,7 +126,8 @@ class ChatRepository {
   }
 
   /// 미디어 업로드 함수
-  Future<Map<String, dynamic>> uploadMedia(MediaUploadDTO mediaUploadDTO) async {
+  Future<Map<String, dynamic>> uploadMedia(
+      MediaUploadDTO mediaUploadDTO, int step) async {
     Map<String, dynamic> mediaUrlData = mediaUploadDTO.mediaUrlData;
     String familyId = mediaUploadDTO.familyId;
     String memberId = mediaUploadDTO.memberId;
@@ -134,10 +139,11 @@ class ChatRepository {
     String policy = mediaUrlData['fields']['policy'];
     String xAmzSignature = mediaUrlData['fields']['x-amz-signature'];
     int xAmzMetaImageCount = mediaUploadDTO.imageCount;
-
+    print("steptest $step");
     FormData formData = FormData.fromMap(
       {
-        "key": "zip/$familyId/${DateTime.now().millisecondsSinceEpoch}/Modak.zip",
+        "key":
+            "zip/$familyId/${DateTime.now().millisecondsSinceEpoch}/Modak.zip",
         "x-amz-algorithm": xAmzAlgorithm.trim(),
         "x-amz-credential": xAmzCredential.trim(),
         "x-amz-date": xAmzDate.trim(),
@@ -146,12 +152,14 @@ class ChatRepository {
         "x-amz-signature": xAmzSignature.trim(),
         "x-amz-meta-user_id": memberId,
         "x-amz-meta-family_id": familyId,
+        "x-amz-meta-step": step,
         "x-amz-meta-image_count": xAmzMetaImageCount,
         "file": mediaUploadDTO.file,
       },
     );
 
-    Map<String, dynamic> response = await remoteDataSource.uploadMedia(formData);
+    Map<String, dynamic> response =
+        await remoteDataSource.uploadMedia(formData);
 
     if (response[Strings.result]) {
       return {
