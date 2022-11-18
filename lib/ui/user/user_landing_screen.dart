@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
+import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
-import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
+import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/widgets/common/colored_safe_area.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
-import 'package:modak_flutter_app/widgets/modal/modal_check_widget.dart';
+import 'package:modak_flutter_app/widgets/modal/theme_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/user/user_profile_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +30,7 @@ class UserLandingScreen extends StatelessWidget {
         child: Scaffold(
             backgroundColor: Coloring.gray_50,
             appBar: headerDefaultWidget(
-              title: "유저",
+              title: "가족 정보",
               customLeading: IconButton(
                 onPressed: () {
                   Get.toNamed("/user/settings");
@@ -60,7 +63,7 @@ class UserLandingScreen extends StatelessWidget {
                           child: Container(
                             width: double.infinity,
                             height: 1,
-                            color: Coloring.gray_40,
+                            color: Coloring.gray_10,
                           ),
                         )
                       ] +
@@ -78,60 +81,88 @@ class UserLandingScreen extends StatelessWidget {
                               ))
                           .toList() +
                       <Widget>[
-                        if (userProvider.familyMembersWithoutMe.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 1,
-                              color: Coloring.gray_40,
-                            ),
-                          ),
                         Padding(
                           padding: const EdgeInsets.only(top: 16),
-                          child: ButtonMainWidget(
-                            title: "초대 코드",
-                            onPressed: () {
+                          child: GestureDetector(
+                            onTap: () {
                               Get.toNamed("/user/invitation/landing");
                             },
+                            child: Container(
+                              width: double.infinity,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(22),
+                                boxShadow: [Shadowing.bottom],
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(LightIcons.Plus),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 6),
+                                    child: Text("가족 초대하기"),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 48),
-                          child: ButtonMainWidget(
-                            title: "로그아웃",
-                            onPressed: () {
-                              modalCheckWidget(context,
-                                  title: "정말 로그아웃 하시겠습니까?",
-                                  okText: "로그아웃",
-                                  noText: "취소", onOkPressed: () {
-                                userProvider.logout(context);
-                              }, onNoPressed: () {
-                                Get.back();
-                              });
-                            },
-                            // onPressed: provider.navigateToFamilyInfo(),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 48),
-                          child: ButtonMainWidget(
-                            title: "회원탈퇴",
-                            onPressed: () {
-                              modalCheckWidget(
-                                context,
-                                title: "정말 회원탈퇴 하시겠습니까?",
-                                okText: "회원탈퇴",
-                                noText: "취소",
-                                onOkPressed: () {
-                                  userProvider.withdraw(context);
+                          padding: EdgeInsets.only(top: 120, bottom: 20),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  themeModalWidget(
+                                    context,
+                                    title: "정말 회원 탈퇴 하시겠습니까?",
+                                    okText: "회원 탈퇴",
+                                    cancelText: "취소",
+                                    onOkPress: () {
+                                      userProvider.withdraw(context);
+                                    },
+                                    onCancelPress: () {
+                                      Get.back();
+                                    },
+                                  );
                                 },
-                                onNoPressed: () {
-                                  Get.back();
+                                child: Text(
+                                  "회원 탈퇴",
+                                  style: EasyStyle.text(Coloring.gray_10,
+                                      Font.size_mediumText, Font.weight_medium),
+                                ),
+                              ),
+                              Container(
+                                width: .8,
+                                height: 35,
+                                color: Coloring.gray_10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  themeModalWidget(
+                                    context,
+                                    title: "정말 로그아웃 하시겠습니까?",
+                                    okText: "로그아웃",
+                                    cancelText: "취소",
+                                    onOkPress: () {
+                                      userProvider.logout(context);
+                                    },
+                                    onCancelPress: () {
+                                      Get.back();
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            // onPressed: provider.navigateToFamilyInfo(),
+                                child: Text(
+                                  "로그아웃",
+                                  style: EasyStyle.text(Coloring.gray_10,
+                                      Font.size_mediumText, Font.weight_medium),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

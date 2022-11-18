@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
-import 'package:modak_flutter_app/constant/enum/chat_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
@@ -19,7 +18,12 @@ import 'package:modak_flutter_app/widgets/modal/theme_position_list_widget.dart'
 import 'package:provider/provider.dart';
 
 class DialogBubbleWidget extends StatefulWidget {
-  const DialogBubbleWidget({Key? key, required this.chat, required this.isMine, this.isHead = true, this.isTail = true})
+  const DialogBubbleWidget(
+      {Key? key,
+      required this.chat,
+      required this.isMine,
+      this.isHead = true,
+      this.isTail = true})
       : super(key: key);
   final Chat chat;
   final bool isMine;
@@ -75,18 +79,18 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
                 Get.back();
               }
             },
-            {
-              'name': '집안일 등록',
-              'icon': Icon(
-                LightIcons.Plus,
-                color: Coloring.gray_0,
-              ),
-              'onTap': () {
-                Get.back();
-                chatProvider.chatMode = ChatMode.functionTodo;
-                chatProvider.todoTitle = widget.chat.content;
-              }
-            },
+            // {
+            //   'name': '집안일 등록',
+            //   'icon': Icon(
+            //     LightIcons.Plus,
+            //     color: Coloring.gray_0,
+            //   ),
+            //   'onTap': () {
+            //     Get.back();
+            //     chatProvider.chatMode = ChatMode.functionTodo;
+            //     chatProvider.todoTitle = widget.chat.content;
+            //   }
+            // },
             {
               'name': '룰렛 돌리기',
               'icon': Icon(
@@ -122,7 +126,8 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
                   alignment: Alignment.center,
                   transform: Matrix4.rotationX(pi),
                   child: CustomPaint(
-                    painter: CustomShape(widget.isMine ? "send" : "receive", isPressed),
+                    painter: CustomShape(
+                        widget.isMine ? "send" : "receive", isPressed),
                   ),
                 ),
               ),
@@ -145,7 +150,8 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
-                padding: EdgeInsets.only(top: 9, right: 10, bottom: 8, left: 10),
+                padding:
+                    EdgeInsets.only(top: 9, right: 10, bottom: 8, left: 10),
                 child: ScalableTextWidget(
                   widget.chat.content,
                   style: TextStyle(
@@ -160,7 +166,9 @@ class _DialogBubbleWidgetState extends State<DialogBubbleWidget> {
             /// row children 3번 시간과 읽은 수 표시
             ChatComponentInfoWidget(
               chat: widget.chat,
-              crossAxisAlignment: widget.isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment: widget.isMine
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
               showTime: widget.isTail,
             ),
           ],

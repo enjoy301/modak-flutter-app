@@ -50,22 +50,22 @@ class DialogFeelingsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         GestureDetector(
-          onLongPress: () {
-            Vibration.vibrate(duration: 10, amplitude: 140);
-            listModalWidget(context, {
-              "클립보드 복사": () {
-                Clipboard.setData(ClipboardData(text: chat.content));
-                Fluttertoast.showToast(msg: "클립보드에 복사되었습니다");
-                Get.back();
-              },
-              "집안일 등록": () {
-                Get.back();
-              },
-              "룰렛 돌리기": () {
-                Get.back();
-              },
-            });
-          },
+          // onLongPress: () {
+          //   Vibration.vibrate(duration: 10, amplitude: 140);
+          //   listModalWidget(context, {
+          //     "클립보드 복사": () {
+          //       Clipboard.setData(ClipboardData(text: chat.content));
+          //       Fluttertoast.showToast(msg: "클립보드에 복사되었습니다");
+          //       Get.back();
+          //     },
+          //     "집안일 등록": () {
+          //       Get.back();
+          //     },
+          //     "룰렛 돌리기": () {
+          //       Get.back();
+          //     },
+          //   });
+          // },
           child: Container(
             constraints: BoxConstraints(
               minWidth: 30,

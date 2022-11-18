@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
@@ -43,8 +45,9 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                           name: "chat",
                         ),
                       ],
-                      options:
-                          CarouselOptions(height: double.infinity, enlargeStrategy: CenterPageEnlargeStrategy.scale)),
+                      options: CarouselOptions(
+                          height: double.infinity,
+                          enlargeStrategy: CenterPageEnlargeStrategy.scale)),
                 ),
               ),
               GestureDetector(
@@ -80,39 +83,40 @@ class _AuthLandingScreenState extends State<AuthLandingScreen> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () => provider.onSocialClick(context, "APPLE"),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  margin: EdgeInsets.only(right: 30, bottom: 50, left: 30),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(48),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: Image.asset(
-                          "lib/assets/images/auth/apple_icon.png",
-                          width: 30,
-                          height: 30,
+              if (Platform.isIOS)
+                GestureDetector(
+                  onTap: () => provider.onSocialClick(context, "APPLE"),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    margin: EdgeInsets.only(right: 30, bottom: 50, left: 30),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(48),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Image.asset(
+                            "lib/assets/images/auth/apple_icon.png",
+                            width: 30,
+                            height: 30,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Apple 로그인",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: Font.size_largeText,
-                          fontWeight: Font.weight_semiBold,
+                        Text(
+                          "Apple 로그인",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Font.size_largeText,
+                            fontWeight: Font.weight_semiBold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
