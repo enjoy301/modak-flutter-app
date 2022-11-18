@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-Future<File> getImageFromCamera() async {
+Future<File?> getImageFromCamera() async {
   try {
     File file = File((await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -20,11 +20,11 @@ Future<File> getImageFromCamera() async {
     return file;
   } catch (e) {
     log("failed to get image, $e");
-    return File("");
+    return null;
   }
 }
 
-Future<File> getVideoFromCamera() async {
+Future<File?> getVideoFromCamera() async {
   try {
     File file = File((await ImagePicker().pickVideo(
       source: ImageSource.camera,
@@ -34,7 +34,7 @@ Future<File> getVideoFromCamera() async {
     return file;
   } catch (e) {
     log("failed to get image, $e");
-    return File("");
+    return null;
   }
 }
 
@@ -51,26 +51,32 @@ Future<List<File>> getImageFromAlbum() async {
   for (AssetEntity entity in entities) {
     File? file = await entity.file;
     if (file != null) {
-      files.add(file);
+      String path = file.path.toLowerCase();
+
+      if (path.endsWith('mp4') ||
+          path.endsWith('mov') ||
+          path.endsWith('jpg') ||
+          path.endsWith('jpeg') ||
+          path.endsWith('png')) {
+        files.add(file);
+      }
     }
   }
   return files;
 }
 
 Future<File> getVideoThumbnailFile(File file) async {
-  String? type = file.toString().mediaType();
-  print(file);
-  if (type != "mp4") {
+  if (file.path.toLowerCase().endsWith('mp4') || file.path.toLowerCase().endsWith('mov')) {
+    String? fileName = await VideoThumbnail.thumbnailFile(
+      video: file.path,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.PNG,
+      quality: 80,
+    );
+    return File(fileName!);
+  } else {
     return file;
   }
-
-  String? fileName = await VideoThumbnail.thumbnailFile(
-    video: file.path,
-    thumbnailPath: (await getTemporaryDirectory()).path,
-    imageFormat: ImageFormat.PNG,
-    quality: 80,
-  );
-  return File(fileName!);
 }
 
 Future<MultipartFile> mediaFilesToZip(List<File> files) async {

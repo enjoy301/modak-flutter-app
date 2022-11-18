@@ -82,12 +82,10 @@ class TodoProvider extends ChangeNotifier {
           Map<String, List<dynamic>>.from(response[Strings.response]["items"]),
           response[Strings.response]["gauge"],
         );
-        Fluttertoast.showToast(msg: "할 일 성공적으로 가져옴");
         todoSavedFromDate = fromDate.isBefore(todoSavedFromDate) ? fromDate : todoSavedFromDate;
         todoSavedToDate = toDate.isAfter(todoSavedToDate) ? toDate : todoSavedToDate;
         return true;
       case Strings.fail:
-        Fluttertoast.showToast(msg: "할 일 가져오기 실패");
         return false;
     }
     return false;

@@ -9,9 +9,9 @@ import 'package:modak_flutter_app/ui/user/user_family_modify_screen.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/chat_date_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_bubble_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_feelings_widget.dart';
+import 'package:modak_flutter_app/widgets/chat/dialog/dialog_image_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_info_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_loading_widget.dart';
-import 'package:modak_flutter_app/widgets/chat/dialog/dialog_media_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_onway_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_roulette_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/dialog/dialog_topic_widget.dart';
@@ -40,8 +40,7 @@ class ChatDialogWidget extends StatefulWidget {
 class _ChatDialogwidgettate extends State<ChatDialogWidget> {
   @override
   Widget build(BuildContext context) {
-    final bool isMine =
-        widget.chat.userId == context.read<UserProvider>().me!.memberId;
+    final bool isMine = widget.chat.userId == context.read<UserProvider>().me!.memberId;
     if (widget.chat.metaData!['type_code'] == 'info') {
       return DialogInfoWidget(chat: widget.chat);
     }
@@ -54,15 +53,10 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
 
             /// column children 2번 채팅 한 bubble 전체
             Container(
-              margin: EdgeInsets.only(
-                  top: !widget.isHead ? 2 : 9,
-                  right: 10,
-                  bottom: !widget.isTail ? 2 : 8,
-                  left: 10),
+              margin: EdgeInsets.only(top: !widget.isHead ? 2 : 9, right: 10, bottom: !widget.isTail ? 2 : 8, left: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                textDirection:
-                    isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                textDirection: isMine ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                 children: [
                   /// row children 1번 프로필
                   !isMine && widget.isHead
@@ -70,15 +64,10 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                           padding: const EdgeInsets.only(right: 10),
                           child: GestureDetector(
                             onTap: () {
-                              if (context
-                                      .read<UserProvider>()
-                                      .findUserById(widget.chat.userId)
-                                      ?.name !=
-                                  null) {
+                              if (context.read<UserProvider>().findUserById(widget.chat.userId)?.name != null) {
                                 Get.to(
                                   UserFamilyModifyScreen(
-                                    familyMember: userProvider
-                                        .findUserById(widget.chat.userId)!,
+                                    familyMember: userProvider.findUserById(widget.chat.userId)!,
                                   ),
                                 );
                               }
@@ -105,11 +94,7 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: 5),
                               child: ScalableTextWidget(
-                                context
-                                        .read<UserProvider>()
-                                        .findUserById(widget.chat.userId)
-                                        ?.name ??
-                                    '(알수없음)',
+                                context.read<UserProvider>().findUserById(widget.chat.userId)?.name ?? '(알수없음)',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   color: Coloring.gray_10,
@@ -135,7 +120,7 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                               isTail: widget.isTail,
                             );
                           case "image":
-                            return DialogMediaWidget(
+                            return DialogImageWidget(
                               chat: widget.chat,
                               isMine: isMine,
                             );
@@ -151,10 +136,7 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                               isTail: widget.isTail,
                             );
                           case "topic":
-                            return DialogTopicWidget(
-                                chat: widget.chat,
-                                isMine: isMine,
-                                isTail: widget.isTail);
+                            return DialogTopicWidget(chat: widget.chat, isMine: isMine, isTail: widget.isTail);
                           case "roulette":
                             return DialogRouletteWidget(
                               chat: widget.chat,

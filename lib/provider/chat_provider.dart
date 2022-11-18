@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -84,12 +83,8 @@ class ChatProvider extends ChangeNotifier {
   List<File> get albumFiles => _albumFiles;
 
   /// 앨범의 동영상 썸네일
-  late Map<String, File> _albumThumbnailFiles;
-  Map<String, File> get albumThumbnailFiles => _albumThumbnailFiles;
-
-  /// 채팅의 동영상 썸네일
-  late Map<String, File> _chatThumbnailFiles;
-  Map<String, File> get chatThumbnailFiles => _chatThumbnailFiles;
+  late Map<String, File> _thumbnailFiles;
+  Map<String, File> get thumbnailFiles => _thumbnailFiles;
 
   late String _mediaDirectory;
   String get mediaDirectory => _mediaDirectory;
@@ -114,8 +109,7 @@ class ChatProvider extends ChangeNotifier {
     _chats = [];
     _albumFiles = [];
     _selectedMediaFiles = [];
-    _albumThumbnailFiles = {};
-    _chatThumbnailFiles = {};
+    _thumbnailFiles = {};
     _mediaDirectory = await FileSystemUtil.getMediaDirectory();
     _screenHeight = MediaQuery.of(context).size.height;
 
@@ -134,15 +128,9 @@ class ChatProvider extends ChangeNotifier {
 
         if (item.containsKey("message_data")) {
           Map<String, dynamic> message = item["message_data"];
-          if (message['metadata']['type_code'] == 'image' ||
-              message['metadata']['type_code'] == 'video') {
-            print(message['metadata']);
+          if (message['metadata']['type_code'] == 'image' || message['metadata']['type_code'] == 'video') {
             for (Chat chat in _chats) {
-              print("!!!");
-              print(chat.metaData!['step']);
-              print(chat.metaData!['step'] == message['metadata']['step']);
-              if (chat.metaData!['step'].toString() ==
-                  message['metadata']['step'].toString()) {
+              if (chat.metaData!['step'].toString() == message['metadata']['step'].toString()) {
                 _chats.remove(chat);
                 break;
               }
@@ -167,8 +155,7 @@ class ChatProvider extends ChangeNotifier {
     );
 
     /// 현재 connection 불러오기
-    Map<String, dynamic> connectionResponse =
-        await _chatRepository.getConnections();
+    Map<String, dynamic> connectionResponse = await _chatRepository.getConnections();
 
     if (connectionResponse[Strings.message] == Strings.fail) {
       Fluttertoast.showToast(msg: "커넥션 불러오기 실패");
@@ -177,8 +164,7 @@ class ChatProvider extends ChangeNotifier {
 
     _disconnectCount = 0;
     for (String uid in connectionResponse['response']['data'].keys) {
-      final Map<dynamic, dynamic> connection =
-          connectionResponse['response']['data'][uid];
+      final Map<dynamic, dynamic> connection = connectionResponse['response']['data'][uid];
 
       if (uid == _memberId) {
         connection['joining'] = true;
@@ -187,10 +173,7 @@ class ChatProvider extends ChangeNotifier {
           _disconnectCount++;
         }
       }
-      connection['lastJoined'] =
-          DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch /
-                  1000 +
-              32400;
+      connection['lastJoined'] = DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch / 1000 + 32400;
       _connections[uid] = connection;
     }
 
@@ -233,8 +216,9 @@ class ChatProvider extends ChangeNotifier {
       await Future(() => context.read<AlbumProvider>().loadMedia(mediaKeyList));
 
       for (Map mediaKey in mediaKeyList) {
-        if (mediaKey['key'].endsWith('mp4')) {
-          _chatThumbnailFiles[mediaKey['key']] = await getVideoThumbnailFile(
+        if (mediaKey['key'].toString().toLowerCase().endsWith("mp4") ||
+            mediaKey['key'].toString().toLowerCase().endsWith("mov")) {
+          _thumbnailFiles[mediaKey['key'].split('/')[2]] = await getVideoThumbnailFile(
             File("$_mediaDirectory/${mediaKey['key']}"),
           );
         }
@@ -247,8 +231,7 @@ class ChatProvider extends ChangeNotifier {
         Chat(
           userId: message['memberId'],
           content: message['content'],
-          sendAt:
-              DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000,
+          sendAt: DateTime.parse(message['sendAt']).millisecondsSinceEpoch / 1000,
           metaData: message['metaData'],
           unReadCount: _disconnectCount,
         ),
@@ -263,10 +246,7 @@ class ChatProvider extends ChangeNotifier {
     if (isJoining) {
       _disconnectCount--;
     } else {
-      connection['lastJoined'] =
-          DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch /
-                  1000 +
-              32400;
+      connection['lastJoined'] = DateTime.parse(connection['lastJoined']).millisecondsSinceEpoch / 1000 + 32400;
       _disconnectCount++;
     }
     _connections[id.toString()] = connection;
@@ -306,8 +286,7 @@ class ChatProvider extends ChangeNotifier {
       context,
     );
 
-    Map<String, dynamic> response =
-        await _chatRepository.postChat(chat, metaData: metaData);
+    Map<String, dynamic> response = await _chatRepository.postChat(chat, metaData: metaData);
 
     if (response['message'] == Strings.fail) {
       _chats.removeAt(0);
@@ -317,75 +296,27 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  void postMediaFileFromCamera(
-    File file,
-    String type,
-  ) async {
-    List<File> compressedFiles = [];
-    if (type == "jpg") {
-      var imageResult = (await FlutterImageCompress.compressAndGetFile(
-        file.path,
-        "$_mediaDirectory/temp0.jpg",
-        quality: 30,
-      ))!;
-      compressedFiles.add(imageResult);
-    } else if (type == "mp4") {
-      var videoResult = ((await VideoCompress.compressVideo(
-        file.path,
-        quality: VideoQuality.LowQuality,
-        deleteOrigin: false,
-        includeAudio: true,
-      ))!
-          .file!);
-      compressedFiles.add(videoResult);
-    }
-    MultipartFile zipFile = await mediaFilesToZip(
-      compressedFiles,
-    );
-
-    Map<String, dynamic> urlResponse =
-        await _chatRepository.getMediaUploadUrl();
-
-    if (urlResponse['message'] == Strings.fail) {
-      return;
-    }
-
-    Map<String, dynamic> mediaUrlData = jsonDecode(
-      urlResponse['response']['data'],
-    );
-
-    Map<String, dynamic> response = await _chatRepository.uploadMedia(
-        MediaUploadDTO(
-          mediaUrlData: mediaUrlData,
-          file: zipFile,
-          type: "zip",
-          imageCount: 1,
-          memberId: _memberId,
-          familyId: _familyId,
-        ),
-        3);
-
-    if (response[Strings.message] == Strings.success) {
-      Fluttertoast.showToast(msg: "미디어 전송 성공");
-    } else {
-      Fluttertoast.showToast(msg: "미디어 전송 실패");
-    }
-  }
-
-  void postMediaFilesFromAlbum(BuildContext context) async {
+  void postMediaFiles(BuildContext context, {bool isLocal = false}) async {
     if (_selectedMediaFiles.isEmpty) {
       return;
     }
+
+    if (isLocal) {
+      _thumbnailFiles[_selectedMediaFiles[0].path.split('/').last] = await getVideoThumbnailFile(
+        _selectedMediaFiles[0],
+      );
+    }
+
     int imageRandom = 0;
     List<int> videoRandomList = [];
 
     for (File file in _selectedMediaFiles) {
-      if (file.isImage() && imageRandom == 0) {
+      if (imageRandom == 0 && file.isImage()) {
         imageRandom = math.Random().nextInt(math.pow(10, 9).toInt()) + 1;
         addNewChat(
           Chat(
-            userId: context.read<UserProvider>().me!.memberId,
-            content: _selectedMediaFiles[0].path,
+            userId: _memberId as int,
+            content: file.path,
             sendAt: DateTime.now().millisecondsSinceEpoch / 1000,
             metaData: {
               "type_code": "loading",
@@ -402,7 +333,7 @@ class ChatProvider extends ChangeNotifier {
         addNewChat(
           Chat(
             userId: context.read<UserProvider>().me!.memberId,
-            content: _selectedMediaFiles[0].path,
+            content: file.path,
             sendAt: DateTime.now().millisecondsSinceEpoch / 1000,
             metaData: {
               "type_code": "loading",
@@ -419,14 +350,11 @@ class ChatProvider extends ChangeNotifier {
 
     /// 로직 전 작업
     _chatMode = ChatMode.textInput;
-    // 채팅 임의로 만들기
 
     /// 로직 작업
-    Map<String, dynamic> urlResponse =
-        await _chatRepository.getMediaUploadUrl();
+    Map<String, dynamic> urlResponse = await _chatRepository.getMediaUploadUrl();
     if (urlResponse['message'] == Strings.success) {
-      Map<String, dynamic> mediaUrlData =
-          jsonDecode(urlResponse['response']['data']);
+      Map<String, dynamic> mediaUrlData = jsonDecode(urlResponse['response']['data']);
 
       /// 압축 로직
       List<File> compressedImageFiles = [];
@@ -436,7 +364,7 @@ class ChatProvider extends ChangeNotifier {
       for (File file in _selectedMediaFiles) {
         String fileExt = extension(file.path);
 
-        if ([".jpg", ".jpeg", ".png"].contains(extension(file.path))) {
+        if (["jpg", "jpeg", "png"].contains(file.path.mediaType())) {
           CompressFormat compressFormat = CompressFormat.jpeg;
 
           if (fileExt == '.png') {
@@ -450,20 +378,20 @@ class ChatProvider extends ChangeNotifier {
             quality: 30,
           ));
           compressedImageFiles.add(imageResult!);
-
           index++;
-        } else if (extension(file.path) == ".mp4") {
+        } else if (file.path.mediaType() == "mp4" || file.path.mediaType() == "mov") {
+          await VideoCompress.setLogLevel(0);
+
           var videoResult = (await VideoCompress.compressVideo(
             file.absolute.path,
-            quality: VideoQuality.LowQuality,
+            quality: VideoQuality.DefaultQuality,
             deleteOrigin: false,
             includeAudio: true,
           ))!
               .file!;
           compressedVideoFiles.add(videoResult);
         } else {
-          log("이 파일형식 반영 안됨. ${extension(file.path)}");
-          log(file.path);
+          Fluttertoast.showToast(msg: "지원하지 않는 파일 형식입니다. ${extension(file.path)}");
         }
       }
 
@@ -527,8 +455,7 @@ class ChatProvider extends ChangeNotifier {
 
   /// 채팅리스트에 앞에 추가합니다.
   void addNewChat(Chat chat, BuildContext context) async {
-    if (chat.metaData!['type_code'] == 'image' ||
-        chat.metaData!['type_code'] == 'video') {
+    if (chat.metaData!['type_code'] == 'image' || chat.metaData!['type_code'] == 'video') {
       List<Map<String, String>> mediaKeyList = [];
       for (String key in chat.metaData!['key']) {
         mediaKeyList.add({"key": key});
@@ -536,12 +463,9 @@ class ChatProvider extends ChangeNotifier {
       if (mediaKeyList.isNotEmpty) {
         await context.read<AlbumProvider>().loadMedia(mediaKeyList);
 
-        if ((mediaKeyList[0]["key"])!.endsWith('.mp4')) {
-          _chatThumbnailFiles[mediaKeyList[0]["key"]!] =
-              await getVideoThumbnailFile(
-            File(
-              "$_mediaDirectory/${mediaKeyList[0]["key"]!}",
-            ),
+        if ((mediaKeyList[0]["key"])!.mediaType() == "mp4" || (mediaKeyList[0]["key"])!.mediaType() == "mov") {
+          _thumbnailFiles[mediaKeyList[0]["key"]!.split('/')[2]] = await getVideoThumbnailFile(
+            File("$_mediaDirectory/${mediaKeyList[0]["key"]!}"),
           );
         }
       }
@@ -570,8 +494,7 @@ class ChatProvider extends ChangeNotifier {
     scrollController.addListener(
       () async {
         /// 채팅 아래 계속 붙어 있는 state 관리
-        if (scrollController.offset ==
-                scrollController.position.minScrollExtent &&
+        if (scrollController.offset == scrollController.position.minScrollExtent &&
             !scrollController.position.outOfRange) {
           _isBottom = true;
         } else {
@@ -579,8 +502,7 @@ class ChatProvider extends ChangeNotifier {
         }
 
         /// infinity scroll
-        if (scrollController.offset ==
-                scrollController.position.maxScrollExtent &&
+        if (scrollController.offset == scrollController.position.maxScrollExtent &&
             !scrollController.position.outOfRange) {
           if (isInfinityScrollLoading == true) {
             return;
@@ -625,8 +547,8 @@ class ChatProvider extends ChangeNotifier {
     _albumFiles = mediaFile;
 
     for (File file in _albumFiles) {
-      if (file.path.endsWith('mp4') || file.path.endsWith('MOV')) {
-        _albumThumbnailFiles[basename(file.path)] = await getVideoThumbnailFile(
+      if (file.path.toLowerCase().endsWith('mp4') || file.path.toLowerCase().endsWith('mov')) {
+        _thumbnailFiles[basename(file.path)] = await getVideoThumbnailFile(
           file,
         );
       }

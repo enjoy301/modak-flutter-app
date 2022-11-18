@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
@@ -68,16 +69,8 @@ class _FunctionListWidget extends State<FunctionListWidget> {
       'icon': LightIcons.TicketStar,
       'color': Coloring.bg_yellow,
     },
-    {
-      'name': "편지",
-      'icon': LightIcons.Message,
-      'color': Coloring.point_pureorange
-    },
-    {
-      'name': "주제 던지기",
-      'icon': LightIcons.Chat,
-      'color': Coloring.todo_lightgreen
-    }
+    {'name': "편지", 'icon': LightIcons.Message, 'color': Coloring.point_pureorange},
+    {'name': "주제 던지기", 'icon': LightIcons.Chat, 'color': Coloring.todo_lightgreen}
   ];
   @override
   Widget build(BuildContext context) {
@@ -99,8 +92,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                   ),
                   child: Text(
                     "가족들과 함께 모닥의 기능들을 이용해보세요",
-                    style: EasyStyle.text(Coloring.gray_10,
-                        Font.size_mediumText, Font.weight_medium),
+                    style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_medium),
                   ),
                 ),
                 GestureDetector(
@@ -125,8 +117,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                           padding: const EdgeInsets.only(left: 12),
                           child: Text(
                             "가족을 초대하세요",
-                            style: EasyStyle.text(Colors.black,
-                                Font.size_mediumText, Font.weight_medium),
+                            style: EasyStyle.text(Colors.black, Font.size_mediumText, Font.weight_medium),
                           ),
                         ),
                         Expanded(child: SizedBox.shrink()),
@@ -169,19 +160,23 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                     {
                       "사진 찍기": () async {
                         Future(() => Navigator.pop(context));
-                        File image = await getImageFromCamera();
-                        chatProvider.postMediaFileFromCamera(
-                          image,
-                          "jpg",
-                        );
+                        File? image = await getImageFromCamera();
+
+                        if (image != null) {
+                          Fluttertoast.showToast(msg: "카메라 접근 에러");
+                          chatProvider.addSelectedMedia(image);
+                          chatProvider.postMediaFiles(context, isLocal: true);
+                        }
                       },
                       "동영상 촬영": () async {
                         Future(() => Navigator.pop(context));
-                        File video = await getVideoFromCamera();
-                        chatProvider.postMediaFileFromCamera(
-                          video,
-                          "mp4",
-                        );
+                        File? video = await getVideoFromCamera();
+
+                        if (video != null) {
+                          Fluttertoast.showToast(msg: "카메라 접근 에러");
+                          chatProvider.addSelectedMedia(video);
+                          chatProvider.postMediaFiles(context, isLocal: true);
+                        }
                       },
                     },
                   );
@@ -211,8 +206,7 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                 data: functionIconWidgetValues[5],
                 onTap: () {
                   int idx = math.Random().nextInt(topics.length);
-                  Iterable<MapEntry<String, String>> entry =
-                      topics[idx].entries;
+                  Iterable<MapEntry<String, String>> entry = topics[idx].entries;
                   chatProvider.postChat(
                     context,
                     entry.first.value,

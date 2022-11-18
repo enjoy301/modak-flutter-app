@@ -23,8 +23,8 @@ extension StringConverter on String? {
 
 extension StringToTypeCertain on String {
   NotificationType toNotificationType() {
-    return NotificationType.values.firstWhere((element) =>
-        this == element.toString().substring(0, element.toString().length));
+    return NotificationType.values
+        .firstWhere((element) => this == element.toString().substring(0, element.toString().length));
   }
 }
 
@@ -61,17 +61,23 @@ extension StringToType on String? {
   }
 
   String? mediaType() {
-    if (this == null) return null;
-    RegExp regExp = RegExp(r'png|mp4|jpg');
+    if (this == null) {
+      return null;
+    }
+
+    RegExp regExp = RegExp(r'png|mp4|jpg|jpeg|mov');
     String res = this!.toLowerCase().split(".").last;
-    List<String> extensions =
-        regExp.allMatches(res).map((m) => m.group(0).toString()).toList();
+    List<String> extensions = regExp.allMatches(res).map((m) => m.group(0).toString()).toList();
     if (extensions.contains("png")) {
       return "png";
     } else if (extensions.contains("mp4")) {
       return "mp4";
     } else if (extensions.contains("jpg")) {
       return "jpg";
+    } else if (extensions.contains("jpeg")) {
+      return "jpeg";
+    } else if (extensions.contains("mov")) {
+      return "mov";
     }
     return null;
   }

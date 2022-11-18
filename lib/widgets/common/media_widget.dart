@@ -3,18 +3,21 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
-import 'package:modak_flutter_app/utils/media_util.dart';
+import 'package:path/path.dart' as path;
+import 'package:provider/provider.dart';
+
+import '../../provider/chat_provider.dart';
 
 class MediaWidget extends StatefulWidget {
-  const MediaWidget(
-      {Key? key,
-      required this.file,
-      this.width,
-      this.height,
-      this.radius = 0,
-      this.isIconShown = true,
-      this.boxFit = BoxFit.cover})
-      : super(key: key);
+  const MediaWidget({
+    Key? key,
+    required this.file,
+    this.width,
+    this.height,
+    this.radius = 0,
+    this.isIconShown = true,
+    this.boxFit = BoxFit.cover,
+  }) : super(key: key);
 
   final File file;
   final double? width;
@@ -28,49 +31,41 @@ class MediaWidget extends StatefulWidget {
 }
 
 class _MediaWidgetState extends State<MediaWidget> {
-  File? file;
-  @override
-  void initState() {
-    getThumbnail();
-    super.initState();
-  }
-
-  getThumbnail() async {
-    if (widget.file.path.mediaType() == "mp4") {
-      file = await getVideoThumbnailFile(widget.file);
-    } else {
-      file = widget.file;
-    }
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(widget.radius),
-          child: file == null
-              ? Container(
-                  color: Colors.white,
-                  width: widget.width,
-                  height: widget.height,
-                )
-              : Image.file(
-                  file!,
-                  fit: widget.boxFit,
-                  width: widget.width,
-                  height: widget.height,
-                  gaplessPlayback: true,
+    return Consumer<ChatProvider>(
+      builder: (context, provider, child) {
+        return Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(widget.radius),
+              child: widget.file.path.toLowerCase().endsWith("mp4") || widget.file.path.toLowerCase().endsWith("mov")
+                  // ? Text("${path.basename(widget.file.path)}")
+                  ? Image.file(
+                      provider.thumbnailFiles[path.basename(widget.file.path)]!,
+                      fit: widget.boxFit,
+                      width: widget.width,
+                      height: widget.height,
+                      gaplessPlayback: true,
+                    )
+                  : Image.file(
+                      widget.file,
+                      fit: widget.boxFit,
+                      width: widget.width,
+                      height: widget.height,
+                      gaplessPlayback: true,
+                    ),
+            ),
+            if (widget.file.isVideo() && widget.isIconShown)
+              Positioned.fill(
+                child: Icon(
+                  LightIcons.Play,
+                  size: 48,
                 ),
-        ),
-        if (widget.file.isVideo() && widget.isIconShown)
-          Positioned.fill(
-              child: Icon(
-            LightIcons.Play,
-            size: 48,
-          )),
-      ],
+              ),
+          ],
+        );
+      },
     );
   }
 }

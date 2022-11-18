@@ -9,8 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../provider/chat_provider.dart';
 
 class DialogVideoWidget extends StatefulWidget {
-  const DialogVideoWidget({Key? key, required this.chat, required this.isMine})
-      : super(key: key);
+  const DialogVideoWidget({Key? key, required this.chat, required this.isMine}) : super(key: key);
 
   final Chat chat;
   final bool isMine;
@@ -47,9 +46,7 @@ class _DialogVideoWidget extends State<DialogVideoWidget> {
                 child: MediaWidget(
                   width: 300,
                   height: 300,
-                  file: provider.getMediaFiles(
-                    widget.chat.metaData!['key'],
-                  )[0],
+                  file: provider.getThumbnail(widget.chat.metaData!['key'][0]),
                   radius: 15,
                 ),
               ),
