@@ -27,7 +27,7 @@ class _AlbumLabelDetailWidget extends State<AlbumLabelDetailWidget> {
               builder: (context, snapshot) {
                 return GridView.builder(
                   shrinkWrap: true,
-                  controller: provider.labelScrollController,
+                  controller: provider.themeScrollController,
                   itemCount: provider.labelDetailFileList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
