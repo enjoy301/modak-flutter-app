@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
@@ -47,6 +48,8 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Hive 시작
   await Hive.initFlutter();
@@ -102,8 +105,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialBinding: BindingsBuilder.put(() => NotificationController(context),
-          permanent: true),
+      initialBinding: BindingsBuilder.put(() => NotificationController(context), permanent: true),
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: 'Font_Poppins',
@@ -140,8 +142,9 @@ class MyApp extends StatelessWidget {
         "/user/settings": (context) => UserSettingsScreen(),
         "/user/invitation/landing": (context) => UserInvitationLandingScreen(),
         "/user/invitation/input": (context) => ChangeNotifierProvider(
-            create: (_) => UserInvitationInputVM(),
-            child: UserInvitationInputScreen()),
+              create: (_) => UserInvitationInputVM(),
+              child: UserInvitationInputScreen(),
+            ),
       },
     );
   }

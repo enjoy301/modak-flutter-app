@@ -45,6 +45,9 @@ class AlbumProvider extends ChangeNotifier {
   ScrollController? _scrollController;
   ScrollController? get scrollController => _scrollController;
 
+  ScrollController? _themeScrollController;
+  ScrollController? get themeScrollController => _themeScrollController;
+
   late bool isInfinityScrollLoading;
 
   late int faceLastId;
@@ -52,29 +55,37 @@ class AlbumProvider extends ChangeNotifier {
   late List<File> _faceDetailFileList = [];
   get faceDetailFileList => _faceDetailFileList;
 
-  late ScrollController _faceScrollController;
-  ScrollController get faceScrollController => _faceScrollController;
+  ScrollController? _faceScrollController;
+  ScrollController? get faceScrollController => _faceScrollController;
 
   late int labelLastId;
+  late int _selectedLabel;
+  get selectedLabel => _selectedLabel;
 
   late List<File> _labelDetailFileList;
   get labelDetailFileList => _labelDetailFileList;
 
-  late ScrollController _labelScrollController;
-  ScrollController get labelScrollController => _labelScrollController;
+  late bool _isLabelLoading;
+  get isLabelLoading => _isLabelLoading;
 
   Future<void> initTotalData() async {
     _albumBuildFileList = [];
+    _labelDetailFileList = [];
     _faceDataList = [];
     _faceFileList = [];
     _labelDataList = [];
     _labelFileList = [];
     _thumbnailList = {};
     _scrollController ??= ScrollController();
+    _themeScrollController ??= ScrollController();
+    _faceScrollController ??= ScrollController();
     isInfinityScrollLoading = false;
     mediaLastId = 0;
+    labelLastId = 0;
+    _selectedLabel = 0;
     index = -1;
     lastDate = "2001-03-01";
+    _isLabelLoading = false;
 
     Map<String, dynamic> mediaInfoResponse = await _albumRepository.getMediaInfoList(mediaLastId, 20);
     if (mediaInfoResponse['result'] == Strings.fail) {
@@ -128,21 +139,11 @@ class AlbumProvider extends ChangeNotifier {
 
     _labelDataList = jsonDecode(labelResponse['response']['data']);
 
-    List<dynamic> labelDataMap = [];
-    for (Map<dynamic, dynamic> labelData in _labelDataList) {
-      labelDataMap.add({'key': labelData['key']});
+    if (_labelDataList.isNotEmpty) {
+      initLabelView(_labelDataList[0]['label']);
     }
 
-    if (labelDataMap.isNotEmpty) {
-      Map<String, dynamic> mediaFileListResponse = await loadMedia(labelDataMap);
-      if (mediaFileListResponse['result'] == Strings.fail) {
-        return;
-      }
-
-      for (File file in mediaFileListResponse['response']) {
-        _labelFileList.add(file);
-      }
-    }
+    notifyListeners();
 
     Fluttertoast.showToast(msg: "앨범 성공적으로 불러옴");
   }
@@ -150,9 +151,9 @@ class AlbumProvider extends ChangeNotifier {
   Future initFaceView(int clusterId) async {
     faceLastId = 0;
     _faceDetailFileList = [];
-    _faceScrollController = ScrollController();
+    _faceScrollController ??= ScrollController();
 
-    Map<String, dynamic> faceResponse = await _albumRepository.getFaceDetail(faceLastId, 10, clusterId);
+    Map<String, dynamic> faceResponse = await _albumRepository.getFaceDetail(faceLastId, 18, clusterId);
 
     if (faceResponse['result'] == Strings.fail) {
       return;
@@ -162,6 +163,8 @@ class AlbumProvider extends ChangeNotifier {
 
     if (faceData.isNotEmpty) {
       faceLastId = faceData.last[0];
+    } else {
+      faceLastId = -1;
     }
 
     List<dynamic> requestList = [];
@@ -186,9 +189,11 @@ class AlbumProvider extends ChangeNotifier {
   Future initLabelView(String labelName) async {
     labelLastId = 0;
     _labelDetailFileList = [];
-    _labelScrollController = ScrollController();
 
-    Map<String, dynamic> labelResponse = await _albumRepository.getLabelDetail(labelLastId, 10, labelName);
+    _isLabelLoading = true;
+    notifyListeners();
+
+    Map<String, dynamic> labelResponse = await _albumRepository.getLabelDetail(labelLastId, 18, labelName);
 
     if (labelResponse['result'] == Strings.fail) {
       return;
@@ -216,7 +221,14 @@ class AlbumProvider extends ChangeNotifier {
       }
     }
 
-    return;
+    _isLabelLoading = false;
+    notifyListeners();
+  }
+
+  void setSelectedLabel(int index) {
+    _selectedLabel = index;
+    labelLastId = 0;
+    notifyListeners();
   }
 
   /// 미디어 info를 넘기면, 디렉토리에서 찾던 다운하던 로드하고 로드된 파일을 리턴함.
@@ -231,14 +243,12 @@ class AlbumProvider extends ChangeNotifier {
     List<String> downloadKeyList = [];
     for (Map<String, dynamic> mediaInfo in mediaInfoList) {
       if (!File("$mediaDirectoryPath/${mediaInfo['key']}").existsSync()) {
-        print(mediaInfo['key']);
         downloadKeyList.add(mediaInfo['key']);
       }
     }
 
     /// 없는 미디어 다운로드
     if (downloadKeyList.isNotEmpty) {
-      print(downloadKeyList);
       Map<String, dynamic> urlResponse = await _albumRepository.getMediaURL(
         downloadKeyList,
       );
@@ -318,6 +328,106 @@ class AlbumProvider extends ChangeNotifier {
 
           notifyListeners();
           isInfinityScrollLoading = false;
+        }
+      },
+    );
+  }
+
+  void addThemeScrollListener() {
+    themeScrollController!.addListener(
+      () async {
+        if (themeScrollController!.offset == themeScrollController!.position.maxScrollExtent &&
+            !themeScrollController!.position.outOfRange) {
+          if (isInfinityScrollLoading == true || labelLastId == -1) {
+            return;
+          }
+
+          isInfinityScrollLoading = true;
+
+          Map<String, dynamic> labelResponse = await _albumRepository.getLabelDetail(
+            labelLastId,
+            18,
+            _labelDataList[_selectedLabel]['label'],
+          );
+
+          if (labelResponse['result'] == Strings.fail) {
+            return;
+          }
+
+          List<dynamic> labelData = jsonDecode(labelResponse['response']['data']);
+
+          if (labelData.isNotEmpty) {
+            labelLastId = labelData.last[0];
+          } else {
+            labelLastId = -1;
+          }
+
+          List<dynamic> requestList = [];
+          for (List<dynamic> f in labelData) {
+            requestList.add({'key': f[1]});
+          }
+
+          if (requestList.isNotEmpty) {
+            Map<String, dynamic> mediaFileListResponse = await loadMedia(requestList);
+            if (mediaFileListResponse['result'] == Strings.fail) {
+              return;
+            }
+
+            for (File file in mediaFileListResponse['response']) {
+              _labelDetailFileList.add(file);
+            }
+          }
+
+          notifyListeners();
+          isInfinityScrollLoading = false;
+        }
+      },
+    );
+  }
+
+  void addFaceScrollListener(int value) {
+    faceScrollController!.addListener(
+      () async {
+        if (faceScrollController!.offset == faceScrollController!.position.maxScrollExtent &&
+            !faceScrollController!.position.outOfRange) {
+          if (isInfinityScrollLoading == true || faceLastId == -1) {
+            return;
+          }
+
+          Map<String, dynamic> faceResponse = await _albumRepository.getFaceDetail(faceLastId, 18, value);
+
+          if (faceResponse['result'] == Strings.fail) {
+            return;
+          }
+
+          List<dynamic> faceData = jsonDecode(faceResponse['response']['data']);
+
+          if (faceData.isNotEmpty) {
+            faceLastId = faceData.last[0];
+          } else {
+            faceLastId = -1;
+          }
+
+          print(faceData);
+
+          List<dynamic> requestList = [];
+          for (List<dynamic> f in faceData) {
+            requestList.add({'key': f[1]});
+          }
+
+          if (requestList.isNotEmpty) {
+            Map<String, dynamic> mediaFileListResponse = await loadMedia(requestList);
+            if (mediaFileListResponse['result'] == Strings.fail) {
+              return;
+            }
+
+            for (File file in mediaFileListResponse['response']) {
+              _faceDetailFileList.add(file);
+            }
+          }
+
+          isInfinityScrollLoading = false;
+          notifyListeners();
         }
       },
     );

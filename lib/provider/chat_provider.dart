@@ -76,7 +76,7 @@ class ChatProvider extends ChangeNotifier {
   ChatMode get chatMode => _chatMode;
 
   /// 선택된 미디어 파일명
-  final List<File> _selectedMediaFiles = [];
+  late List<File> _selectedMediaFiles = [];
   List<File> get selectedMediaFiles => _selectedMediaFiles;
 
   /// 모든 앨범 파일
@@ -113,6 +113,7 @@ class ChatProvider extends ChangeNotifier {
     _chatMode = ChatMode.textInput;
     _chats = [];
     _albumFiles = [];
+    _selectedMediaFiles = [];
     _albumThumbnailFiles = {};
     _chatThumbnailFiles = {};
     _mediaDirectory = await FileSystemUtil.getMediaDirectory();
