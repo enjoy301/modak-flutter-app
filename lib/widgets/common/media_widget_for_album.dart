@@ -2,20 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
-import 'package:modak_flutter_app/utils/extension_util.dart';
-import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
-import '../../provider/chat_provider.dart';
+import '../../provider/album_provider.dart';
 
-class MediaWidget extends StatefulWidget {
-  const MediaWidget({
+class MediaWidgetForAlbum extends StatefulWidget {
+  const MediaWidgetForAlbum({
     Key? key,
     required this.file,
     this.width,
     this.height,
     this.radius = 0,
-    this.isIconShown = true,
+    this.isIconShown = false,
     this.boxFit = BoxFit.cover,
   }) : super(key: key);
 
@@ -27,13 +25,13 @@ class MediaWidget extends StatefulWidget {
   final BoxFit boxFit;
 
   @override
-  State<MediaWidget> createState() => _MediaWidgetState();
+  State<MediaWidgetForAlbum> createState() => _MediaWidgetForAlbum();
 }
 
-class _MediaWidgetState extends State<MediaWidget> {
+class _MediaWidgetForAlbum extends State<MediaWidgetForAlbum> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatProvider>(
+    return Consumer<AlbumProvider>(
       builder: (context, provider, child) {
         return Stack(
           children: [
@@ -41,7 +39,7 @@ class _MediaWidgetState extends State<MediaWidget> {
               borderRadius: BorderRadius.circular(widget.radius),
               child: widget.file.path.toLowerCase().endsWith("mp4") || widget.file.path.toLowerCase().endsWith("mov")
                   ? Image.file(
-                      provider.thumbnailFiles[path.basename(widget.file.path)]!,
+                      widget.file,
                       fit: widget.boxFit,
                       width: widget.width,
                       height: widget.height,
@@ -55,7 +53,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                       gaplessPlayback: true,
                     ),
             ),
-            if (widget.file.isVideo() && widget.isIconShown)
+            if (widget.isIconShown)
               Positioned.fill(
                 child: Icon(
                   LightIcons.Play,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
+import 'package:modak_flutter_app/widgets/common/media_widget_for_album.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
@@ -104,38 +105,32 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                     );
                                   }
                                 },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                    1,
-                                  ),
-                                  child: (() {
-                                    if (provider.albumBuildFileList[dateIndex][mediaIndex].path
-                                            .toString()
-                                            .toLowerCase()
-                                            .endsWith("mp4") ||
-                                        provider.albumBuildFileList[dateIndex][mediaIndex].path
-                                            .toString()
-                                            .toLowerCase()
-                                            .endsWith("mov")) {
-                                      return Image.file(
-                                        provider.thumbnailList[
-                                            path.basename(provider.albumBuildFileList[dateIndex][mediaIndex].path)],
-                                        fit: BoxFit.cover,
-                                        height: double.infinity,
-                                        width: double.infinity,
-                                        gaplessPlayback: true,
-                                      );
-                                    } else {
-                                      return Image.file(
-                                        provider.albumBuildFileList[dateIndex][mediaIndex],
-                                        fit: BoxFit.cover,
-                                        height: double.infinity,
-                                        width: double.infinity,
-                                        gaplessPlayback: true,
-                                      );
-                                    }
-                                  })(),
-                                ),
+                                child: (() {
+                                  if (provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                          .toString()
+                                          .toLowerCase()
+                                          .endsWith("mp4") ||
+                                      provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                          .toString()
+                                          .toLowerCase()
+                                          .endsWith("mov")) {
+                                    return MediaWidgetForAlbum(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      radius: 5,
+                                      file: provider.thumbnailList[
+                                          path.basename(provider.albumBuildFileList[dateIndex][mediaIndex].path)],
+                                      isIconShown: true,
+                                    );
+                                  } else {
+                                    return MediaWidgetForAlbum(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      radius: 5,
+                                      file: provider.albumBuildFileList[dateIndex][mediaIndex],
+                                    );
+                                  }
+                                })(),
                               );
                             },
                           ),

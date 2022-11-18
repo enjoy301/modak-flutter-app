@@ -106,7 +106,7 @@ extension MediaValidation on File {
   bool isImage() {
     File file = this;
     String path = file.path.toLowerCase();
-    if (path.endsWith("png") || path.endsWith("jpg")) {
+    if (path.endsWith("png") || path.endsWith("jpg") || path.endsWith("jpg")) {
       return true;
     }
     if (path.endsWith("mp4") || path.endsWith("mov")) {
