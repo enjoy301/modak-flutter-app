@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/data/dto/todo.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
@@ -291,6 +292,8 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                         const EdgeInsets.only(right: 30, bottom: 24, left: 30),
                     child: ButtonMainWidget(
                       title: "돌려 돌려~",
+                      color: Coloring.main,
+                      shadow: Shadowing.yellow,
                       isValid: title.isNotEmpty && participatedUsers.length > 1,
                       onPressed: () async {
                         FocusScope.of(context).unfocus();

@@ -152,9 +152,9 @@ class _ChatDialogwidgettate extends State<ChatDialogWidget> {
                             );
                           case "topic":
                             return DialogTopicWidget(
-                              chat: widget.chat,
-                              isMine: isMine,
-                            );
+                                chat: widget.chat,
+                                isMine: isMine,
+                                isTail: widget.isTail);
                           case "roulette":
                             return DialogRouletteWidget(
                               chat: widget.chat,

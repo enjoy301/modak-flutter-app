@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/ui/chat/roulette/chat_roulette_result_screen.dart';
+import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
@@ -51,81 +53,63 @@ class _DialogRouletteWidgetState extends State<DialogRouletteWidget> {
               padding: MaterialStateProperty.all(EdgeInsets.zero),
               overlayColor: MaterialStateProperty.all(Colors.transparent)),
           child: Container(
+            padding: EdgeInsets.all(20),
             constraints: BoxConstraints(
               minWidth: MediaQuery.of(context).size.width * 0.6,
               maxWidth: MediaQuery.of(context).size.width * 0.6,
             ),
             decoration: BoxDecoration(
-                color: Coloring.bg_red,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                border:
-                    Border.all(color: Colors.black.withOpacity(0.3), width: 4)),
-            child: Padding(
-              padding: EdgeInsets.only(top: 15, right: 15, bottom: 6, left: 15),
-              child: Column(
-                children: [
-                  ScalableTextWidget(
-                    widget.chat.metaData!['title'],
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: Font.size_subTitle,
-                      fontWeight: Font.weight_semiBold,
-                    ),
-                    textAlign: TextAlign.center,
+                border: Border.all(color: Coloring.todo_orange)),
+            child: Column(
+              children: [
+                ScalableTextWidget(
+                  widget.chat.metaData!['title'],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: Font.size_subTitle,
+                    fontWeight: Font.weight_semiBold,
                   ),
-                  Text(
-                    "룰렛 결과가 도착했습니다",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: Font.size_mediumText,
-                      fontWeight: Font.weight_medium,
-                    ),
-                    textAlign: TextAlign.center,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "룰렛 결과가 도착했습니다",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: Font.size_mediumText,
+                    fontWeight: Font.weight_medium,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 30),
-                    child: Image.asset(
-                      "lib/assets/images/others/il_roulette.png",
-                      width: MediaQuery.of(context).size.width * 0.4,
-                    ),
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 30),
+                  child: Image.asset(
+                    "lib/assets/images/others/il_roulette.png",
+                    width: MediaQuery.of(context).size.width * 0.4,
                   ),
-                  Text(
-                    "내 결과를 확인하세요",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Font.size_mediumText,
-                        fontWeight: Font.weight_regular),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ButtonMainWidget(
+                    title: "결과 확인",
+                    height: 40,
+                    color: Coloring.main,
+                    shadow: Shadowing.none,
+                    onPressed: () {
+                      Get.to(ChatRouletteResultScreen(
+                          title: widget.chat.metaData!['title'],
+                          addTodo: widget.chat.metaData!['addTodo'],
+                          participatedUsers: List<User>.from(widget
+                              .chat.metaData!['participatedUsers']
+                              .map((entity) => jsonToUser(entity))
+                              .toList()),
+                          selectedUser: jsonToUser(
+                              widget.chat.metaData!['selectedUser'])));
+                    },
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {
-                        Get.to(ChatRouletteResultScreen(
-                            title: widget.chat.metaData!['title'],
-                            addTodo: widget.chat.metaData!['addTodo'],
-                            participatedUsers: List<User>.from(widget
-                                .chat.metaData!['participatedUsers']
-                                .map((entity) => jsonToUser(entity))
-                                .toList()),
-                            selectedUser: jsonToUser(
-                                widget.chat.metaData!['selectedUser'])));
-                      },
-                      style: ButtonStyle(
-                          overlayColor:
-                              MaterialStateProperty.all(Coloring.gray_50),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
-                      child: Text(
-                        "결과 확인",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: Font.size_mediumText,
-                            fontWeight: Font.weight_regular),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),

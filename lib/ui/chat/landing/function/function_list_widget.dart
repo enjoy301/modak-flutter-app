@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,29 @@ class FunctionListWidget extends StatefulWidget {
 }
 
 class _FunctionListWidget extends State<FunctionListWidget> {
+  final List<Map<String, String>> topics = [
+    {
+      "가족 퀴즈": "아빠와 엄마 혹은 남편과 아내분의 첫 데이트한 장소는 어딜까요??",
+    },
+    {
+      "가족 퀴즈": "엄마가 가장 좋아하는 음식은?",
+    },
+    {
+      "가족 퀴즈": "아빠가 가장 좋아하는 음식은?",
+    },
+    {
+      "가족 대화": "다들 오늘 계획은 어떻게 되시나요? 아니면 오늘 하루 어떻게 보내셨나요?",
+    },
+    {
+      "가족 대화": "가족에게 감사한 점이 있다면?",
+    },
+    {
+      "가족 대화": "요즘 가장 큰 고민거리는 무엇인가요",
+    },
+    {
+      "가족 대화": "다음 휴가 때 어디로 가지...",
+    },
+  ];
   final List<Map<String, dynamic>> functionIconWidgetValues = [
     {
       'name': "앨범",
@@ -185,7 +209,19 @@ class _FunctionListWidget extends State<FunctionListWidget> {
               ),
               ChatFunctionIconWidget(
                 data: functionIconWidgetValues[5],
-                onTap: () {},
+                onTap: () {
+                  int idx = math.Random().nextInt(topics.length);
+                  Iterable<MapEntry<String, String>> entry =
+                      topics[idx].entries;
+                  chatProvider.postChat(
+                    context,
+                    entry.first.value,
+                    metaData: {
+                      "type_code": "topic",
+                      "title": entry.first.key,
+                    },
+                  );
+                },
               )
             ],
           ),

@@ -50,7 +50,6 @@ void main() async {
 
   // Hive 시작
   await Hive.initFlutter();
-
   Hive
     ..initFlutter()
     ..registerAdapter(UserAdapter())
