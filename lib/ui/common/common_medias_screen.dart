@@ -5,14 +5,11 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/utils/media_util.dart';
 import 'package:video_player/video_player.dart';
 
 class CommonMediasScreen extends StatefulWidget {
-  const CommonMediasScreen(
-      {Key? key, required this.files, this.initialIndex = 0})
-      : super(key: key);
+  const CommonMediasScreen({Key? key, required this.files, this.initialIndex = 0}) : super(key: key);
 
   final List<File> files;
   final int initialIndex;
@@ -25,9 +22,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
   bool showHeaderAndFooter = true;
   int imageIndex = 0;
   final List<File> filesWithThumbnail = [];
-  final ScrollController _scrollController = ScrollController();
-  late PageController pageController =
-      PageController(initialPage: widget.initialIndex);
+  late PageController pageController = PageController(initialPage: widget.initialIndex);
 
   @override
   void initState() {
@@ -38,7 +33,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
 
   addFiles() async {
     for (File file in widget.files) {
-      if (file.path.toString().mediaType() == "mp4") {
+      if (file.path.toLowerCase().endsWith("mp4") || file.path.toLowerCase().endsWith("mov")) {
         filesWithThumbnail.add(await getVideoThumbnailFile(file));
       } else {
         filesWithThumbnail.add(file);
@@ -87,7 +82,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
                 children: widget.files
                     .mapIndexed(
                       (index, file) => Center(
-                        child: file.toString().mediaType() == "mp4"
+                        child: file.path.toLowerCase().endsWith("mp4") || file.path.toLowerCase().endsWith("mov")
                             ? CommonVideoScreen(
                                 file: file,
                               )
@@ -131,8 +126,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
                                           children: [
                                             Center(
                                               child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(
+                                                borderRadius: BorderRadius.circular(
                                                   3,
                                                 ),
                                                 child: Image.file(
@@ -150,8 +144,7 @@ class _CommonMediasScreenState extends State<CommonMediasScreen> {
                                                   width: 50,
                                                   height: 80,
                                                   decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
+                                                    borderRadius: BorderRadius.circular(
                                                       3,
                                                     ),
                                                     border: Border.all(
@@ -220,21 +213,27 @@ class _CommonVideoScreenState extends State<CommonVideoScreen> {
   late final VideoPlayerController _controller = VideoPlayerController.file(
     widget.file,
   );
-  late final Future<void> _initializeVideoPlayerFuture =
-      _controller.initialize().then((value) => {
-            _controller.addListener(() {
-              setState(() {
-                if (!_controller.value.isPlaying &&
-                    _controller.value.isInitialized &&
-                    (_controller.value.duration ==
-                        _controller.value.position)) {
-                  setState(() {
-                    _controller.pause();
-                  });
-                }
-              });
-            })
-          });
+  late final Future<void> _initializeVideoPlayerFuture = _controller.initialize().then(
+        (value) => {
+          _controller.addListener(
+            () {
+              setState(
+                () {
+                  if (!_controller.value.isPlaying &&
+                      _controller.value.isInitialized &&
+                      (_controller.value.duration == _controller.value.position)) {
+                    setState(
+                      () {
+                        _controller.pause();
+                      },
+                    );
+                  }
+                },
+              );
+            },
+          )
+        },
+      );
 
   @override
   void initState() {
@@ -269,8 +268,7 @@ class _CommonVideoScreenState extends State<CommonVideoScreen> {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return Container(
                         constraints: BoxConstraints(
-                          maxHeight:
-                              MediaQuery.of(context).size.height * 8 / 10,
+                          maxHeight: MediaQuery.of(context).size.height * 8 / 10,
                           maxWidth: MediaQuery.of(context).size.width,
                         ),
                         child: VideoPlayer(_controller),
@@ -302,9 +300,7 @@ class _CommonVideoScreenState extends State<CommonVideoScreen> {
                     icon: Visibility(
                       visible: isIconVisible,
                       child: Icon(
-                        _controller.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow,
+                        _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
                       ),
                     ),
                   ),

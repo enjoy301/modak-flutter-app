@@ -3,28 +3,23 @@ import 'package:get/get.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
-import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.dart';
 import 'package:modak_flutter_app/widgets/common/media_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/chat_provider.dart';
-import '../../../utils/media_util.dart';
 
-class DialogMediaWidget extends StatefulWidget {
-  const DialogMediaWidget({Key? key, required this.chat, required this.isMine})
-      : super(key: key);
+class DialogImageWidget extends StatefulWidget {
+  const DialogImageWidget({Key? key, required this.chat, required this.isMine}) : super(key: key);
 
   final Chat chat;
   final bool isMine;
 
   @override
-  State<DialogMediaWidget> createState() => _DialogMediaWidgetState();
+  State<DialogImageWidget> createState() => _DialogImageWidgetState();
 }
 
-class _DialogMediaWidgetState extends State<DialogMediaWidget> {
-  late Future initial;
-
+class _DialogImageWidgetState extends State<DialogImageWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChatProvider>(
@@ -55,15 +50,11 @@ class _DialogMediaWidgetState extends State<DialogMediaWidget> {
                       height: double.infinity,
                       width: double.infinity,
                       radius: 15,
-                      file: provider
-                          .getThumbnail(widget.chat.metaData!['key'][0]),
+                      file: provider.getThumbnail(widget.chat.metaData!['key'][0]),
                       boxFit: BoxFit.cover,
                     ),
                   ),
-                  if ((provider
-                          .getMediaFiles(widget.chat.metaData!['key'])[0]
-                          .isImage()) &&
-                      int.parse(widget.chat.metaData!['count']) > 1)
+                  if (int.parse(widget.chat.metaData!['count']) > 1)
                     Positioned(
                       right: 12,
                       bottom: 12,
@@ -93,17 +84,6 @@ class _DialogMediaWidgetState extends State<DialogMediaWidget> {
           ],
         );
       },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    print(3);
-    initial = getVideoThumbnailFile(
-      context.read<ChatProvider>().getThumbnail(
-            widget.chat.metaData!['key'][0],
-          ),
     );
   }
 }

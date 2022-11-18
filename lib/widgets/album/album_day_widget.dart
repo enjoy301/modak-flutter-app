@@ -89,7 +89,14 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                                     1,
                                   ),
                                   child: (() {
-                                    if (provider.albumBuildFileList[dateIndex][mediaIndex].path.endsWith(".mp4")) {
+                                    if (provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                            .toString()
+                                            .toLowerCase()
+                                            .endsWith("mp4") ||
+                                        provider.albumBuildFileList[dateIndex][mediaIndex].path
+                                            .toString()
+                                            .toLowerCase()
+                                            .endsWith("mov")) {
                                       return Image.file(
                                         provider.thumbnailList[
                                             path.basename(provider.albumBuildFileList[dateIndex][mediaIndex].path)],

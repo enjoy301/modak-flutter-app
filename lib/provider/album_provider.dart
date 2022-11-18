@@ -446,7 +446,7 @@ class AlbumProvider extends ChangeNotifier {
         _albumBuildFileList[index].add(mediaFile);
       }
 
-      if (extension(mediaFile.path) == ".mp4") {
+      if (mediaFile.path.toLowerCase().endsWith('mp4') || mediaFile.path.toLowerCase().endsWith('mov')) {
         _thumbnailList[basename(mediaFile.path)] = await getVideoThumbnailFile(
           mediaFile,
         );

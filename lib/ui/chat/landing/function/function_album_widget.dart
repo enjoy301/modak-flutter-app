@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
@@ -23,8 +24,7 @@ class FunctionAlbumWidget extends StatefulWidget {
   State<FunctionAlbumWidget> createState() => _FunctionAlbumWidget();
 }
 
-class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
-    with AutomaticKeepAliveClientMixin {
+class _FunctionAlbumWidget extends State<FunctionAlbumWidget> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -52,21 +52,17 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                       child: Center(
                         child: RichText(
                           text: TextSpan(
-                            style: EasyStyle.text(Coloring.gray_0,
-                                Font.size_largeText, Font.weight_medium),
+                            style: EasyStyle.text(Coloring.gray_0, Font.size_largeText, Font.weight_medium),
                             children: <TextSpan>[
-                              if (provider.selectedMediaFiles.isEmpty)
-                                TextSpan(text: "보내고 싶은 사진 혹은 영상을 선택하세요"),
+                              if (provider.selectedMediaFiles.isEmpty) TextSpan(text: "보내고 싶은 사진 혹은 영상을 선택하세요"),
                               if (provider.selectedMediaFiles.isNotEmpty)
                                 TextSpan(
                                   children: <TextSpan>[
                                     TextSpan(text: "현재 "),
                                     TextSpan(
-                                        text: provider.selectedMediaFiles.length
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontWeight: Font.weight_bold,
-                                            color: Colors.purpleAccent[700])),
+                                        text: provider.selectedMediaFiles.length.toString(),
+                                        style:
+                                            TextStyle(fontWeight: Font.weight_bold, color: Colors.purpleAccent[700])),
                                     TextSpan(text: "개가 선택 되었습니다."),
                                   ],
                                 ),
@@ -79,12 +75,10 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                     /// row 3번 전송 버튼
                     IconButton(
                       onPressed: () async {
-                        provider.postMediaFilesFromAlbum(context);
+                        provider.postMediaFiles(context);
                       },
                       icon: IconGradientWidget(
-                        provider.selectedMediaFiles.isEmpty
-                            ? LightIcons.Send
-                            : DarkIcons.Send,
+                        provider.selectedMediaFiles.isEmpty ? LightIcons.Send : DarkIcons.Send,
                         25,
                         Coloring.sub_purple,
                       ),
@@ -109,12 +103,19 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                           child: GestureDetector(
                             onTap: () {
                               File file = provider.albumFiles[index];
-                              provider.isExistFile(file)
-                                  ? provider.removeSelectedMedia(file)
-                                  : provider.addSelectedMedia(file);
+                              if (provider.isExistFile(file)) {
+                                provider.removeSelectedMedia(file);
+                              } else {
+                                if (provider.selectedMediaFiles.length < 10) {
+                                  provider.addSelectedMedia(file);
+                                } else {
+                                  Fluttertoast.showToast(msg: "한 번에 최대 10개까지 전송할 수 있습니다.");
+                                }
+                              }
                             },
                             child: Stack(
                               children: [
+                                /// 썸네일
                                 MediaWidget(
                                   file: provider.albumFiles[index],
                                   boxFit: BoxFit.cover,
@@ -122,13 +123,14 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                   radius: 12,
                                   height: double.infinity,
                                 ),
+
+                                /// 가장자리 border
                                 Container(
                                   width: 160,
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
                                     border: Border.all(
-                                        color: provider.selectedMediaFiles
-                                                .contains(
+                                        color: provider.selectedMediaFiles.contains(
                                           provider.albumFiles[index],
                                         )
                                             ? Coloring.todo_purple
@@ -137,6 +139,8 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
+
+                                /// 우 상단 체크 박스
                                 Positioned(
                                   top: 9,
                                   right: 9,
@@ -148,24 +152,21 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                     onChanged: (bool? value) {},
                                   ),
                                 ),
+
+                                /// 상세 보기 아이콘
                                 Positioned(
                                   bottom: 9,
                                   left: 9,
                                   child: IconButton(
                                     onPressed: () {
                                       // ignore: unrelated_type_equality_checks
-                                      if (provider.albumFiles[index]
-                                              .toString()
-                                              .mediaType() ==
-                                          "mp4") {
+                                      if (provider.albumFiles[index].path.mediaType() == "mp4" ||
+                                          provider.albumFiles[index].path.mediaType() == "mov") {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                CommonMediasScreen(
-                                              files: [
-                                                provider.albumFiles[index]
-                                              ],
+                                            builder: (context) => CommonMediasScreen(
+                                              files: [provider.albumFiles[index]],
                                             ),
                                           ),
                                         );
@@ -173,11 +174,8 @@ class _FunctionAlbumWidget extends State<FunctionAlbumWidget>
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                CommonMediasScreen(
-                                              files: [
-                                                provider.albumFiles[index]
-                                              ],
+                                            builder: (context) => CommonMediasScreen(
+                                              files: [provider.albumFiles[index]],
                                             ),
                                           ),
                                         );
