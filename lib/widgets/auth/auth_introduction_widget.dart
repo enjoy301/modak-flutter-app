@@ -71,9 +71,14 @@ class _AuthIntroductionWidgetState extends State<AuthIntroductionWidget> {
                 maxLines: 2,
               ),
             ),
-            Expanded(child: SizedBox.shrink()),
-            Image.asset(
-              data[widget.name]!["imagePath"] as String,
+            Expanded(
+              child: Center(
+                child: Image.asset(
+                  width: 250,
+                  height: 250,
+                  data[widget.name]!["imagePath"] as String,
+                ),
+              ),
             ),
           ],
         ),

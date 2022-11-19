@@ -110,6 +110,7 @@ dependencies:
   flutter_advanced_segment: ^3.0.1
   buttons_tabbar: ^1.3.6
   toggle_switch: ^2.0.1
+  word_break_text: ^0.1.0
 
 dev_dependencies:
   flutter_test:

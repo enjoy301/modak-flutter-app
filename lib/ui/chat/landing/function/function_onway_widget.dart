@@ -29,8 +29,7 @@ class _FunctionOnWayWidget extends State<FunctionOnWayWidget> {
       return Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
         ),
         child: Row(
           children: [
@@ -48,8 +47,7 @@ class _FunctionOnWayWidget extends State<FunctionOnWayWidget> {
             ),
             Text(
               "오늘",
-              style: EasyStyle.text(
-                  Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
+              style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
             ),
             Expanded(
               child: Padding(
@@ -69,23 +67,22 @@ class _FunctionOnWayWidget extends State<FunctionOnWayWidget> {
             ),
             Text(
               "어때요?",
-              style: EasyStyle.text(
-                  Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
+              style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
             ),
             IconButton(
               onPressed: () {
-                chatProvider.postChat(context, text, metaData: {
-                  'type_code': "onway",
-                  'step': Random().nextInt(10),
-                });
-                chatProvider.chatMode = ChatMode.textInput;
-                text = "";
-                setState(() {});
+                if (text.trim().isNotEmpty) {
+                  chatProvider.postChat(context, text, metaData: {
+                    'type_code': "onway",
+                    'step': Random().nextInt(10),
+                  });
+                  chatProvider.chatMode = ChatMode.textInput;
+                  text = "";
+                  setState(() {});
+                }
               },
               icon: IconGradientWidget(
-                _textEditingController.text.isEmpty
-                    ? LightIcons.Send
-                    : DarkIcons.Send,
+                _textEditingController.text.isEmpty ? LightIcons.Send : DarkIcons.Send,
                 20,
                 Coloring.sub_purple,
               ),

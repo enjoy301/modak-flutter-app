@@ -15,12 +15,10 @@ class UserInvitationLandingScreen extends StatefulWidget {
   const UserInvitationLandingScreen({Key? key}) : super(key: key);
 
   @override
-  State<UserInvitationLandingScreen> createState() =>
-      _UserInvitationLandingScreenState();
+  State<UserInvitationLandingScreen> createState() => _UserInvitationLandingScreenState();
 }
 
-class _UserInvitationLandingScreenState
-    extends State<UserInvitationLandingScreen> {
+class _UserInvitationLandingScreenState extends State<UserInvitationLandingScreen> {
   bool isClipTappedDown = false;
 
   @override
@@ -65,8 +63,7 @@ class _UserInvitationLandingScreenState
                       children: [
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.only(
-                                top: 30, right: 30, left: 30, bottom: 30),
+                            padding: EdgeInsets.only(top: 30, right: 30, left: 30, bottom: 30),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -78,16 +75,13 @@ class _UserInvitationLandingScreenState
                                 ),
                                 Text(
                                   "모닥 코드",
-                                  style: EasyStyle.text(Coloring.gray_10,
-                                      Font.size_largeText, Font.weight_medium),
+                                  style: EasyStyle.text(Coloring.gray_10, Font.size_largeText, Font.weight_medium),
                                 ),
                                 GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text: homeProvider.familyCode));
-                                    Fluttertoast.showToast(
-                                        msg: "클립보드에 복사되었습니다.");
+                                    Clipboard.setData(ClipboardData(text: homeProvider.familyCode));
+                                    Fluttertoast.showToast(msg: "클립보드에 복사되었습니다.");
                                   },
                                   onTapDown: (tapDownDetails) {
                                     setState(() {
@@ -102,9 +96,7 @@ class _UserInvitationLandingScreenState
                                   child: Text(
                                     homeProvider.familyCode ?? "",
                                     style: TextStyle(
-                                      color: isClipTappedDown
-                                          ? Colors.grey[700]!.withOpacity(0.5)
-                                          : Colors.grey[700],
+                                      color: isClipTappedDown ? Colors.grey[700]!.withOpacity(0.5) : Colors.grey[700],
                                       fontSize: Font.size_subTitle,
                                       fontWeight: Font.weight_medium,
                                       decoration: TextDecoration.underline,
@@ -114,10 +106,7 @@ class _UserInvitationLandingScreenState
                                 ),
                                 Text(
                                   "가족과 함께\n모닥으로 따뜻한 이야기를 남겨보세요",
-                                  style: EasyStyle.text(
-                                      Coloring.gray_20,
-                                      Font.size_mediumText,
-                                      Font.weight_regular),
+                                  style: EasyStyle.text(Coloring.gray_20, Font.size_mediumText, Font.weight_regular),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -126,8 +115,7 @@ class _UserInvitationLandingScreenState
                         ),
                         GestureDetector(
                           onTap: () {
-                            Share.share(
-                                "[MODAK]\n가족 방에 초대되셨습니다\n초대코드: ${homeProvider.familyCode ?? ""}");
+                            Share.share("[MODAK]\n가족 방에 초대되셨습니다\n초대코드: ${homeProvider.familyCode ?? ""}");
                           },
                           child: Container(
                             width: double.infinity,
@@ -142,8 +130,7 @@ class _UserInvitationLandingScreenState
                             ),
                             child: Text(
                               "공유하기",
-                              style: EasyStyle.text(Colors.white,
-                                  Font.size_largeText, Font.weight_semiBold),
+                              style: EasyStyle.text(Colors.white, Font.size_largeText, Font.weight_semiBold),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -159,8 +146,7 @@ class _UserInvitationLandingScreenState
             ),
             Text(
               "가족의 코드를 알고 계시나요?",
-              style: EasyStyle.text(
-                  Coloring.gray_10, Font.size_largeText, Font.weight_medium),
+              style: EasyStyle.text(Coloring.gray_10, Font.size_largeText, Font.weight_medium),
               textAlign: TextAlign.center,
             ),
             Padding(
@@ -172,10 +158,12 @@ class _UserInvitationLandingScreenState
                 child: Text(
                   "코드 직접 입력하기",
                   style: TextStyle(
-                      color: Coloring.point_pureorange,
-                      fontSize: Font.size_largeText,
-                      fontWeight: Font.weight_bold,
-                      height: 2),
+                    color: Coloring.point_pureorange,
+                    fontSize: Font.size_largeText,
+                    fontWeight: Font.weight_bold,
+                    height: 2,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
             )

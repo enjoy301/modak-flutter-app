@@ -5,16 +5,17 @@ import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class ButtonMainWidget extends StatelessWidget {
-  const ButtonMainWidget(
-      {Key? key,
-      required this.title,
-      required this.onPressed,
-      this.color = Coloring.sub_purple,
-      this.shadow = Shadowing.purple,
-      this.isValid = true,
-      this.width = double.infinity,
-      this.height = 60})
-      : super(key: key);
+  const ButtonMainWidget({
+    Key? key,
+    required this.title,
+    required this.onPressed,
+    this.color = Coloring.sub_purple,
+    this.shadow = Shadowing.purple,
+    this.isValid = true,
+    this.width = double.infinity,
+    this.height = 60,
+  }) : super(key: key);
+
   final String title;
   final Function()? onPressed;
   final Gradient color;
@@ -42,9 +43,10 @@ class ButtonMainWidget extends StatelessWidget {
         child: ScalableTextWidget(
           title,
           style: TextStyle(
-              color: isValid ? Colors.white : Coloring.gray_30,
-              fontSize: Font.size_largeText,
-              fontWeight: Font.weight_bold),
+            color: isValid ? Colors.white : Coloring.gray_30,
+            fontSize: Font.size_largeText,
+            fontWeight: Font.weight_bold,
+          ),
         ),
       ),
     );

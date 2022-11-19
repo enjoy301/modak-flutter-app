@@ -9,18 +9,21 @@ class TodoModifyVM extends ChangeNotifier {
   bool isTimeSelected = false;
 
   Todo _todo = Todo(
-      todoId: -1,
-      groupTodoId: -1,
-      memberId: -1,
-      title: "",
-      color: "",
-      memoColor: "",
-      isDone: false,
-      timeTag: null,
-      repeatTag: null,
-      repeat: [0, 0, 0, 0, 0, 0, 0],
-      memo: "",
-      date: "");
+    todoId: -1,
+    groupTodoId: -1,
+    memberId: -1,
+    title: "",
+    color: "",
+    memoColor: "",
+    isDone: false,
+    timeTag: null,
+    repeatTag: null,
+    repeat: [0, 0, 0, 0, 0, 0, 0],
+    memo: "",
+    date: "",
+  );
+
+  DateTime todoDateTime = DateTime.now();
 
   Todo get todo => _todo;
   set todo(Todo todo) {

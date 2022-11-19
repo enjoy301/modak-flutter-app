@@ -12,12 +12,7 @@ import 'package:modak_flutter_app/widgets/chat/components/component_info_widget.
 import 'package:provider/provider.dart';
 
 class DialogOnwayWidget extends StatefulWidget {
-  const DialogOnwayWidget(
-      {Key? key,
-      required this.chat,
-      required this.isMine,
-      required this.isTail})
-      : super(key: key);
+  const DialogOnwayWidget({Key? key, required this.chat, required this.isMine, required this.isTail}) : super(key: key);
 
   final Chat chat;
   final bool isMine;
@@ -36,20 +31,20 @@ class _DialogOnwayWidgetState extends State<DialogOnwayWidget> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(
-            width: MediaQuery.of(context).size.width * 0.6,
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Coloring.todo_purple)),
-            child: DialogOnwayFirstWidget(
-              chat: widget.chat,
-              isMine: widget.isMine,
-            )),
+          width: MediaQuery.of(context).size.width * 0.6,
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Coloring.todo_purple)),
+          child: DialogOnwayFirstWidget(
+            chat: widget.chat,
+            isMine: widget.isMine,
+          ),
+        ),
         ChatComponentInfoWidget(
           chat: widget.chat,
-          crossAxisAlignment:
-              widget.isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: widget.isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           showTime: widget.isTail,
         ),
       ],
@@ -58,9 +53,7 @@ class _DialogOnwayWidgetState extends State<DialogOnwayWidget> {
 }
 
 class DialogOnwayFirstWidget extends StatefulWidget {
-  const DialogOnwayFirstWidget(
-      {Key? key, required this.chat, required this.isMine})
-      : super(key: key);
+  const DialogOnwayFirstWidget({Key? key, required this.chat, required this.isMine}) : super(key: key);
 
   final Chat chat;
   final bool isMine;
@@ -74,37 +67,43 @@ class _DialogOnwayFirstWidgetState extends State<DialogOnwayFirstWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          "오늘",
-          style: EasyStyle.text(
-              Colors.black, Font.size_largeText, Font.weight_regular),
+        Container(
+          margin: EdgeInsets.only(bottom: 7),
+          child: Text(
+            "오늘",
+            style: EasyStyle.text(Colors.black, Font.size_largeText, Font.weight_regular),
+          ),
         ),
         Text(
           widget.chat.content,
-          style: EasyStyle.text(
-              Colors.black, Font.size_largeText, Font.weight_bold),
+          style: EasyStyle.text(Colors.black, Font.size_h4, Font.weight_bold),
         ),
-        Text(
-          "어때요?",
-          style: EasyStyle.text(
-              Colors.black, Font.size_largeText, Font.weight_regular),
+        Container(
+          margin: EdgeInsets.only(top: 7),
+          child: Text(
+            "어때요?",
+            style: EasyStyle.text(Colors.black, Font.size_largeText, Font.weight_regular),
+          ),
         ),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         ButtonMainWidget(
-          height: 50,
+          height: 40,
           title: "수락",
+          isValid: widget.isMine ? false : true,
           onPressed: () {
             if (widget.isMine) {
               Fluttertoast.showToast(msg: "자신이 보낸 요청입니다.");
               return;
             }
-            context.read<ChatProvider>().postChat(context,
-                "${context.read<UserProvider>().me!.name}이(가) 오늘 ${widget.chat.content}을(를) 수락하셨습니다.",
-                metaData: {
-                  "type_code": "info",
-                });
+            context.read<ChatProvider>().postChat(
+              context,
+              "${context.read<UserProvider>().me!.name}님이 ${widget.chat.content}을(를) 수락하셨습니다!",
+              metaData: {
+                "type_code": "info",
+              },
+            );
           },
           color: Coloring.notice,
           shadow: Shadowing.none,

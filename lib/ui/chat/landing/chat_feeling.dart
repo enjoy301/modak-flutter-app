@@ -34,7 +34,11 @@ class ChatFeeling extends StatelessWidget {
                   .mapIndexed(
                     (int index, String feeling) => GestureDetector(
                       onTap: () {
-                        chatProvider.feel = feeling;
+                        if (chatProvider.feel == feeling) {
+                          chatProvider.feel = Strings.none;
+                        } else {
+                          chatProvider.feel = feeling;
+                        }
                       },
                       child: ChatFeelingItem(
                         feelingType: feeling,
@@ -52,9 +56,7 @@ class ChatFeeling extends StatelessWidget {
 }
 
 class ChatFeelingItem extends StatelessWidget {
-  ChatFeelingItem(
-      {Key? key, required this.feelingType, this.showFeeling = true})
-      : super(key: key);
+  ChatFeelingItem({Key? key, required this.feelingType, this.showFeeling = true}) : super(key: key);
 
   final bool showFeeling;
   final String feelingType;
@@ -102,9 +104,7 @@ class ChatFeelingItem extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
-                color: showFeeling
-                    ? feelingsMap[feelingType]!['color'] as Color
-                    : Coloring.gray_50,
+                color: showFeeling ? feelingsMap[feelingType]!['color'] as Color : Coloring.gray_50,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(

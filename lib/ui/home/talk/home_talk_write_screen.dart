@@ -54,10 +54,10 @@ class _HomeTalkWriteScreenState extends State<HomeTalkWriteScreen> {
                   Expanded(child: SizedBox()),
                   GestureDetector(
                     onTap: () async {
-                      if (content.isEmpty) {
+                      if (content.trim().isEmpty) {
                         Fluttertoast.showToast(msg: "값을 입력해주세요");
                       } else {
-                        bool isSuccess = await homeProvider.postTodayTalk(context, content);
+                        bool isSuccess = await homeProvider.postTodayTalk(context, content.trim());
                         if (isSuccess) Get.back();
                       }
                     },

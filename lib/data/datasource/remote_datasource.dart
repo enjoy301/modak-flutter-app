@@ -681,7 +681,7 @@ class RemoteDataSource {
         return await Dio().post(
           "${dotenv.get("CHAT_HTTP")}/family-image",
           data: {
-            'familyId': 1,
+            'familyId': await RemoteDataSource.storage.read(key: Strings.familyId),
             'imageKey': key,
           },
         );

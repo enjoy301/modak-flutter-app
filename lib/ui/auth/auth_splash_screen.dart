@@ -19,10 +19,8 @@ class AuthSplashScreen extends StatefulWidget {
 class _AuthSplashScreenState extends State<AuthSplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer6<UserProvider, HomeProvider, TodoProvider, ChatProvider,
-        AlbumProvider, AuthSplashVM>(
-      builder: (context, userProvider, homeProvider, todoProvider, chatProvider,
-          albumProvider, provider, child) {
+    return Consumer6<UserProvider, HomeProvider, TodoProvider, ChatProvider, AlbumProvider, AuthSplashVM>(
+      builder: (context, userProvider, homeProvider, todoProvider, chatProvider, albumProvider, provider, child) {
         return FutureBuilder(
           future: Future<void>(
             () async {
@@ -31,8 +29,7 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
               String redirectionPath = await provider.init();
 
               if (redirectionPath == "/main") {
-                await Future(() async =>
-                    await ProviderController.startProviders(context));
+                await Future(() async => await ProviderController.startProviders(context));
               }
 
               /// redirection

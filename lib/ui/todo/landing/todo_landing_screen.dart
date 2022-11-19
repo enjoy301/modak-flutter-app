@@ -13,8 +13,9 @@ class TodoLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TodoProvider>(builder: (context, todoProvider, child) {
-      return Scaffold(
+    return Consumer<TodoProvider>(
+      builder: (context, todoProvider, child) {
+        return Scaffold(
           body: Column(
             children: [
               TodoLandingCalendar(),
@@ -24,7 +25,9 @@ class TodoLandingScreen extends StatelessWidget {
           floatingActionButton: GestureDetector(
             onTap: () {
               Get.to(
-                () => TodoWriteScreen(),
+                () => TodoWriteScreen(
+                  date: todoProvider.selectedDateTime,
+                ),
               );
             },
             child: Container(
@@ -42,7 +45,9 @@ class TodoLandingScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-          ));
-    });
+          ),
+        );
+      },
+    );
   }
 }

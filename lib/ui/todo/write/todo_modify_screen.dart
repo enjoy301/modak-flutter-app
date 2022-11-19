@@ -19,9 +19,11 @@ import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class TodoModifyScreen extends StatefulWidget {
-  const TodoModifyScreen(
-      {Key? key, required this.todo, required this.isAfterUpdate})
-      : super(key: key);
+  const TodoModifyScreen({
+    Key? key,
+    required this.todo,
+    required this.isAfterUpdate,
+  }) : super(key: key);
 
   final Todo todo;
   final bool isAfterUpdate;
@@ -43,31 +45,36 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Consumer2<UserProvider, TodoModifyVM>(
-            builder: (context, userProvider, provider, child) {
-          return FutureBuilder(future: Future<void>(() async {
-            if (!loaded) {
-              loaded = true;
-              provider.todo = widget.todo;
-              provider.manager =
-                  userProvider.findUserById(provider.todo.memberId);
-              provider.isAfterUpdate = widget.isAfterUpdate;
-              titleController.text = provider.todo.title;
-              memoController.text = provider.todo.memo ?? "";
-              titleController.selection = TextSelection.fromPosition(
-                  TextPosition(offset: titleController.text.length));
-              provider.notify();
-            }
-          }), builder: (context, snapshot) {
+        child: Consumer2<UserProvider, TodoModifyVM>(builder: (context, userProvider, provider, child) {
+          return FutureBuilder(future: Future<void>(
+            () async {
+              if (!loaded) {
+                loaded = true;
+                provider.todo = widget.todo;
+                provider.todoDateTime = DateTime.parse(widget.todo.date);
+                provider.manager = userProvider.findUserById(provider.todo.memberId);
+                provider.isAfterUpdate = widget.isAfterUpdate;
+                titleController.text = provider.todo.title;
+                memoController.text = provider.todo.memo ?? "";
+                titleController.selection = TextSelection.fromPosition(
+                  TextPosition(
+                    offset: titleController.text.length,
+                  ),
+                );
+                provider.notify();
+              }
+            },
+          ), builder: (context, snapshot) {
             return Scaffold(
               backgroundColor: Colors.white,
               appBar: headerDefaultWidget(
                 bgColor: Colors.white,
-                  title: "할 일 수정하기",
-                  leading: FunctionalIcon.back,
-                  onClickLeading: () {
-                    Navigator.pop(context);
-                  }),
+                title: "할 일 수정하기",
+                leading: FunctionalIcon.back,
+                onClickLeading: () {
+                  Navigator.pop(context);
+                },
+              ),
               body: SingleChildScrollView(
                 child: ExpandableNotifier(
                   child: Padding(
@@ -104,9 +111,7 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                           padding: const EdgeInsets.only(bottom: 13),
                           child: InputSelectWidget(
                               title: "담당",
-                              contents: provider.manager == null
-                                  ? userProvider.me!.name
-                                  : provider.manager!.name,
+                              contents: provider.manager == null ? userProvider.me!.name : provider.manager!.name,
                               isFilled: true,
                               buttons: {
                                 for (User family in userProvider.familyMembers)
@@ -121,20 +126,16 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                             ? Padding(
                                 padding: const EdgeInsets.only(bottom: 13),
                                 child: InputDateWidget(
-                                    title: "날짜",
-                                    contents: provider.todo.date,
-                                    onChanged: (DateTime dateTime) {
-                                      provider.todo.date =
-                                          DateFormat("yyyy-MM-dd")
-                                              .format(dateTime);
-                                      provider.notify();
-                                    },
-                                    minTime: DateTime.now()
-                                        .subtract(Duration(days: 400)),
-                                    maxTime:
-                                        DateTime.now().add(Duration(days: 400)),
-                                    currTime:
-                                        DateTime.parse(provider.todo.date)),
+                                  title: "날짜",
+                                  contents: provider.todo.date,
+                                  onChanged: (DateTime dateTime) {
+                                    provider.todo.date = DateFormat("yyyy-MM-dd").format(dateTime);
+                                    provider.notify();
+                                  },
+                                  minTime: DateTime.now().subtract(Duration(days: 400)),
+                                  maxTime: DateTime.now().add(Duration(days: 400)),
+                                  currTime: provider.todoDateTime,
+                                ),
                               )
                             : SizedBox(
                                 height: 0,
@@ -164,8 +165,7 @@ class _TodoModifyScreenState extends State<TodoModifyScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 24, bottom: 8),
+                              padding: const EdgeInsets.only(top: 24, bottom: 8),
                               child: Text("메모 (옵션)",
                                   style: TextStyle(
                                     color: Coloring.gray_10,

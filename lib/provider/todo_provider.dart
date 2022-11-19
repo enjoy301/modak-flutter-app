@@ -22,7 +22,7 @@ class TodoProvider extends ChangeNotifier {
 
   DateFormat formatter = DateFormat("yyyy-MM-dd");
 
-  init() async {
+  Future init() async {
     clear();
     await getTodosByScroll(
       DateTime.now().subtract(

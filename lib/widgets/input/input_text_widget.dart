@@ -67,22 +67,15 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                     fontWeight: Font.weight_regular,
                   ),
                   filled: true,
-                  fillColor:
-                      widget.isBlocked ? Coloring.gray_30 : Coloring.gray_50,
+                  fillColor: Coloring.gray_40,
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           width: widget.isSatisfied ? 0 : 1.5,
-                          color: widget.isSatisfied
-                              ? Coloring.gray_50
-                              : Colors.red),
+                          color: widget.isSatisfied ? Coloring.gray_50 : Colors.red),
                       borderRadius: BorderRadius.circular(16)),
                   focusColor: Coloring.bg_red,
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 1.5,
-                          color: widget.isSatisfied
-                              ? Coloring.gray_30
-                              : Colors.red),
+                      borderSide: BorderSide(width: 1.5, color: widget.isSatisfied ? Coloring.gray_30 : Colors.red),
                       borderRadius: BorderRadius.circular(16)),
                   suffixIcon: widget.isSuffix
                       ? IconButton(
@@ -98,7 +91,7 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                       : null),
               cursorColor: Coloring.gray_0,
               style: TextStyle(
-                color: widget.isBlocked ? Coloring.gray_0 : Coloring.gray_10,
+                color: Coloring.gray_10,
                 fontSize: Font.size_mediumText,
                 fontWeight: Font.weight_regular,
               ),

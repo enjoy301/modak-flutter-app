@@ -24,10 +24,11 @@ class UserLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(builder: (context, userProvider, child) {
-      return ColoredSafeArea(
-        color: Colors.white,
-        child: Scaffold(
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        return ColoredSafeArea(
+          color: Colors.white,
+          child: Scaffold(
             backgroundColor: Coloring.gray_50,
             appBar: headerDefaultWidget(
               title: "가족 정보",
@@ -41,135 +42,140 @@ class UserLandingScreen extends StatelessWidget {
                 ),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  right: 30,
-                  left: 30,
-                ),
-                child: Column(
-                  children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 32, bottom: 16),
-                          child: UserProfileWidget(
-                            user: userProvider.me,
-                            onPressed: () {
-                              Get.toNamed("/user/modify");
-                            },
+            body: RefreshIndicator(
+              onRefresh: userProvider.refresh,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 30,
+                    left: 30,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 32, bottom: 16),
+                            child: UserProfileWidget(
+                              user: userProvider.me,
+                              onPressed: () {
+                                Get.toNamed("/user/modify");
+                              },
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Container(
-                            width: double.infinity,
-                            height: 1,
-                            color: Coloring.gray_10,
-                          ),
-                        )
-                      ] +
-                      userProvider.familyMembersWithoutMe
-                          .map((familyMember) => Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 16, bottom: 16),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Container(
+                              width: double.infinity,
+                              height: 1,
+                              color: Coloring.gray_10,
+                            ),
+                          )
+                        ] +
+                        userProvider.familyMembersWithoutMe
+                            .map(
+                              (familyMember) => Padding(
+                                padding: const EdgeInsets.only(top: 16, bottom: 16),
                                 child: UserProfileWidget(
                                   user: familyMember,
                                   onPressed: () {
-                                    Get.to(UserFamilyModifyScreen(
-                                        familyMember: familyMember));
+                                    Get.to(UserFamilyModifyScreen(familyMember: familyMember));
                                   },
                                 ),
-                              ))
-                          .toList() +
-                      <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.toNamed("/user/invitation/landing");
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              height: 90,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(22),
-                                boxShadow: [Shadowing.bottom],
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(LightIcons.Plus),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 6),
-                                    child: Text("가족 초대하기"),
-                                  ),
-                                ],
+                            )
+                            .toList() +
+                        <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/user/invitation/landing");
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                height: 90,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(22),
+                                  boxShadow: [Shadowing.bottom],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(LightIcons.Plus),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 6),
+                                      child: Text("가족 초대 또는 참여하기"),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 120, bottom: 20),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  themeModalWidget(
-                                    context,
-                                    title: "정말 회원 탈퇴 하시겠습니까?",
-                                    okText: "회원 탈퇴",
-                                    cancelText: "취소",
-                                    onOkPress: () {
-                                      userProvider.withdraw(context);
-                                    },
-                                    onCancelPress: () {
-                                      Get.back();
-                                    },
-                                  );
-                                },
-                                child: Text(
-                                  "회원 탈퇴",
-                                  style: EasyStyle.text(Coloring.gray_10,
-                                      Font.size_mediumText, Font.weight_medium),
+                          Padding(
+                            padding: EdgeInsets.only(top: 80, bottom: 20),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    themeModalWidget(
+                                      context,
+                                      title: "정말 회원 탈퇴 하시겠습니까?",
+                                      okText: "회원 탈퇴",
+                                      cancelText: "취소",
+                                      onOkPress: () {
+                                        userProvider.withdraw(context);
+                                      },
+                                      onCancelPress: () {
+                                        Get.back();
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    "회원 탈퇴",
+                                    style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_medium),
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                width: .8,
-                                height: 35,
-                                color: Coloring.gray_10,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  themeModalWidget(
-                                    context,
-                                    title: "정말 로그아웃 하시겠습니까?",
-                                    okText: "로그아웃",
-                                    cancelText: "취소",
-                                    onOkPress: () {
-                                      userProvider.logout(context);
-                                    },
-                                    onCancelPress: () {
-                                      Get.back();
-                                    },
-                                  );
-                                },
-                                child: Text(
-                                  "로그아웃",
-                                  style: EasyStyle.text(Coloring.gray_10,
-                                      Font.size_mediumText, Font.weight_medium),
+                                Container(
+                                  width: .8,
+                                  height: 35,
+                                  color: Coloring.gray_10,
                                 ),
-                              ),
-                            ],
+                                GestureDetector(
+                                  onTap: () {
+                                    themeModalWidget(
+                                      context,
+                                      title: "정말 로그아웃 하시겠습니까?",
+                                      okText: "로그아웃",
+                                      cancelText: "취소",
+                                      onOkPress: () {
+                                        userProvider.logout(context);
+                                      },
+                                      onCancelPress: () {
+                                        Get.back();
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    "로그아웃",
+                                    style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_medium),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          SizedBox.shrink(),
+                        ],
+                  ),
                 ),
               ),
-            )),
-      );
-    });
+            ),
+          ),
+        );
+      },
+    );
   }
 }

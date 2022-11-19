@@ -7,9 +7,12 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/chat.dart';
 
 class ChatComponentInfoWidget extends StatelessWidget {
-  const ChatComponentInfoWidget(
-      {Key? key, required this.chat, this.showTime = true, this.crossAxisAlignment = CrossAxisAlignment.start})
-      : super(key: key);
+  const ChatComponentInfoWidget({
+    Key? key,
+    required this.chat,
+    this.showTime = true,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
+  }) : super(key: key);
 
   final Chat chat;
   final bool showTime;

@@ -20,68 +20,63 @@ class _HomeNotificationScreenState extends State<HomeNotificationScreen> {
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
-        print(userProvider.getNewNotificationNumber());
         return WillPopScope(
           onWillPop: () async {
             userProvider.checkNotification();
             return true;
           },
           child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: headerDefaultWidget(
-                title: isArchiveMode ? "아카이브" : "알림",
-                leading: FunctionalIcon.back,
-                onClickLeading: () {
-                  userProvider.checkNotification();
-                  Get.back();
+            backgroundColor: Colors.white,
+            appBar: headerDefaultWidget(
+              title: isArchiveMode ? "아카이브" : "알림",
+              leading: FunctionalIcon.back,
+              onClickLeading: () {
+                userProvider.checkNotification();
+                Get.back();
+              },
+              customTrailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    isArchiveMode = !isArchiveMode;
+                  });
                 },
-                customTrailing: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isArchiveMode = !isArchiveMode;
-                    });
-                  },
-                  icon: isArchiveMode
-                      ? Icon(
-                          Icons.notifications,
-                          color: Colors.grey[700],
-                        )
-                      : Icon(
-                          Icons.archive,
-                          color: Colors.grey[700],
-                        ),
-                ),
+                icon: isArchiveMode
+                    ? Icon(
+                        Icons.notifications,
+                        color: Colors.grey[700],
+                      )
+                    : Icon(
+                        Icons.archive,
+                        color: Colors.grey[700],
+                      ),
               ),
-              body: isArchiveMode
-                  ? ListView.builder(
-                      itemCount: userProvider.archiveNotifications.length,
-                      itemBuilder: (context, index) {
-                        return NotificationWidget(
-                          notification:
-                              userProvider.archiveNotifications[index],
-                          onDismiss: () {
-                            userProvider.removeArchiveNotification(index);
-                          },
-                          onArchive: () {
-                            userProvider.unArchive(index);
-                          },
-                        );
-                      },
-                    )
-                  : ListView.builder(
-                      itemCount: userProvider.notifications.length,
-                      itemBuilder: (context, index) {
-                        return NotificationWidget(
-                          notification: userProvider.notifications[index],
-                          onDismiss: () {
-                            userProvider.removeNotification(index);
-                          },
-                          onArchive: () {
-                            userProvider.archive(index);
-                          },
-                        );
-                      },
-                    )),
+            ),
+            body: isArchiveMode
+                ? ListView.builder(
+                    itemCount: userProvider.archiveNotifications.length,
+                    itemBuilder: (context, index) {
+                      return NotificationWidget(
+                        notification: userProvider.archiveNotifications[index],
+                        onDismiss: () {
+                          userProvider.removeArchiveNotification(index);
+                        },
+                        onArchive: () {
+                          userProvider.unArchive(index);
+                        },
+                      );
+                    },
+                  )
+                : ListView.builder(
+                    itemCount: userProvider.notifications.length,
+                    itemBuilder: (context, index) {
+                      return NotificationWidget(
+                        notification: userProvider.notifications[index],
+                        onDismiss: () {},
+                        onArchive: () {},
+                      );
+                    },
+                  ),
+          ),
         );
       },
     );

@@ -26,8 +26,7 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<HomeProvider, UserProvider>(
-        builder: (context, homeProvider, userProvider, child) {
+    return Consumer2<HomeProvider, UserProvider>(builder: (context, homeProvider, userProvider, child) {
       return Scaffold(
         backgroundColor: Coloring.gray_50,
         appBar: AppBar(
@@ -59,114 +58,124 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
             )
           ],
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                HomePictureWidget(),
-                HomeFamilyTalkWidget(
-                  dateTime: DateTime.now(),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 9),
-                  child: LayoutGrid(
-                    columnSizes: [1.fr, 1.fr],
-                    rowSizes: [auto, auto],
-                    rowGap: 20,
-                    columnGap: 20,
-                    children: [
-                      HomeItemWidget(
-                        title: "하루 한줄",
-                        des: "모닥이 알려주는\n오늘의 문장",
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "하루 한줄",
-                                    style: EasyStyle.text(Colors.black,
-                                        Font.size_h3, Font.weight_bold),
+        body: RefreshIndicator(
+          onRefresh: homeProvider.init,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  HomePictureWidget(),
+                  HomeFamilyTalkWidget(
+                    dateTime: DateTime.now(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 9),
+                    child: LayoutGrid(
+                      columnSizes: [1.fr, 1.fr],
+                      rowSizes: [auto, auto],
+                      rowGap: 20,
+                      columnGap: 20,
+                      children: [
+                        HomeItemWidget(
+                          title: "하루 한 줄",
+                          des: "모닥이 알려주는\n오늘의 문장",
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                      32.0,
+                                    ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5),
-                                      child: Image.asset(
-                                        "lib/assets/functional_image/ic_close.png",
-                                        width: 32,
-                                        height: 32,
+                                ),
+                                contentPadding: EdgeInsets.only(
+                                  left: 24.0,
+                                  top: 10.0,
+                                  right: 24.0,
+                                  bottom: 28.0,
+                                ),
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "하루 한 줄",
+                                      style: EasyStyle.text(Colors.black, Font.size_h3, Font.weight_bold),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.back();
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Image.asset(
+                                          "lib/assets/functional_image/ic_close.png",
+                                          width: 32,
+                                          height: 32,
+                                        ),
                                       ),
+                                    )
+                                  ],
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "모닥이 알려주는 오늘의 문장",
+                                      style: EasyStyle.text(Colors.black, Font.size_smallText, Font.weight_medium),
                                     ),
-                                  )
-                                ],
-                              ),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "모닥이 알려주는 오늘의 문장",
-                                    style: EasyStyle.text(
-                                        Colors.black,
-                                        Font.size_smallText,
-                                        Font.weight_medium),
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.symmetric(vertical: 20),
-                                    margin: EdgeInsets.only(top: 15),
-                                    decoration: BoxDecoration(
-                                      color: Coloring.gray_40,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Text(
-                                      homeProvider.todayFortune?.content ??
-                                          "운세 없음",
-                                      style: EasyStyle.text(
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.symmetric(vertical: 20),
+                                      margin: EdgeInsets.only(top: 15),
+                                      decoration: BoxDecoration(
+                                        gradient: Coloring.notice,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        homeProvider.todayFortune?.content ?? "운세 없음",
+                                        style: EasyStyle.text(
                                           Colors.black,
                                           Font.size_largeText,
-                                          Font.weight_medium),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ],
+                                          Font.weight_bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        isPointGiven: true,
-                      ),
-                      HomeItemWidget(
-                        title: "우편함",
-                        des: "편지를 작성하고\n보내보세요",
-                        onPressed: () {
-                          Get.toNamed("/chat/letter/landing");
-                        },
-                      ),
-                      ...homeProvider.todayContents
-                          .map(
-                            (TodayContent content) => HomeItemWidget(
-                              type: content.type,
-                              title: content.title,
-                              des: content.desc,
-                              onPressed: () {
-                                Get.to(CommonWebScreen(
-                                    title: content.title, link: content.url));
-                              },
-                            ),
-                          )
-                          .toList(),
-                    ],
-                  ),
-                )
-              ],
+                            );
+                          },
+                          isPointGiven: true,
+                        ),
+                        HomeItemWidget(
+                          title: "우편함",
+                          des: "편지를 작성하고\n보내보세요",
+                          onPressed: () {
+                            Get.toNamed("/chat/letter/landing");
+                          },
+                        ),
+                        ...homeProvider.todayContents
+                            .map(
+                              (TodayContent content) => HomeItemWidget(
+                                type: content.type,
+                                title: content.title,
+                                des: content.desc,
+                                onPressed: () {
+                                  Get.to(CommonWebScreen(title: content.title, link: content.url));
+                                },
+                              ),
+                            )
+                            .toList(),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -221,8 +230,7 @@ class HomePictureWidget extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: Image.file(homeProvider.familyImage!,
-                          width: double.infinity, fit: BoxFit.fitWidth),
+                      child: Image.file(homeProvider.familyImage!, width: double.infinity, fit: BoxFit.fitWidth),
                     ),
                   ),
                 );

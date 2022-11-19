@@ -42,8 +42,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    EdgeInsets iconPadding =
-        EdgeInsets.only(top: 8, bottom: 3, left: 12, right: 12);
+    EdgeInsets iconPadding = EdgeInsets.only(top: 8, bottom: 3, left: 12, right: 12);
     return Consumer<HomeProvider>(builder: (context, homeProvider, child) {
       return ColoredSafeArea(
         color: Colors.white,
@@ -69,13 +68,11 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                       children: [
                         Text(
                           "유저 탭에서 가족을 추가할 수 있어요",
-                          style: EasyStyle.text(Colors.white,
-                              Font.size_subTitle, Font.weight_semiBold),
+                          style: EasyStyle.text(Colors.white, Font.size_subTitle, Font.weight_semiBold),
                         ),
                         Text(
-                          "\n아무 데나 탭하세요",
-                          style: EasyStyle.text(Coloring.gray_20,
-                              Font.size_largeText, Font.weight_semiBold),
+                          "\n아무 곳이나 누르세요",
+                          style: EasyStyle.text(Coloring.gray_20, Font.size_largeText, Font.weight_semiBold),
                         )
                       ],
                     ),
@@ -102,8 +99,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 setState(() => homeProvider.bottomTabIndex = 0);
                               },
                               icon: homeProvider.bottomTabIndex == 0
-                                  ? IconGradientWidget(
-                                      DarkIcons.Home, 25, Coloring.sub_purple)
+                                  ? IconGradientWidget(DarkIcons.Home, 25, Coloring.sub_purple)
                                   : Icon(
                                       LightIcons.Home,
                                       size: 25,
@@ -125,8 +121,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 setState(() => homeProvider.bottomTabIndex = 1);
                               },
                               icon: homeProvider.bottomTabIndex == 1
-                                  ? IconGradientWidget(DarkIcons.TickSquare, 25,
-                                      Coloring.sub_purple)
+                                  ? IconGradientWidget(DarkIcons.TickSquare, 25, Coloring.sub_purple)
                                   : Icon(
                                       LightIcons.TickSquare,
                                       size: 25,
@@ -146,14 +141,10 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                               onPressed: () {
                                 if (isIntroductionNeeded) return;
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ChatScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
                               },
                               icon: homeProvider.bottomTabIndex == 2
-                                  ? IconGradientWidget(
-                                      DarkIcons.Chat, 25, Coloring.sub_purple)
+                                  ? IconGradientWidget(DarkIcons.Chat, 25, Coloring.sub_purple)
                                   : Icon(
                                       LightIcons.Chat,
                                       size: 25,
@@ -176,8 +167,7 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                                 setState(() => homeProvider.bottomTabIndex = 3);
                               },
                               icon: homeProvider.bottomTabIndex == 3
-                                  ? IconGradientWidget(
-                                      DarkIcons.Image, 25, Coloring.sub_purple)
+                                  ? IconGradientWidget(DarkIcons.Image, 25, Coloring.sub_purple)
                                   : Icon(
                                       LightIcons.Image,
                                       size: 25,
@@ -196,15 +186,13 @@ class _LandingBottomNavigatorState extends State<LandingBottomNavigator> {
                             IconButton(
                               onPressed: () {
                                 if (isIntroductionNeeded) {
-                                  LocalDataSource()
-                                      .updateIsIntroductionNeeded(false);
+                                  LocalDataSource().updateIsIntroductionNeeded(false);
                                   isIntroductionNeeded = false;
                                 }
                                 setState(() => homeProvider.bottomTabIndex = 4);
                               },
                               icon: homeProvider.bottomTabIndex == 4
-                                  ? IconGradientWidget(DarkIcons.Profile, 25,
-                                      Coloring.sub_purple)
+                                  ? IconGradientWidget(DarkIcons.Profile, 25, Coloring.sub_purple)
                                   : Icon(
                                       LightIcons.Profile,
                                       size: 25,

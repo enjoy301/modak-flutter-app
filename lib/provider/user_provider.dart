@@ -13,7 +13,7 @@ import 'package:modak_flutter_app/utils/notification_controller.dart';
 import 'package:provider/provider.dart';
 
 class UserProvider extends ChangeNotifier {
-  init() async {
+  Future<void> init() async {
     clear();
     _me = _userRepository.getMe();
     _familyMembers = _userRepository.getFamilyMembers();
@@ -22,6 +22,14 @@ class UserProvider extends ChangeNotifier {
     _chatAlarmReceive = _userRepository.getChatAlarmReceive();
     notifications = _userRepository.getNotifications();
     archiveNotifications = _userRepository.getArchiveNotifications();
+    notifyListeners();
+  }
+
+  Future<void> refresh() async {
+    _userRepository.tokenLogin();
+
+    init();
+
     notifyListeners();
   }
 

@@ -49,14 +49,12 @@ class InputDateWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding:
-                  EdgeInsets.only(top: 15, right: 15, bottom: 11, left: 15),
+              padding: EdgeInsets.only(top: 15, right: 15, bottom: 11, left: 15),
               decoration: BoxDecoration(
-                  color: isBlocked ? Coloring.gray_40 : Coloring.gray_50,
-                  borderRadius: BorderRadius.circular(16),
-                  border: !isFilled && isNecessary
-                      ? Border.all(color: Colors.red)
-                      : null),
+                color: isBlocked ? Coloring.gray_40 : Coloring.gray_50,
+                borderRadius: BorderRadius.circular(16),
+                border: !isFilled && isNecessary ? Border.all(color: Colors.red) : null,
+              ),
               child: Row(
                 children: [
                   Padding(

@@ -84,13 +84,9 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TimeTagWidget(timeSelectTag,
-                        provider: userProvider,
-                        isSelected: isTimeSelected, onPressed: () {
-                      DatePicker.showTime12hPicker(context,
-                          onConfirm: (DateTime dateTime) {
-                        String text = Date.getFormattedDate(
-                            format: "hh:mm a", dateTime: dateTime);
+                    TimeTagWidget(timeSelectTag, provider: userProvider, isSelected: isTimeSelected, onPressed: () {
+                      DatePicker.showTime12hPicker(context, onConfirm: (DateTime dateTime) {
+                        String text = Date.getFormattedDate(format: "hh:mm a", dateTime: dateTime);
 
                         setState(() {
                           isTimeSelected = true;
@@ -117,8 +113,7 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                               .map((timeTag) => TimeTagWidget(timeTag,
                                       provider: userProvider,
                                       isCustom: true,
-                                      isSelected: selectedTag == timeTag,
-                                      onPressed: () {
+                                      isSelected: selectedTag == timeTag, onPressed: () {
                                     setState(() {
                                       selectedTag = timeTag;
                                     });
@@ -143,9 +138,7 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
 }
 
 class TimeTagWriteWidget extends StatefulWidget {
-  const TimeTagWriteWidget(
-      {required this.provider, required this.textEditingController, Key? key})
-      : super(key: key);
+  const TimeTagWriteWidget({required this.provider, required this.textEditingController, Key? key}) : super(key: key);
 
   final UserProvider provider;
   final TextEditingController textEditingController;
@@ -194,8 +187,7 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
               controller: widget.textEditingController,
               decoration: InputDecoration(
                 isDense: true,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                 hintText: "+ 추가",
                 hintStyle: TextStyle(
                   color: Coloring.gray_10,
@@ -217,11 +209,7 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
 
 class TimeTagWidget extends StatelessWidget {
   const TimeTagWidget(this.title,
-      {Key? key,
-      required this.provider,
-      required this.isSelected,
-      required this.onPressed,
-      this.isCustom = false})
+      {Key? key, required this.provider, required this.isSelected, required this.onPressed, this.isCustom = false})
       : super(key: key);
   final UserProvider provider;
   final String title;
@@ -245,14 +233,15 @@ class TimeTagWidget extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title,
-                  style: TextStyle(
-                      color: isSelected ? Colors.white : Coloring.gray_10,
-                      fontSize: Font.size_smallText,
-                      fontWeight: isSelected
-                          ? Font.weight_semiBold
-                          : Font.weight_regular,
-                      height: 1)),
+              Text(
+                title,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Coloring.gray_10,
+                  fontSize: Font.size_smallText,
+                  fontWeight: isSelected ? Font.weight_semiBold : Font.weight_regular,
+                  height: 1,
+                ),
+              ),
               isCustom == true
                   ? IconButton(
                       padding: EdgeInsets.zero,
@@ -272,7 +261,8 @@ class TimeTagWidget extends StatelessWidget {
                         Icons.close,
                         size: 15,
                         color: Coloring.gray_10,
-                      ))
+                      ),
+                    )
                   : Text(""),
             ],
           ),

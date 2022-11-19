@@ -14,8 +14,10 @@ import 'package:modak_flutter_app/widgets/input/input_select_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 
 class UserFamilyModifyScreen extends StatefulWidget {
-  const UserFamilyModifyScreen({Key? key, required this.familyMember})
-      : super(key: key);
+  const UserFamilyModifyScreen({
+    Key? key,
+    required this.familyMember,
+  }) : super(key: key);
 
   final User familyMember;
   @override
@@ -23,6 +25,13 @@ class UserFamilyModifyScreen extends StatefulWidget {
 }
 
 class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
+  Map<String, String> roleTranslate = {
+    "MOM": "엄마",
+    "DAD": "아빠",
+    "SON": "아들",
+    "DAU": "딸",
+  };
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -73,15 +82,19 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 13),
                   child: InputTextWidget(
-                      textEditingController: TextEditingController(
-                          text: widget.familyMember.name)),
+                    initText: widget.familyMember.name,
+                    isBlocked: true,
+                    textEditingController: TextEditingController(
+                      text: widget.familyMember.name,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 13),
                   child: InputSelectWidget(
                     isBlocked: true,
                     title: "가족 역할",
-                    contents: widget.familyMember.role,
+                    contents: roleTranslate[widget.familyMember.role]!,
                     isFilled: true,
                     leftIconData: LightIcons.Profile,
                     tailIconShow: false,
@@ -113,19 +126,19 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
                         padding: EdgeInsets.only(right: 10),
                         child: Opacity(
                           opacity: 0.5,
-                          child: CheckboxWidget(
-                              value: widget.familyMember.isLunar,
-                              onChanged: (bool? value) {}),
+                          child: CheckboxWidget(value: widget.familyMember.isLunar, onChanged: (bool? value) {}),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 16),
-                        child: Text("음력",
-                            style: TextStyle(
-                              color: Coloring.gray_10,
-                              fontSize: Font.size_smallText,
-                              fontWeight: Font.weight_regular,
-                            )),
+                        child: Text(
+                          "음력",
+                          style: TextStyle(
+                            color: Coloring.gray_10,
+                            fontSize: Font.size_smallText,
+                            fontWeight: Font.weight_regular,
+                          ),
+                        ),
                       ),
                     ],
                   ),

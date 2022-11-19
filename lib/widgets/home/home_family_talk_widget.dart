@@ -48,7 +48,7 @@ class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "오늘의 한마디",
+                "오늘의 한 마디",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: Font.size_h3,

@@ -9,20 +9,16 @@ import 'package:modak_flutter_app/widgets/input/input_date_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_text_widget.dart';
 
 class RegisterNameAgreementScreen extends StatefulWidget {
-  const RegisterNameAgreementScreen(
-      {Key? key, required this.provider, required this.controller})
-      : super(key: key);
+  const RegisterNameAgreementScreen({Key? key, required this.provider, required this.controller}) : super(key: key);
 
   final AuthRegisterVM provider;
   final TextEditingController controller;
 
   @override
-  State<RegisterNameAgreementScreen> createState() =>
-      _RegisterNameAgreementScreenState();
+  State<RegisterNameAgreementScreen> createState() => _RegisterNameAgreementScreenState();
 }
 
-class _RegisterNameAgreementScreenState
-    extends State<RegisterNameAgreementScreen> {
+class _RegisterNameAgreementScreenState extends State<RegisterNameAgreementScreen> {
   @override
   void initState() {
     widget.controller.text = widget.provider.name;
@@ -159,8 +155,7 @@ class _RegisterNameAgreementScreenState
                       context,
                       MaterialPageRoute(
                           builder: (context) => CommonPolicyScreen(
-                                isChecked:
-                                    widget.provider.isPrivateInformationAgreed,
+                                isChecked: widget.provider.isPrivateInformationAgreed,
                                 policyType: PolicyType.private,
                               )));
                   widget.provider.isPrivateInformationAgreed = result;
@@ -172,14 +167,11 @@ class _RegisterNameAgreementScreenState
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                       child: Text(
                         "상세 보기 >",
                         style: TextStyle(
-                            color: Coloring.gray_10,
-                            fontSize: Font.size_smallText,
-                            fontWeight: Font.weight_regular),
+                            color: Coloring.gray_10, fontSize: Font.size_smallText, fontWeight: Font.weight_regular),
                       ),
                     ))),
           ),
@@ -227,8 +219,7 @@ class _RegisterNameAgreementScreenState
                     context,
                     MaterialPageRoute(
                         builder: (context) => CommonPolicyScreen(
-                              isChecked:
-                                  widget.provider.isOperatingPolicyAgreed,
+                              isChecked: widget.provider.isOperatingPolicyAgreed,
                               policyType: PolicyType.operating,
                             )));
                 widget.provider.isOperatingPolicyAgreed = result;
@@ -240,14 +231,11 @@ class _RegisterNameAgreementScreenState
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                   child: Text(
                     "상세 보기 >",
                     style: TextStyle(
-                        color: Coloring.gray_10,
-                        fontSize: Font.size_smallText,
-                        fontWeight: Font.weight_regular),
+                        color: Coloring.gray_10, fontSize: Font.size_smallText, fontWeight: Font.weight_regular),
                   ),
                 ),
               ),
