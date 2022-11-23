@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/user/user_modify_VM.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../assets/icons/light/LightIcons_icons.dart';
@@ -46,7 +47,7 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                 },
                 child: Scaffold(
                   resizeToAvoidBottomInset: false,
-                  backgroundColor: Colors.white,
+                  backgroundColor: Coloring.gray_50,
                   appBar: headerDefaultWidget(
                     title: "수정 하기",
                     leading: FunctionalIcon.close,
@@ -95,7 +96,9 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                                 provider.setName(name);
                               },
                               textEditingController: controller,
-                              isSuffix: provider.isLoaded ? provider.me!.name.isNotEmpty : false,
+                              isSuffix: provider.isLoaded
+                                  ? provider.me!.name.isNotEmpty
+                                  : false,
                               onClickSuffix: () {
                                 provider.setName("");
                               },
@@ -105,7 +108,9 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                             padding: const EdgeInsets.only(bottom: 13),
                             child: InputSelectWidget(
                               title: "가족 역할",
-                              contents: provider.isLoaded ? provider.me!.role.toDisplayString() : "",
+                              contents: provider.isLoaded
+                                  ? provider.me!.role.toDisplayString()
+                                  : "",
                               isFilled: true,
                               buttons: {
                                 "아빠": () {
@@ -125,7 +130,9 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                             ),
                           ),
                           InputColorWidget(
-                            color: provider.isLoaded ? provider.me!.color.toColor()! : Colors.white,
+                            color: provider.isLoaded
+                                ? provider.me!.color.toColor()!
+                                : Colors.white,
                             onColorChanged: (Color color) {
                               provider.setColor(color);
                             },
@@ -149,14 +156,16 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(right: 10),
                                   child: CheckboxWidget(
-                                      value: provider.isLoaded ? provider.me!.isLunar : false,
+                                      value: provider.isLoaded
+                                          ? provider.me!.isLunar
+                                          : false,
                                       onChanged: (bool? value) {
                                         provider.setLunar(value!);
                                       }),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 16),
-                                  child: Text(
+                                  child: ScalableTextWidget(
                                     "음력",
                                     style: TextStyle(
                                       color: Coloring.gray_10,
@@ -170,8 +179,11 @@ class _UserModifyScreenState extends State<UserModifyScreen> {
                           ),
                           InputDateWidget(
                             title: "생일",
-                            contents: provider.isLoaded ? provider.me!.birthDay : "",
-                            currTime: provider.isLoaded ? DateTime.parse(provider.me!.birthDay) : DateTime.now(),
+                            contents:
+                                provider.isLoaded ? provider.me!.birthDay : "",
+                            currTime: provider.isLoaded
+                                ? DateTime.parse(provider.me!.birthDay)
+                                : DateTime.now(),
                             onChanged: (DateTime dateTime) {
                               provider.setBirthDay(dateTime);
                             },

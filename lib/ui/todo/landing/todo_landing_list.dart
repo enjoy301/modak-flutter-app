@@ -14,6 +14,7 @@ import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/utils/notification_controller.dart';
 import 'package:modak_flutter_app/widgets/common/pressed_timer_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/theme_modal_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/theme_position_list_widget.dart';
@@ -36,14 +37,20 @@ class _TodoLandingListState extends State<TodoLandingList> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<TodoProvider, UserProvider>(builder: (context, todoProvider, userProvider, _) {
-      List<Todo> todos = todoProvider.todoMap[DateFormat("yyyy-MM-dd").format(todoProvider.selectedDateTime)] ?? [];
+    return Consumer2<TodoProvider, UserProvider>(
+        builder: (context, todoProvider, userProvider, _) {
+      List<Todo> todos = todoProvider.todoMap[
+              DateFormat("yyyy-MM-dd").format(todoProvider.selectedDateTime)] ??
+          [];
       return Expanded(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: RefreshIndicator(
-            onRefresh: todoProvider.init,
+            onRefresh: () async {
+              todoProvider.getTodosByScroll(null);
+            },
             child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
                   if (todos.isEmpty)
@@ -51,7 +58,8 @@ class _TodoLandingListState extends State<TodoLandingList> {
                       padding: const EdgeInsets.symmetric(vertical: 30),
                       child: Text(
                         "아직 등록된 할 일이 없습니다",
-                        style: EasyStyle.text(Coloring.gray_20, Font.size_mediumText, Font.weight_medium),
+                        style: EasyStyle.text(Coloring.gray_20,
+                            Font.size_mediumText, Font.weight_medium),
                       ),
                     ),
                   ListView.builder(
@@ -60,14 +68,18 @@ class _TodoLandingListState extends State<TodoLandingList> {
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         Todo todo = todos[index];
-                        Color mainColor = todo.isDone ? Coloring.gray_30 : Coloring.gray_10;
-                        Color memoColor = todo.isDone ? Coloring.gray_20 : Coloring.gray_10;
+                        Color mainColor =
+                            todo.isDone ? Coloring.gray_30 : Coloring.gray_10;
+                        Color memoColor =
+                            todo.isDone ? Coloring.gray_20 : Coloring.gray_10;
                         return PressedTimerWidget(
                           duration: Duration(milliseconds: 400),
                           onTap: () {
                             if (!todo.isDone) {
                               themeModalWidget(context,
-                                  title: "할 일을 완료하셨나요?", des: "확인을 누르면 알림이 보내집니다.\n다시 취소 할 수 없어요.", onOkPress: () {
+                                  title: "할 일을 완료하셨나요?",
+                                  des: "확인을 누르면 알림이 보내집니다.\n다시 취소 할 수 없어요.",
+                                  onOkPress: () {
                                 todoProvider.doneTodo(todo, !todo.isDone);
                                 NotificationController.sendNotification(
                                     "${todo.title}가 완료되었습니다\n",
@@ -101,16 +113,21 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                         {
                                           "단일 변경": () {
                                             Get.back();
-                                            Get.to(TodoModifyScreen(todo: todo, isAfterUpdate: false));
+                                            Get.to(TodoModifyScreen(
+                                                todo: todo,
+                                                isAfterUpdate: false));
                                           },
                                           "이후 변경": () {
                                             Get.back();
-                                            Get.to(TodoModifyScreen(todo: todo, isAfterUpdate: true));
+                                            Get.to(TodoModifyScreen(
+                                                todo: todo,
+                                                isAfterUpdate: true));
                                           },
                                         },
                                       );
                                     } else {
-                                      Get.to(TodoModifyScreen(todo: todo, isAfterUpdate: false));
+                                      Get.to(TodoModifyScreen(
+                                          todo: todo, isAfterUpdate: false));
                                     }
                                   },
                                 },
@@ -128,7 +145,8 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                         {
                                           "단일 변경": () {
                                             Get.back();
-                                            todoProvider.deleteTodo(todo, false);
+                                            todoProvider.deleteTodo(
+                                                todo, false);
                                           },
                                           "이후 변경": () {
                                             Get.back();
@@ -141,7 +159,8 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                     }
                                   },
                                 },
-                                if (todo.isDone && todo.memberId != userProvider.me!.memberId)
+                                if (todo.isDone &&
+                                    todo.memberId != userProvider.me!.memberId)
                                   {
                                     'name': '감사 표현하기',
                                     'icon': Icon(
@@ -173,13 +192,17 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                     child: Column(
                                       children: [
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Text(
+                                            ScalableTextWidget(
                                               todo.title,
-                                              style:
-                                                  EasyStyle.text(mainColor, Font.size_largeText, Font.weight_semiBold),
+                                              style: EasyStyle.text(
+                                                  mainColor,
+                                                  Font.size_largeText,
+                                                  Font.weight_semiBold),
                                             ),
                                             TodoListItemTagWidget(
                                               name: todo.timeTag ?? "언제든지",
@@ -188,17 +211,24 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                           ],
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 6),
+                                          padding:
+                                              const EdgeInsets.only(top: 6),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text("@${userProvider.findUserById(todo.memberId)?.name ?? "익명"}",
-                                                  style:
-                                                      EasyStyle.text(mainColor, Font.size_smallText, Font.weight_bold)),
+                                              ScalableTextWidget(
+                                                  "@${userProvider.findUserById(todo.memberId)?.name ?? "익명"}",
+                                                  style: EasyStyle.text(
+                                                      mainColor,
+                                                      Font.size_smallText,
+                                                      Font.weight_bold)),
                                               Text(
                                                 todo.repeatTag ?? "",
-                                                style:
-                                                    EasyStyle.text(mainColor, Font.size_smallText, Font.weight_regular),
+                                                style: EasyStyle.text(
+                                                    mainColor,
+                                                    Font.size_smallText,
+                                                    Font.weight_regular),
                                               )
                                             ],
                                           ),
@@ -213,7 +243,10 @@ class _TodoLandingListState extends State<TodoLandingList> {
                                       color: todo.memoColor.toColor(),
                                       child: Text(
                                         todo.memo!,
-                                        style: EasyStyle.text(memoColor, Font.size_smallText, Font.weight_medium),
+                                        style: EasyStyle.text(
+                                            memoColor,
+                                            Font.size_smallText,
+                                            Font.weight_medium),
                                       ),
                                     ),
                                   SizedBox.shrink()
@@ -223,6 +256,9 @@ class _TodoLandingListState extends State<TodoLandingList> {
                           ),
                         );
                       }),
+                  SizedBox(
+                    height: 100,
+                  )
                 ],
               ),
             ),

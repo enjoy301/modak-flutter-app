@@ -22,7 +22,6 @@ class ButtonCancelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height,
       decoration: BoxDecoration(
         color: Coloring.gray_40,
         borderRadius: BorderRadius.circular(99),
@@ -36,6 +35,7 @@ class ButtonCancelWidget extends StatelessWidget {
         child: ScalableTextWidget(
           title,
           style: TextStyle(
+              height: 1.5,
               color: Colors.black,
               fontSize: Font.size_largeText,
               fontWeight: Font.weight_bold),

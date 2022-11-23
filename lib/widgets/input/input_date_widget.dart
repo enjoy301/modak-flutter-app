@@ -4,6 +4,7 @@ import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class InputDateWidget extends StatelessWidget {
   const InputDateWidget({
@@ -49,11 +50,14 @@ class InputDateWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(top: 15, right: 15, bottom: 11, left: 15),
+              padding:
+                  EdgeInsets.only(top: 15, right: 15, bottom: 11, left: 15),
               decoration: BoxDecoration(
                 color: isBlocked ? Coloring.gray_40 : Coloring.gray_50,
                 borderRadius: BorderRadius.circular(16),
-                border: !isFilled && isNecessary ? Border.all(color: Colors.red) : null,
+                border: !isFilled && isNecessary
+                    ? Border.all(color: Colors.red)
+                    : null,
               ),
               child: Row(
                 children: [
@@ -64,7 +68,7 @@ class InputDateWidget extends StatelessWidget {
                       color: Coloring.gray_20,
                     ),
                   ),
-                  Text(
+                  ScalableTextWidget(
                     title,
                     style: TextStyle(
                       color: Coloring.titleText,
@@ -77,7 +81,7 @@ class InputDateWidget extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: Text(
+                    child: ScalableTextWidget(
                       contents,
                       style: TextStyle(
                         color: isBlocked

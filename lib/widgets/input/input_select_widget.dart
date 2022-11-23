@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/assets/icons/light/LightIcons_icons.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/modal/list_modal_widget.dart';
 
 class InputSelectWidget extends StatefulWidget {
@@ -61,7 +62,7 @@ class _InputSelectWidgetState extends State<InputSelectWidget> {
                         color: Coloring.gray_20,
                       ),
               ),
-              Text(
+              ScalableTextWidget(
                 widget.title,
                 style: TextStyle(
                   color: Coloring.titleText,
@@ -74,7 +75,7 @@ class _InputSelectWidgetState extends State<InputSelectWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
+                child: ScalableTextWidget(
                   widget.contents,
                   style: TextStyle(
                     color: widget.isBlocked

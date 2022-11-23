@@ -7,10 +7,15 @@ import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/home/talk/home_talk_view_screen.dart';
 import 'package:modak_flutter_app/ui/home/talk/home_talk_write_screen.dart';
 import 'package:modak_flutter_app/utils/date.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomeFamilyTalkWidget extends StatefulWidget {
-  const HomeFamilyTalkWidget({Key? key, required this.dateTime, this.isNone = false, this.isPast = false})
+  const HomeFamilyTalkWidget(
+      {Key? key,
+      required this.dateTime,
+      this.isNone = false,
+      this.isPast = false})
       : super(key: key);
 
   final DateTime dateTime;
@@ -24,8 +29,10 @@ class HomeFamilyTalkWidget extends StatefulWidget {
 class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<HomeProvider, UserProvider>(builder: (context, homeProvider, userProvider, child) {
-      bool isWritten = homeProvider.todayTalkMap[Date.getFormattedDate(dateTime: widget.dateTime)]
+    return Consumer2<HomeProvider, UserProvider>(
+        builder: (context, homeProvider, userProvider, child) {
+      bool isWritten = homeProvider.todayTalkMap[
+                  Date.getFormattedDate(dateTime: widget.dateTime)]
               ?[userProvider.me!.memberId] !=
           null;
       return GestureDetector(
@@ -47,7 +54,7 @@ class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              ScalableTextWidget(
                 "오늘의 한 마디",
                 style: TextStyle(
                   color: Colors.black,
@@ -57,10 +64,15 @@ class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
               ),
               if (isWritten || widget.isPast)
                 Column(
-                  children: homeProvider.todayTalkMap[Date.getFormattedDate(dateTime: widget.dateTime)]?.entries
+                  children: homeProvider
+                          .todayTalkMap[
+                              Date.getFormattedDate(dateTime: widget.dateTime)]
+                          ?.entries
                           .map(
-                            (MapEntry<int, String> item) => HomeFamilyTalkItemWidget(
-                              name: userProvider.findUserById(item.key)?.name ?? "익명",
+                            (MapEntry<int, String> item) =>
+                                HomeFamilyTalkItemWidget(
+                              name: userProvider.findUserById(item.key)?.name ??
+                                  "익명",
                               talk: item.value,
                             ),
                           )
@@ -68,7 +80,7 @@ class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
                       [],
                 ),
               if (!isWritten && !widget.isPast)
-                Text(
+                ScalableTextWidget(
                   "한마디를 작성하고 확인해보세요",
                   style: TextStyle(
                     color: Coloring.gray_10,
@@ -77,9 +89,12 @@ class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
                     height: 2.5,
                   ),
                 ),
-              if ((homeProvider.todayTalkMap[Date.getFormattedDate(dateTime: widget.dateTime)] ?? {}).isEmpty &&
+              if ((homeProvider.todayTalkMap[Date.getFormattedDate(
+                              dateTime: widget.dateTime)] ??
+                          {})
+                      .isEmpty &&
                   widget.isPast)
-                Text(
+                ScalableTextWidget(
                   "작성된 한마디가 없습니다",
                   style: TextStyle(
                     color: Coloring.gray_10,
@@ -97,7 +112,9 @@ class _HomeFamilyTalkWidgetState extends State<HomeFamilyTalkWidget> {
 }
 
 class HomeFamilyTalkItemWidget extends StatelessWidget {
-  const HomeFamilyTalkItemWidget({Key? key, required this.name, required this.talk}) : super(key: key);
+  const HomeFamilyTalkItemWidget(
+      {Key? key, required this.name, required this.talk})
+      : super(key: key);
 
   final String name;
   final String talk;
@@ -108,11 +125,12 @@ class HomeFamilyTalkItemWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30)),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(30)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            ScalableTextWidget(
               "$name   ",
               style: TextStyle(
                 color: Colors.black,
@@ -121,7 +139,7 @@ class HomeFamilyTalkItemWidget extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: Text(
+                child: ScalableTextWidget(
               talk,
               style: TextStyle(
                 color: Colors.black,

@@ -26,27 +26,21 @@ class FunctionListWidget extends StatefulWidget {
 
 class _FunctionListWidget extends State<FunctionListWidget> {
   final List<Map<String, String>> topics = [
-    {
-      "가족 퀴즈": "아빠와 엄마 혹은 남편과 아내분의 첫 데이트한 장소는 어딜까요??",
-    },
-    {
-      "가족 퀴즈": "엄마가 가장 좋아하는 음식은?",
-    },
-    {
-      "가족 퀴즈": "아빠가 가장 좋아하는 음식은?",
-    },
-    {
-      "가족 대화": "다들 오늘 계획은 어떻게 되시나요? 아니면 오늘 하루 어떻게 보내셨나요?",
-    },
-    {
-      "가족 대화": "가족에게 감사한 점이 있다면?",
-    },
-    {
-      "가족 대화": "요즘 가장 큰 고민거리는 무엇인가요",
-    },
-    {
-      "가족 대화": "다음 휴가 때 어디로 가지...",
-    },
+    {"가족 퀴즈": "아빠와 엄마 혹은 남편과 아내분의 첫 데이트 한 장소는 어딜까요??"},
+    {"가족 퀴즈": "엄마가 가장 좋아하는 음식은?"},
+    {"가족 퀴즈": "아빠가 가장 좋아하는 음식은?"},
+    {"가족 대화": "다들 오늘 계획은 어떻게 되시나요? 아니면 오늘 하루 어떻게 보내셨나요?"},
+    {"가족 대화": "가족에게 감사한 점이 있다면?"},
+    {"가족 대화": "요즘 가장 큰 고민거리는 무엇인가요?"},
+    {"가족 대화": "다음 휴가 때 어디로 가지..."},
+    {"가족 대화": "각자 겪었던 재밌는 일은 무엇이 있나요?"},
+    {"가족 대화": "가족한테 고마웠던 경험은?"},
+    {"가족 대화": "요즘 관심사를 한 번 말해볼까요?"},
+    {"가족 대화": "지금 가장 듣고 싶은 말은?"},
+    {"가족 대화": "그동안 살면서 가장 기억에 남는 것은?"},
+    {"가족 대화": "가장 슬펐던 일은?"},
+    {"가족 대화": "가족에게 가장 바라는 것은?"},
+    {"가족 대화": "앞으로의 소원과 다짐을 공유해봅시다"},
   ];
   final List<Map<String, dynamic>> functionIconWidgetValues = [
     {
@@ -69,8 +63,16 @@ class _FunctionListWidget extends State<FunctionListWidget> {
       'icon': LightIcons.TicketStar,
       'color': Coloring.bg_yellow,
     },
-    {'name': "편지", 'icon': LightIcons.Message, 'color': Coloring.point_pureorange},
-    {'name': "주제 던지기", 'icon': LightIcons.Chat, 'color': Coloring.todo_lightgreen}
+    {
+      'name': "편지",
+      'icon': LightIcons.Message,
+      'color': Coloring.point_pureorange
+    },
+    {
+      'name': "주제 던지기",
+      'icon': LightIcons.Chat,
+      'color': Coloring.todo_lightgreen
+    }
   ];
   @override
   Widget build(BuildContext context) {
@@ -92,7 +94,8 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                   ),
                   child: Text(
                     "가족들과 함께 모닥의 기능들을 이용해보세요",
-                    style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_medium),
+                    style: EasyStyle.text(Coloring.gray_10,
+                        Font.size_mediumText, Font.weight_medium),
                   ),
                 ),
                 GestureDetector(
@@ -117,7 +120,8 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                           padding: const EdgeInsets.only(left: 12),
                           child: Text(
                             "가족을 초대하세요",
-                            style: EasyStyle.text(Colors.black, Font.size_mediumText, Font.weight_medium),
+                            style: EasyStyle.text(Colors.black,
+                                Font.size_mediumText, Font.weight_medium),
                           ),
                         ),
                         Expanded(child: SizedBox.shrink()),
@@ -206,7 +210,8 @@ class _FunctionListWidget extends State<FunctionListWidget> {
                 data: functionIconWidgetValues[5],
                 onTap: () {
                   int idx = math.Random().nextInt(topics.length);
-                  Iterable<MapEntry<String, String>> entry = topics[idx].entries;
+                  Iterable<MapEntry<String, String>> entry =
+                      topics[idx].entries;
                   chatProvider.postChat(
                     context,
                     entry.first.value,

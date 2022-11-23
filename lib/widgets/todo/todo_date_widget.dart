@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class TodoDateWidget extends StatelessWidget {
   const TodoDateWidget(
-      {Key? key, required this.colors, required this.selectedDay, required this.isSelected, this.isToday = false})
+      {Key? key,
+      required this.colors,
+      required this.selectedDay,
+      required this.isSelected,
+      this.isToday = false})
       : super(key: key);
 
   final List<String> colors;
@@ -35,7 +40,7 @@ class TodoDateWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            ScalableTextWidget(
               daysOfWeek[selectedDay.weekday],
               style: isSelected
                   ? TextStyle(
@@ -49,7 +54,7 @@ class TodoDateWidget extends StatelessWidget {
                       fontWeight: Font.weight_medium,
                     ),
             ),
-            Text(
+            ScalableTextWidget(
               selectedDay.day.toString(),
               textAlign: TextAlign.center,
               style: isSelected

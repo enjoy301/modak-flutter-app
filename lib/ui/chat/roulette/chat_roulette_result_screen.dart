@@ -33,7 +33,12 @@ class _ChatRouletteResultScreenState extends State<ChatRouletteResultScreen> {
 
   @override
   void initState() {
-    stream.add(widget.participatedUsers.indexOf(widget.selectedUser));
+    int index = 0;
+    for (User user in widget.participatedUsers) {
+      if (widget.selectedUser.name == user.name) break;
+      index += 1;
+    }
+    stream.add(index);
     super.initState();
   }
 
@@ -48,6 +53,7 @@ class _ChatRouletteResultScreenState extends State<ChatRouletteResultScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: headerDefaultWidget(
+        bgColor: Colors.white,
         title: "돌림판 결과",
         leading: FunctionalIcon.back,
         onClickLeading: () {

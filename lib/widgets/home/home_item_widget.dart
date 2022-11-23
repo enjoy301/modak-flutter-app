@@ -3,10 +3,16 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/shadowing.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class HomeItemWidget extends StatelessWidget {
   const HomeItemWidget(
-      {Key? key, required this.title, required this.des, required this.onPressed, this.type, this.isPointGiven = false})
+      {Key? key,
+      required this.title,
+      required this.des,
+      required this.onPressed,
+      this.type,
+      this.isPointGiven = false})
       : super(key: key);
 
   final String? type;
@@ -21,26 +27,34 @@ class HomeItemWidget extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15), boxShadow: [
-          Shadowing.grey,
-          Shadowing.grey,
-        ]),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              Shadowing.grey,
+              Shadowing.grey,
+            ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (type != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
-                child: Text(
+                child: ScalableTextWidget(
                   type!,
-                  style: EasyStyle.text(Colors.blueAccent, Font.size_smallText, Font.weight_semiBold),
+                  style: EasyStyle.text(Colors.blueAccent, Font.size_smallText,
+                      Font.weight_semiBold),
                 ),
               ),
-            Text(
+            ScalableTextWidget(
               "$title ",
-              style: TextStyle(height: 1, color: Colors.black, fontSize: Font.size_h3, fontWeight: Font.weight_bold),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  height: 1,
+                  color: Colors.black,
+                  fontSize: Font.size_h3,
+                  fontWeight: Font.weight_bold,
+                  overflow: TextOverflow.ellipsis),
+              maxLines: 2,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 6),

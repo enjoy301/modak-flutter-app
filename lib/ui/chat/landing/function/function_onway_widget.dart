@@ -9,6 +9,7 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/widgets/chat/chat_input_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/icon/icon_gradient_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,8 @@ class _FunctionOnWayWidget extends State<FunctionOnWayWidget> {
       return Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
         ),
         child: Row(
           children: [
@@ -45,9 +47,10 @@ class _FunctionOnWayWidget extends State<FunctionOnWayWidget> {
                 LightIcons.CloseSquare,
               ),
             ),
-            Text(
+            ScalableTextWidget(
               "오늘",
-              style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
+              style: EasyStyle.text(
+                  Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
             ),
             Expanded(
               child: Padding(
@@ -65,9 +68,10 @@ class _FunctionOnWayWidget extends State<FunctionOnWayWidget> {
                 ),
               ),
             ),
-            Text(
+            ScalableTextWidget(
               "어때요?",
-              style: EasyStyle.text(Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
+              style: EasyStyle.text(
+                  Coloring.gray_10, Font.size_mediumText, Font.weight_regular),
             ),
             IconButton(
               onPressed: () {
@@ -82,7 +86,9 @@ class _FunctionOnWayWidget extends State<FunctionOnWayWidget> {
                 }
               },
               icon: IconGradientWidget(
-                _textEditingController.text.isEmpty ? LightIcons.Send : DarkIcons.Send,
+                _textEditingController.text.isEmpty
+                    ? LightIcons.Send
+                    : DarkIcons.Send,
                 20,
                 Coloring.sub_purple,
               ),

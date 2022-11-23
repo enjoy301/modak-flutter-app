@@ -21,7 +21,6 @@ class UserProvider extends ChangeNotifier {
     _todoAlarmReceive = _userRepository.getTodoAlarmReceive();
     _chatAlarmReceive = _userRepository.getChatAlarmReceive();
     notifications = _userRepository.getNotifications();
-    archiveNotifications = _userRepository.getArchiveNotifications();
     notifyListeners();
   }
 
@@ -46,7 +45,6 @@ class UserProvider extends ChangeNotifier {
   bool _todoAlarmReceive = true;
   bool _chatAlarmReceive = true;
   List<Noti> notifications = <Noti>[];
-  List<Noti> archiveNotifications = <Noti>[];
 
   User? get me => _me;
 
@@ -119,12 +117,11 @@ class UserProvider extends ChangeNotifier {
     Map<String, dynamic> response = await _userRepository.updateMeTag(timeTags);
     switch (response[Strings.message]) {
       case Strings.success:
-        Fluttertoast.showToast(msg: "성공적으로 업데이트");
         _me!.timeTags = timeTags;
         notifyListeners();
         break;
       case Strings.fail:
-        Fluttertoast.showToast(msg: "업데이트에 실패하셨습니다");
+        Fluttertoast.showToast(msg: "태그를 추가하는데 실패하셨습니다");
         break;
     }
   }
@@ -173,11 +170,8 @@ class UserProvider extends ChangeNotifier {
     for (Noti noti in notifications) {
       noti.isRead = true;
     }
-    for (Noti noti in archiveNotifications) {
-      noti.isRead = true;
-    }
+
     _userRepository.setNotifications(notifications);
-    _userRepository.setArchiveNotifications(archiveNotifications);
     notifyListeners();
   }
 
@@ -198,53 +192,9 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  addArchiveNotification(Noti noti) {
-    print("add archive");
-    archiveNotifications.insert(0, noti);
-    _userRepository.setArchiveNotifications(archiveNotifications);
-    notifyListeners();
-  }
-
-  removeNotification(int index) {
-    print("remove noti");
-    try {
-      notifications.removeAt(index);
-      _userRepository.setNotifications(notifications);
-    } catch (e) {
-      print("there is no item in notification at index $index");
-    }
-    notifyListeners();
-  }
-
-  removeArchiveNotification(int index) {
-    print("remove archive");
-    try {
-      archiveNotifications.removeAt(index);
-      _userRepository.setArchiveNotifications(archiveNotifications);
-    } catch (e) {
-      print("there's no item in archive notifications at index $index");
-    }
-    notifyListeners();
-  }
-
-  archive(int index) {
-    print("archive");
-    addArchiveNotification(notifications[index]);
-    removeNotification(index);
-    notifyListeners();
-  }
-
-  unArchive(int index) {
-    print("unarchive");
-    addNotification(archiveNotifications[index]);
-    removeArchiveNotification(index);
-    notifyListeners();
-  }
-
   clear() {
     _me = null;
     _familyMembers = [];
     notifications = [];
-    archiveNotifications = [];
   }
 }

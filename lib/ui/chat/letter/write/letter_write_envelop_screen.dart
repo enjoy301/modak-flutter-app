@@ -13,13 +13,15 @@ class LetterWriteEnvelopScreen extends StatefulWidget {
   const LetterWriteEnvelopScreen({Key? key}) : super(key: key);
 
   @override
-  State<LetterWriteEnvelopScreen> createState() => _LetterWriteEnvelopScreenState();
+  State<LetterWriteEnvelopScreen> createState() =>
+      _LetterWriteEnvelopScreenState();
 }
 
 class _LetterWriteEnvelopScreenState extends State<LetterWriteEnvelopScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, ChatLetterVM>(builder: (context, userProvider, provider, child) {
+    return Consumer2<UserProvider, ChatLetterVM>(
+        builder: (context, userProvider, provider, child) {
       return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
@@ -28,11 +30,12 @@ class _LetterWriteEnvelopScreenState extends State<LetterWriteEnvelopScreen> {
               children: EnvelopeType.values.map((EnvelopeType envelop) {
                 return LetterWidget(
                   letter: Letter(
-                      fromMemberId: userProvider.me!.memberId,
-                      toMemberId: provider.toMember!.memberId,
-                      content: provider.content,
-                      envelope: envelop,
-                      date: Date.getFormattedDate()),
+                    fromMemberId: userProvider.me!.memberId,
+                    toMemberId: provider.toMember!.memberId,
+                    content: provider.content,
+                    envelope: envelop,
+                    date: Date.getFormattedDate(),
+                  ),
                   onTap: () {
                     provider.envelope = envelop;
                   },
@@ -43,7 +46,8 @@ class _LetterWriteEnvelopScreenState extends State<LetterWriteEnvelopScreen> {
           ),
         ),
         bottomSheet: Padding(
-          padding: const EdgeInsets.only(right: 30, left: 30, bottom: 16, top: 16),
+          padding:
+              const EdgeInsets.only(right: 30, left: 30, bottom: 16, top: 16),
           child: ButtonMainWidget(
             title: "편지 보내기",
             onPressed: () async {

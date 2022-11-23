@@ -28,7 +28,6 @@ class ButtonMainWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height,
       decoration: BoxDecoration(
         gradient: isValid ? color : null,
         color: isValid ? null : Coloring.gray_50,
@@ -42,6 +41,7 @@ class ButtonMainWidget extends StatelessWidget {
         onPressed: isValid ? onPressed : null,
         child: ScalableTextWidget(
           title,
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: isValid ? Colors.white : Coloring.gray_30,
             fontSize: Font.size_largeText,

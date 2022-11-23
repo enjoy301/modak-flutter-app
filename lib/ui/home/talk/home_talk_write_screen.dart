@@ -5,6 +5,8 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/home_provider.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +23,8 @@ class _HomeTalkWriteScreenState extends State<HomeTalkWriteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeProvider>(builder: (context, homeProvider, child) {
+    return Consumer2<HomeProvider, UserProvider>(
+        builder: (context, homeProvider, userProvider, child) {
       return Scaffold(
         backgroundColor: Coloring.gray_50,
         appBar: headerDefaultWidget(
@@ -43,6 +46,9 @@ class _HomeTalkWriteScreenState extends State<HomeTalkWriteScreen> {
                   hintText: "오늘의 한 마디를 적어보세요",
                   border: InputBorder.none,
                 ),
+                style: TextStyle(
+                    fontSize:
+                        Font.size_mediumText * userProvider.getFontScale()),
                 onChanged: (String text) {
                   setState(() {
                     content = text;
@@ -57,7 +63,8 @@ class _HomeTalkWriteScreenState extends State<HomeTalkWriteScreen> {
                       if (content.trim().isEmpty) {
                         Fluttertoast.showToast(msg: "값을 입력해주세요");
                       } else {
-                        bool isSuccess = await homeProvider.postTodayTalk(context, content.trim());
+                        bool isSuccess = await homeProvider.postTodayTalk(
+                            context, content.trim());
                         if (isSuccess) Get.back();
                       }
                     },
@@ -76,13 +83,30 @@ class _HomeTalkWriteScreenState extends State<HomeTalkWriteScreen> {
                         isInputTappedDown = false;
                       });
                     },
-                    child: Text(
-                      "오늘의 한 마디 작성",
-                      style: TextStyle(
-                          color: isInputTappedDown ? Colors.grey[700]!.withOpacity(0.5) : Colors.grey[700],
-                          fontSize: Font.size_subTitle,
-                          fontWeight: Font.weight_medium,
-                          height: 2),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Coloring.bg_purple),
+                      ),
+                      onPressed: () async {
+                        if (content.trim().isEmpty) {
+                          Fluttertoast.showToast(msg: "값을 입력해주세요");
+                        } else {
+                          bool isSuccess = await homeProvider.postTodayTalk(
+                              context, content.trim());
+                          if (isSuccess) Get.back();
+                        }
+                      },
+                      child: ScalableTextWidget(
+                        "오늘의 한 마디 작성",
+                        style: TextStyle(
+                            color: isInputTappedDown
+                                ? Colors.grey[700]!.withOpacity(0.5)
+                                : Colors.grey[700],
+                            fontSize: Font.size_subTitle,
+                            fontWeight: Font.weight_medium,
+                            height: 1),
+                      ),
                     ),
                   ),
                 ],

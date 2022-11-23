@@ -87,12 +87,14 @@ class AlbumProvider extends ChangeNotifier {
     lastDate = "2001-03-01";
     _isLabelLoading = false;
 
-    Map<String, dynamic> mediaInfoResponse = await _albumRepository.getMediaInfoList(mediaLastId, 20);
+    Map<String, dynamic> mediaInfoResponse =
+        await _albumRepository.getMediaInfoList(mediaLastId, 20);
     if (mediaInfoResponse['result'] == Strings.fail) {
       return;
     }
 
-    List<dynamic> mediaInfoList = jsonDecode(mediaInfoResponse['response']['data'])['album'];
+    List<dynamic> mediaInfoList =
+        jsonDecode(mediaInfoResponse['response']['data'])['album'];
     mediaLastId = jsonDecode(
       mediaInfoResponse['response']['data'],
     )['last_id'];
@@ -144,8 +146,6 @@ class AlbumProvider extends ChangeNotifier {
     }
 
     notifyListeners();
-
-    Fluttertoast.showToast(msg: "앨범 성공적으로 불러옴");
   }
 
   Future initFaceView(int clusterId) async {
@@ -153,7 +153,8 @@ class AlbumProvider extends ChangeNotifier {
     _faceDetailFileList = [];
     _faceScrollController ??= ScrollController();
 
-    Map<String, dynamic> faceResponse = await _albumRepository.getFaceDetail(faceLastId, 18, clusterId);
+    Map<String, dynamic> faceResponse =
+        await _albumRepository.getFaceDetail(faceLastId, 18, clusterId);
 
     if (faceResponse['result'] == Strings.fail) {
       return;
@@ -182,7 +183,7 @@ class AlbumProvider extends ChangeNotifier {
         _faceDetailFileList.add(file);
       }
     }
-
+    notifyListeners();
     return;
   }
 
@@ -193,7 +194,8 @@ class AlbumProvider extends ChangeNotifier {
     _isLabelLoading = true;
     notifyListeners();
 
-    Map<String, dynamic> labelResponse = await _albumRepository.getLabelDetail(labelLastId, 18, labelName);
+    Map<String, dynamic> labelResponse =
+        await _albumRepository.getLabelDetail(labelLastId, 18, labelName);
 
     if (labelResponse['result'] == Strings.fail) {
       return;
@@ -294,9 +296,9 @@ class AlbumProvider extends ChangeNotifier {
     );
 
     if (response['message'] == "SUCCESS") {
-      Fluttertoast.showToast(msg: "가족 대표사진 등록!");
+      Fluttertoast.showToast(msg: "가족 대표 사진이 등록되었습니다");
     } else {
-      Fluttertoast.showToast(msg: "대표사진 등록 실패");
+      Fluttertoast.showToast(msg: "대표 사진 등록이 실패하였습니다");
     }
 
     return {
@@ -307,7 +309,8 @@ class AlbumProvider extends ChangeNotifier {
   void addScrollListener() {
     scrollController!.addListener(
       () async {
-        if (scrollController!.offset == scrollController!.position.maxScrollExtent &&
+        if (scrollController!.offset ==
+                scrollController!.position.maxScrollExtent &&
             !scrollController!.position.outOfRange) {
           if (isInfinityScrollLoading == true || mediaLastId == -1) {
             return;
@@ -315,7 +318,8 @@ class AlbumProvider extends ChangeNotifier {
 
           isInfinityScrollLoading = true;
 
-          Map<String, dynamic> mediaInfoResponse = await _albumRepository.getMediaInfoList(
+          Map<String, dynamic> mediaInfoResponse =
+              await _albumRepository.getMediaInfoList(
             mediaLastId,
             20,
           );
@@ -336,7 +340,8 @@ class AlbumProvider extends ChangeNotifier {
             return;
           }
 
-          Map<String, dynamic> mediaFileListResponse = await loadMedia(mediaInfoList);
+          Map<String, dynamic> mediaFileListResponse =
+              await loadMedia(mediaInfoList);
           if (mediaFileListResponse['result'] == Strings.fail) {
             return;
           }
@@ -353,7 +358,8 @@ class AlbumProvider extends ChangeNotifier {
   void addThemeScrollListener() {
     themeScrollController!.addListener(
       () async {
-        if (themeScrollController!.offset == themeScrollController!.position.maxScrollExtent &&
+        if (themeScrollController!.offset ==
+                themeScrollController!.position.maxScrollExtent &&
             !themeScrollController!.position.outOfRange) {
           if (isInfinityScrollLoading == true || labelLastId == -1) {
             return;
@@ -361,7 +367,8 @@ class AlbumProvider extends ChangeNotifier {
 
           isInfinityScrollLoading = true;
 
-          Map<String, dynamic> labelResponse = await _albumRepository.getLabelDetail(
+          Map<String, dynamic> labelResponse =
+              await _albumRepository.getLabelDetail(
             labelLastId,
             18,
             _labelDataList[_selectedLabel]['label'],
@@ -371,7 +378,8 @@ class AlbumProvider extends ChangeNotifier {
             return;
           }
 
-          List<dynamic> labelData = jsonDecode(labelResponse['response']['data']);
+          List<dynamic> labelData =
+              jsonDecode(labelResponse['response']['data']);
 
           if (labelData.isNotEmpty) {
             labelLastId = labelData.last[0];
@@ -385,7 +393,8 @@ class AlbumProvider extends ChangeNotifier {
           }
 
           if (requestList.isNotEmpty) {
-            Map<String, dynamic> mediaFileListResponse = await loadMedia(requestList);
+            Map<String, dynamic> mediaFileListResponse =
+                await loadMedia(requestList);
             if (mediaFileListResponse['result'] == Strings.fail) {
               return;
             }
@@ -405,13 +414,15 @@ class AlbumProvider extends ChangeNotifier {
   void addFaceScrollListener(int value) {
     faceScrollController!.addListener(
       () async {
-        if (faceScrollController!.offset == faceScrollController!.position.maxScrollExtent &&
+        if (faceScrollController!.offset ==
+                faceScrollController!.position.maxScrollExtent &&
             !faceScrollController!.position.outOfRange) {
           if (isInfinityScrollLoading == true || faceLastId == -1) {
             return;
           }
 
-          Map<String, dynamic> faceResponse = await _albumRepository.getFaceDetail(faceLastId, 18, value);
+          Map<String, dynamic> faceResponse =
+              await _albumRepository.getFaceDetail(faceLastId, 18, value);
 
           if (faceResponse['result'] == Strings.fail) {
             return;
@@ -431,7 +442,8 @@ class AlbumProvider extends ChangeNotifier {
           }
 
           if (requestList.isNotEmpty) {
-            Map<String, dynamic> mediaFileListResponse = await loadMedia(requestList);
+            Map<String, dynamic> mediaFileListResponse =
+                await loadMedia(requestList);
             if (mediaFileListResponse['result'] == Strings.fail) {
               return;
             }
@@ -461,7 +473,8 @@ class AlbumProvider extends ChangeNotifier {
         _albumBuildFileList[index].add(mediaFile);
       }
 
-      if (mediaFile.path.toLowerCase().endsWith('mp4') || mediaFile.path.toLowerCase().endsWith('mov')) {
+      if (mediaFile.path.toLowerCase().endsWith('mp4') ||
+          mediaFile.path.toLowerCase().endsWith('mov')) {
         _thumbnailList[basename(mediaFile.path)] = await getVideoThumbnailFile(
           mediaFile,
         );

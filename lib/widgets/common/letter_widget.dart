@@ -7,10 +7,13 @@ import 'package:modak_flutter_app/data/dto/letter.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/date.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class LetterWidget extends StatefulWidget {
-  const LetterWidget({Key? key, required this.letter, this.onTap, this.onSelected = false}) : super(key: key);
+  const LetterWidget(
+      {Key? key, required this.letter, this.onTap, this.onSelected = false})
+      : super(key: key);
 
   final Letter letter;
   final Function()? onTap;
@@ -51,7 +54,9 @@ class _LetterWidgetState extends State<LetterWidget> {
               decoration: BoxDecoration(
                   color: letterEnvelop[widget.letter.envelope]['background'],
                   borderRadius: BorderRadius.circular(15),
-                  border: widget.onSelected ? Border.all(color: Colors.white70, width: 3) : null,
+                  border: widget.onSelected
+                      ? Border.all(color: Colors.white70, width: 3)
+                      : null,
                   boxShadow: [
                     Shadowing.grey,
                   ]),
@@ -59,25 +64,30 @@ class _LetterWidgetState extends State<LetterWidget> {
                 children: [
                   Row(
                     children: [
-                      Text(
+                      ScalableTextWidget(
                         "To ${userProvider.findUserById(widget.letter.toMemberId)?.name ?? ""}",
-                        style: EasyStyle.text(Colors.black, Font.size_mediumText, Font.weight_medium),
+                        style: EasyStyle.text(Colors.black,
+                            Font.size_mediumText, Font.weight_medium),
                       ),
                       Expanded(child: SizedBox()),
                       Text(
-                        Date.getFormattedDate(format: "yyyy.MM.dd", dateTime: DateTime.parse(widget.letter.date)),
-                        style: EasyStyle.text(Colors.black, Font.size_mediumText, Font.weight_regular),
+                        Date.getFormattedDate(
+                            format: "yyyy.MM.dd",
+                            dateTime: DateTime.parse(widget.letter.date)),
+                        style: EasyStyle.text(Colors.black,
+                            Font.size_mediumText, Font.weight_regular),
                       )
                     ],
                   ),
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      '${widget.letter.content}',
+                    child: ScalableTextWidget(
+                      widget.letter.content,
                       maxLines: 3,
                       textAlign: TextAlign.left,
-                      style: EasyStyle.text(Colors.black, Font.size_largeText, Font.weight_regular),
+                      style: EasyStyle.text(Colors.black, Font.size_largeText,
+                          Font.weight_regular),
                     ),
                   ),
                   Row(
@@ -85,7 +95,8 @@ class _LetterWidgetState extends State<LetterWidget> {
                       Expanded(child: SizedBox()),
                       Text(
                         "from ${userProvider.findUserById(widget.letter.fromMemberId)!.name}",
-                        style: EasyStyle.text(Colors.black, Font.size_mediumText, Font.weight_medium),
+                        style: EasyStyle.text(Colors.black,
+                            Font.size_mediumText, Font.weight_medium),
                       )
                     ],
                   )

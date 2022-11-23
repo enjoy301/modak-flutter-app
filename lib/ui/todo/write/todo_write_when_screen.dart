@@ -8,6 +8,7 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/date.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -84,9 +85,13 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TimeTagWidget(timeSelectTag, provider: userProvider, isSelected: isTimeSelected, onPressed: () {
-                      DatePicker.showTime12hPicker(context, onConfirm: (DateTime dateTime) {
-                        String text = Date.getFormattedDate(format: "hh:mm a", dateTime: dateTime);
+                    TimeTagWidget(timeSelectTag,
+                        provider: userProvider,
+                        isSelected: isTimeSelected, onPressed: () {
+                      DatePicker.showTime12hPicker(context,
+                          onConfirm: (DateTime dateTime) {
+                        String text = Date.getFormattedDate(
+                            format: "hh:mm a", dateTime: dateTime);
 
                         setState(() {
                           isTimeSelected = true;
@@ -113,7 +118,8 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
                               .map((timeTag) => TimeTagWidget(timeTag,
                                       provider: userProvider,
                                       isCustom: true,
-                                      isSelected: selectedTag == timeTag, onPressed: () {
+                                      isSelected: selectedTag == timeTag,
+                                      onPressed: () {
                                     setState(() {
                                       selectedTag = timeTag;
                                     });
@@ -138,7 +144,9 @@ class _TodoWriteWhenScreenState extends State<TodoWriteWhenScreen> {
 }
 
 class TimeTagWriteWidget extends StatefulWidget {
-  const TimeTagWriteWidget({required this.provider, required this.textEditingController, Key? key}) : super(key: key);
+  const TimeTagWriteWidget(
+      {required this.provider, required this.textEditingController, Key? key})
+      : super(key: key);
 
   final UserProvider provider;
   final TextEditingController textEditingController;
@@ -152,64 +160,71 @@ class _TimeTagWriteWidgetState extends State<TimeTagWriteWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),
-        decoration: BoxDecoration(
-          color: Coloring.gray_50,
-          borderRadius: BorderRadius.circular(59),
-        ),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: 48),
-          child: IntrinsicWidth(
-            child: TextFormField(
-              onChanged: (String changedText) {
-                setState(() {
-                  text = changedText;
-                });
-              },
-              onEditingComplete: () {
-                if (text == "") {
-                  Fluttertoast.showToast(msg: "글자를 입력해주세요");
-                } else {
-                  widget.provider.addMeTag(text);
-                  widget.textEditingController.clear();
-                  FocusScope.of(context).unfocus();
-                }
-              },
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: Font.size_smallText,
-                fontWeight: Font.weight_regular,
-                height: 1,
-              ),
-              controller: widget.textEditingController,
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                hintText: "+ 추가",
-                hintStyle: TextStyle(
-                  color: Coloring.gray_10,
-                  fontSize: Font.size_smallText,
+    return Consumer<UserProvider>(builder: (context, userProvider, child) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),
+          decoration: BoxDecoration(
+            color: Coloring.gray_50,
+            borderRadius: BorderRadius.circular(59),
+          ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: 48),
+            child: IntrinsicWidth(
+              child: TextFormField(
+                onChanged: (String changedText) {
+                  setState(() {
+                    text = changedText;
+                  });
+                },
+                onEditingComplete: () {
+                  if (text == "") {
+                    Fluttertoast.showToast(msg: "글자를 입력해주세요");
+                  } else {
+                    widget.provider.addMeTag(text);
+                    widget.textEditingController.clear();
+                    FocusScope.of(context).unfocus();
+                  }
+                },
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: Font.size_smallText * userProvider.getFontScale(),
                   fontWeight: Font.weight_regular,
                   height: 1,
                 ),
-                counterText: "",
-                border: InputBorder.none,
+                controller: widget.textEditingController,
+                decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  hintText: "+ 추가",
+                  hintStyle: TextStyle(
+                    color: Coloring.gray_10,
+                    fontSize: Font.size_smallText * userProvider.getFontScale(),
+                    fontWeight: Font.weight_regular,
+                    height: 1,
+                  ),
+                  counterText: "",
+                  border: InputBorder.none,
+                ),
+                maxLength: 12,
               ),
-              maxLength: 12,
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
 class TimeTagWidget extends StatelessWidget {
   const TimeTagWidget(this.title,
-      {Key? key, required this.provider, required this.isSelected, required this.onPressed, this.isCustom = false})
+      {Key? key,
+      required this.provider,
+      required this.isSelected,
+      required this.onPressed,
+      this.isCustom = false})
       : super(key: key);
   final UserProvider provider;
   final String title;
@@ -233,12 +248,13 @@ class TimeTagWidget extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              ScalableTextWidget(
                 title,
                 style: TextStyle(
                   color: isSelected ? Colors.white : Coloring.gray_10,
                   fontSize: Font.size_smallText,
-                  fontWeight: isSelected ? Font.weight_semiBold : Font.weight_regular,
+                  fontWeight:
+                      isSelected ? Font.weight_semiBold : Font.weight_regular,
                   height: 1,
                 ),
               ),

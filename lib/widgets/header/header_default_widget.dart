@@ -62,7 +62,7 @@ AppBar headerDefaultWidget({
                 )
               : iconData[leading]!,
         ),
-    actions: [],
+    actions: customTrailing == null ? [] : [customTrailing],
     centerTitle: true,
     title: Text(title,
         style: TextStyle(

@@ -187,8 +187,8 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   padding: const EdgeInsets.only(top: 10, bottom: 6, left: 4),
                   child: Text(
                     "글씨 크기",
-                    style: EasyStyle.text(Colors.black, Font.size_mediumText,
-                        Font.weight_regular),
+                    style: EasyStyle.text(
+                        Colors.black, Font.size_h3, Font.weight_regular),
                   ),
                 ),
                 Container(
@@ -203,16 +203,20 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                       FlutterToggleTab(
                           labels: ["1.0", "1.5", "2.0"],
                           width: 60,
-                          height: 40,
+                          height: 60,
                           selectedLabelIndex: (index) {
                             setState(() {
                               userProvider.sizeSettings = index;
                             });
                           },
-                          selectedTextStyle:
-                              TextStyle(color: Coloring.point_pureorange),
-                          unSelectedTextStyle:
-                              TextStyle(color: Coloring.gray_10),
+                          selectedTextStyle: TextStyle(
+                              color: Coloring.point_pureorange,
+                              fontSize: Font.size_subTitle *
+                                  userProvider.getFontScale()),
+                          unSelectedTextStyle: TextStyle(
+                              color: Coloring.gray_10,
+                              fontSize: Font.size_subTitle *
+                                  userProvider.getFontScale()),
                           unSelectedBackgroundColors: [Coloring.todo_orange],
                           selectedBackgroundColors: [Colors.white],
                           selectedIndex: userProvider.sizeSettings),

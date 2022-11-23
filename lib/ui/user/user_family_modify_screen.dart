@@ -7,6 +7,7 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/utils/extension_util.dart';
 import 'package:modak_flutter_app/widgets/common/checkbox_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_color_widget.dart';
 import 'package:modak_flutter_app/widgets/input/input_date_widget.dart';
@@ -39,7 +40,7 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Coloring.gray_50,
         appBar: headerDefaultWidget(
             title: "가족 정보",
             leading: FunctionalIcon.back,
@@ -126,12 +127,14 @@ class _UserFamilyModifyScreenState extends State<UserFamilyModifyScreen> {
                         padding: EdgeInsets.only(right: 10),
                         child: Opacity(
                           opacity: 0.5,
-                          child: CheckboxWidget(value: widget.familyMember.isLunar, onChanged: (bool? value) {}),
+                          child: CheckboxWidget(
+                              value: widget.familyMember.isLunar,
+                              onChanged: (bool? value) {}),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 16),
-                        child: Text(
+                        child: ScalableTextWidget(
                           "음력",
                           style: TextStyle(
                             color: Coloring.gray_10,

@@ -15,7 +15,9 @@ import 'package:provider/provider.dart';
 import '../../provider/user_provider.dart';
 
 class UserProfileWidget extends StatefulWidget {
-  const UserProfileWidget({Key? key, required this.user, required this.onPressed}) : super(key: key);
+  const UserProfileWidget(
+      {Key? key, required this.user, required this.onPressed})
+      : super(key: key);
 
   final User? user;
   final Function() onPressed;
@@ -35,7 +37,8 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.user?.memberId == context.read<UserProvider>().me!.memberId) {
+        if (widget.user?.memberId ==
+            context.read<UserProvider>().me!.memberId) {
           Get.to(UserModifyScreen());
         } else {
           Get.to(UserFamilyModifyScreen(familyMember: widget.user!));
@@ -47,8 +50,10 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
           vertical: 18,
         ),
         width: MediaQuery.of(context).size.width - 60,
-        decoration:
-            BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22), boxShadow: [Shadowing.bottom]),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: [Shadowing.bottom]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -71,14 +76,16 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                   children: [
                     Row(
                       children: [
-                        ScalableTextWidget(
-                          widget.user != null ? widget.user!.name : "",
-                          maxLines: 5,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: Font.size_largeText,
-                            fontWeight: Font.weight_semiBold,
-                            overflow: TextOverflow.ellipsis,
+                        Expanded(
+                          child: ScalableTextWidget(
+                            widget.user != null ? widget.user!.name : "",
+                            maxLines: 5,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Font.size_largeText,
+                              fontWeight: Font.weight_semiBold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                         Padding(
@@ -87,7 +94,9 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                             width: 10,
                             height: 10,
                             child: CircleAvatar(
-                              backgroundColor: widget.user != null ? widget.user!.color.toColor() : Colors.white,
+                              backgroundColor: widget.user != null
+                                  ? widget.user!.color.toColor()
+                                  : Colors.white,
                             ),
                           ),
                         ),

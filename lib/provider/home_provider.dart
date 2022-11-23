@@ -103,7 +103,9 @@ class HomeProvider extends ChangeNotifier {
 
       if (!File("$mediaDirectoryPath/$imageKey").existsSync()) {
         Map<String, dynamic> urlResponse = await _homeRepository.getMediaURL(
-          ["media/${(await RemoteDataSource.storage.read(key: Strings.familyId))!}/$imageKey"],
+          [
+            "media/${(await RemoteDataSource.storage.read(key: Strings.familyId))!}/$imageKey"
+          ],
         );
 
         List<dynamic> urlList = jsonDecode(
@@ -149,16 +151,18 @@ class HomeProvider extends ChangeNotifier {
     if (todayTalkMap[Date.getFormattedDate(dateTime: dateTime)] != null) {
       return false;
     }
-    DateTime firstDate = Date.getFirstDayOfWeek(dateTime);
-    DateTime lastDate = firstDate.add(Duration(days: 6));
+    DateTime firstDate = DateTime(dateTime.year, dateTime.month, 1);
+    DateTime lastDate = DateTime(dateTime.year, dateTime.month + 1, 0);
 
     String firstDateString = Date.getFormattedDate(dateTime: firstDate);
     String lastDateString = Date.getFormattedDate(dateTime: lastDate);
 
-    Map<String, dynamic> response = await _homeRepository.getTodayTalk(firstDateString, lastDateString);
+    Map<String, dynamic> response =
+        await _homeRepository.getTodayTalk(firstDateString, lastDateString);
     switch (response[Strings.message]) {
       case Strings.success:
-        Map<String, Map<int, String>> todayTalkWeekMap = response[Strings.response][Strings.todayTalk];
+        Map<String, Map<int, String>> todayTalkWeekMap =
+            response[Strings.response][Strings.todayTalk];
         for (String date in todayTalkWeekMap.keys) {
           todayTalkMap[date] = todayTalkWeekMap[date]!;
         }
@@ -173,11 +177,13 @@ class HomeProvider extends ChangeNotifier {
 
   Future<bool> postTodayTalk(BuildContext context, String content) async {
     String date = Date.getFormattedDate();
-    Map<String, dynamic> response = await _homeRepository.postTodayTalk(content);
+    Map<String, dynamic> response =
+        await _homeRepository.postTodayTalk(content);
     switch (response[Strings.message]) {
       case Strings.success:
         if (todayTalkMap[date] == null) todayTalkMap[date] = <int, String>{};
-        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] = content;
+        todayTalkMap[date]![context.read<UserProvider>().me!.memberId] =
+            content;
         Fluttertoast.showToast(msg: "오늘의 한 마디를 등록하였습니다");
         notifyListeners();
         return true;
@@ -186,6 +192,11 @@ class HomeProvider extends ChangeNotifier {
         return false;
     }
     return false;
+  }
+
+  bool isTodayTalkExist(String date) {
+    if (todayTalkMap[date]?.isEmpty ?? true) return false;
+    return true;
   }
 
   clear() {

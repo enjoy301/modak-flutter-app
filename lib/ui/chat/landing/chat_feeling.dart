@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
+import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/strings.dart';
 import 'package:modak_flutter_app/provider/chat_provider.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class ChatFeeling extends StatelessWidget {
@@ -56,7 +58,9 @@ class ChatFeeling extends StatelessWidget {
 }
 
 class ChatFeelingItem extends StatelessWidget {
-  ChatFeelingItem({Key? key, required this.feelingType, this.showFeeling = true}) : super(key: key);
+  ChatFeelingItem(
+      {Key? key, required this.feelingType, this.showFeeling = true})
+      : super(key: key);
 
   final bool showFeeling;
   final String feelingType;
@@ -104,7 +108,9 @@ class ChatFeelingItem extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
-                color: showFeeling ? feelingsMap[feelingType]!['color'] as Color : Coloring.gray_50,
+                color: showFeeling
+                    ? feelingsMap[feelingType]!['color'] as Color
+                    : Coloring.gray_50,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -117,7 +123,9 @@ class ChatFeelingItem extends StatelessWidget {
                       height: 20,
                     ),
                   ),
-                  Text(feelingsMap[feelingType]!['title'] as String),
+                  ScalableTextWidget(
+                      feelingsMap[feelingType]!['title'] as String,
+                      style: TextStyle(fontSize: Font.size_mediumText)),
                 ],
               ),
             ),

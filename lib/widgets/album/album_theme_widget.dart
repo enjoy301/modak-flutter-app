@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/widgets/album/album_chip_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constant/coloring.dart';
@@ -32,6 +33,7 @@ class _AlbumThemeWidgetState extends State<AlbumThemeWidget> {
             Container(
               margin: EdgeInsets.only(bottom: 10),
               child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: List<Widget>.from(
@@ -64,7 +66,7 @@ class _AlbumThemeWidgetState extends State<AlbumThemeWidget> {
                     if (provider.labelDataList.isEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 30),
-                        child: Text(
+                        child: ScalableTextWidget(
                           "아직 인식된 테마가 없습니다",
                           style: EasyStyle.text(
                             Coloring.gray_20,
@@ -74,45 +76,56 @@ class _AlbumThemeWidgetState extends State<AlbumThemeWidget> {
                         ),
                       ),
                     Expanded(
-                      child: Container(
-                        margin: EdgeInsets.all(5),
-                        child: GridView.builder(
-                          controller: provider.themeScrollController,
-                          shrinkWrap: true,
-                          itemCount: provider.labelDetailFileList.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1,
-                            mainAxisSpacing: 5,
-                            crossAxisSpacing: 5,
-                          ),
-                          itemBuilder: (BuildContext context, int labelIndex) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                1,
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CommonMediasScreen(
-                                        files: provider.labelDetailFileList,
-                                        initialIndex: labelIndex,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Image.file(
-                                  provider.labelDetailFileList[labelIndex],
-                                  fit: BoxFit.cover,
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  gaplessPlayback: true,
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          String label = provider
+                              .labelDataList[provider.selectedLabel]['label'];
+                          provider.initLabelView(label);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(5),
+                          child: GridView.builder(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            controller: provider.themeScrollController,
+                            shrinkWrap: true,
+                            itemCount: provider.labelDetailFileList.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 1,
+                              mainAxisSpacing: 5,
+                              crossAxisSpacing: 5,
+                            ),
+                            itemBuilder:
+                                (BuildContext context, int labelIndex) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  1,
                                 ),
-                              ),
-                            );
-                          },
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CommonMediasScreen(
+                                          files: provider.labelDetailFileList,
+                                          initialIndex: labelIndex,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Image.file(
+                                    provider.labelDetailFileList[labelIndex],
+                                    fit: BoxFit.cover,
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    gaplessPlayback: true,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),

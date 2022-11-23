@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 import '../../ui/common/common_medias_screen.dart';
 
 class AlbumFaceDetailWidget extends StatefulWidget {
-  const AlbumFaceDetailWidget({Key? key, required this.indexImage}) : super(key: key);
+  const AlbumFaceDetailWidget({Key? key, required this.indexImage})
+      : super(key: key);
 
   final File indexImage;
 
@@ -57,13 +58,15 @@ class _AlbumFaceDetailWidget extends State<AlbumFaceDetailWidget> {
                             shrinkWrap: true,
                             controller: provider.faceScrollController,
                             itemCount: provider.faceDetailFileList.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               childAspectRatio: 1,
                               mainAxisSpacing: 5,
                               crossAxisSpacing: 5,
                             ),
-                            itemBuilder: (BuildContext context, int mediaIndex) {
+                            itemBuilder:
+                                (BuildContext context, int mediaIndex) {
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.push(

@@ -4,6 +4,7 @@ import 'package:modak_flutter_app/provider/album_provider.dart';
 import 'package:modak_flutter_app/provider/home_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/widgets/common/media_widget_for_album.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 
@@ -35,7 +36,7 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                 if (provider.albumBuildFileList.isEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 30),
-                    child: Text(
+                    child: ScalableTextWidget(
                       "채팅방에서 사진을 보내보세요!",
                       style: EasyStyle.text(
                         Coloring.gray_20,
@@ -54,9 +55,10 @@ class _AlbumDayWidgetState extends State<AlbumDayWidget> {
                         children: [
                           Container(
                             margin: EdgeInsets.all(12),
-                            child: Text(
+                            child: ScalableTextWidget(
                               "${provider.albumBuildFileList[dateIndex][0].absolute.path.split('/').last.split('T')[0]}",
                               textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: Font.size_largeText),
                             ),
                           ),
                           GridView.builder(

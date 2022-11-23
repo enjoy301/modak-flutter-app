@@ -4,6 +4,7 @@ import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
 import 'package:modak_flutter_app/widgets/button/button_cancel_widget.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 void themeModalWidget(
   BuildContext context, {
@@ -17,10 +18,12 @@ void themeModalWidget(
   showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-            title: Text(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            title: ScalableTextWidget(
               title,
-              style: EasyStyle.text(Colors.black, Font.size_subTitle, Font.weight_semiBold),
+              style: EasyStyle.text(
+                  Colors.black, Font.size_subTitle, Font.weight_semiBold),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -29,7 +32,8 @@ void themeModalWidget(
                 if (des != null)
                   Text(
                     des ?? "",
-                    style: EasyStyle.text(Colors.black, Font.size_smallText, Font.weight_regular),
+                    style: EasyStyle.text(
+                        Colors.black, Font.size_smallText, Font.weight_regular),
                   ),
                 Padding(
                   padding: EdgeInsets.only(top: des != null ? 24 : 8),

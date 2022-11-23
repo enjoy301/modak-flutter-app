@@ -6,13 +6,15 @@ import 'package:modak_flutter_app/data/dto/user.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
 import 'package:modak_flutter_app/widgets/button/button_main_widget.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class LetterWriteContentScreen extends StatelessWidget {
   const LetterWriteContentScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, ChatLetterVM>(builder: (context, userProvider, provider, child) {
+    return Consumer2<UserProvider, ChatLetterVM>(
+        builder: (context, userProvider, provider, child) {
       return GestureDetector(
         child: Scaffold(
           body: Container(
@@ -23,13 +25,14 @@ class LetterWriteContentScreen extends StatelessWidget {
             ),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        Text(
-                          "To.   ",
+                        ScalableTextWidget(
+                          "To.  ",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: Font.size_h3,
@@ -37,18 +40,19 @@ class LetterWriteContentScreen extends StatelessWidget {
                           ),
                         ),
                         DropdownButton<User>(
-                          items: userProvider.familyMembersWithoutMe.map((User familyMember) {
+                          items: userProvider.familyMembersWithoutMe
+                              .map((User familyMember) {
                             return DropdownMenuItem<User>(
                               key: Key(familyMember.name),
                               alignment: Alignment.center,
                               value: familyMember,
                               child: Row(
                                 children: [
-                                  Text(
+                                  ScalableTextWidget(
                                     familyMember.name,
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: Font.size_h4,
+                                      fontSize: Font.size_largeText,
                                       fontWeight: Font.weight_bold,
                                     ),
                                   ),
@@ -69,6 +73,9 @@ class LetterWriteContentScreen extends StatelessWidget {
                       },
                       minLines: 20,
                       maxLines: 200,
+                      style: TextStyle(
+                          fontSize: Font.size_mediumText *
+                              userProvider.getFontScale()),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                       ),

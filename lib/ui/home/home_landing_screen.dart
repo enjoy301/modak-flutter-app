@@ -10,6 +10,7 @@ import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/common/common_medias_screen.dart';
 import 'package:modak_flutter_app/ui/common/common_web_screen.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/home/home_family_talk_widget.dart';
 import 'package:modak_flutter_app/widgets/home/home_item_widget.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +23,10 @@ class HomeLandingScreen extends StatefulWidget {
 }
 
 class _HomeLandingScreenState extends State<HomeLandingScreen> {
-  List<String> headerTitle = ["오늘 우리 가족은", "오늘의 컨텐츠"];
-
   @override
   Widget build(BuildContext context) {
-    return Consumer2<HomeProvider, UserProvider>(builder: (context, homeProvider, userProvider, child) {
+    return Consumer2<HomeProvider, UserProvider>(
+        builder: (context, homeProvider, userProvider, child) {
       return Scaffold(
         backgroundColor: Coloring.gray_50,
         appBar: AppBar(
@@ -45,22 +45,41 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
           ),
           centerTitle: false,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: IconButton(
-                  onPressed: () {
-                    Get.toNamed("/home/notification");
-                  },
-                  icon: Icon(
-                    LightIcons.Notification,
-                    color: Colors.black,
-                  )),
+            Stack(
+              children: [
+                if (userProvider.getNewNotificationNumber() > 0)
+                  Positioned(
+                    top: 5,
+                    right: 20,
+                    child: Container(
+                      width: 5,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: IconButton(
+                    onPressed: () {
+                      Get.toNamed("/home/notification");
+                    },
+                    icon: Icon(
+                      LightIcons.Notification,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),
         body: RefreshIndicator(
           onRefresh: homeProvider.init,
           child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -98,11 +117,13 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                   bottom: 28.0,
                                 ),
                                 title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    ScalableTextWidget(
                                       "하루 한 줄",
-                                      style: EasyStyle.text(Colors.black, Font.size_h3, Font.weight_bold),
+                                      style: EasyStyle.text(Colors.black,
+                                          Font.size_h3, Font.weight_bold),
                                     ),
                                     GestureDetector(
                                       onTap: () {
@@ -125,24 +146,33 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                   children: [
                                     Text(
                                       "모닥이 알려주는 오늘의 문장",
-                                      style: EasyStyle.text(Colors.black, Font.size_smallText, Font.weight_medium),
+                                      style: EasyStyle.text(
+                                          Colors.black,
+                                          Font.size_smallText,
+                                          Font.weight_medium),
                                     ),
                                     Container(
                                       width: double.infinity,
-                                      padding: EdgeInsets.symmetric(vertical: 20),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
                                       margin: EdgeInsets.only(top: 15),
                                       decoration: BoxDecoration(
                                         gradient: Coloring.notice,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Text(
-                                        homeProvider.todayFortune?.content ?? "운세 없음",
-                                        style: EasyStyle.text(
-                                          Colors.black,
-                                          Font.size_largeText,
-                                          Font.weight_bold,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 8, horizontal: 20),
+                                        child: ScalableTextWidget(
+                                          homeProvider.todayFortune?.content ??
+                                              "운세 없음",
+                                          style: EasyStyle.text(
+                                            Colors.black,
+                                            Font.size_largeText,
+                                            Font.weight_bold,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
                                     )
                                   ],
@@ -166,7 +196,8 @@ class _HomeLandingScreenState extends State<HomeLandingScreen> {
                                 title: content.title,
                                 des: content.desc,
                                 onPressed: () {
-                                  Get.to(CommonWebScreen(title: content.title, link: content.url));
+                                  Get.to(CommonWebScreen(
+                                      title: content.title, link: content.url));
                                 },
                               ),
                             )
@@ -230,7 +261,8 @@ class HomePictureWidget extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: Image.file(homeProvider.familyImage!, width: double.infinity, fit: BoxFit.fitWidth),
+                      child: Image.file(homeProvider.familyImage!,
+                          width: double.infinity, fit: BoxFit.fitWidth),
                     ),
                   ),
                 );

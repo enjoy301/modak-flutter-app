@@ -5,6 +5,7 @@ import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/ui/user/invitation/user_invitation_input_VM.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -71,11 +72,11 @@ class _UserInvitationInputScreenState extends State<UserInvitationInputScreen> {
                                     width: 65,
                                     height: 65,
                                   ),
-                                  Text(
+                                  ScalableTextWidget(
                                     "모닥 코드",
                                     style: EasyStyle.text(
                                         Coloring.gray_10,
-                                        Font.size_largeText,
+                                        Font.size_mediumText,
                                         Font.weight_medium),
                                   ),
                                   Transform.scale(
@@ -134,7 +135,7 @@ class _UserInvitationInputScreenState extends State<UserInvitationInputScreen> {
                                   bottomRight: Radius.circular(12),
                                 ),
                               ),
-                              child: Text(
+                              child: ScalableTextWidget(
                                 "입력 하기",
                                 style: EasyStyle.text(Colors.white,
                                     Font.size_largeText, Font.weight_semiBold),

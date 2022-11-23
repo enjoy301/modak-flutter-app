@@ -4,6 +4,7 @@ import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
 import 'package:modak_flutter_app/constant/shadowing.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
 import 'package:modak_flutter_app/ui/chat/letter/landing/letter_landing_received.dart';
 import 'package:modak_flutter_app/ui/chat/letter/landing/letter_landing_sent.dart';
@@ -14,7 +15,8 @@ class ChatLetterLandingScreen extends StatefulWidget {
   const ChatLetterLandingScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatLetterLandingScreen> createState() => _ChatLetterLandingScreenState();
+  State<ChatLetterLandingScreen> createState() =>
+      _ChatLetterLandingScreenState();
 }
 
 class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
@@ -22,8 +24,8 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatLetterVM>(
-      builder: (context, provider, child) {
+    return Consumer2<ChatLetterVM, UserProvider>(
+      builder: (context, provider, userProvider, child) {
         return FutureBuilder(
           future: initial,
           builder: (context, snapshot) {
@@ -43,11 +45,21 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: TabBar(
-                          tabs: [Tab(child: Text("보낸")), Tab(child: Text("받은"))],
+                          tabs: [
+                            Tab(
+                              child: Text("받은"),
+                            ),
+                            Tab(
+                              child: Text("보낸"),
+                            ),
+                          ],
                           isScrollable: true,
                           labelPadding: EdgeInsets.only(left: 10, right: 10),
-                          labelStyle:
-                              TextStyle(color: Colors.black, fontSize: Font.size_h3, fontWeight: Font.weight_bold),
+                          labelStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize:
+                                  Font.size_h3 * userProvider.getFontScale(),
+                              fontWeight: Font.weight_bold),
                           labelColor: Colors.black,
                           unselectedLabelColor: Coloring.gray_20,
                           indicator: UnderlineTabIndicator(
@@ -59,7 +71,10 @@ class _ChatLetterLandingScreenState extends State<ChatLetterLandingScreen> {
                   ),
                 ),
                 body: TabBarView(
-                  children: [LetterLandingSent(), LetterLandingReceived()],
+                  children: [
+                    LetterLandingReceived(),
+                    LetterLandingSent(),
+                  ],
                 ),
                 floatingActionButton: GestureDetector(
                   onTap: () {

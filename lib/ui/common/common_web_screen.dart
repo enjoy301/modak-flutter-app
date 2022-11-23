@@ -9,7 +9,8 @@ import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CommonWebScreen extends StatefulWidget {
-  const CommonWebScreen({Key? key, required this.title, required this.link}) : super(key: key);
+  const CommonWebScreen({Key? key, required this.title, required this.link})
+      : super(key: key);
 
   final String title;
   final String link;
@@ -25,13 +26,15 @@ class _CommonWebScreenState extends State<CommonWebScreen> {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
     return ColoredSafeArea(
       child: Scaffold(
         appBar: headerDefaultWidget(
+          bgColor: Colors.white,
           title: widget.title,
           leading: FunctionalIcon.back,
           onClickLeading: () {

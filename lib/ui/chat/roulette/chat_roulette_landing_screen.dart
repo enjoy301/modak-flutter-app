@@ -26,12 +26,14 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatRouletteLandingScreen extends StatefulWidget {
-  const ChatRouletteLandingScreen({Key? key, this.title = ""}) : super(key: key);
+  const ChatRouletteLandingScreen({Key? key, this.title = ""})
+      : super(key: key);
 
   final String title;
 
   @override
-  State<ChatRouletteLandingScreen> createState() => _ChatRouletteLandingScreenState();
+  State<ChatRouletteLandingScreen> createState() =>
+      _ChatRouletteLandingScreenState();
 }
 
 class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
@@ -104,24 +106,36 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                                                 if (state != PENDING) {
                                                   return;
                                                 }
-                                                if (participatedUsers.contains(familyMember)) {
-                                                  participatedUsers.remove(familyMember);
+                                                if (participatedUsers
+                                                    .contains(familyMember)) {
+                                                  participatedUsers
+                                                      .remove(familyMember);
                                                 } else {
-                                                  participatedUsers.add(familyMember);
+                                                  participatedUsers
+                                                      .add(familyMember);
                                                 }
                                                 setState(() {});
                                               },
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(10000),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10000),
                                                 child: Stack(
                                                   children: [
                                                     Container(
                                                       width: 50,
                                                       height: 50,
-                                                      color: familyMember.color.toColor()!.withOpacity(
-                                                          participatedUsers.contains(familyMember) ? 0.9 : 0.2),
+                                                      color: familyMember.color
+                                                          .toColor()!
+                                                          .withOpacity(
+                                                              participatedUsers
+                                                                      .contains(
+                                                                          familyMember)
+                                                                  ? 0.9
+                                                                  : 0.2),
                                                     ),
-                                                    if (participatedUsers.contains(familyMember))
+                                                    if (participatedUsers
+                                                        .contains(familyMember))
                                                       Icon(
                                                         Icons.check,
                                                         size: 50,
@@ -138,7 +152,8 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                                                 style: TextStyle(
                                                     height: 1.05,
                                                     color: Coloring.gray_0,
-                                                    fontSize: Font.size_smallText),
+                                                    fontSize:
+                                                        Font.size_smallText),
                                                 textAlign: TextAlign.center,
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -155,6 +170,7 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                           padding: const EdgeInsets.only(top: 24),
                           child: InputTextWidget(
                             hint: "할 일을 입력해주세요",
+                            initText: title,
                             textEditingController: _editingController,
                             isBlocked: state != PENDING,
                             onChanged: (String text) {
@@ -186,19 +202,25 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                                           familyMember.name,
                                         ),
                                       ),
-                                      style: FortuneItemStyle(color: familyMember.color.toColor()!, borderWidth: 0),
+                                      style: FortuneItemStyle(
+                                          color: familyMember.color.toColor()!,
+                                          borderWidth: 0),
                                     ),
                                   )
                                   .toList(),
                               if (participatedUsers.isEmpty)
                                 FortuneItem(
                                     child: Text(""),
-                                    style:
-                                        FortuneItemStyle(color: Colors.grey, borderColor: Colors.grey, borderWidth: 3)),
+                                    style: FortuneItemStyle(
+                                        color: Colors.grey,
+                                        borderColor: Colors.grey,
+                                        borderWidth: 3)),
                               if (participatedUsers.length < 2)
                                 FortuneItem(
                                     child: Text(""),
-                                    style: FortuneItemStyle(color: Colors.grey, borderColor: Colors.white)),
+                                    style: FortuneItemStyle(
+                                        color: Colors.grey,
+                                        borderColor: Colors.white)),
                             ],
                             onAnimationEnd: () {
                               setState(
@@ -208,7 +230,8 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("${participatedUsers[stream.value].name}님이 당첨되셨습니다~"),
+                                  content: Text(
+                                      "${participatedUsers[stream.value].name}님이 당첨되셨습니다~"),
                                 ),
                               );
                             },
@@ -216,7 +239,10 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 12),
-                          child: Text(state == PENDING && participatedUsers.length < 2 ? "최소 2명 이상 선택하세요" : ""),
+                          child: Text(
+                              state == PENDING && participatedUsers.length < 2
+                                  ? "최소 2명 이상 선택하세요"
+                                  : ""),
                         ),
                         if (state == DONE)
                           TextButton(
@@ -225,12 +251,15 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                                   title: title,
                                   addTodo: addTodo,
                                   participatedUsers: participatedUsers,
-                                  selectedUser: participatedUsers[stream.value]));
+                                  selectedUser:
+                                      participatedUsers[stream.value]));
                             },
                             child: Text(
                               "결과 확인하기",
                               style: TextStyle(
-                                  color: Colors.black, fontSize: Font.size_largeText, fontWeight: Font.weight_semiBold),
+                                  color: Colors.black,
+                                  fontSize: Font.size_largeText,
+                                  fontWeight: Font.weight_semiBold),
                             ),
                           ),
                         if (state != DONE)
@@ -252,7 +281,8 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
                                 padding: const EdgeInsets.only(left: 8),
                                 child: Text(
                                   "할 일에 자동 등록",
-                                  style: EasyStyle.text(Coloring.gray_10, Font.size_smallText, Font.weight_regular),
+                                  style: EasyStyle.text(Coloring.gray_10,
+                                      Font.size_smallText, Font.weight_regular),
                                 ),
                               )
                             ],
@@ -265,15 +295,18 @@ class _ChatRouletteLandingScreenState extends State<ChatRouletteLandingScreen> {
               bottomSheet: state == PENDING
                   ? Container(
                       color: Colors.white,
-                      padding: const EdgeInsets.only(right: 30, bottom: 24, left: 30),
+                      padding: const EdgeInsets.only(
+                          right: 30, bottom: 24, left: 30),
                       child: ButtonMainWidget(
                         title: "돌려 돌려~",
                         color: Coloring.main,
                         shadow: Shadowing.yellow,
-                        isValid: title.isNotEmpty && participatedUsers.length > 1,
+                        isValid:
+                            title.isNotEmpty && participatedUsers.length > 1,
                         onPressed: () async {
                           FocusScope.of(context).unfocus();
-                          int random = Fortune.randomInt(0, participatedUsers.length);
+                          int random =
+                              Fortune.randomInt(0, participatedUsers.length);
 
                           chatProvider.postChat(
                             context,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/enum/general_enum.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 
 class TodoDayWeekWidget extends StatelessWidget {
   const TodoDayWeekWidget({
@@ -60,7 +61,7 @@ class TodoDayWeekWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
-              child: Text(
+              child: ScalableTextWidget(
             data[dayOfTheWeek]['title'],
             style: TextStyle(
               color: Coloring.gray_10,

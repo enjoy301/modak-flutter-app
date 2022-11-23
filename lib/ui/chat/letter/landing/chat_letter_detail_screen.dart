@@ -7,11 +7,13 @@ import 'package:modak_flutter_app/data/dto/letter.dart';
 import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/ui/chat/letter/chat_letter_VM.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
+import 'package:modak_flutter_app/widgets/common/scalable_text_widget.dart';
 import 'package:modak_flutter_app/widgets/header/header_default_widget.dart';
 import 'package:provider/provider.dart';
 
 class ChatLetterDetailScreen extends StatelessWidget {
-  const ChatLetterDetailScreen({Key? key, required this.letter}) : super(key: key);
+  const ChatLetterDetailScreen({Key? key, required this.letter})
+      : super(key: key);
 
   final Letter letter;
 
@@ -46,17 +48,19 @@ class ChatLetterDetailScreen extends StatelessWidget {
           body: Container(
             margin: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
             decoration: BoxDecoration(
-              color: (letterEnvelop[letter.envelope]['background'] as Color).withOpacity(0.5),
+              color: (letterEnvelop[letter.envelope]['background'] as Color)
+                  .withOpacity(0.5),
               borderRadius: BorderRadius.circular(15),
             ),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        Text(
+                        ScalableTextWidget(
                           "To. ${userProvider.findUserById(letter.toMemberId)?.name ?? "익명"}",
                           style: TextStyle(
                             color: Colors.black,
@@ -70,9 +74,10 @@ class ChatLetterDetailScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 12),
                       child: SizedBox(
                         width: double.infinity,
-                        child: Text(
+                        child: ScalableTextWidget(
                           letter.content + "\n" * 19,
-                          style: EasyStyle.text(Colors.black, Font.size_largeText, Font.weight_regular),
+                          style: EasyStyle.text(Colors.black,
+                              Font.size_largeText, Font.weight_regular),
                           maxLines: 200,
                         ),
                       ),

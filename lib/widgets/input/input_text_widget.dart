@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:modak_flutter_app/constant/coloring.dart';
 import 'package:modak_flutter_app/constant/font.dart';
+import 'package:modak_flutter_app/provider/user_provider.dart';
 import 'package:modak_flutter_app/utils/easy_style.dart';
+import 'package:provider/provider.dart';
 
 class InputTextWidget extends StatefulWidget {
   const InputTextWidget({
@@ -45,68 +47,77 @@ class _InputTextWidgetState extends State<InputTextWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(
-      ignoring: widget.isBlocked,
-      child: SizedBox(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              autofocus: widget.autofocus,
-              minLines: widget.minLines,
-              maxLines: widget.maxLines,
-              controller: widget.textEditingController,
-              onChanged: widget.onChanged,
-              maxLength: widget.maxLength,
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(15),
-                  hintText: widget.hint,
-                  hintStyle: TextStyle(
-                    color: Coloring.hintText,
-                    fontSize: Font.size_mediumText,
-                    fontWeight: Font.weight_regular,
-                  ),
-                  filled: true,
-                  fillColor: Coloring.gray_40,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: widget.isSatisfied ? 0 : 1.5,
-                          color: widget.isSatisfied ? Coloring.gray_50 : Colors.red),
-                      borderRadius: BorderRadius.circular(16)),
-                  focusColor: Coloring.bg_red,
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1.5, color: widget.isSatisfied ? Coloring.gray_30 : Colors.red),
-                      borderRadius: BorderRadius.circular(16)),
-                  suffixIcon: widget.isSuffix
-                      ? IconButton(
-                          onPressed: () {
-                            widget.onClickSuffix!.call();
-                            widget.textEditingController.clear();
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            color: Coloring.gray_10,
-                            size: 20,
-                          ))
-                      : null),
-              cursorColor: Coloring.gray_0,
-              style: TextStyle(
-                color: Coloring.gray_10,
-                fontSize: Font.size_mediumText,
-                fontWeight: Font.weight_regular,
-              ),
-            ),
-            if (!widget.isSatisfied)
-              Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Text(
-                  "세 글자 이상 입력해주세요",
-                  style: EasyStyle.errorText(),
+    return Consumer<UserProvider>(builder: (context, userProvider, child) {
+      return IgnorePointer(
+        ignoring: widget.isBlocked,
+        child: SizedBox(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                autofocus: widget.autofocus,
+                minLines: widget.minLines,
+                maxLines: widget.maxLines,
+                controller: widget.textEditingController,
+                onChanged: widget.onChanged,
+                maxLength: widget.maxLength,
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: widget.hint,
+                    hintStyle: TextStyle(
+                      color: Coloring.hintText,
+                      fontSize:
+                          Font.size_mediumText * userProvider.getFontScale(),
+                      fontWeight: Font.weight_regular,
+                    ),
+                    filled: true,
+                    fillColor: Coloring.gray_40,
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: widget.isSatisfied ? 0 : 1.5,
+                            color: widget.isSatisfied
+                                ? Coloring.gray_50
+                                : Colors.red),
+                        borderRadius: BorderRadius.circular(16)),
+                    focusColor: Coloring.bg_red,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 1.5,
+                            color: widget.isSatisfied
+                                ? Coloring.gray_30
+                                : Colors.red),
+                        borderRadius: BorderRadius.circular(16)),
+                    suffixIcon: widget.isSuffix
+                        ? IconButton(
+                            onPressed: () {
+                              widget.onClickSuffix!.call();
+                              widget.textEditingController.clear();
+                            },
+                            icon: Icon(
+                              Icons.close,
+                              color: Coloring.gray_10,
+                              size: 20,
+                            ))
+                        : null),
+                cursorColor: Coloring.gray_0,
+                style: TextStyle(
+                  color: Coloring.gray_10,
+                  fontSize: Font.size_mediumText * userProvider.getFontScale(),
+                  fontWeight: Font.weight_regular,
                 ),
-              )
-          ],
+              ),
+              if (!widget.isSatisfied)
+                Padding(
+                  padding: EdgeInsets.only(left: 8),
+                  child: Text(
+                    "세 글자 이상 입력해주세요",
+                    style: EasyStyle.errorText(),
+                  ),
+                )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

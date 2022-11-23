@@ -52,7 +52,7 @@ android {
         applicationId "com.wowbros.android.modak"
         minSdkVersion 19
         targetSdkVersion 32
-        versionName '2.0.0q'
+        versionName '2.0.0'
         versionCode 30
         multiDexEnabled true
     }

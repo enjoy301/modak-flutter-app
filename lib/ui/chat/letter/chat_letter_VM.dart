@@ -28,7 +28,8 @@ class ChatLetterVM extends ChangeNotifier {
   List<Letter> lettersReceived = [];
 
   Future getLetters() async {
-    String memberId = (await RemoteDataSource.storage.read(key: Strings.memberId))!;
+    String memberId =
+        (await RemoteDataSource.storage.read(key: Strings.memberId))!;
     Map<String, dynamic> response = await _chatRepository.getLetters();
     switch (response[Strings.message]) {
       case Strings.success:
@@ -45,10 +46,8 @@ class ChatLetterVM extends ChangeNotifier {
           }
         }
         notifyListeners();
-        Fluttertoast.showToast(msg: "성공적으로 편지를 받아왔습니다");
         break;
       case Strings.fail:
-        Fluttertoast.showToast(msg: "편지를 받아오는데 실패하였습니다");
         break;
     }
   }
@@ -91,7 +90,6 @@ class ChatLetterVM extends ChangeNotifier {
       case Strings.success:
         lettersSent.add(letter);
         notifyListeners();
-        Fluttertoast.showToast(msg: "메시지 전송 성공");
         clearLetter();
         return true;
       case Strings.fail:

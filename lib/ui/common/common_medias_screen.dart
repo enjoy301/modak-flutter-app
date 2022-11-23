@@ -345,6 +345,6 @@ class _CommonVideoScreenState extends State<CommonVideoScreen> {
 void downloadToGallery(File file) async {
   final result = await ImageGallerySaver.saveFile(file.path);
   if (result['isSuccess']) {
-    Fluttertoast.showToast(msg: "다운로드 성공", toastLength: Toast.LENGTH_SHORT);
+    Fluttertoast.showToast(msg: "다운로드 되었습니다", toastLength: Toast.LENGTH_SHORT);
   }
 }

@@ -62,12 +62,14 @@ class NotificationController extends GetxController {
     /// We use this channel in the `AndroidManifest.xml` file to override the
     /// default FCM channel to enable heads up notifications.
     await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     /// Update the iOS foreground notification presentation options to allow
     /// heads up notifications.
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
       alert: false,
       badge: false,
       sound: false,
@@ -96,7 +98,8 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingForegroundHandler(
+      RemoteMessage message) async {
     /// setting and verifying
     await setupFlutterNotifications();
 
@@ -105,7 +108,8 @@ class NotificationController extends GetxController {
     showFlutterNotification(message);
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
     // await Firebase.initializeApp();
     print("data values:${message.data.values}");
 
@@ -143,7 +147,10 @@ class NotificationController extends GetxController {
   static void sendNotification(String title, String body, String type,
       {List<String> memberIds = const [], String develop = ""}) {
     Dio(BaseOptions(
-      headers: {"Content-Type": "application/json", "Authorization": "key=${dotenv.get("FCM_KEY")}"},
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "key=${dotenv.get("FCM_KEY")}"
+      },
     )).post(
       "https://fcm.googleapis.com/fcm/send",
       data: {
@@ -166,8 +173,12 @@ class NotificationController extends GetxController {
   void setSubscription() {
     bool todoAlarmReceive = context.read<UserProvider>().todoAlarmReceive;
     bool chatAlarmReceive = context.read<UserProvider>().chatAlarmReceive;
-    todoAlarmReceive ? subscribe("FAM${_familyId}todo") : unsubscribe("FAM${_familyId}todo");
-    chatAlarmReceive ? subscribe("FAM${_familyId}chat") : unsubscribe("FAM${_familyId}chat");
+    todoAlarmReceive
+        ? subscribe("FAM${_familyId}todo")
+        : unsubscribe("FAM${_familyId}todo");
+    chatAlarmReceive
+        ? subscribe("FAM${_familyId}chat")
+        : unsubscribe("FAM${_familyId}chat");
   }
 
   void unSubscribeAll() {
